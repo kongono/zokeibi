@@ -2,12 +2,12 @@
 $rows = [];
 if (isset($items) && is_array($items)) {
     foreach ($items as $item) {
-        if (is_array($item) && isset($item['title'])) {
+        if (is_array($item) && isset($item['title']) && is_scalar($item['title'])) {
             $rows[] = [
                 'title' => (string) $item['title'],
-                'time' => isset($item['time']) ? (string) $item['time'] : '',
-                'meta' => isset($item['meta']) ? (string) $item['meta'] : '',
-                'variant' => isset($item['variant']) && in_array($item['variant'], ['accent', 'emerald', 'amber', 'danger', 'blue'], true) ? $item['variant'] : 'accent',
+                'time' => isset($item['time']) && is_scalar($item['time']) ? (string) $item['time'] : '',
+                'meta' => isset($item['meta']) && is_scalar($item['meta']) ? (string) $item['meta'] : '',
+                'variant' => isset($item['variant']) && is_string($item['variant']) && in_array($item['variant'], ['accent', 'emerald', 'amber', 'danger', 'blue'], true) ? $item['variant'] : 'accent',
             ];
         }
     }

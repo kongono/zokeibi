@@ -1,6 +1,6 @@
 @php
 $name = isset($name) && is_string($name) && $name !== '' ? $name : 'tags';
-$id = isset($id) && is_string($id) && $id !== '' ? $id : 'k-ti-' . preg_replace('/[^a-zA-Z0-9_-]/', '', $name);
+$id = isset($id) && is_string($id) && $id !== '' ? $id : 'z-ti-' . preg_replace('/[^a-zA-Z0-9_-]/', '', $name) . '-' . bin2hex(random_bytes(3));
 $label = isset($label) && is_string($label) && $label !== '' ? $label : null;
 $placeholder = isset($placeholder) && is_string($placeholder) && $placeholder !== '' ? $placeholder : 'Type a tag and press Enter...';
 $tags = [];
@@ -39,6 +39,6 @@ $wrapClass = $class !== '' ? 'z-taginput ' . $class : 'z-taginput';
       </span>
 @endforeach
     </div>
-    <input id="{{ $id }}" type="text" class="z-taginput-field" placeholder="{{ $placeholder }}" autocomplete="off" data-z-ti-field>
+    <input id="{{ $id }}" type="text" class="z-taginput-field" placeholder="{{ $placeholder }}" @if ($label === null) aria-label="{{ $placeholder }}" @endif autocomplete="off" data-z-ti-field>
   </div>
 </div>

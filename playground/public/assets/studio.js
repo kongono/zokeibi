@@ -96,13 +96,23 @@
     el.className = "z-badge " + (ratio >= 4.5 ? "z-badge-emerald" : ratio >= 3.0 ? "z-badge-amber" : "z-badge-crimson");
   }
 
+  function parseNum(raw, fallback) {
+    const n = parseFloat(raw);
+    return Number.isFinite(n) ? n : fallback;
+  }
+
+  function parseIntSafe(raw, fallback) {
+    const n = parseInt(raw, 10);
+    return Number.isFinite(n) ? n : fallback;
+  }
+
   function syncPreview() {
     if (!preview || !hueInput || !chromaInput || !lightInput || !radiusInput || !modeInput) return;
 
-    const H = parseFloat(hueInput.value) || 355;
-    const C = parseFloat(chromaInput.value) || 0.145;
-    const L = parseFloat(lightInput.value) || 0.65;
-    const R = parseInt(radiusInput.value, 10) || 0;
+    const H = parseNum(hueInput.value, 355);
+    const C = parseNum(chromaInput.value, 0.145);
+    const L = parseNum(lightInput.value, 0.65);
+    const R = parseIntSafe(radiusInput.value, 12);
     const Rsm = Math.max(0, Math.round(R * 0.66));
     const mode = modeInput.value === "light" ? "light" : "dark";
     const fontScale = fontScaleInput ? fontScaleInput.value : "default";
@@ -169,17 +179,18 @@
       preview.style.setProperty("--z-blue", "oklch(0.73 0.145 252)");
     }
 
-    // Live WCAG 2.1 contrast audit
+    // Live WCAG 2.1 contrast audit (matches OklchContrast::auditConfig exactly)
     const isLight = mode === "light";
-    const bgL = isLight ? 0.972 : 0.155;
-    const surfL = isLight ? 0.998 : 0.192;
+    const bgL = isLight ? 0.972 : 0.152;
+    const surfL = isLight ? 0.998 : 0.190;
     const bodyInkL = isLight ? 0.18 : 0.955;
     const mutedL = isLight ? 0.43 : 0.725;
-    const surfC = isLight ? 0.004 : 0.014;
+    const bgC = isLight ? 0.004 : 0.014;
+    const surfC = isLight ? 0.002 : 0.016;
     const surfH = isLight ? 95 : H;
 
     updateContrastBadge("accent_button", contrastRatio(inkL, inkC, H, L, C, H));
-    updateContrastBadge("body_text", contrastRatio(bodyInkL, isLight ? 0.014 : 0.006, 264, bgL, surfC, surfH));
+    updateContrastBadge("body_text", contrastRatio(bodyInkL, isLight ? 0.014 : 0.006, 264, bgL, bgC, surfH));
     updateContrastBadge("card_text", contrastRatio(bodyInkL, isLight ? 0.014 : 0.006, 264, surfL, surfC, surfH));
     updateContrastBadge("muted_text", contrastRatio(mutedL, 0.014, 264, surfL, surfC, surfH));
 
@@ -215,6 +226,7 @@
       if (modeInput && btn.dataset.mode) modeInput.value = btn.dataset.mode;
       if (radiusInput && btn.dataset.radius) radiusInput.value = btn.dataset.radius;
       syncPreview();
+      scheduleLiveSync();
     });
   });
 
@@ -229,16 +241,24 @@
 
   // Copy CSS button
   const copyBtn = document.getElementById("st-copy-css");
+  let copyTimer = null;
   if (copyBtn && cssCodeOut) {
     copyBtn.addEventListener("click", () => {
+      if (!copyBtn.dataset.origLabel) copyBtn.dataset.origLabel = copyBtn.textContent || "Copy CSS";
+      const finish = (label) => {
+        if (copyTimer) window.clearTimeout(copyTimer);
+        copyBtn.textContent = label;
+        copyTimer = window.setTimeout(() => {
+          copyBtn.textContent = copyBtn.dataset.origLabel || "Copy CSS";
+        }, 1400);
+      };
       if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(cssCodeOut.textContent || "").then(() => {
-          const orig = copyBtn.textContent;
-          copyBtn.textContent = "Copied CSS!";
-          window.setTimeout(() => {
-            copyBtn.textContent = orig;
-          }, 1400);
-        });
+        navigator.clipboard
+          .writeText(cssCodeOut.textContent || "")
+          .then(() => finish("Copied CSS!"))
+          .catch(() => finish("Copy failed"));
+      } else {
+        finish("Copy unavailable");
       }
     });
   }
@@ -249,12 +269,16 @@
   const proofSummary = document.getElementById("st-proof-summary");
   const saveForm = document.getElementById("studio-save-form");
   let syncTimer = null;
+  let syncController = null;
 
   function scheduleLiveSync() {
     if (!liveSyncToggle || !liveSyncToggle.checked || !saveForm) return;
     if (syncTimer) window.clearTimeout(syncTimer);
     if (liveSyncStatus) liveSyncStatus.textContent = "Syncing CSS...";
     syncTimer = window.setTimeout(() => {
+      if (syncController) syncController.abort();
+      syncController = typeof AbortController === "function" ? new AbortController() : null;
+
       const fd = new URLSearchParams();
       const csrfInput = saveForm.querySelector('input[name="_csrf"]');
       if (csrfInput && csrfInput.value) fd.set("_csrf", csrfInput.value);
@@ -270,6 +294,7 @@
         method: "POST",
         headers: { "Content-Type": "application/x-www-form-urlencoded", Accept: "application/json" },
         body: fd.toString(),
+        signal: syncController ? syncController.signal : undefined,
       })
         .then((r) => (r.ok ? r.json() : Promise.reject(new Error("Sync failed"))))
         .then((data) => {
@@ -288,7 +313,8 @@
             link.setAttribute("href", "/assets/zokeibi.min.css?v=" + encodeURIComponent(data.css_version));
           }
         })
-        .catch(() => {
+        .catch((err) => {
+          if (err && err.name === "AbortError") return;
           if (liveSyncStatus) liveSyncStatus.textContent = "Sync error — click Save";
         });
     }, 350);
@@ -301,12 +327,17 @@
     });
   }
 
-  [hueInput, chromaInput, lightInput, radiusInput, modeInput, fontScaleInput, fontStackInput].forEach((el) => {
+  [hueInput, chromaInput, lightInput, radiusInput].forEach((el) => {
     if (el) {
       el.addEventListener("input", () => {
         syncPreview();
         scheduleLiveSync();
       });
+    }
+  });
+
+  [modeInput, fontScaleInput, fontStackInput].forEach((el) => {
+    if (el) {
       el.addEventListener("change", () => {
         syncPreview();
         scheduleLiveSync();

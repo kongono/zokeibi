@@ -3,7 +3,9 @@ $columns = isset($columns) && is_numeric($columns) && in_array((int) $columns, [
 $rows = [];
 if (isset($items) && is_array($items)) {
     foreach ($items as $k => $v) {
-        $rows[] = ['term' => (string) $k, 'detail' => (string) $v];
+        if (is_scalar($v)) {
+            $rows[] = ['term' => (string) $k, 'detail' => (string) $v];
+        }
     }
 } elseif (isset($items) && is_string($items) && trim($items) !== '') {
     foreach (explode('|', $items) as $seg) {

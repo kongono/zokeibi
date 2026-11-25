@@ -3,7 +3,7 @@ $title = isset($title) && is_string($title) && $title !== '' ? $title : 'Dialog'
 $show = isset($show) && is_string($show) && $show !== '' ? $show : 'modalOpen';
 $closeExpr = isset($closeExpr) && is_string($closeExpr) && $closeExpr !== '' ? $closeExpr : 'set(' . $show . ', false)';
 $variant = isset($variant) && is_string($variant) ? $variant : 'default';
-$id = isset($id) && is_string($id) && $id !== '' ? $id : 'z-modal';
+$id = isset($id) && is_string($id) && $id !== '' ? $id : 'z-modal-' . bin2hex(random_bytes(3));
 $class = isset($class) && is_string($class) ? trim($class) : '';
 $modalClasses = ['z-modal'];
 if ($variant === 'danger') {
@@ -15,11 +15,11 @@ if ($class !== '') {
 $modalClass = implode(' ', $modalClasses);
 $slot = isset($slot) && is_string($slot) ? $slot : '';
 @endphp
-<div class="z-modal-backdrop" k-show="{{ $show }}" hidden>
-  <div class="{{ $modalClass }}" id="{{ $id }}" role="dialog" aria-modal="true" aria-labelledby="{{ $id }}-title">
+<div class="z-modal-backdrop" id="{{ $id }}" k-show="{{ $show }}" hidden>
+  <div class="{{ $modalClass }}" role="dialog" aria-modal="true" aria-labelledby="{{ $id }}-title">
     <div class="z-modal-head">
       <h3 class="z-modal-title" id="{{ $id }}-title">{{ $title }}</h3>
-      <button type="button" class="z-btn z-btn-ghost z-btn-sm" k-on:click="{{ $closeExpr }}" aria-label="Close dialog">✕</button>
+      <button type="button" class="z-btn z-btn-ghost z-btn-sm" k-on:click="{{ $closeExpr }}" data-z-close="#{{ $id }}" aria-label="Close dialog">✕</button>
     </div>
     <div class="z-modal-body">{!! $slot !!}</div>
   </div>

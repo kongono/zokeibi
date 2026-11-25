@@ -1,9 +1,9 @@
 @php
 $name = isset($name) && is_string($name) && $name !== '' ? $name : 'agree';
-$id = isset($id) && is_string($id) && $id !== '' ? $id : 'k-cb-' . preg_replace('/[^a-zA-Z0-9_-]/', '', $name);
+$id = isset($id) && is_string($id) && $id !== '' ? $id : 'z-cb-' . preg_replace('/[^a-zA-Z0-9_-]/', '', $name) . '-' . bin2hex(random_bytes(3));
 $label = isset($label) && is_string($label) ? $label : 'Check option';
 $description = isset($description) && is_string($description) && $description !== '' ? $description : null;
-$value = isset($value) && is_string($value) && $value !== '' ? $value : '1';
+$value = isset($value) && is_scalar($value) && (string) $value !== '' ? (string) $value : '1';
 $checked = isset($checked) && ($checked === true || $checked === 'true' || $checked === '1');
 $required = isset($required) && ($required === true || $required === 'true' || $required === '1');
 $disabled = isset($disabled) && ($disabled === true || $disabled === 'true' || $disabled === '1');

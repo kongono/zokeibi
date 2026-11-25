@@ -59,6 +59,17 @@
     grid-template-columns: 1fr;
 
     &.is-split { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    &.is-split .z-editor-preview { border-left: 1px solid var(--z-border); }
+  }
+
+  @media (max-width: 640px) {
+    .z-editor-panes.is-split {
+      grid-template-columns: 1fr;
+    }
+    .z-editor-panes.is-split .z-editor-preview {
+      border-left: 0;
+      border-top: 1px solid var(--z-border);
+    }
   }
 
   .z-editor-input {
@@ -83,7 +94,6 @@
     color: var(--z-ink);
     font-size: 0.84rem;
     line-height: 1.6;
-    border-left: 1px solid var(--z-border);
 
     & h3 { margin: 0 0 0.4rem; font-size: 0.96rem; }
     & p { margin: 0 0 0.5rem; }

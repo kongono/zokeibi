@@ -1,28 +1,50 @@
 @php
-$id = isset($id) && is_string($id) && $id !== '' ? $id : 'z-cmdk';
+$safeUrl = static function (string $raw): string {
+    $clean = trim((string) preg_replace('/[\x00-\x1F\x7F]+/', '', $raw));
+    $lower = strtolower($clean);
+    if ($clean === '' || str_starts_with($lower, '//') || str_starts_with($lower, '/\\')) {
+        return '#';
+    }
+    if (
+        str_starts_with($lower, '/')
+        || str_starts_with($lower, './')
+        || str_starts_with($lower, '../')
+        || str_starts_with($lower, '#')
+        || str_starts_with($lower, '?')
+        || str_starts_with($lower, 'https://')
+        || str_starts_with($lower, 'http://')
+        || str_starts_with($lower, 'mailto:')
+        || str_starts_with($lower, 'tel:')
+    ) {
+        return $clean;
+    }
+
+    return '#';
+};
+$id = isset($id) && is_string($id) && $id !== '' ? $id : 'z-cmdk-' . bin2hex(random_bytes(3));
 $placeholder = isset($placeholder) && is_string($placeholder) && $placeholder !== '' ? $placeholder : 'Search commands or jump to...';
 $triggerLabel = isset($triggerLabel) && is_string($triggerLabel) && $triggerLabel !== '' ? $triggerLabel : 'Quick Command';
 $itemsRaw = isset($items) ? $items : 'studio:Open Token Studio:/studio|docs:View Documentation:/|health:Check API Health:/api/v1/health';
 $parsedItems = [];
 if (is_array($itemsRaw)) {
     foreach ($itemsRaw as $entry) {
-        if (is_array($entry) && isset($entry['label'])) {
+        if (is_array($entry) && isset($entry['label']) && is_scalar($entry['label'])) {
             $parsedItems[] = [
-                'id' => (string) ($entry['id'] ?? 'item'),
+                'id' => isset($entry['id']) && is_scalar($entry['id']) ? (string) $entry['id'] : 'item',
                 'label' => (string) $entry['label'],
-                'href' => (string) ($entry['href'] ?? '#'),
-                'shortcut' => (string) ($entry['shortcut'] ?? ''),
+                'href' => isset($entry['href']) && is_scalar($entry['href']) ? $safeUrl((string) $entry['href']) : '#',
+                'shortcut' => isset($entry['shortcut']) && is_scalar($entry['shortcut']) ? (string) $entry['shortcut'] : '',
             ];
         }
     }
 } elseif (is_string($itemsRaw) && trim($itemsRaw) !== '') {
     foreach (explode('|', $itemsRaw) as $chunk) {
-        $parts = explode(':', trim($chunk));
+        $parts = preg_split('/:(?!\/\/)/', trim($chunk), 4) ?: [];
         if (count($parts) >= 2) {
             $parsedItems[] = [
                 'id' => trim($parts[0]),
                 'label' => trim($parts[1]),
-                'href' => isset($parts[2]) ? trim($parts[2]) : '#',
+                'href' => isset($parts[2]) ? $safeUrl($parts[2]) : '#',
                 'shortcut' => isset($parts[3]) ? trim($parts[3]) : '',
             ];
         }
@@ -38,13 +60,13 @@ $slot = isset($slot) && is_string($slot) ? $slot : '';
   <div class="z-cmdk-backdrop" id="{{ $id }}" data-z-cmdk="true" hidden>
     <div class="z-cmdk" role="dialog" aria-modal="true" aria-label="{{ $triggerLabel }}">
       <div class="z-cmdk-head">
-        <input type="search" class="z-cmdk-input" data-z-cmdk-input placeholder="{{ $placeholder }}" aria-label="{{ $placeholder }}" autocomplete="off">
+        <input type="search" class="z-cmdk-input" data-z-cmdk-input placeholder="{{ $placeholder }}" aria-label="{{ $placeholder }}" aria-controls="{{ $id }}-list" autocomplete="off">
         <button type="button" class="z-btn z-btn-ghost z-btn-sm" data-z-close="#{{ $id }}" aria-label="Close command palette">Esc</button>
       </div>
-      <ul class="z-cmdk-list" role="listbox" data-z-cmdk-list>
+      <ul id="{{ $id }}-list" class="z-cmdk-list" role="listbox" aria-label="{{ $triggerLabel }}" data-z-cmdk-list>
         @foreach ($parsedItems as $idx => $item)
-          <li role="option" aria-selected="{{ $idx === 0 ? 'true' : 'false' }}" data-z-cmdk-item="{{ strtolower($item['label'] . ' ' . $item['id']) }}">
-            <a class="z-cmdk-item{{ $idx === 0 ? ' is-active' : '' }}" href="{{ $item['href'] }}">
+          <li role="option" aria-selected="{{ $idx === 0 ? 'true' : 'false' }}" data-z-cmdk-item="{{ function_exists('mb_strtolower') ? mb_strtolower($item['label'] . ' ' . $item['id'], 'UTF-8') : strtolower($item['label'] . ' ' . $item['id']) }}">
+            <a class="z-cmdk-item{{ $idx === 0 ? ' is-active' : '' }}" href="{{ $item['href'] }}" @if (str_starts_with($item['href'], '#')) data-z-close="#{{ $id }}" @endif>
               <span>{{ $item['label'] }}</span>
               @if ($item['shortcut'] !== '')
                 <kbd class="z-kbd">{{ $item['shortcut'] }}</kbd>

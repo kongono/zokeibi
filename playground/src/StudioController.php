@@ -108,6 +108,7 @@ final readonly class StudioController
             fontStack: $fontStack,
             customColors: $current->customColors,
             customThemes: $current->customThemes,
+            safelist: $current->safelist,
         );
 
         $report = $this->zokeibi->studio->saveAndBuild($this->studioProjectDir, $updated, $this->zokeibi->compiler);
@@ -166,6 +167,7 @@ final readonly class StudioController
             fontStack: $fontStack,
             customColors: $current->customColors,
             customThemes: $current->customThemes,
+            safelist: $current->safelist,
         );
 
         $report = $this->zokeibi->studio->saveAndBuild($this->studioProjectDir, $updated, $this->zokeibi->compiler);
@@ -224,6 +226,7 @@ final readonly class StudioController
                 fontStack: $current->fontStack,
                 customColors: $current->customColors,
                 customThemes: $themes,
+                safelist: $current->safelist,
             );
 
             $this->zokeibi->studio->saveAndBuild($this->studioProjectDir, $updated, $this->zokeibi->compiler);
@@ -258,6 +261,7 @@ final readonly class StudioController
                 fontStack: $current->fontStack,
                 customColors: $current->customColors,
                 customThemes: $themes,
+                safelist: $current->safelist,
             );
 
             $this->zokeibi->studio->saveAndBuild($this->studioProjectDir, $updated, $this->zokeibi->compiler);
@@ -295,6 +299,7 @@ final readonly class StudioController
                 fontStack: $current->fontStack,
                 customColors: $colors,
                 customThemes: $current->customThemes,
+                safelist: $current->safelist,
             );
 
             $this->zokeibi->studio->saveAndBuild($this->studioProjectDir, $updated, $this->zokeibi->compiler);
@@ -329,6 +334,7 @@ final readonly class StudioController
                 fontStack: $current->fontStack,
                 customColors: $colors,
                 customThemes: $current->customThemes,
+                safelist: $current->safelist,
             );
 
             $this->zokeibi->studio->saveAndBuild($this->studioProjectDir, $updated, $this->zokeibi->compiler);

@@ -1,16 +1,40 @@
 @php
+$safeUrl = static function (string $raw): ?string {
+    $clean = trim((string) preg_replace('/[\x00-\x1F\x7F]+/', '', $raw));
+    $lower = strtolower($clean);
+    if ($clean === '' || str_starts_with($lower, '//') || str_starts_with($lower, '/\\')) {
+        return null;
+    }
+    if (
+        str_starts_with($lower, '/')
+        || str_starts_with($lower, './')
+        || str_starts_with($lower, '../')
+        || str_starts_with($lower, '#')
+        || str_starts_with($lower, '?')
+        || str_starts_with($lower, 'https://')
+        || str_starts_with($lower, 'http://')
+    ) {
+        return $clean;
+    }
+
+    return null;
+};
 $crumbs = [];
 if (isset($items) && is_array($items)) {
     foreach ($items as $item) {
-        if (is_array($item) && isset($item['label'])) {
-            $crumbs[] = ['label' => (string) $item['label'], 'href' => isset($item['href']) ? (string) $item['href'] : null];
+        if (is_array($item) && isset($item['label']) && is_scalar($item['label'])) {
+            $lbl = trim((string) $item['label']);
+            $rawHref = isset($item['href']) && is_scalar($item['href']) ? (string) $item['href'] : '';
+            if ($lbl !== '') {
+                $crumbs[] = ['label' => $lbl, 'href' => $rawHref !== '' ? $safeUrl($rawHref) : null];
+            }
         }
     }
 } elseif (isset($items) && is_string($items) && trim($items) !== '') {
     foreach (explode('|', $items) as $seg) {
-        $parts = explode(':', trim($seg), 2);
-        $lbl = trim($parts[0]);
-        $href = isset($parts[1]) && trim($parts[1]) !== '' ? trim($parts[1]) : null;
+        $parts = preg_split('/:(?!\/\/)/', trim($seg), 2) ?: [];
+        $lbl = trim($parts[0] ?? '');
+        $href = isset($parts[1]) && trim($parts[1]) !== '' ? $safeUrl($parts[1]) : null;
         if ($lbl !== '') {
             $crumbs[] = ['label' => $lbl, 'href' => $href];
         }
@@ -26,8 +50,10 @@ $navClass = $class !== '' ? 'z-breadcrumb ' . $class : 'z-breadcrumb';
     <li>
 @if ($idx < $lastIdx && $crumb['href'] !== null)
       <a href="{{ $crumb['href'] }}">{{ $crumb['label'] }}</a>
-@else
+@elseif ($idx === $lastIdx)
       <span aria-current="page">{{ $crumb['label'] }}</span>
+@else
+      <span>{{ $crumb['label'] }}</span>
 @endif
     </li>
 @endforeach

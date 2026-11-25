@@ -13,7 +13,6 @@
     color: var(--z-ink);
     font: inherit;
     font-size: 0.84rem;
-    color-scheme: dark light;
 
     &:focus {
       outline: 2px solid var(--z-accent);

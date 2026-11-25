@@ -47,7 +47,7 @@
     & .z-step-num {
       background: var(--z-emerald);
       border-color: var(--z-emerald);
-      color: oklch(0.15 0.02 162);
+      color: var(--z-emerald-ink);
     }
   }
 }

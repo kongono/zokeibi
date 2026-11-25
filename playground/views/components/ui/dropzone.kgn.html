@@ -1,13 +1,14 @@
 @php
 $name = isset($name) && is_string($name) && $name !== '' ? $name : 'file';
-$id = isset($id) && is_string($id) && $id !== '' ? $id : 'k-drop-' . preg_replace('/[^a-z0-9_-]/i', '-', $name);
+$id = isset($id) && is_string($id) && $id !== '' ? $id : 'z-drop-' . preg_replace('/[^a-z0-9_-]/i', '-', $name) . '-' . bin2hex(random_bytes(3));
 $label = isset($label) && is_string($label) ? $label : '';
 $title = isset($title) && is_string($title) && $title !== '' ? $title : 'Drop files here or click to browse';
-$hint = isset($hint) && is_string($hint) && $hint !== '' ? $hint : 'PNG, JPG, PDF up to 10 MB (validated via magic bytes)';
 $accept = isset($accept) && is_string($accept) ? $accept : '';
+$hint = isset($hint) && is_string($hint) && $hint !== '' ? $hint : ($accept !== '' ? 'Accepted: ' . $accept : 'Upload files up to 10 MB');
 $multiple = isset($multiple) && ($multiple === true || $multiple === 'true' || $multiple === '1');
 $required = isset($required) && ($required === true || $required === 'true' || $required === '1');
 $error = isset($error) && is_string($error) ? $error : '';
+$describedBy = $error !== '' ? $id . '-err' : ($hint !== '' ? $id . '-hint' : '');
 @endphp
 <div class="z-dropzone" data-z-dropzone="true">
   @if ($label !== '')
@@ -23,12 +24,14 @@ $error = isset($error) && is_string($error) ? $error : '';
       @if ($accept !== '') accept="{{ $accept }}" @endif
       @if ($multiple) multiple @endif
       @if ($required) required @endif
+      @if ($error !== '') aria-invalid="true" @endif
+      @if ($describedBy !== '') aria-describedby="{{ $describedBy }}" @endif
     >
     <div class="z-dropzone-title">{{ $title }}</div>
-    <div class="z-dropzone-hint">{{ $hint }}</div>
+    <div id="{{ $id }}-hint" class="z-dropzone-hint">{{ $hint }}</div>
   </div>
   <ul class="z-dropzone-files" data-z-dropzone-files aria-live="polite"></ul>
   @if ($error !== '')
-    <div class="z-field-error" role="alert">{{ $error }}</div>
+    <div id="{{ $id }}-err" class="z-field-err" role="alert">{{ $error }}</div>
   @endif
 </div>

@@ -99,10 +99,11 @@ final readonly class OklchContrast
     {
         $isLight = 'light' === $config->mode;
         $surfaceHue = $isLight ? 95.0 : $config->hue;
-        $surfaceChroma = $isLight ? 0.004 : 0.014;
+        $bgChroma = $isLight ? 0.004 : 0.014;
+        $surfChroma = $isLight ? 0.002 : 0.016;
 
-        $bgL = $isLight ? 0.972 : 0.155;
-        $surfL = $isLight ? 0.998 : 0.192;
+        $bgL = $isLight ? 0.972 : 0.152;
+        $surfL = $isLight ? 0.998 : 0.190;
         $inkL = $isLight ? 0.180 : 0.955;
         $mutedL = $isLight ? 0.430 : 0.725;
         $inkC = $isLight ? 0.014 : 0.006;
@@ -128,7 +129,7 @@ final readonly class OklchContrast
                 $inkC,
                 264.0,
                 $bgL,
-                $surfaceChroma,
+                $bgChroma,
                 $surfaceHue,
             ),
             self::makeCheck(
@@ -138,7 +139,7 @@ final readonly class OklchContrast
                 $inkC,
                 264.0,
                 $surfL,
-                $surfaceChroma,
+                $surfChroma,
                 $surfaceHue,
             ),
             self::makeCheck(
@@ -148,7 +149,7 @@ final readonly class OklchContrast
                 0.014,
                 264.0,
                 $surfL,
-                $surfaceChroma,
+                $surfChroma,
                 $surfaceHue,
             ),
         ];

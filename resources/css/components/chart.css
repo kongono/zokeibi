@@ -60,7 +60,7 @@
 
   .z-chart-bar {
     fill: var(--z-accent);
-    rx: 4;
+    rx: 4px;
     transition: opacity 120ms ease;
 
     &:hover { opacity: 0.82; }

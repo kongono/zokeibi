@@ -1,9 +1,9 @@
 {
   "name": "zokeibi",
-  "kanji": "形",
-  "meaning": "Form / Shape",
+  "kanji": "造形美",
+  "meaning": "Beauty of Form",
   "package": "kongono/zokeibi",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "themes": ["sumi", "washi", "indigo", "matcha", "kintsugi"],
   "radius_presets": ["sharp", "default", "rounded"],
   "core_css": [
@@ -33,6 +33,13 @@
         "disabled": { "type": "boolean", "default": false, "description": "Disables user interaction" },
         "k-click": { "type": "string", "description": "Kongono Live 2.5 k-on:click action" },
         "k-disabled": { "type": "string", "description": "Kongono Live 2.5 reactive disabled expression" },
+        "kgn-get": { "type": "string", "description": "Kongono Live HTTP GET action URL" },
+        "kgn-post": { "type": "string", "description": "Kongono Live HTTP POST action URL" },
+        "kgn-target": { "type": "string", "description": "Kongono Live swap target selector" },
+        "kgn-swap": { "type": "string", "description": "Kongono Live swap strategy (morph, innerHTML, etc.)" },
+        "data-z-open": { "type": "string", "description": "Standalone runtime selector to open an overlay" },
+        "data-z-close": { "type": "string", "description": "Standalone runtime selector to close an overlay" },
+        "data-z-toggle": { "type": "string", "description": "Standalone runtime selector to toggle an overlay" },
         "popover-target": { "type": "string", "description": "Native HTML popovertarget ID" },
         "aria-label": { "type": "string", "description": "Accessible label for icon-only buttons" }
       },
@@ -123,7 +130,7 @@
       "css_deps": [],
       "template": "avatar.kgn.html",
       "props": {
-        "initials": { "type": "string", "default": "KT", "description": "1-2 character monogram" },
+        "initials": { "type": "string", "default": "ZK", "description": "1-2 character monogram" },
         "name": { "type": "string", "description": "Accessible full name" },
         "size": { "type": "enum", "enum": ["sm", "md", "lg"], "default": "md", "description": "Avatar diameter" },
         "status": { "type": "enum", "enum": ["none", "online", "busy", "away"], "default": "none", "description": "Presence indicator dot" }
@@ -269,7 +276,7 @@
       "css_deps": [],
       "template": "empty-state.kgn.html",
       "props": {
-        "icon": { "type": "string", "default": "形", "description": "Emblem symbol or short monogram" },
+        "icon": { "type": "string", "default": "造形美", "description": "Emblem symbol or short monogram" },
         "title": { "type": "string", "description": "Primary empty-state heading" },
         "description": { "type": "string", "description": "Helpful next-step guidance" }
       },
@@ -330,7 +337,7 @@
         "tabs": { "type": "string", "description": "Pipe-separated id:Label pairs or array" },
         "default": { "type": "string", "description": "Initial active tab ID" }
       },
-      "example": "<x-ui.tabs tabs=\"preview:Preview|code:Code\" default=\"preview\"><div class=\"k-tabpanel\" k-show=\"tab === 'preview'\">Live view</div><div class=\"k-tabpanel\" k-show=\"tab === 'code'\" hidden>Markup</div></x-ui.tabs>"
+      "example": "<x-ui.tabs tabs=\"preview:Preview|code:Code\" default=\"preview\"><div class=\"z-tabpanel\" k-show=\"tab === 'preview'\">Live view</div><div class=\"z-tabpanel\" k-show=\"tab === 'code'\" hidden>Markup</div></x-ui.tabs>"
     },
     "accordion": {
       "id": "accordion",
@@ -931,7 +938,7 @@
         "action-href": { "type": "string", "description": "Optional CTA link destination" },
         "dismissible": { "type": "boolean", "default": false, "description": "Shows dismiss button wired to data-z-close" }
       },
-      "example": "<x-ui.banner variant=\"emerald\" title=\"Zokeibi v1.3 Ready\" action-label=\"Open Studio\" action-href=\"/studio\" dismissible=\"true\">All 49 primitives pass strict CSP.</x-ui.banner>"
+      "example": "<x-ui.banner variant=\"emerald\" title=\"Zokeibi v1.0 Ready\" action-label=\"Open Studio\" action-href=\"/studio\" dismissible=\"true\">All 55 primitives pass strict CSP.</x-ui.banner>"
     },
     "rating": {
       "id": "rating",
@@ -1031,7 +1038,7 @@
         "max": { "type": "integer", "default": 4, "description": "Max visible avatars before +N overflow pill" },
         "size": { "type": "enum", "enum": ["sm", "md", "lg"], "default": "md", "description": "Avatar diameter" }
       },
-      "example": "<x-ui.avatar-group max=\"4\" items=\"OS:Oshie|CH:Chie|HT:Hantei|KT:Zokeibi|AK:Aiko|RY:Ryu\" />"
+      "example": "<x-ui.avatar-group max=\"4\" items=\"OS:Oshie|CH:Chie|HT:Hantei|ZK:Zokeibi|AK:Aiko|RY:Ryu\" />"
     },
     "carousel": {
       "id": "carousel",

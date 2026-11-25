@@ -1,6 +1,6 @@
 @php
 $name = isset($name) && is_string($name) && $name !== '' ? $name : 'content';
-$id = isset($id) && is_string($id) && $id !== '' ? $id : 'k-ed-' . preg_replace('/[^a-zA-Z0-9_-]/', '', $name);
+$id = isset($id) && is_string($id) && $id !== '' ? $id : 'z-ed-' . preg_replace('/[^a-zA-Z0-9_-]/', '', $name) . '-' . bin2hex(random_bytes(3));
 $label = isset($label) && is_string($label) && $label !== '' ? $label : null;
 $slotText = isset($slot) && is_string($slot) ? trim($slot) : '';
 $value = isset($value) && is_string($value) && $value !== '' ? $value : $slotText;
@@ -25,13 +25,13 @@ $wrapClass = $class !== '' ? 'z-editor ' . $class : 'z-editor';
         <button type="button" class="z-editor-btn" data-z-ed-cmd="link" aria-label="Insert link">Link</button>
       </div>
       <div class="z-editor-modes" role="tablist" aria-label="Editor view mode">
-        <button type="button" class="z-editor-btn is-active" data-z-ed-mode="write">Write</button>
-        <button type="button" class="z-editor-btn" data-z-ed-mode="split">Split</button>
-        <button type="button" class="z-editor-btn" data-z-ed-mode="preview">Preview</button>
+        <button type="button" role="tab" aria-selected="true" class="z-editor-btn is-active" data-z-ed-mode="write">Write</button>
+        <button type="button" role="tab" aria-selected="false" class="z-editor-btn" data-z-ed-mode="split">Split</button>
+        <button type="button" role="tab" aria-selected="false" class="z-editor-btn" data-z-ed-mode="preview">Preview</button>
       </div>
     </div>
     <div class="z-editor-panes" data-z-ed-panes>
-      <textarea id="{{ $id }}" name="{{ $name }}" rows="{{ $rows }}" class="z-editor-input" placeholder="{{ $placeholder }}" data-z-ed-input>{{ $value }}</textarea>
+      <textarea id="{{ $id }}" name="{{ $name }}" rows="{{ $rows }}" class="z-editor-input" placeholder="{{ $placeholder }}" @if ($label === null) aria-label="{{ $placeholder }}" @endif data-z-ed-input>{{ $value }}</textarea>
       <div class="z-editor-preview" data-z-ed-preview hidden></div>
     </div>
     <div class="z-editor-foot">

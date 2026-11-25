@@ -1,5 +1,5 @@
 @layer zokeibi.components {
-  @keyframes k-spin {
+  @keyframes z-spin {
     to { transform: rotate(360deg); }
   }
 
@@ -18,7 +18,7 @@
     border-radius: 999px;
     border: 2px solid color-mix(in oklch, currentColor 22%, transparent);
     border-top-color: currentColor;
-    animation: k-spin 0.72s linear infinite;
+    animation: z-spin 0.72s linear infinite;
     color: var(--z-accent);
 
     &.z-spinner-sm { width: 14px; height: 14px; border-width: 2px; }

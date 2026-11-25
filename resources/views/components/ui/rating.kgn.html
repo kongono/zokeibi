@@ -13,9 +13,10 @@ $wrapClass = $class !== '' ? 'z-rating ' . $class : 'z-rating';
 @endif
   <div class="z-rating-stars">
 @foreach ($stars as $s)
-    <label class="z-rating-star" aria-label="{{ $s }} of {{ $max }} stars">
-      <input type="radio" name="{{ $name }}" value="{{ $s }}" @if ($s === $value) checked @endif>
+    <label class="z-rating-star">
+      <input type="radio" name="{{ $name }}" value="{{ $s }}" aria-label="{{ $s }} of {{ $max }} stars" @if ($s === $value) checked @endif>
       <span aria-hidden="true">★</span>
+      <span class="z-sr-only">{{ $s }} of {{ $max }} stars</span>
     </label>
 @endforeach
   </div>

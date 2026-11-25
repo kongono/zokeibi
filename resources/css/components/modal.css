@@ -14,6 +14,9 @@
   .z-modal {
     width: 100%;
     max-width: 470px;
+    max-height: calc(100dvh - 2rem);
+    display: flex;
+    flex-direction: column;
     background: var(--z-surface);
     border: 1px solid var(--z-border-strong);
     border-radius: var(--z-radius);
@@ -33,7 +36,7 @@
   }
 
   .z-modal-title { margin: 0; font-size: 0.96rem; font-weight: 780; }
-  .z-modal-body { padding: 1rem 1.05rem; font-size: 0.82rem; color: var(--z-ink-muted); line-height: 1.55; }
+  .z-modal-body { padding: 1rem 1.05rem; font-size: 0.82rem; color: var(--z-ink-muted); line-height: 1.55; overflow-y: auto; flex: 1; }
 
   .z-modal-foot {
     padding: 0.78rem 1.05rem;

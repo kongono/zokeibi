@@ -81,7 +81,32 @@ final readonly class ComponentRegistry
 
     public function cssPath(string $relative): string
     {
-        return $this->resourcesDir . DIRECTORY_SEPARATOR . 'css' . DIRECTORY_SEPARATOR . str_replace('/', DIRECTORY_SEPARATOR, ltrim($relative, '/\\'));
+        $trimmed = trim($relative);
+        if ('' === $trimmed || 1 === preg_match('/[\x00-\x1F\x7F]/', $trimmed)) {
+            throw new InvalidArgumentException('Invalid CSS stylesheet path.');
+        }
+
+        $segments = preg_split('#[/\\\\]+#', ltrim($trimmed, '/\\'));
+        if (false === $segments) {
+            throw new InvalidArgumentException('Invalid CSS stylesheet path.');
+        }
+
+        $clean = [];
+        foreach ($segments as $seg) {
+            if ('' === $seg || '.' === $seg) {
+                continue;
+            }
+            if ('..' === $seg) {
+                throw new InvalidArgumentException(sprintf('Path traversal is not allowed in CSS path "%s".', $relative));
+            }
+            $clean[] = $seg;
+        }
+
+        if ([] === $clean) {
+            throw new InvalidArgumentException('CSS stylesheet path cannot be empty.');
+        }
+
+        return $this->resourcesDir . DIRECTORY_SEPARATOR . 'css' . DIRECTORY_SEPARATOR . implode(DIRECTORY_SEPARATOR, $clean);
     }
 
     public function templatePath(string $templateFile): string

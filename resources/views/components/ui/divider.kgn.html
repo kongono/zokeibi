@@ -6,9 +6,9 @@ $class = isset($class) && is_string($class) ? trim($class) : '';
 @if ($orientation === 'vertical')
 <span class="z-divider-vertical {{ $class }}" role="separator" aria-orientation="vertical"></span>
 @else
-<div class="z-divider {{ $label === null ? 'is-plain ' : '' }}{{ $class }}" role="separator" aria-orientation="horizontal">
+<div class="z-divider {{ $label === null ? 'is-plain ' : '' }}{{ $class }}" role="separator" aria-orientation="horizontal" @if ($label !== null) aria-label="{{ $label }}" @endif>
 @if ($label !== null)
-  <span>{{ $label }}</span>
+  <span aria-hidden="true">{{ $label }}</span>
 @endif
 </div>
 @endif

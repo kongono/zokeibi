@@ -107,7 +107,6 @@
     cursor: pointer;
 
     &:hover { background: var(--z-surface-hover); }
-    &.is-muted { color: var(--z-ink-soft); opacity: 0.45; }
     &.is-today { border-color: var(--z-border-strong); font-weight: 750; }
     &.is-in-range {
       background: var(--z-accent-soft);

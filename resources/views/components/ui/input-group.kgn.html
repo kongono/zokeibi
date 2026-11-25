@@ -1,11 +1,11 @@
 @php
 $name = isset($name) && is_string($name) && $name !== '' ? $name : 'domain';
-$id = isset($id) && is_string($id) && $id !== '' ? $id : 'k-ig-' . preg_replace('/[^a-zA-Z0-9_-]/', '', $name);
+$id = isset($id) && is_string($id) && $id !== '' ? $id : 'z-ig-' . preg_replace('/[^a-zA-Z0-9_-]/', '', $name) . '-' . bin2hex(random_bytes(3));
 $label = isset($label) && is_string($label) && $label !== '' ? $label : null;
 $type = isset($type) && is_string($type) && in_array($type, ['text', 'url', 'number', 'email', 'search'], true) ? $type : 'text';
 $prefix = isset($prefix) && is_string($prefix) && $prefix !== '' ? $prefix : null;
 $suffix = isset($suffix) && is_string($suffix) && $suffix !== '' ? $suffix : null;
-$value = isset($value) && is_string($value) ? $value : '';
+$value = isset($value) && is_scalar($value) ? (string) $value : '';
 $placeholder = isset($placeholder) && is_string($placeholder) ? $placeholder : '';
 $hint = isset($hint) && is_string($hint) && $hint !== '' ? $hint : null;
 $required = isset($required) && ($required === true || $required === 'true' || $required === '1');
@@ -27,6 +27,8 @@ $wrapClass = $class !== '' ? 'z-input-group ' . $class : 'z-input-group';
       class="z-input-group-field"
       value="{{ $value }}"
       placeholder="{{ $placeholder }}"
+      @if ($label === null) aria-label="{{ $placeholder !== '' ? $placeholder : $name }}" @endif
+      @if ($hint !== null) aria-describedby="{{ $id }}-hint" @endif
       @if ($required) required @endif
     >
 @if ($suffix !== null)
@@ -34,6 +36,6 @@ $wrapClass = $class !== '' ? 'z-input-group ' . $class : 'z-input-group';
 @endif
   </div>
 @if ($hint !== null)
-  <span class="z-hint">{{ $hint }}</span>
+  <span id="{{ $id }}-hint" class="z-hint">{{ $hint }}</span>
 @endif
 </div>

@@ -86,11 +86,16 @@ final readonly class BlockCatalog
 
             $dest = $blocksDir . DIRECTORY_SEPARATOR . $id . '.kgn.html';
             $rel = 'views/blocks/' . $id . '.kgn.html';
+            if (is_link($dest)) {
+                throw new RuntimeException(sprintf('Refusing to overwrite symlinked block "%s".', $id));
+            }
             if (is_file($dest) && !$force) {
                 $skipped[] = $rel;
                 continue;
             }
-            if (false === file_put_contents($dest, $block['template'])) {
+            $tmp = $dest . '.tmp.' . bin2hex(random_bytes(4));
+            if (false === file_put_contents($tmp, $block['template']) || !rename($tmp, $dest)) {
+                @unlink($tmp);
                 throw new RuntimeException(sprintf('Unable to write Zokeibi block "%s".', $id));
             }
             $written[] = $rel;
@@ -117,16 +122,16 @@ final readonly class BlockCatalog
                 'description' => 'Sidebar workspace layout with mobile slide-over drawer, Cmd+K command palette, user avatar, and Live 2.5 slot.',
                 'components' => ['button', 'badge', 'avatar', 'drawer', 'command-palette', 'kbd'],
                 'template' => <<<'HTML'
-<div class="z-stack">
+<div class="z-stack" @state(['navOpen' => false])>
   <header class="z-between">
     <div class="z-row">
-      <x-ui.button variant="outline" size="sm" k-click="set(navOpen, true)">Menu</x-ui.button>
+      <x-ui.button variant="outline" size="sm" k-click="set(navOpen, true)" data-z-open="#mobile-nav">Menu</x-ui.button>
       <strong>{{ $appName ?? 'Workspace' }}</strong>
       <x-ui.badge variant="emerald" dot="true">Production</x-ui.badge>
     </div>
     <div class="z-row">
       <x-ui.command-palette id="shell-cmdk" trigger-label="Search Workspace" items="dashboard:Dashboard:/|settings:Settings:/settings|billing:Billing:/billing" />
-      <x-ui.avatar initials="{{ $userInitials ?? 'KT' }}" name="{{ $userName ?? 'Account' }}" status="online" />
+      <x-ui.avatar :initials="$userInitials ?? 'ZK'" :name="$userName ?? 'Account'" status="online" />
     </div>
   </header>
   <x-ui.drawer id="mobile-nav" title="Navigation" show="navOpen">
@@ -145,7 +150,7 @@ HTML,
             'auth-login' => [
                 'name' => 'Auth Sign-In & Passkey Screen',
                 'category' => 'auth',
-                'description' => 'Accessible sign-in card with CSRF hidden field, PRG @old/@error feedback, remember-me switch, and Passkey CTA.',
+                'description' => 'Accessible sign-in card with CSRF hidden field, PRG old-input feedback, remember-me switch, and Passkey CTA.',
                 'components' => ['card', 'input', 'switch', 'button', 'alert'],
                 'template' => <<<'HTML'
 <main class="z-stack">
@@ -155,7 +160,7 @@ HTML,
     @endif
     <form method="POST" action="/login" class="z-stack">
       <input type="hidden" name="_csrf" value="{{ $csrf ?? '' }}">
-      <x-ui.input name="email" type="email" label="Work Email" value="@old('email')" required="true" />
+      <x-ui.input name="email" type="email" label="Work Email" :value="$old['email'] ?? ''" required="true" />
       <x-ui.input name="password" type="password" label="Password" required="true" />
       <x-ui.switch name="remember" label="Keep me signed in on this device" />
       <div class="z-row">
@@ -174,20 +179,20 @@ HTML,
                 'description' => 'Workspace profile form, live subscription KPIs, region combobox, and danger-zone confirmation modal.',
                 'components' => ['card', 'kpi', 'input', 'combobox', 'button', 'modal', 'badge'],
                 'template' => <<<'HTML'
-<section class="z-stack">
+<section class="z-stack" @state(['deleteOpen' => false])>
   <div class="z-grid-3">
-    <x-ui.kpi label="Current Plan" value="{{ $planName ?? 'Pro' }}" delta="Active" trend="up" variant="emerald" />
-    <x-ui.kpi label="Seats Used" value="{{ $seatsUsed ?? '8 / 15' }}" delta="53%" />
-    <x-ui.kpi label="Next Invoice" value="{{ $nextAmount ?? '$49.00' }}" delta="Monthly" />
+    <x-ui.kpi label="Current Plan" :value="$planName ?? 'Pro'" delta="Active" trend="up" variant="emerald" />
+    <x-ui.kpi label="Seats Used" :value="$seatsUsed ?? '8 / 15'" delta="53%" />
+    <x-ui.kpi label="Next Invoice" :value="$nextAmount ?? '$49.00'" delta="Monthly" />
   </div>
   <x-ui.card title="Workspace Profile" badge="Settings">
     <form method="POST" action="/settings/profile" class="z-stack" kgn-post="/settings/profile" kgn-target="#settings-notice" kgn-swap="morph">
       <input type="hidden" name="_csrf" value="{{ $csrf ?? '' }}">
-      <x-ui.input name="workspace_name" label="Workspace Name" value="{{ $workspaceName ?? '' }}" required="true" />
-      <x-ui.combobox name="region" label="Primary Data Region" options="us-east:US East|eu-central:EU Central|ap-northeast:Tokyo" value="{{ $region ?? 'us-east' }}" />
+      <x-ui.input name="workspace_name" label="Workspace Name" :value="$workspaceName ?? ''" required="true" />
+      <x-ui.combobox name="region" label="Primary Data Region" options="us-east:US East|eu-central:EU Central|ap-northeast:Tokyo" :value="$region ?? 'us-east'" />
       <div class="z-between">
         <x-ui.button type="submit" variant="primary">Save Changes</x-ui.button>
-        <x-ui.button type="button" variant="danger" k-click="set(deleteOpen, true)">Delete Workspace</x-ui.button>
+        <x-ui.button type="button" variant="danger" k-click="set(deleteOpen, true)" data-z-open="#delete-workspace-modal">Delete Workspace</x-ui.button>
       </div>
     </form>
     <div id="settings-notice" aria-live="polite"></div>
@@ -197,7 +202,7 @@ HTML,
     <form method="POST" action="/settings/delete" class="z-row">
       <input type="hidden" name="_csrf" value="{{ $csrf ?? '' }}">
       <x-ui.button type="submit" variant="danger">Confirm Delete</x-ui.button>
-      <x-ui.button type="button" variant="outline" k-click="set(deleteOpen, false)">Cancel</x-ui.button>
+      <x-ui.button type="button" variant="outline" k-click="set(deleteOpen, false)" data-z-close="#delete-workspace-modal">Cancel</x-ui.button>
     </form>
   </x-ui.modal>
 </section>
@@ -232,8 +237,8 @@ HTML,
                 'components' => ['stepper', 'empty-state', 'button'],
                 'template' => <<<'HTML'
 <section class="z-stack">
-  <x-ui.stepper steps="Create Account|Connect Database|Run kongo prove|Deploy" current="{{ $step ?? 2 }}" />
-  <x-ui.empty-state icon="形" title="No projects yet" description="Create your first project to unlock live telemetry, proofs, and zero-downtime deploys.">
+  <x-ui.stepper steps="Create Account|Connect Database|Run kongo prove|Deploy" :current="$step ?? 2" />
+  <x-ui.empty-state icon="造" title="No projects yet" description="Create your first project to unlock live telemetry, proofs, and zero-downtime deploys.">
     <x-ui.button variant="primary" kgn-get="/projects/new">Create Project</x-ui.button>
   </x-ui.empty-state>
 </section>
@@ -246,7 +251,7 @@ HTML,
                 'components' => ['card', 'badge', 'button', 'alert'],
                 'template' => <<<'HTML'
 <main class="z-stack">
-  <x-ui.card title="{{ $title ?? 'Something went wrong' }}" badge="{{ $statusCode ?? '500' }}">
+  <x-ui.card :title="$title ?? 'Something went wrong'" :badge="$statusCode ?? '500'">
     <x-ui.alert variant="warning" title="Reference ID">{{ $reference ?? 'KGN-UNKNOWN' }}</x-ui.alert>
     <p>{{ $message ?? 'The request could not be completed. Share the reference ID above with support.' }}</p>
     <div class="z-row">
@@ -265,9 +270,9 @@ HTML,
 <section class="z-stack">
   <x-ui.breadcrumb items="Workspace:/|Analytics" />
   <div class="z-grid-3">
-    <x-ui.kpi label="Monthly Revenue" value="{{ $mrr ?? '$48,920' }}" delta="+24.2%" trend="up" variant="emerald" />
-    <x-ui.kpi label="Active Workspaces" value="{{ $tenants ?? '1,284' }}" delta="+9.1%" trend="up" variant="accent" />
-    <x-ui.kpi label="P95 Latency" value="{{ $p95 ?? '11.4 ms' }}" delta="-31%" trend="up" />
+    <x-ui.kpi label="Monthly Revenue" :value="$mrr ?? '$48,920'" delta="+24.2%" trend="up" variant="emerald" />
+    <x-ui.kpi label="Active Workspaces" :value="$tenants ?? '1,284'" delta="+9.1%" trend="up" variant="accent" />
+    <x-ui.kpi label="P95 Latency" :value="$p95 ?? '11.4 ms'" delta="-31%" trend="up" />
   </div>
   <div class="z-grid-2">
     <x-ui.chart type="bar" title="Daily API Requests (k)" meta="Last 5 days" data="Mon:32|Tue:49|Wed:44|Thu:68|Fri:61" />
@@ -308,7 +313,7 @@ HTML,
   <div class="z-grid-2">
     <x-ui.card title="Personal Access Token" badge="SHA-256 Hashed" badge-variant="emerald">
       <div class="z-stack">
-        <x-ui.copy-field label="Active Production Token" value="{{ $maskedToken ?? 'kgn_pat_example_replace_me' }}" masked="true" />
+        <x-ui.copy-field label="Active Production Token" :value="$maskedToken ?? 'kgn_pat_example_replace_me'" masked="true" />
         <form method="POST" action="/security/keys/rotate" class="z-stack">
           <input type="hidden" name="_csrf" value="{{ $csrf ?? '' }}">
           <x-ui.otp-input name="totp_code" label="Confirm Rotation with 2FA Code" length="6" hint="Enter your 6-digit authenticator code." />

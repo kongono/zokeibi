@@ -1,6 +1,6 @@
 @php
 $name = isset($name) && is_string($name) && $name !== '' ? $name : 'quantity';
-$id = isset($id) && is_string($id) && $id !== '' ? $id : 'z-num-' . preg_replace('/[^a-zA-Z0-9_-]/', '', $name);
+$id = isset($id) && is_string($id) && $id !== '' ? $id : 'z-num-' . preg_replace('/[^a-zA-Z0-9_-]/', '', $name) . '-' . bin2hex(random_bytes(3));
 $label = isset($label) && is_string($label) && $label !== '' ? $label : null;
 $min = isset($min) && is_numeric($min) ? (string) $min : '0';
 $max = isset($max) && is_numeric($max) ? (string) $max : '999';
@@ -24,6 +24,7 @@ $wrapClass = $class !== '' ? 'z-num ' . $class : 'z-num';
       max="{{ $max }}"
       step="{{ $step }}"
       value="{{ $value }}"
+      @if ($label === null) aria-label="{{ $name }}" @endif
       data-z-num-input
     >
     <button type="button" class="z-num-btn" data-z-num-inc aria-label="Increase value">+</button>

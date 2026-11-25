@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Zokeibi\Proof;
 
+use InvalidArgumentException;
 use Zokeibi\Audit\UiAuditor;
 use Zokeibi\Compiler\CssTreeShaker;
 use Zokeibi\Studio\OklchContrast;
@@ -16,7 +17,7 @@ use Zokeibi\Studio\ThemeTokenConfig;
  * Proves three mathematical UI guarantees in one command:
  *   1. WCAG 2.1 AA contrast across active theme + EVERY saved custom brand theme in `zokeibi.json`
  *   2. Static UI schema, ARIA & strict-CSP audit (`UiAuditor`)
- *   3. Tree-shaken gzipped CSS bundle budget (`--max-gzip-kb=6.0`)
+ *   3. Tree-shaken gzipped CSS bundle budget (`--max-gzip-kb=10.0`)
  */
 final readonly class UiProver
 {
@@ -45,9 +46,27 @@ final readonly class UiProver
         float $maxGzipKb = 10.0,
         bool $strict = false,
     ): array {
+        if (!is_finite($maxGzipKb) || $maxGzipKb <= 0.0) {
+            throw new InvalidArgumentException('CSS gzip budget must be a finite positive number.');
+        }
+
         $t0 = hrtime(true);
         $root = rtrim($projectDir, '\\/');
-        $resolvedViews = $viewsDir ?? ($root . DIRECTORY_SEPARATOR . 'views');
+        $resolvedViews = $viewsDir;
+        if (null === $resolvedViews) {
+            $configPath = $this->studio->configPath($root);
+            $viewsRel = 'views';
+            if (is_file($configPath) && !is_link($configPath)) {
+                $rawCfg = file_get_contents($configPath);
+                if (false !== $rawCfg) {
+                    $decodedCfg = json_decode($rawCfg, true);
+                    if (is_array($decodedCfg) && isset($decodedCfg['views_dir']) && is_string($decodedCfg['views_dir']) && '' !== trim($decodedCfg['views_dir'])) {
+                        $viewsRel = $decodedCfg['views_dir'];
+                    }
+                }
+            }
+            $resolvedViews = $this->studio->resolveSafeProjectPath($root, $viewsRel);
+        }
 
         // Pillar 1: WCAG 2.1 AA Contrast across active theme AND all saved custom themes
         $config = $this->studio->load($root);

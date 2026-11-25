@@ -28,14 +28,24 @@ if ($points === []) {
         ['label' => 'Fri', 'value' => 54.0],
     ];
 }
-$maxVal = 1.0;
+$minVal = $points[0]['value'];
+$maxVal = $points[0]['value'];
 $sumVal = 0.0;
 foreach ($points as $pt) {
+    if ($pt['value'] < $minVal) {
+        $minVal = $pt['value'];
+    }
     if ($pt['value'] > $maxVal) {
         $maxVal = $pt['value'];
     }
     $sumVal += max(0.0, $pt['value']);
 }
+$sparkMin = min(0.0, $minVal);
+$sparkMax = $maxVal > $sparkMin ? $maxVal : ($sparkMin + 1.0);
+$sparkSpan = $sparkMax - $sparkMin;
+$barBaseMin = min(0.0, $minVal);
+$barBaseMax = $maxVal > $barBaseMin ? $maxVal : ($barBaseMin + 1.0);
+$barSpan = $barBaseMax - $barBaseMin;
 $count = count($points);
 $class = isset($class) && is_string($class) ? trim($class) : '';
 $wrapClass = $class !== '' ? 'z-chart ' . $class : 'z-chart';
@@ -60,7 +70,8 @@ $polyCoords = [];
 $dots = [];
 foreach ($points as $i => $pt) {
     $x = $count > 1 ? $padX + (($i / ($count - 1)) * $plotW) : ($w / 2);
-    $y = $padY + $plotH - (($pt['value'] / $maxVal) * $plotH);
+    $normY = ($pt['value'] - $sparkMin) / $sparkSpan;
+    $y = $padY + $plotH - ($normY * $plotH);
     $polyCoords[] = sprintf('%.1f,%.1f', $x, $y);
     $dots[] = ['x' => sprintf('%.1f', $x), 'y' => sprintf('%.1f', $y), 'label' => $pt['label'], 'val' => $pt['value']];
 }
@@ -90,7 +101,8 @@ $slotW = $plotW / max(1, $count);
 $barW = min(38.0, max(12.0, $slotW * 0.58));
 $bars = [];
 foreach ($points as $i => $pt) {
-    $bh = max(4.0, ($pt['value'] / $maxVal) * $plotH);
+    $normH = ($pt['value'] - $barBaseMin) / $barSpan;
+    $bh = max(4.0, $normH * $plotH);
     $bx = $padX + ($i * $slotW) + (($slotW - $barW) / 2);
     $by = $padTop + ($plotH - $bh);
     $bars[] = [

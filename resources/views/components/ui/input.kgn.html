@@ -1,8 +1,9 @@
 @php
-$name = isset($name) && is_string($name) ? $name : 'field';
-$id = isset($id) && is_string($id) && $id !== '' ? $id : 'z-input-' . preg_replace('/[^a-zA-Z0-9_-]/', '-', $name);
+$name = isset($name) && is_string($name) && $name !== '' ? $name : 'field';
+$id = isset($id) && is_string($id) && $id !== '' ? $id : 'z-input-' . preg_replace('/[^a-zA-Z0-9_-]/', '-', $name) . '-' . bin2hex(random_bytes(3));
 $label = isset($label) && is_string($label) && $label !== '' ? $label : null;
-$type = isset($type) && is_string($type) ? $type : 'text';
+$allowedTypes = ['text', 'email', 'password', 'search', 'url', 'number', 'tel'];
+$type = isset($type) && is_string($type) && in_array($type, $allowedTypes, true) ? $type : 'text';
 $value = isset($value) && is_scalar($value) ? (string) $value : '';
 $placeholder = isset($placeholder) && is_string($placeholder) ? $placeholder : '';
 $hint = isset($hint) && is_string($hint) && $hint !== '' ? $hint : null;
@@ -51,7 +52,7 @@ $fieldClass = $class !== '' ? 'z-field ' . $class : 'z-field';
 @endif
   >
 @if ($error !== null)
-  <span class="z-field-err" id="{{ $id }}-err">{{ $error }}</span>
+  <span class="z-field-err" id="{{ $id }}-err" role="alert">{{ $error }}</span>
 @elseif ($hint !== null)
   <span class="z-hint" id="{{ $id }}-hint">{{ $hint }}</span>
 @endif

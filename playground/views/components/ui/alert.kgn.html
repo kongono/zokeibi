@@ -1,7 +1,7 @@
 @php
 $variant = isset($variant) && is_string($variant) ? $variant : 'default';
 $title = isset($title) && is_string($title) && $title !== '' ? $title : null;
-$role = isset($role) && is_string($role) && $role !== '' ? $role : ($variant === 'danger' ? 'alert' : 'status');
+$role = isset($role) && is_string($role) && in_array($role, ['status', 'alert'], true) ? $role : ($variant === 'danger' ? 'alert' : 'status');
 $class = isset($class) && is_string($class) ? trim($class) : '';
 $classes = ['z-alert'];
 if (in_array($variant, ['info', 'success', 'warning', 'danger'], true)) {

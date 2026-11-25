@@ -1,8 +1,30 @@
 @php
+$safeUrl = static function (string $raw): string {
+    $clean = trim((string) preg_replace('/[\x00-\x1F\x7F]+/', '', $raw));
+    $lower = strtolower($clean);
+    if ($clean === '' || str_starts_with($lower, '//') || str_starts_with($lower, '/\\')) {
+        return '#';
+    }
+    if (
+        str_starts_with($lower, '/')
+        || str_starts_with($lower, './')
+        || str_starts_with($lower, '../')
+        || str_starts_with($lower, '#')
+        || str_starts_with($lower, '?')
+        || str_starts_with($lower, 'https://')
+        || str_starts_with($lower, 'http://')
+        || str_starts_with($lower, 'mailto:')
+        || str_starts_with($lower, 'tel:')
+    ) {
+        return $clean;
+    }
+
+    return '#';
+};
 $variant = isset($variant) && is_string($variant) && in_array($variant, ['info', 'accent', 'emerald', 'amber', 'danger'], true) ? $variant : 'accent';
 $title = isset($title) && is_string($title) && $title !== '' ? $title : null;
 $actionLabel = isset($actionLabel) && is_string($actionLabel) && $actionLabel !== '' ? $actionLabel : null;
-$actionHref = isset($actionHref) && is_string($actionHref) && $actionHref !== '' ? $actionHref : '#';
+$actionHref = isset($actionHref) && is_string($actionHref) && $actionHref !== '' ? $safeUrl($actionHref) : '#';
 $dismissible = isset($dismissible) && ($dismissible === true || $dismissible === 'true' || $dismissible === '1');
 $slot = isset($slot) && is_string($slot) ? $slot : '';
 $class = isset($class) && is_string($class) ? trim($class) : '';

@@ -139,8 +139,11 @@ final readonly class CssTreeShaker
             $filterIterator = new RecursiveCallbackFilterIterator(
                 $dirIterator,
                 static function (SplFileInfo $current): bool {
+                    if ($current->isLink()) {
+                        return false;
+                    }
                     if ($current->isDir()) {
-                        return !in_array($current->getFilename(), self::IGNORED_DIRS, true);
+                        return !in_array(strtolower($current->getFilename()), self::IGNORED_DIRS, true);
                     }
 
                     return true;
@@ -244,15 +247,28 @@ final readonly class CssTreeShaker
             }
         }
 
-        // 2. Framework-agnostic CSS component classes (e.g. class="z-btn z-btn-primary" or className="z-modal")
-        if (preg_match_all('/(?<![a-z0-9_-])(z-[a-z]+)(?=[-\s"\'`,;})>\]])/i', $source, $classMatches) > 0) {
+        // 2. Framework-agnostic CSS component classes (e.g. class="z-btn z-btn-primary" or className="z-input-group")
+        if (preg_match_all('/(?<![a-z0-9_-])(z-[a-z0-9-]+)(?=[\s"\'`,;})>\]\.]|$)/i', $source, $classMatches) > 0) {
             foreach ($classMatches[1] as $rawClass) {
-                $prefix = strtolower($rawClass);
-                if (isset(self::CLASS_PREFIX_MAP[$prefix])) {
-                    $compId = self::CLASS_PREFIX_MAP[$prefix];
-                    if ($this->registry->has($compId)) {
-                        $found[$compId] = true;
+                $token = strtolower($rawClass);
+                $matchedComp = null;
+
+                // Prefer longest matching prefix so multi-hyphen keys (`z-input-group`, `z-avatar-group`, `z-seg-item`) win
+                $candidate = $token;
+                while (true) {
+                    if (isset(self::CLASS_PREFIX_MAP[$candidate])) {
+                        $matchedComp = self::CLASS_PREFIX_MAP[$candidate];
+                        break;
                     }
+                    $lastDash = strrpos($candidate, '-');
+                    if (false === $lastDash || $lastDash <= 1) {
+                        break;
+                    }
+                    $candidate = substr($candidate, 0, $lastDash);
+                }
+
+                if (null !== $matchedComp && $this->registry->has($matchedComp)) {
+                    $found[$matchedComp] = true;
                 }
             }
         }
@@ -365,6 +381,9 @@ final readonly class CssTreeShaker
         }
 
         if (null !== $outputPath && '' !== $outputPath) {
+            if (is_link($outputPath)) {
+                throw new RuntimeException('Refusing to overwrite symlinked CSS output file.');
+            }
             $dir = dirname($outputPath);
             if (!is_dir($dir) && !mkdir($dir, 0o775, true) && !is_dir($dir)) {
                 throw new RuntimeException('Unable to create CSS output directory.');

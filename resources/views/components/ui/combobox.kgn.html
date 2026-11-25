@@ -1,16 +1,18 @@
 @php
 $name = isset($name) && is_string($name) && $name !== '' ? $name : 'selection';
-$id = isset($id) && is_string($id) && $id !== '' ? $id : 'k-combo-' . preg_replace('/[^a-z0-9_-]/i', '-', $name);
+$id = isset($id) && is_string($id) && $id !== '' ? $id : 'z-combo-' . preg_replace('/[^a-z0-9_-]/i', '-', $name) . '-' . bin2hex(random_bytes(3));
 $label = isset($label) && is_string($label) ? $label : '';
 $placeholder = isset($placeholder) && is_string($placeholder) && $placeholder !== '' ? $placeholder : 'Search options...';
-$value = isset($value) && is_string($value) ? $value : '';
+$value = isset($value) && is_scalar($value) ? (string) $value : '';
 $error = isset($error) && is_string($error) ? $error : '';
 $required = isset($required) && ($required === true || $required === 'true' || $required === '1');
 $optionsRaw = isset($options) ? $options : '';
 $parsedOptions = [];
 if (is_array($optionsRaw)) {
     foreach ($optionsRaw as $k => $v) {
-        $parsedOptions[] = ['value' => (string) $k, 'label' => (string) $v];
+        if (is_scalar($v)) {
+            $parsedOptions[] = ['value' => (string) $k, 'label' => (string) $v];
+        }
     }
 } elseif (is_string($optionsRaw) && trim($optionsRaw) !== '') {
     foreach (explode('|', $optionsRaw) as $chunk) {
@@ -48,12 +50,15 @@ foreach ($parsedOptions as $opt) {
       value="{{ $selectedLabel }}"
       data-z-combobox-input
       autocomplete="off"
+      @if ($label === '') aria-label="{{ $placeholder }}" @endif
       @if ($required) required @endif
+      @if ($error !== '') aria-invalid="true" aria-describedby="{{ $id }}-err" @endif
     >
     <button type="button" class="z-combobox-toggle" data-z-combobox-toggle aria-label="Toggle options">▾</button>
-    <ul id="{{ $id }}-list" class="z-combobox-list" role="listbox" data-z-combobox-list hidden>
-      @foreach ($parsedOptions as $opt)
+    <ul id="{{ $id }}-list" class="z-combobox-list" role="listbox" aria-label="{{ $label !== '' ? $label : $placeholder }}" data-z-combobox-list hidden>
+      @foreach ($parsedOptions as $optIdx => $opt)
         <li
+          id="{{ $id }}-opt-{{ $optIdx }}"
           class="z-combobox-option"
           role="option"
           data-z-combobox-option
@@ -65,6 +70,6 @@ foreach ($parsedOptions as $opt) {
     </ul>
   </div>
   @if ($error !== '')
-    <div class="z-field-error" role="alert">{{ $error }}</div>
+    <div id="{{ $id }}-err" class="z-field-err" role="alert">{{ $error }}</div>
   @endif
 </div>

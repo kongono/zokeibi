@@ -27,6 +27,10 @@
     gap: 0.6rem;
     padding: 0.78rem 1rem;
     border-bottom: 1px solid var(--z-border);
+
+    &:focus-within {
+      box-shadow: inset 0 -2px 0 var(--z-accent);
+    }
   }
 
   .z-cmdk-input {

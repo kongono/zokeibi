@@ -22,6 +22,12 @@
       border-color: var(--z-accent);
       background: var(--z-surface-hover);
     }
+
+    &:focus-within {
+      border-color: var(--z-accent);
+      outline: 2px solid var(--z-accent);
+      outline-offset: 2px;
+    }
   }
 
   .z-dropzone-input {

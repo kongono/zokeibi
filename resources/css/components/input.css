@@ -6,8 +6,8 @@
     min-width: 0;
 
     &:has([aria-invalid="true"]) .z-label { color: var(--z-danger); }
-    &:has([aria-invalid="true"]) .z-input { border-color: var(--z-danger); }
-    &:has(.z-input:focus-visible) .z-label { color: var(--z-accent); }
+    &:has([aria-invalid="true"]) :is(.z-input, .z-select, .z-textarea) { border-color: var(--z-danger); }
+    &:has(:is(.z-input, .z-select, .z-textarea):focus-visible) .z-label { color: var(--z-accent); }
   }
 
   .z-label {
@@ -32,12 +32,13 @@
     transition: border-color 120ms ease, box-shadow 120ms ease;
 
     &:focus {
-      outline: none;
+      outline: 2px solid transparent;
       border-color: var(--z-accent);
       box-shadow: 0 0 0 3px var(--z-accent-soft);
     }
   }
 
   .z-hint { font-size: 0.73rem; color: var(--z-ink-soft); }
-  .z-field-err { font-size: 0.74rem; color: var(--z-danger); font-weight: 600; }
+  .z-field-err,
+  .z-field-error { font-size: 0.74rem; color: var(--z-danger); font-weight: 600; }
 }

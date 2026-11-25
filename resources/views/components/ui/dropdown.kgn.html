@@ -1,11 +1,52 @@
 @php
-$id = isset($id) && is_string($id) && $id !== '' ? $id : 'k-dd-' . substr(md5((string) ($trigger ?? 'menu')), 0, 6);
+$safeUrl = static function (string $raw): string {
+    $clean = trim((string) preg_replace('/[\x00-\x1F\x7F]+/', '', $raw));
+    $lower = strtolower($clean);
+    if ($clean === '' || str_starts_with($lower, '//') || str_starts_with($lower, '/\\')) {
+        return '#';
+    }
+    if (
+        str_starts_with($lower, '/')
+        || str_starts_with($lower, './')
+        || str_starts_with($lower, '../')
+        || str_starts_with($lower, '#')
+        || str_starts_with($lower, '?')
+        || str_starts_with($lower, 'https://')
+        || str_starts_with($lower, 'http://')
+        || str_starts_with($lower, 'mailto:')
+        || str_starts_with($lower, 'tel:')
+    ) {
+        return $clean;
+    }
+
+    return '#';
+};
 $trigger = isset($trigger) && is_string($trigger) && $trigger !== '' ? $trigger : 'Actions ▾';
+$id = isset($id) && is_string($id) && $id !== '' ? $id : 'z-dd-' . bin2hex(random_bytes(3));
 $triggerVariant = isset($triggerVariant) && is_string($triggerVariant) && in_array($triggerVariant, ['default', 'primary', 'emerald', 'danger', 'ghost', 'outline'], true) ? $triggerVariant : 'outline';
 $triggerSize = isset($triggerSize) && is_string($triggerSize) && in_array($triggerSize, ['sm', 'md', 'lg'], true) ? $triggerSize : 'sm';
-$btnClass = 'z-btn z-btn-' . $triggerVariant . ($triggerSize !== 'md' ? ' z-btn-' . $triggerSize : '');
+$btnClass = 'z-btn' . ($triggerVariant !== 'default' ? ' z-btn-' . $triggerVariant : '') . ($triggerSize !== 'md' ? ' z-btn-' . $triggerSize : '');
 $rows = [];
-if (isset($items) && is_string($items) && trim($items) !== '') {
+if (isset($items) && is_array($items)) {
+    foreach ($items as $entry) {
+        if ($entry === '---') {
+            $rows[] = ['sep' => true];
+            continue;
+        }
+        if (is_array($entry) && isset($entry['label']) && is_scalar($entry['label'])) {
+            $lbl = trim((string) $entry['label']);
+            if ($lbl !== '') {
+                $rows[] = [
+                    'sep' => false,
+                    'danger' => !empty($entry['danger']),
+                    'label' => $lbl,
+                    'href' => isset($entry['href']) && is_scalar($entry['href']) ? $safeUrl((string) $entry['href']) : '#',
+                    'shortcut' => isset($entry['shortcut']) && is_scalar($entry['shortcut']) ? trim((string) $entry['shortcut']) : '',
+                ];
+            }
+        }
+    }
+} elseif (isset($items) && is_string($items) && trim($items) !== '') {
     foreach (explode('|', $items) as $seg) {
         $seg = trim($seg);
         if ($seg === '---') {
@@ -16,14 +57,14 @@ if (isset($items) && is_string($items) && trim($items) !== '') {
         if ($danger) {
             $seg = substr($seg, 7);
         }
-        $parts = explode(':', $seg, 3);
-        $lbl = trim($parts[0]);
+        $parts = preg_split('/:(?!\/\/)/', $seg, 3) ?: [];
+        $lbl = trim($parts[0] ?? '');
         if ($lbl !== '') {
             $rows[] = [
                 'sep' => false,
                 'danger' => $danger,
                 'label' => $lbl,
-                'href' => isset($parts[1]) && trim($parts[1]) !== '' ? trim($parts[1]) : '#',
+                'href' => isset($parts[1]) && trim($parts[1]) !== '' ? $safeUrl($parts[1]) : '#',
                 'shortcut' => isset($parts[2]) ? trim($parts[2]) : '',
             ];
         }
@@ -31,11 +72,11 @@ if (isset($items) && is_string($items) && trim($items) !== '') {
 }
 $slot = isset($slot) && is_string($slot) ? trim($slot) : '';
 @endphp
-<span class="z-dropdown">
+<div class="z-dropdown">
   <button type="button" class="{{ $btnClass }}" popovertarget="{{ $id }}" aria-haspopup="menu">{{ $trigger }}</button>
   <div id="{{ $id }}" class="z-dropdown-panel" popover="auto" role="menu">
 @if ($rows !== [])
-    <ul class="z-dropdown-list">
+    <ul class="z-dropdown-list" role="none">
 @foreach ($rows as $row)
 @if ($row['sep'])
       <li class="z-dropdown-sep" role="separator"></li>
@@ -56,4 +97,4 @@ $slot = isset($slot) && is_string($slot) ? trim($slot) : '';
     {!! $slot !!}
 @endif
   </div>
-</span>
+</div>

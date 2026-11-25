@@ -6,7 +6,7 @@ $safeVariant = in_array($variant, ['line', 'title', 'block', 'circle'], true) ? 
 $itemClass = 'z-skeleton z-skeleton-' . $safeVariant . ($class !== '' ? ' ' . $class : '');
 @endphp
 <div class="z-stack" role="status" aria-label="Loading content">
-@foreach (range(1, $lines) as $lineIdx)
+@foreach (range(1, $lines) as $_)
   <span class="{{ $itemClass }}" aria-hidden="true"></span>
 @endforeach
 </div>

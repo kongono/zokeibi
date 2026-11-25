@@ -1,27 +1,30 @@
 @php
 $name = isset($name) && is_string($name) && $name !== '' ? $name : 'tags';
-$id = isset($id) && is_string($id) && $id !== '' ? $id : 'z-ms-' . preg_replace('/[^a-zA-Z0-9_-]/', '', $name);
+$id = isset($id) && is_string($id) && $id !== '' ? $id : 'z-ms-' . preg_replace('/[^a-zA-Z0-9_-]/', '', $name) . '-' . bin2hex(random_bytes(3));
 $label = isset($label) && is_string($label) && $label !== '' ? $label : null;
 $placeholder = isset($placeholder) && is_string($placeholder) && $placeholder !== '' ? $placeholder : 'Filter & select tags...';
 $rawSelected = isset($selected) ? $selected : '';
 $selectedList = [];
 if (is_array($rawSelected)) {
     foreach ($rawSelected as $sv) {
-        if (is_string($sv) && trim($sv) !== '') {
-            $selectedList[] = trim($sv);
+        if (is_scalar($sv) && trim((string) $sv) !== '') {
+            $selectedList[] = trim((string) $sv);
         }
     }
-} elseif (is_string($rawSelected) && trim($rawSelected) !== '') {
-    foreach (explode(',', $rawSelected) as $sv) {
+} elseif (is_scalar($rawSelected) && trim((string) $rawSelected) !== '') {
+    foreach (explode(',', (string) $rawSelected) as $sv) {
         if (trim($sv) !== '') {
             $selectedList[] = trim($sv);
         }
     }
 }
+$selectedList = array_values(array_unique($selectedList));
 $items = [];
 if (isset($options) && is_array($options)) {
     foreach ($options as $k => $v) {
-        $items[(string) $k] = (string) $v;
+        if (is_scalar($v)) {
+            $items[(string) $k] = (string) $v;
+        }
     }
 } elseif (isset($options) && is_string($options) && trim($options) !== '') {
     foreach (explode('|', $options) as $seg) {
@@ -68,13 +71,16 @@ $wrapClass = $class !== '' ? 'z-ms ' . $class : 'z-ms';
       aria-expanded="false"
       aria-autocomplete="list"
       aria-controls="{{ $id }}-list"
+@if ($label === null)
+      aria-label="{{ $placeholder }}"
+@endif
       data-z-ms-input
     >
   </div>
-  <ul id="{{ $id }}-list" class="z-ms-list" role="listbox" aria-multiselectable="true" data-z-ms-list hidden>
+  <ul id="{{ $id }}-list" class="z-ms-list" role="listbox" aria-multiselectable="true" aria-label="{{ $label ?? $placeholder }}" data-z-ms-list hidden>
 @foreach ($items as $optVal => $optLabel)
-@php $isSel = in_array($optVal, $selectedList, true); @endphp
-    <li class="z-ms-option" role="option" data-z-ms-option data-value="{{ $optVal }}" data-label="{{ $optLabel }}" aria-selected="{{ $isSel ? 'true' : 'false' }}">
+@php $optKey = (string) $optVal; $isSel = in_array($optKey, $selectedList, true); @endphp
+    <li class="z-ms-option" role="option" data-z-ms-option data-value="{{ $optKey }}" data-label="{{ $optLabel }}" aria-selected="{{ $isSel ? 'true' : 'false' }}">
       <span>{{ $optLabel }}</span>
       <span class="z-ms-check" aria-hidden="true">{{ $isSel ? '✓' : '' }}</span>
     </li>

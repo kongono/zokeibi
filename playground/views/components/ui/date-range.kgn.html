@@ -3,8 +3,15 @@ $name = isset($name) && is_string($name) && $name !== '' ? $name : 'date_range';
 $startName = isset($startName) && is_string($startName) && $startName !== '' ? $startName : $name . '_start';
 $endName = isset($endName) && is_string($endName) && $endName !== '' ? $endName : $name . '_end';
 $label = isset($label) && is_string($label) && $label !== '' ? $label : null;
-$start = isset($start) && is_string($start) && preg_match('/^\d{4}-\d{2}-\d{2}$/', $start) === 1 ? $start : date('Y-m-01');
-$end = isset($end) && is_string($end) && preg_match('/^\d{4}-\d{2}-\d{2}$/', $end) === 1 ? $end : date('Y-m-d');
+$isValidIso = static function (mixed $v): bool {
+    if (!is_string($v) || preg_match('/\A(\d{4})-(\d{2})-(\d{2})\z/', $v, $m) !== 1) {
+        return false;
+    }
+
+    return checkdate((int) $m[2], (int) $m[3], (int) $m[1]);
+};
+$start = isset($start) && $isValidIso($start) ? (string) $start : date('Y-m-01');
+$end = isset($end) && $isValidIso($end) ? (string) $end : date('Y-m-d');
 if ($end < $start) {
     $tmp = $start;
     $start = $end;
@@ -13,7 +20,8 @@ if ($end < $start) {
 $presets = !isset($presets) || ($presets !== false && $presets !== 'false' && $presets !== '0');
 $viewYear = (int) substr($start, 0, 4);
 $viewMonth = (int) substr($start, 5, 2);
-$firstTs = mktime(0, 0, 0, $viewMonth, 1, $viewYear) ?: time();
+$firstTsRaw = mktime(0, 0, 0, $viewMonth, 1, $viewYear);
+$firstTs = false !== $firstTsRaw ? $firstTsRaw : time();
 $monthLabel = date('F Y', $firstTs);
 $daysInMonth = (int) date('t', $firstTs);
 $startDow = (int) date('w', $firstTs);
@@ -25,15 +33,18 @@ for ($i = 0; $i < $startDow; $i++) {
 for ($d = 1; $d <= $daysInMonth; $d++) {
     $iso = sprintf('%04d-%02d-%02d', $viewYear, $viewMonth, $d);
     $cls = 'z-dr-day';
+    $selectedDay = false;
     if ($iso === $todayIso) {
         $cls .= ' is-today';
     }
     if ($iso === $start || $iso === $end) {
         $cls .= ' is-edge';
+        $selectedDay = true;
     } elseif ($iso > $start && $iso < $end) {
         $cls .= ' is-in-range';
+        $selectedDay = true;
     }
-    $cells[] = ['day' => $d, 'iso' => $iso, 'cls' => $cls];
+    $cells[] = ['day' => $d, 'iso' => $iso, 'cls' => $cls, 'selected' => $selectedDay, 'today' => $iso === $todayIso];
 }
 $class = isset($class) && is_string($class) ? trim($class) : '';
 $wrapClass = $class !== '' ? 'z-dr ' . $class : 'z-dr';
@@ -69,7 +80,7 @@ $wrapClass = $class !== '' ? 'z-dr ' . $class : 'z-dr';
 @if ($cell === null)
       <span aria-hidden="true"></span>
 @else
-      <button type="button" class="{{ $cell['cls'] }}" data-z-dr-day="{{ $cell['iso'] }}">{{ $cell['day'] }}</button>
+      <button type="button" class="{{ $cell['cls'] }}" data-z-dr-day="{{ $cell['iso'] }}" aria-label="{{ $cell['iso'] }}" aria-pressed="{{ $cell['selected'] ? 'true' : 'false' }}" @if ($cell['today']) aria-current="date" @endif>{{ $cell['day'] }}</button>
 @endif
 @endforeach
     </div>

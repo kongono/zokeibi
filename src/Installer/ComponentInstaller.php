@@ -35,6 +35,9 @@ final readonly class ComponentInstaller
         $configPath = $root . DIRECTORY_SEPARATOR . 'zokeibi.json';
 
         if (!is_file($configPath)) {
+            if (is_link($configPath)) {
+                throw new RuntimeException('Refusing to overwrite symlinked zokeibi.json.');
+            }
             $config = [
                 'zokeibi' => $this->registry->version(),
                 'theme' => $theme,
@@ -44,9 +47,7 @@ final readonly class ComponentInstaller
                 'installed' => [],
             ];
             $json = json_encode($config, JSON_THROW_ON_ERROR | JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES) . "\n";
-            if (false === file_put_contents($configPath, $json)) {
-                throw new RuntimeException('Unable to write zokeibi.json.');
-            }
+            $this->atomicWrite($configPath, $json, 'Unable to write zokeibi.json.');
             $written[] = 'zokeibi.json';
         } else {
             $skipped[] = 'zokeibi.json';
@@ -80,15 +81,19 @@ final readonly class ComponentInstaller
             $rel = 'views/components/ui/' . $schema->template;
             $installedIds[] = $id;
 
+            if (is_link($dest)) {
+                throw new RuntimeException(sprintf('Refusing to overwrite symlinked component "%s".', $id));
+            }
             if (is_file($dest) && !$force) {
                 $skipped[] = $rel;
                 continue;
             }
 
             $contents = file_get_contents($source);
-            if (false === $contents || false === file_put_contents($dest, $contents)) {
+            if (false === $contents) {
                 throw new RuntimeException(sprintf('Unable to install component "%s".', $id));
             }
+            $this->atomicWrite($dest, $contents, sprintf('Unable to install component "%s".', $id));
             $written[] = $rel;
         }
 
@@ -169,7 +174,10 @@ final readonly class ComponentInstaller
         array &$skipped,
     ): void {
         if (!is_file($src)) {
-            throw new RuntimeException(sprintf('Missing stylesheet "%s".', basename($src)));
+            throw new RuntimeException(sprintf('Missing asset "%s".', basename($src)));
+        }
+        if (is_link($dst)) {
+            throw new RuntimeException(sprintf('Refusing to overwrite symlinked file "%s".', basename($dst)));
         }
         if (is_file($dst) && !$force) {
             $skipped[] = $rel;
@@ -177,9 +185,10 @@ final readonly class ComponentInstaller
             return;
         }
         $contents = file_get_contents($src);
-        if (false === $contents || false === file_put_contents($dst, $contents)) {
-            throw new RuntimeException(sprintf('Unable to eject stylesheet "%s".', basename($src)));
+        if (false === $contents) {
+            throw new RuntimeException(sprintf('Unable to read asset "%s".', basename($src)));
         }
+        $this->atomicWrite($dst, $contents, sprintf('Unable to write asset "%s".', basename($dst)));
         $written[] = $rel;
     }
 
@@ -189,7 +198,7 @@ final readonly class ComponentInstaller
     private function recordInstalled(string $root, array $ids): void
     {
         $configPath = $root . DIRECTORY_SEPARATOR . 'zokeibi.json';
-        if (!is_file($configPath)) {
+        if (!is_file($configPath) || is_link($configPath)) {
             return;
         }
         $raw = file_get_contents($configPath);
@@ -216,12 +225,24 @@ final readonly class ComponentInstaller
         $decoded['installed'] = $merged;
 
         $json = json_encode($decoded, JSON_THROW_ON_ERROR | JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES) . "\n";
-        file_put_contents($configPath, $json);
+        $this->atomicWrite($configPath, $json, 'Unable to update zokeibi.json.');
+    }
+
+    private function atomicWrite(string $path, string $contents, string $errorMessage): void
+    {
+        $tmp = $path . '.tmp.' . bin2hex(random_bytes(4));
+        if (false === file_put_contents($tmp, $contents)) {
+            throw new RuntimeException($errorMessage);
+        }
+        if (!rename($tmp, $path)) {
+            @unlink($tmp);
+            throw new RuntimeException($errorMessage);
+        }
     }
 
     private function ensureDir(string $dir): void
     {
-        if (!is_dir($dir) && !mkdir($dir, 0775, true) && !is_dir($dir)) {
+        if (!is_dir($dir) && !mkdir($dir, 0o775, true) && !is_dir($dir)) {
             throw new RuntimeException(sprintf('Unable to create directory "%s".', $dir));
         }
     }

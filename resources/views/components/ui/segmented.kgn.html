@@ -1,11 +1,13 @@
 @php
 $name = isset($name) && is_string($name) && $name !== '' ? $name : 'segment';
-$selected = isset($value) && is_string($value) ? $value : '';
+$selected = isset($value) && is_scalar($value) ? (string) $value : '';
 $ariaLabel = isset($label) && is_string($label) && $label !== '' ? $label : 'Options';
 $opts = [];
 if (isset($options) && is_array($options)) {
     foreach ($options as $k => $v) {
-        $opts[(string) $k] = (string) $v;
+        if (is_scalar($v)) {
+            $opts[(string) $k] = (string) $v;
+        }
     }
 } elseif (isset($options) && is_string($options) && trim($options) !== '') {
     foreach (explode('|', $options) as $seg) {
@@ -25,7 +27,7 @@ $wrapClass = $class !== '' ? 'z-segmented ' . $class : 'z-segmented';
 <div class="{{ $wrapClass }}" role="radiogroup" aria-label="{{ $ariaLabel }}">
 @foreach ($opts as $optVal => $optLbl)
   <label class="z-seg-item">
-    <input type="radio" name="{{ $name }}" value="{{ $optVal }}" @if ($optVal === $selected) checked @endif>
+    <input type="radio" name="{{ $name }}" value="{{ (string) $optVal }}" @if ((string) $optVal === $selected) checked @endif>
     <span>{{ $optLbl }}</span>
   </label>
 @endforeach

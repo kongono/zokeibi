@@ -1,8 +1,33 @@
 @php
+$safeUrl = static function (string $raw, string $fallback = '#'): string {
+    $clean = trim((string) preg_replace('/[\x00-\x1F\x7F]+/', '', $raw));
+    if ($clean === '') {
+        return $fallback;
+    }
+    $lower = strtolower($clean);
+    if (str_starts_with($lower, '//') || str_starts_with($lower, '/\\')) {
+        return $fallback;
+    }
+    if (
+        str_starts_with($lower, '/')
+        || str_starts_with($lower, './')
+        || str_starts_with($lower, '../')
+        || str_starts_with($lower, '#')
+        || str_starts_with($lower, '?')
+        || str_starts_with($lower, 'https://')
+        || str_starts_with($lower, 'http://')
+        || str_starts_with($lower, 'mailto:')
+        || str_starts_with($lower, 'tel:')
+    ) {
+        return $clean;
+    }
+
+    return $fallback;
+};
 $variant = isset($variant) && is_string($variant) ? $variant : 'default';
 $size = isset($size) && is_string($size) ? $size : 'md';
-$type = isset($type) && is_string($type) ? $type : 'button';
-$href = isset($href) && is_string($href) && $href !== '' ? $href : null;
+$type = isset($type) && is_string($type) && in_array($type, ['button', 'submit', 'reset'], true) ? $type : 'button';
+$href = isset($href) && is_string($href) && trim($href) !== '' ? $safeUrl($href) : null;
 $id = isset($id) && is_string($id) && $id !== '' ? $id : null;
 $class = isset($class) && is_string($class) ? trim($class) : '';
 $ariaLabel = isset($ariaLabel) && is_string($ariaLabel) && $ariaLabel !== '' ? $ariaLabel : null;
@@ -10,6 +35,13 @@ $disabled = isset($disabled) && ($disabled === true || $disabled === 'true' || $
 $kClick = isset($kClick) && is_string($kClick) && $kClick !== '' ? $kClick : null;
 $kDisabled = isset($kDisabled) && is_string($kDisabled) && $kDisabled !== '' ? $kDisabled : null;
 $kClass = isset($kClass) && is_string($kClass) && $kClass !== '' ? $kClass : null;
+$kgnGet = isset($kgnGet) && is_string($kgnGet) && trim($kgnGet) !== '' ? $safeUrl($kgnGet) : null;
+$kgnPost = isset($kgnPost) && is_string($kgnPost) && trim($kgnPost) !== '' ? $safeUrl($kgnPost) : null;
+$kgnTarget = isset($kgnTarget) && is_string($kgnTarget) && trim($kgnTarget) !== '' ? trim($kgnTarget) : null;
+$kgnSwap = isset($kgnSwap) && is_string($kgnSwap) && trim($kgnSwap) !== '' ? trim($kgnSwap) : null;
+$dataZOpen = isset($dataZOpen) && is_string($dataZOpen) && trim($dataZOpen) !== '' ? trim($dataZOpen) : null;
+$dataZClose = isset($dataZClose) && is_string($dataZClose) && trim($dataZClose) !== '' ? trim($dataZClose) : null;
+$dataZToggle = isset($dataZToggle) && is_string($dataZToggle) && trim($dataZToggle) !== '' ? trim($dataZToggle) : null;
 $popoverTarget = isset($popoverTarget) && is_string($popoverTarget) && $popoverTarget !== '' ? $popoverTarget : null;
 $popoverTargetAction = isset($popoverTargetAction) && is_string($popoverTargetAction) && $popoverTargetAction !== '' ? $popoverTargetAction : null;
 $classes = ['z-btn'];
@@ -27,7 +59,12 @@ $slot = isset($slot) && is_string($slot) ? $slot : '';
 @endphp
 @if ($href !== null)
 <a
+@if (!$disabled)
   href="{{ $href }}"
+@else
+  aria-disabled="true"
+  tabindex="-1"
+@endif
   class="{{ $classAttr }}"
 @if ($id !== null)
   id="{{ $id }}"
@@ -57,6 +94,27 @@ $slot = isset($slot) && is_string($slot) ? $slot : '';
 @endif
 @if ($kClass !== null)
   k-class="{{ $kClass }}"
+@endif
+@if ($kgnGet !== null)
+  kgn-get="{{ $kgnGet }}"
+@endif
+@if ($kgnPost !== null)
+  kgn-post="{{ $kgnPost }}"
+@endif
+@if ($kgnTarget !== null)
+  kgn-target="{{ $kgnTarget }}"
+@endif
+@if ($kgnSwap !== null)
+  kgn-swap="{{ $kgnSwap }}"
+@endif
+@if ($dataZOpen !== null)
+  data-z-open="{{ $dataZOpen }}"
+@endif
+@if ($dataZClose !== null)
+  data-z-close="{{ $dataZClose }}"
+@endif
+@if ($dataZToggle !== null)
+  data-z-toggle="{{ $dataZToggle }}"
 @endif
 @if ($popoverTarget !== null)
   popovertarget="{{ $popoverTarget }}"

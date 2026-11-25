@@ -2,13 +2,34 @@
 (() => {
   "use strict";
 
+  const ALLOWED_THEMES = new Set(["sumi", "washi", "indigo", "matcha", "kintsugi"]);
+  const ALLOWED_RADII = new Set(["sharp", "default", "rounded"]);
   const root = document.documentElement;
-  const savedTheme = localStorage.getItem("zokeibi-theme");
-  const savedRadius = localStorage.getItem("zokeibi-radius");
+  const copyTimers = new WeakMap();
 
-  const applyTheme = (theme) => {
+  const safeGet = (key) => {
+    try {
+      return window.localStorage.getItem(key);
+    } catch (_e) {
+      return null;
+    }
+  };
+
+  const safeSet = (key, val) => {
+    try {
+      window.localStorage.setItem(key, val);
+    } catch (_e) {
+      // Storage blocked or quota exceeded
+    }
+  };
+
+  const savedTheme = safeGet("zokeibi-theme");
+  const savedRadius = safeGet("zokeibi-radius");
+
+  const applyTheme = (rawTheme) => {
+    const theme = ALLOWED_THEMES.has(rawTheme) ? rawTheme : "sumi";
     root.setAttribute("data-zokeibi-theme", theme);
-    localStorage.setItem("zokeibi-theme", theme);
+    safeSet("zokeibi-theme", theme);
     document.querySelectorAll("[data-set-theme]").forEach((btn) => {
       const active = btn.getAttribute("data-set-theme") === theme;
       btn.classList.toggle("is-active", active);
@@ -16,9 +37,10 @@
     });
   };
 
-  const applyRadius = (radius) => {
+  const applyRadius = (rawRadius) => {
+    const radius = ALLOWED_RADII.has(rawRadius) ? rawRadius : "default";
     root.setAttribute("data-zokeibi-radius", radius);
-    localStorage.setItem("zokeibi-radius", radius);
+    safeSet("zokeibi-radius", radius);
     document.querySelectorAll("[data-set-radius]").forEach((btn) => {
       const active = btn.getAttribute("data-set-radius") === radius;
       btn.classList.toggle("is-active", active);
@@ -63,15 +85,24 @@
     const copyBtn = target.closest("[data-copy-cmd]");
     if (copyBtn) {
       const cmd = copyBtn.getAttribute("data-copy-cmd") || "";
-      const prev = copyBtn.textContent;
-      const done = () => {
-        copyBtn.textContent = "Copied!";
-        window.setTimeout(() => { copyBtn.textContent = prev; }, 1600);
+      if (!copyBtn.dataset.origLabel) copyBtn.dataset.origLabel = copyBtn.textContent || "Copy";
+      const finish = (label) => {
+        const prev = copyTimers.get(copyBtn);
+        if (prev) window.clearTimeout(prev);
+        copyBtn.textContent = label;
+        const timer = window.setTimeout(() => {
+          copyBtn.textContent = copyBtn.dataset.origLabel || "Copy";
+          copyTimers.delete(copyBtn);
+        }, 1600);
+        copyTimers.set(copyBtn, timer);
       };
       if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(cmd).then(done).catch(done);
+        navigator.clipboard
+          .writeText(cmd)
+          .then(() => finish("Copied!"))
+          .catch(() => finish("Copy failed"));
       } else {
-        done();
+        finish("Copy unavailable");
       }
     }
   });

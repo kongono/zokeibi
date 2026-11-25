@@ -13,7 +13,7 @@ $wrapClass = $class !== '' ? 'z-copy ' . $class : 'z-copy';
   <div class="z-copy-row">
     <code class="z-copy-val" data-z-copy-display>{{ $display }}</code>
 @if ($masked)
-    <button type="button" class="z-btn z-btn-ghost z-btn-sm" data-z-copy-reveal aria-label="Reveal secret value">Show</button>
+    <button type="button" class="z-btn z-btn-ghost z-btn-sm" data-z-copy-reveal aria-pressed="false">Show</button>
 @endif
     <button type="button" class="z-btn z-btn-outline z-btn-sm" data-z-copy-btn>Copy</button>
   </div>

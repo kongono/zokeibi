@@ -106,7 +106,7 @@ final readonly class ThemeTokenConfig
                     continue;
                 }
                 $slug = strtolower(trim($name));
-                if (in_array($slug, ['sumi', 'washi', 'indigo', 'matcha', 'kintsugi'], true)) {
+                if (in_array($slug, ['sumi', 'washi', 'indigo', 'matcha', 'kintsugi', 'studio'], true)) {
                     continue;
                 }
                 $customThemes[$slug] = [
@@ -151,7 +151,7 @@ final readonly class ThemeTokenConfig
 
     public static function isValidTokenName(string $name): bool
     {
-        return 1 === preg_match('/^[a-z][a-z0-9-]{1,31}$/', strtolower(trim($name)));
+        return 1 === preg_match('/\A[a-z][a-z0-9-]{1,31}\z/', strtolower(trim($name)));
     }
 
     /**
@@ -160,11 +160,13 @@ final readonly class ThemeTokenConfig
     public static function isValidColorValue(string $value): bool
     {
         $v = trim($value);
-        if (1 === preg_match('/^#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})$/', $v)) {
+        if (1 === preg_match('/\A#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})\z/', $v)) {
             return true;
         }
 
-        return 1 === preg_match('/^oklch\(\s*[0-9.]+%?\s+[0-9.]+\s+[0-9.]+(?:\s*\/\s*[0-9.]+%?)?\s*\)$/', $v);
+        $num = '(?:0?\.\d+|\d+(?:\.\d+)?)';
+
+        return 1 === preg_match('/\Aoklch\(\s*' . $num . '%?\s+' . $num . '\s+' . $num . '(?:\s*\/\s*' . $num . '%?)?\s*\)\z/', $v);
     }
 
     public static function assertValidTokenName(string $name): string
@@ -218,23 +220,28 @@ final readonly class ThemeTokenConfig
 
         // 1. Global Studio overrides (:root custom colors, font stack, and active custom tokens)
         $rootDecls = [];
-        if ('system' !== $this->fontStack) {
-            $rootDecls[] = sprintf('    --z-sans: %s;', self::FONT_STACKS[$this->fontStack]);
+        $fontStackCss = self::FONT_STACKS[$this->fontStack] ?? self::FONT_STACKS['system'];
+        $fontSizeCss = self::FONT_SIZES[$this->fontScale] ?? self::FONT_SIZES['default'];
+        if ('system' !== $this->fontStack && array_key_exists($this->fontStack, self::FONT_STACKS)) {
+            $rootDecls[] = sprintf('    --z-sans: %s;', $fontStackCss);
         }
-        if ('default' !== $this->fontScale) {
-            $rootDecls[] = sprintf('    --z-font-size: %s;', self::FONT_SIZES[$this->fontScale]);
+        if ('default' !== $this->fontScale && array_key_exists($this->fontScale, self::FONT_SIZES)) {
+            $rootDecls[] = sprintf('    --z-font-size: %s;', $fontSizeCss);
         }
         foreach ($this->customColors as $tokenName => $colorValue) {
-            $rootDecls[] = sprintf('    --z-color-%s: %s;', $tokenName, $colorValue);
+            if (!self::isValidTokenName($tokenName) || !self::isValidColorValue($colorValue)) {
+                continue;
+            }
+            $rootDecls[] = sprintf('    --z-color-%s: %s;', strtolower(trim($tokenName)), trim($colorValue));
         }
 
         // Emit explicit `[data-zokeibi-theme="studio"]` matching the active Studio knobs
         $studioDecls = $this->buildThemeDeclarations(
-            hue: $this->hue,
-            chroma: $this->chroma,
-            accentLightness: $this->accentLightness,
-            mode: $this->mode,
-            radiusPx: $this->radiusPx,
+            hue: self::clampFloat($this->hue, 0.0, 360.0, 355.0),
+            chroma: self::clampFloat($this->chroma, 0.0, 0.30, 0.145),
+            accentLightness: self::clampFloat($this->accentLightness, 0.35, 0.82, 0.65),
+            mode: 'light' === $this->mode ? 'light' : 'dark',
+            radiusPx: self::clampInt($this->radiusPx, 0, 24, 12),
         );
 
         if ([] !== $rootDecls) {
@@ -245,8 +252,8 @@ final readonly class ThemeTokenConfig
             $lines[] = '  }';
         }
 
-        if ('default' !== $this->fontScale) {
-            $lines[] = sprintf('  html, body { font-size: %s; }', self::FONT_SIZES[$this->fontScale]);
+        if ('default' !== $this->fontScale && array_key_exists($this->fontScale, self::FONT_SIZES)) {
+            $lines[] = sprintf('  html, body { font-size: %s; }', $fontSizeCss);
         }
 
         $lines[] = '  [data-zokeibi-theme="studio"] {';
@@ -257,14 +264,21 @@ final readonly class ThemeTokenConfig
 
         // 2. Emit every user-saved custom named theme (`[data-zokeibi-theme="<name>"]`)
         foreach ($this->customThemes as $themeName => $def) {
-            $lines[] = sprintf('  [data-zokeibi-theme="%s"] {', $themeName);
+            if (!self::isValidTokenName($themeName)) {
+                continue;
+            }
+            $cleanTheme = strtolower(trim($themeName));
+            if (in_array($cleanTheme, ['sumi', 'washi', 'indigo', 'matcha', 'kintsugi', 'studio'], true)) {
+                continue;
+            }
+            $lines[] = sprintf('  [data-zokeibi-theme="%s"] {', $cleanTheme);
             foreach (
                 $this->buildThemeDeclarations(
-                    hue: $def['hue'],
-                    chroma: $def['chroma'],
-                    accentLightness: $def['accent_lightness'],
-                    mode: $def['mode'],
-                    radiusPx: $def['radius_px'],
+                    hue: self::clampFloat($def['hue'], 0.0, 360.0, 355.0),
+                    chroma: self::clampFloat($def['chroma'], 0.0, 0.30, 0.145),
+                    accentLightness: self::clampFloat($def['accent_lightness'], 0.35, 0.82, 0.65),
+                    mode: 'light' === $def['mode'] ? 'light' : 'dark',
+                    radiusPx: self::clampInt($def['radius_px'], 0, 24, 12),
                 ) as $decl
             ) {
                 $lines[] = $decl;
@@ -304,6 +318,7 @@ final readonly class ThemeTokenConfig
         ];
 
         if ('light' === $mode) {
+            $decls[] = '    color-scheme: light;';
             $decls[] = '    --z-bg: oklch(0.972 0.004 95);';
             $decls[] = '    --z-surface: oklch(0.998 0.002 95);';
             $decls[] = '    --z-surface-2: oklch(0.948 0.006 264);';
@@ -312,19 +327,30 @@ final readonly class ThemeTokenConfig
             $decls[] = '    --z-border-strong: oklch(0.795 0.014 264);';
             $decls[] = '    --z-ink: oklch(0.18 0.014 264);';
             $decls[] = '    --z-ink-muted: oklch(0.43 0.015 264);';
-            $decls[] = '    --z-ink-soft: oklch(0.55 0.012 264);';
-            $decls[] = '    --z-emerald: oklch(0.52 0.14 162);';
-            $decls[] = '    --z-amber: oklch(0.58 0.145 75);';
-            $decls[] = '    --z-danger: oklch(0.54 0.185 20);';
-            $decls[] = '    --z-blue: oklch(0.52 0.155 256);';
+            $decls[] = '    --z-ink-soft: oklch(0.47 0.014 264);';
+            $decls[] = '    --z-emerald: oklch(0.46 0.14 162);';
+            $decls[] = '    --z-emerald-ink: oklch(0.985 0.008 162);';
+            $decls[] = '    --z-amber: oklch(0.49 0.145 75);';
+            $decls[] = '    --z-danger: oklch(0.50 0.185 20);';
+            $decls[] = '    --z-blue: oklch(0.48 0.155 256);';
             $decls[] = '    --z-shadow: 0 12px 32px oklch(0.2 0.02 264 / 0.1);';
         } else {
+            $decls[] = '    color-scheme: dark;';
             $decls[] = sprintf('    --z-bg: oklch(0.152 0.014 %.1f);', $hue);
             $decls[] = sprintf('    --z-surface: oklch(0.190 0.016 %.1f);', $hue);
             $decls[] = sprintf('    --z-surface-2: oklch(0.228 0.018 %.1f);', $hue);
             $decls[] = sprintf('    --z-surface-hover: oklch(0.262 0.020 %.1f);', $hue);
             $decls[] = sprintf('    --z-border: oklch(0.296 0.020 %.1f);', $hue);
             $decls[] = sprintf('    --z-border-strong: oklch(0.372 0.024 %.1f);', $hue);
+            $decls[] = '    --z-ink: oklch(0.955 0.006 264);';
+            $decls[] = '    --z-ink-muted: oklch(0.725 0.014 264);';
+            $decls[] = '    --z-ink-soft: oklch(0.645 0.014 264);';
+            $decls[] = '    --z-emerald: oklch(0.72 0.155 162);';
+            $decls[] = '    --z-emerald-ink: oklch(0.15 0.02 162);';
+            $decls[] = '    --z-amber: oklch(0.80 0.15 78);';
+            $decls[] = '    --z-danger: oklch(0.66 0.195 22);';
+            $decls[] = '    --z-blue: oklch(0.71 0.15 254);';
+            $decls[] = '    --z-shadow: 0 18px 46px oklch(0.05 0.01 264 / 0.45);';
         }
 
         return $decls;

@@ -1,6 +1,6 @@
 @php
-$name = isset($name) && is_string($name) ? $name : 'select';
-$id = isset($id) && is_string($id) && $id !== '' ? $id : 'z-select-' . preg_replace('/[^a-zA-Z0-9_-]/', '-', $name);
+$name = isset($name) && is_string($name) && $name !== '' ? $name : 'select';
+$id = isset($id) && is_string($id) && $id !== '' ? $id : 'z-select-' . preg_replace('/[^a-zA-Z0-9_-]/', '-', $name) . '-' . bin2hex(random_bytes(3));
 $label = isset($label) && is_string($label) && $label !== '' ? $label : null;
 $hint = isset($hint) && is_string($hint) && $hint !== '' ? $hint : null;
 $error = isset($error) && is_string($error) && $error !== '' ? $error : null;
@@ -10,6 +10,7 @@ $kModel = isset($kModel) && is_string($kModel) && $kModel !== '' ? $kModel : nul
 $class = isset($class) && is_string($class) ? trim($class) : '';
 $fieldClass = $class !== '' ? 'z-field ' . $class : 'z-field';
 $slot = isset($slot) && is_string($slot) ? $slot : '';
+$describedBy = $error !== null ? $id . '-err' : ($hint !== null ? $id . '-hint' : null);
 @endphp
 <div class="{{ $fieldClass }}">
 @if ($label !== null)
@@ -31,10 +32,13 @@ $slot = isset($slot) && is_string($slot) ? $slot : '';
 @if ($error !== null)
     aria-invalid="true"
 @endif
+@if ($describedBy !== null)
+    aria-describedby="{{ $describedBy }}"
+@endif
   >{!! $slot !!}</select>
 @if ($error !== null)
-  <span class="z-field-err">{{ $error }}</span>
+  <span id="{{ $id }}-err" class="z-field-err" role="alert">{{ $error }}</span>
 @elseif ($hint !== null)
-  <span class="z-hint">{{ $hint }}</span>
+  <span id="{{ $id }}-hint" class="z-hint">{{ $hint }}</span>
 @endif
 </div>

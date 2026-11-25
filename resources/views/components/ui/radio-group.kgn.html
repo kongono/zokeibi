@@ -2,13 +2,20 @@
 $name = isset($name) && is_string($name) && $name !== '' ? $name : 'choice';
 $label = isset($label) && is_string($label) && $label !== '' ? $label : null;
 $layout = isset($layout) && is_string($layout) && in_array($layout, ['list', 'cards'], true) ? $layout : 'list';
-$selected = isset($value) && is_string($value) ? $value : '';
+$selected = isset($value) && is_scalar($value) ? (string) $value : '';
 $opts = [];
 if (isset($options) && is_array($options)) {
     foreach ($options as $k => $v) {
         if (is_array($v)) {
-            $opts[] = ['value' => (string) ($v['value'] ?? $k), 'label' => (string) ($v['label'] ?? $k), 'desc' => (string) ($v['desc'] ?? '')];
-        } else {
+            $valRaw = $v['value'] ?? $k;
+            $lblRaw = $v['label'] ?? $k;
+            $descRaw = $v['desc'] ?? '';
+            $opts[] = [
+                'value' => is_scalar($valRaw) ? (string) $valRaw : (string) $k,
+                'label' => is_scalar($lblRaw) ? (string) $lblRaw : (string) $k,
+                'desc' => is_scalar($descRaw) ? (string) $descRaw : '',
+            ];
+        } elseif (is_scalar($v)) {
             $opts[] = ['value' => (string) $k, 'label' => (string) $v, 'desc' => ''];
         }
     }

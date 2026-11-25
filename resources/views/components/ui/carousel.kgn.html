@@ -10,6 +10,7 @@ if (isset($items) && is_string($items) && trim($items) !== '') {
         }
     }
 }
+$hint = isset($hint) && is_string($hint) ? trim($hint) : '';
 $slot = isset($slot) && is_string($slot) ? trim($slot) : '';
 $class = isset($class) && is_string($class) ? trim($class) : '';
 $wrapClass = $class !== '' ? 'z-carousel ' . $class : 'z-carousel';
@@ -28,5 +29,7 @@ $wrapClass = $class !== '' ? 'z-carousel ' . $class : 'z-carousel';
     {!! $slot !!}
 @endif
   </div>
-  <span class="z-carousel-hint">Scroll or swipe horizontally — 0 B JS CSS scroll-snap</span>
+@if ($hint !== '')
+  <span class="z-carousel-hint">{{ $hint }}</span>
+@endif
 </section>

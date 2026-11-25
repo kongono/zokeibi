@@ -1,6 +1,6 @@
 @php
 $name = isset($name) && is_string($name) && $name !== '' ? $name : 'range';
-$id = isset($id) && is_string($id) && $id !== '' ? $id : 'k-sl-' . preg_replace('/[^a-zA-Z0-9_-]/', '', $name);
+$id = isset($id) && is_string($id) && $id !== '' ? $id : 'z-sl-' . preg_replace('/[^a-zA-Z0-9_-]/', '', $name) . '-' . bin2hex(random_bytes(3));
 $label = isset($label) && is_string($label) && $label !== '' ? $label : null;
 $min = isset($min) && is_numeric($min) ? (string) $min : '0';
 $max = isset($max) && is_numeric($max) ? (string) $max : '100';
@@ -26,6 +26,7 @@ $wrapClass = $class !== '' ? 'z-slider ' . $class : 'z-slider';
     max="{{ $max }}"
     step="{{ $step }}"
     value="{{ $value }}"
+    @if ($label === null) aria-label="{{ $name }}" @endif
     data-z-slider-input
   >
 </div>

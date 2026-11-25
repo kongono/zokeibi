@@ -16,12 +16,17 @@ if (isset($items) && is_array($items)) {
 }
 $tree = [];
 foreach ($paths as $p) {
-    $parts = explode('/', $p);
+    $parts = array_values(array_filter(explode('/', $p), static fn (string $s): bool => $s !== ''));
+    if ($parts === []) {
+        continue;
+    }
     $node = &$tree;
     $last = count($parts) - 1;
     foreach ($parts as $idx => $part) {
         if ($idx === $last) {
-            $node[$part] = null;
+            if (!isset($node[$part])) {
+                $node[$part] = null;
+            }
         } else {
             if (!isset($node[$part]) || !is_array($node[$part])) {
                 $node[$part] = [];
@@ -32,11 +37,11 @@ foreach ($paths as $p) {
     unset($node);
 }
 $ops = [];
-$walk = static function (array $nodes, callable $self, bool $openRoot = true) use (&$ops): void {
-    $ops[] = ['kind' => 'ul_open', 'label' => ''];
+$walk = static function (array $nodes, callable $self, bool $isRoot = true) use (&$ops): void {
+    $ops[] = ['kind' => $isRoot ? 'ul_root_open' : 'ul_open', 'label' => ''];
     foreach ($nodes as $name => $children) {
         if (is_array($children)) {
-            $ops[] = ['kind' => $openRoot ? 'dir_open' : 'dir_closed', 'label' => (string) $name];
+            $ops[] = ['kind' => $isRoot ? 'dir_open' : 'dir_closed', 'label' => (string) $name];
             $self($children, $self, false);
             $ops[] = ['kind' => 'dir_close', 'label' => ''];
         } else {
@@ -51,14 +56,16 @@ $wrapClass = $class !== '' ? 'z-tree ' . $class : 'z-tree';
 @endphp
 <div class="{{ $wrapClass }}" role="tree" aria-label="{{ $label }}">
 @foreach ($ops as $op)
-@if ($op['kind'] === 'ul_open')
+@if ($op['kind'] === 'ul_root_open')
+  <ul class="z-tree-list" role="none">
+@elseif ($op['kind'] === 'ul_open')
   <ul class="z-tree-list" role="group">
 @elseif ($op['kind'] === 'ul_close')
   </ul>
 @elseif ($op['kind'] === 'dir_open')
-    <li role="treeitem"><details class="z-tree-dir" open><summary>{{ $op['label'] }}/</summary>
+    <li role="treeitem" aria-expanded="true"><details class="z-tree-dir" open><summary>{{ $op['label'] }}/</summary>
 @elseif ($op['kind'] === 'dir_closed')
-    <li role="treeitem"><details class="z-tree-dir"><summary>{{ $op['label'] }}/</summary>
+    <li role="treeitem" aria-expanded="false"><details class="z-tree-dir"><summary>{{ $op['label'] }}/</summary>
 @elseif ($op['kind'] === 'dir_close')
     </details></li>
 @else

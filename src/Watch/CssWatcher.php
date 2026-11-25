@@ -9,8 +9,10 @@ use FilesystemIterator;
 use Zokeibi\Compiler\BuildReport;
 use Zokeibi\Compiler\CssTreeShaker;
 use Zokeibi\Studio\StudioStore;
+use RecursiveCallbackFilterIterator;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
+use RuntimeException;
 use SplFileInfo;
 
 /**
@@ -19,6 +21,30 @@ use SplFileInfo;
  */
 final readonly class CssWatcher
 {
+    /** @var list<string> */
+    private const array IGNORED_DIRS = [
+        'vendor',
+        'node_modules',
+        '.git',
+        'var',
+        'storage',
+        'dist',
+        '.cache',
+    ];
+
+    /** @var list<string> */
+    private const array WATCHED_EXTENSIONS = [
+        '.kgn.html',
+        '.blade.php',
+        '.html',
+        '.php',
+        '.twig',
+        '.jsx',
+        '.tsx',
+        '.vue',
+        '.svelte',
+    ];
+
     public function __construct(
         private CssTreeShaker $compiler,
         private StudioStore $studio,
@@ -26,23 +52,55 @@ final readonly class CssWatcher
 
     public function fingerprint(string $projectDir, string $viewsDir): string
     {
+        clearstatcache();
+
         $parts = [];
         $configPath = $this->studio->configPath($projectDir);
-        if (is_file($configPath)) {
-            $parts[] = 'zokeibi.json:' . (string) filemtime($configPath) . ':' . (string) filesize($configPath);
+        if (is_file($configPath) && !is_link($configPath)) {
+            $mtime = @filemtime($configPath);
+            $size = @filesize($configPath);
+            if (false !== $mtime && false !== $size) {
+                $parts[] = 'zokeibi.json:' . (string) $mtime . ':' . (string) $size;
+            }
         }
 
         if (is_dir($viewsDir)) {
-            $it = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($viewsDir, FilesystemIterator::SKIP_DOTS));
+            $dirIterator = new RecursiveDirectoryIterator($viewsDir, FilesystemIterator::SKIP_DOTS);
+            $filterIterator = new RecursiveCallbackFilterIterator(
+                $dirIterator,
+                static function (SplFileInfo $current): bool {
+                    if ($current->isLink()) {
+                        return false;
+                    }
+                    if ($current->isDir()) {
+                        return !in_array(strtolower($current->getFilename()), self::IGNORED_DIRS, true);
+                    }
+
+                    return true;
+                },
+            );
+            $it = new RecursiveIteratorIterator($filterIterator);
             foreach ($it as $file) {
-                if (!$file instanceof SplFileInfo || !$file->isFile()) {
+                if (!$file instanceof SplFileInfo || !$file->isFile() || $file->isLink()) {
                     continue;
                 }
                 $name = strtolower($file->getFilename());
-                if (!str_ends_with($name, '.kgn.html') && !str_ends_with($name, '.html') && !str_ends_with($name, '.php')) {
+                $watched = false;
+                foreach (self::WATCHED_EXTENSIONS as $ext) {
+                    if (str_ends_with($name, $ext)) {
+                        $watched = true;
+                        break;
+                    }
+                }
+                if (!$watched) {
                     continue;
                 }
-                $parts[] = $file->getPathname() . ':' . (string) $file->getMTime() . ':' . (string) $file->getSize();
+                try {
+                    $parts[] = $file->getPathname() . ':' . (string) $file->getMTime() . ':' . (string) $file->getSize();
+                } catch (RuntimeException) {
+                    // File removed concurrently during watch scan
+                    continue;
+                }
             }
         }
         sort($parts, SORT_STRING);

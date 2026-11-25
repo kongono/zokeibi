@@ -1,8 +1,50 @@
 @php
+$safeUrl = static function (string $raw): string {
+    $clean = trim((string) preg_replace('/[\x00-\x1F\x7F]+/', '', $raw));
+    $lower = strtolower($clean);
+    if ($clean === '' || str_starts_with($lower, '//') || str_starts_with($lower, '/\\')) {
+        return '#';
+    }
+    if (
+        str_starts_with($lower, '/')
+        || str_starts_with($lower, './')
+        || str_starts_with($lower, '../')
+        || str_starts_with($lower, '#')
+        || str_starts_with($lower, '?')
+        || str_starts_with($lower, 'https://')
+        || str_starts_with($lower, 'http://')
+        || str_starts_with($lower, 'mailto:')
+        || str_starts_with($lower, 'tel:')
+    ) {
+        return $clean;
+    }
+
+    return '#';
+};
+$toLower = static fn (string $v): string => function_exists('mb_strtolower') ? mb_strtolower($v, 'UTF-8') : strtolower($v);
 $label = isset($label) && is_string($label) && $label !== '' ? $label : 'Sidebar navigation';
 $active = isset($active) && is_string($active) ? trim($active) : '';
 $groups = [];
-if (isset($items) && is_string($items) && trim($items) !== '') {
+if (isset($items) && is_array($items)) {
+    foreach ($items as $groupHeading => $groupItems) {
+        if (!is_array($groupItems)) {
+            continue;
+        }
+        $heading = is_string($groupHeading) && trim($groupHeading) !== '' ? trim($groupHeading) : 'Navigation';
+        foreach ($groupItems as $entry) {
+            if (is_array($entry) && isset($entry['label']) && is_scalar($entry['label'])) {
+                $lbl = trim((string) $entry['label']);
+                if ($lbl !== '') {
+                    $groups[$heading][] = [
+                        'label' => $lbl,
+                        'href' => isset($entry['href']) && is_scalar($entry['href']) ? $safeUrl((string) $entry['href']) : '#',
+                        'badge' => isset($entry['badge']) && is_scalar($entry['badge']) ? trim((string) $entry['badge']) : '',
+                    ];
+                }
+            }
+        }
+    }
+} elseif (isset($items) && is_string($items) && trim($items) !== '') {
     $currentGroup = 'Navigation';
     foreach (explode('|', $items) as $seg) {
         $seg = trim($seg);
@@ -13,9 +55,9 @@ if (isset($items) && is_string($items) && trim($items) !== '') {
             $currentGroup = trim(substr($seg, 1));
             continue;
         }
-        $parts = explode(':', $seg, 3);
-        $lbl = trim($parts[0]);
-        $href = isset($parts[1]) && trim($parts[1]) !== '' ? trim($parts[1]) : '#';
+        $parts = preg_split('/:(?!\/\/)/', $seg, 3) ?: [];
+        $lbl = trim($parts[0] ?? '');
+        $href = isset($parts[1]) && trim($parts[1]) !== '' ? $safeUrl($parts[1]) : '#';
         $badge = isset($parts[2]) ? trim($parts[2]) : '';
         if ($lbl !== '') {
             $groups[$currentGroup][] = ['label' => $lbl, 'href' => $href, 'badge' => $badge];
@@ -30,7 +72,7 @@ $navClass = $class !== '' ? 'z-sidebar ' . $class : 'z-sidebar';
   <div class="z-sidebar-group">
     <div class="z-sidebar-heading">{{ $heading }}</div>
 @foreach ($links as $link)
-    <a class="z-sidebar-link" href="{{ $link['href'] }}" @if ($active !== '' && ($link['href'] === $active || strtolower($link['label']) === strtolower($active))) aria-current="page" @endif>
+    <a class="z-sidebar-link" href="{{ $link['href'] }}" @if ($active !== '' && ($link['href'] === $active || $toLower($link['label']) === $toLower($active))) aria-current="page" @endif>
       <span>{{ $link['label'] }}</span>
 @if ($link['badge'] !== '')
       <span class="z-sidebar-count">{{ $link['badge'] }}</span>

@@ -1,4 +1,8 @@
 @layer zokeibi.components {
+  .z-dropdown {
+    display: inline-block;
+  }
+
   .z-dropdown-panel {
     margin: 0.45rem auto;
     padding: 0.34rem;
@@ -53,7 +57,7 @@
     &:hover,
     &:focus-visible {
       background: var(--z-surface-hover);
-      outline: none;
+      outline: 2px solid transparent;
     }
 
     &.is-danger {

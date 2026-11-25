@@ -3,15 +3,16 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Zokeibi (造形美) v1.0.0 — Zero-npm, Strict-CSP UI Framework &amp; Pure PHP 8.5 OKLCH Compiler</title>
-  <meta name="description" content="Zokeibi (造形美 — Architectural Beauty of Form): 55 accessible UI components, 8 turnkey SaaS blocks, pure PHP 8.5 OKLCH CSS tree-shaker (9.40 KB gzip), pure-SVG charts (0 B JS), DTO-to-UI generator, Design Token Studio, and zokeibi prove Grade A+ readiness gate.">
+  <title>Zokeibi (造形美) v1.0.1 — Zero-npm, Strict-CSP UI Framework &amp; Pure PHP 8.5 OKLCH Compiler</title>
+  <meta name="description" content="Zokeibi (造形美 — Architectural Beauty of Form): 55 accessible UI components, 8 turnkey SaaS blocks, pure PHP 8.5 OKLCH CSS tree-shaker (9.50 KB gzip), pure-SVG charts (0 B JS), DTO-to-UI generator, Design Token Studio, and zokeibi prove Grade A+ readiness gate.">
   <meta property="og:type" content="website">
   <meta property="og:title" content="Zokeibi (造形美) — Zero-npm, Strict-CSP UI Framework for PHP 8.5+">
-  <meta property="og:description" content="55 accessible components + 8 SaaS blocks in 9.40 KB gzip. Zero npm, strict CSP (style-src 'self'), pure PHP OKLCH compiler, pure-SVG charts, and Grade A+ automated WCAG/CSP proofs.">
+  <meta property="og:description" content="55 accessible components + 8 SaaS blocks in 9.50 KB gzip. Zero npm, strict CSP (style-src 'self'), pure PHP OKLCH compiler, pure-SVG charts, and Grade A+ automated WCAG/CSP proofs.">
   <meta property="og:url" content="https://zokeibi.com/">
+  <link rel="canonical" href="https://zokeibi.com/">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Zokeibi (造形美) — Zero-npm, Strict-CSP UI Framework">
-  <meta name="twitter:description" content="55 accessible components + 8 SaaS blocks in 9.40 KB gzip. Pure PHP 8.5 OKLCH compiler, 0 B JS SVG charts, and zokeibi prove Grade A+ gate.">
+  <meta name="twitter:description" content="55 accessible components + 8 SaaS blocks in 9.50 KB gzip. Pure PHP 8.5 OKLCH compiler, 0 B JS SVG charts, and zokeibi prove Grade A+ gate.">
   <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
   <link rel="stylesheet" href="assets/zokeibi.min.css">
   <link rel="stylesheet" href="assets/site.css">
@@ -24,7 +25,7 @@
         <img src="assets/favicon.svg" width="26" height="26" alt="Zokeibi mark">
         <span>Zokeibi</span>
         <span class="zs-brand-kanji">造形美</span>
-        <span class="z-badge">v1.0.0</span>
+        <span class="z-badge">v1.0.1</span>
       </a>
       <nav class="zs-nav" aria-label="Primary">
         <a href="#live-demo">Live Demo</a>
@@ -34,45 +35,10 @@
         <a href="https://kongono.com" target="_blank" rel="noopener">Kongono &rarr;</a>
         <a href="https://github.com/anthonyiovanna/zokeibi" target="_blank" rel="noopener">GitHub</a>
         <a href="llms.txt">llms.txt</a>
-        <div class="z-cmdk-wrap" data-z-cmdk-root="site-cmdk">
-          <button type="button" class="z-btn z-btn-outline z-btn-sm" data-z-open="#site-cmdk" aria-haspopup="dialog" aria-controls="site-cmdk">
-            <span>Jump</span>
-            <kbd class="z-kbd">⌘K</kbd>
-          </button>
-          <div class="z-cmdk-backdrop" id="site-cmdk" data-z-cmdk="true" hidden>
-            <div class="z-cmdk" role="dialog" aria-modal="true" aria-label="Quick navigation">
-              <div class="z-cmdk-head">
-                <input type="search" class="z-cmdk-input" data-z-cmdk-input placeholder="Jump to section or external docs..." aria-label="Search commands" autocomplete="off">
-                <button type="button" class="z-btn z-btn-ghost z-btn-sm" data-z-close="#site-cmdk" aria-label="Close command palette">Esc</button>
-              </div>
-              <ul class="z-cmdk-list" role="listbox" data-z-cmdk-list>
-                <li role="option" aria-selected="true" data-z-cmdk-item="live demo interactive showcase components">
-                  <a class="z-cmdk-item is-active" href="#live-demo" data-z-close="#site-cmdk"><span>Live Interactive Showcase</span><kbd class="z-kbd">Demo</kbd></a>
-                </li>
-                <li role="option" aria-selected="false" data-z-cmdk-item="55 components catalog saas blocks">
-                  <a class="z-cmdk-item" href="#catalog" data-z-close="#site-cmdk"><span>Browse All 55 Components &amp; 8 Blocks</span><kbd class="z-kbd">Catalog</kbd></a>
-                </li>
-                <li role="option" aria-selected="false" data-z-cmdk-item="quickstart cli prove studio install">
-                  <a class="z-cmdk-item" href="#quickstart" data-z-close="#site-cmdk"><span>CLI Quick Start &amp; zokeibi prove</span><kbd class="z-kbd">CLI</kbd></a>
-                </li>
-                <li role="option" aria-selected="false" data-z-cmdk-item="bring your own stack react vue svelte twig blade tailwind w3c tokens">
-                  <a class="z-cmdk-item" href="#stacks" data-z-close="#site-cmdk"><span>Any Stack &amp; W3C / Tailwind Exports</span><kbd class="z-kbd">Export</kbd></a>
-                </li>
-                <li role="option" aria-selected="false" data-z-cmdk-item="kongono php framework home">
-                  <a class="z-cmdk-item" href="https://kongono.com" target="_blank" rel="noopener"><span>Kongono PHP 8.5 Framework</span><kbd class="z-kbd">kongono.com</kbd></a>
-                </li>
-                <li role="option" aria-selected="false" data-z-cmdk-item="llms txt ai agent mcp registry">
-                  <a class="z-cmdk-item" href="llms.txt"><span>LLM Documentation Index (llms.txt)</span><kbd class="z-kbd">AI</kbd></a>
-                </li>
-              </ul>
-              <div class="z-cmdk-empty" data-z-cmdk-empty hidden>No matching commands.</div>
-              <div class="z-cmdk-foot">
-                <span>↑↓ Navigate · ↵ Open</span>
-                <span>Esc Close</span>
-              </div>
-            </div>
-          </div>
-        </div>
+        <button type="button" class="z-btn z-btn-outline z-btn-sm" data-z-open="#site-cmdk" aria-haspopup="dialog" aria-controls="site-cmdk">
+          <span>Jump</span>
+          <kbd class="z-kbd">⌘K</kbd>
+        </button>
       </nav>
     </div>
   </header>
@@ -80,7 +46,7 @@
   <main id="top">
     <section class="zs-hero">
       <div class="zs-container">
-        <div class="zs-kicker">造形美 · Architectural Beauty of Form · PHP 8.5+ · 0 npm · 9.40 KB Gzip · MIT</div>
+        <div class="zs-kicker">造形美 · Architectural Beauty of Form · PHP 8.5+ · 0 npm · 9.50 KB Gzip · MIT</div>
         <h1>Zero-npm, Strict-CSP UI <span class="zs-hero-accent">Proven on Every Build</span></h1>
         <p class="zs-lead">
           <strong>Zokeibi</strong> (<code>kongono/zokeibi</code>) is a standalone UI component framework and pure PHP 8.5 OKLCH CSS tree-shaker with <strong>zero runtime Composer dependencies</strong> and <strong>zero Node.js</strong>. Ship 55 accessible components, 8 turnkey SaaS blocks, pure-SVG charts, DTO-to-UI generators, a local Design Token Studio, and automated Grade A+ WCAG &amp; CSP proofs — on <strong>Kongono</strong> or any HTML stack.
@@ -101,7 +67,7 @@
         <div class="zs-stats">
           <div class="zs-stat"><div class="zs-stat-num">0</div><div class="zs-stat-lbl">npm or Runtime Composer Deps</div></div>
           <div class="zs-stat"><div class="zs-stat-num">55 + 8</div><div class="zs-stat-lbl">Components &amp; SaaS Blocks (MIT)</div></div>
-          <div class="zs-stat"><div class="zs-stat-num">9.40 KB</div><div class="zs-stat-lbl">Full 55-Component Gzip Bundle</div></div>
+          <div class="zs-stat"><div class="zs-stat-num">9.50 KB</div><div class="zs-stat-lbl">Full 55-Component Gzip Bundle</div></div>
           <div class="zs-stat"><div class="zs-stat-num">Grade A+</div><div class="zs-stat-lbl">zokeibi prove --strict (100/100)</div></div>
           <div class="zs-stat"><div class="zs-stat-num">Strict CSP</div><div class="zs-stat-lbl">script-src 'self' · style-src 'self'</div></div>
         </div>
@@ -140,17 +106,17 @@
                 <div class="z-card-kicker">0 B JS · Top-Layer Popover API</div>
                 <h3 class="z-card-title">Buttons, Badges &amp; Native Dropdown</h3>
               </div>
-              <span class="z-dropdown">
+              <div class="z-dropdown">
                 <button type="button" class="z-btn z-btn-outline z-btn-sm" popovertarget="demo-menu" aria-haspopup="menu">Actions ▾</button>
                 <div id="demo-menu" class="z-dropdown-panel" popover="auto" role="menu">
-                  <ul class="z-dropdown-list">
+                  <ul class="z-dropdown-list" role="none">
                     <li role="none"><a class="z-dropdown-item" role="menuitem" href="#quickstart"><span>Install via Composer</span><kbd class="z-kbd">I</kbd></a></li>
                     <li role="none"><a class="z-dropdown-item" role="menuitem" href="#catalog"><span>Browse 55 Components</span><kbd class="z-kbd">C</kbd></a></li>
                     <li class="z-dropdown-sep" role="separator"></li>
                     <li role="none"><a class="z-dropdown-item" role="menuitem" href="https://kongono.com" target="_blank" rel="noopener"><span>Open Kongono</span><kbd class="z-kbd">↗</kbd></a></li>
                   </ul>
                 </div>
-              </span>
+              </div>
             </div>
             <div class="z-card-body z-stack">
               <div class="z-row">
@@ -164,7 +130,7 @@
                 <span class="z-badge z-badge-primary">OKLCH Tokens</span>
                 <span class="z-badge z-badge-emerald">Grade A+</span>
                 <span class="z-badge z-badge-blue">Strict CSP</span>
-                <span class="z-badge z-badge-amber">9.40 KB Gzip</span>
+                <span class="z-badge z-badge-amber">9.50 KB Gzip</span>
               </div>
               <div class="z-alert z-alert-success" role="status">
                 <div class="z-alert-title">Zero Inline Styles or Eval</div>
@@ -187,7 +153,7 @@
                 <label class="z-label" for="demo-pw">Workspace Passphrase (try typing)</label>
                 <div class="z-pw-row">
                   <input id="demo-pw" type="password" class="z-pw-input" placeholder="Try: Zokeibi-2026!OKLCH" autocomplete="new-password" data-z-pw-input>
-                  <button type="button" class="z-btn z-btn-ghost z-btn-sm" data-z-pw-toggle aria-label="Toggle password visibility">Show</button>
+                  <button type="button" class="z-btn z-btn-ghost z-btn-sm" data-z-pw-toggle aria-pressed="false">Show</button>
                 </div>
                 <div class="z-pw-meter" aria-hidden="true">
                   <span class="z-pw-bar"></span>
@@ -213,8 +179,8 @@
                 <div class="z-field">
                   <label class="z-label" for="demo-domain">Custom Domain</label>
                   <div class="z-input-group-row">
-                    <span class="z-input-addon">https://</span>
-                    <input id="demo-domain" type="text" class="z-input-group-field" value="zokeibi.com" aria-label="Domain name">
+                    <span class="z-input-addon is-prefix">https://</span>
+                    <input id="demo-domain" type="text" class="z-input-group-field" value="zokeibi.com">
                   </div>
                 </div>
               </div>
@@ -316,12 +282,12 @@
               </div>
 
               <div class="z-tree" role="tree" aria-label="Zokeibi project layout">
-                <ul class="z-tree-list" role="group">
-                  <li role="treeitem">
+                <ul class="z-tree-list" role="none">
+                  <li role="treeitem" aria-expanded="true">
                     <details class="z-tree-dir" open>
                       <summary>views/</summary>
                       <ul class="z-tree-list" role="group">
-                        <li role="treeitem">
+                        <li role="treeitem" aria-expanded="true">
                           <details class="z-tree-dir" open>
                             <summary>components/ui/</summary>
                             <ul class="z-tree-list" role="group">
@@ -365,14 +331,14 @@
                       <button type="button" class="z-editor-btn" data-z-ed-cmd="link" aria-label="Insert link">Link</button>
                     </div>
                     <div class="z-editor-modes" role="tablist" aria-label="Editor view mode">
-                      <button type="button" class="z-editor-btn" data-z-ed-mode="write">Write</button>
-                      <button type="button" class="z-editor-btn is-active" data-z-ed-mode="split">Split</button>
-                      <button type="button" class="z-editor-btn" data-z-ed-mode="preview">Preview</button>
+                      <button type="button" role="tab" aria-selected="false" class="z-editor-btn" data-z-ed-mode="write">Write</button>
+                      <button type="button" role="tab" aria-selected="true" class="z-editor-btn is-active" data-z-ed-mode="split">Split</button>
+                      <button type="button" role="tab" aria-selected="false" class="z-editor-btn" data-z-ed-mode="preview">Preview</button>
                     </div>
                   </div>
                   <div class="z-editor-panes is-split" data-z-ed-panes>
-                    <textarea id="demo-editor" name="notes" rows="6" class="z-editor-input" aria-label="Markdown release notes" data-z-ed-input>### Zokeibi v1.0.0 (造形美)
-Ship **55 accessible components** in `9.40 KB` gzipped with *zero npm*.
+                    <textarea id="demo-editor" name="notes" rows="6" class="z-editor-input" aria-label="Markdown release notes" data-z-ed-input>### Zokeibi v1.0.1 (造形美)
+Ship **55 accessible components** in `9.50 KB` gzipped with *zero npm*.
 
 > Built for strict CSP: zero `eval()`, zero `innerHTML`, zero inline styles.
 
@@ -408,10 +374,10 @@ Ship **55 accessible components** in `9.40 KB` gzipped with *zero npm*.
                   <caption class="z-sr-only">Sample Zokeibi component benchmarks</caption>
                   <thead>
                     <tr>
-                      <th data-z-sort="string" tabindex="0" aria-sort="none">Component</th>
-                      <th data-z-sort="string" tabindex="0" aria-sort="none">Category</th>
-                      <th data-z-sort="string" tabindex="0" aria-sort="none">JS Requirement</th>
-                      <th data-z-sort="auto" tabindex="0" aria-sort="none">Proof Score</th>
+                      <th scope="col" data-z-sort="string" tabindex="0" aria-sort="none">Component</th>
+                      <th scope="col" data-z-sort="string" tabindex="0" aria-sort="none">Category</th>
+                      <th scope="col" data-z-sort="string" tabindex="0" aria-sort="none">JS Requirement</th>
+                      <th scope="col" data-z-sort="auto" tabindex="0" aria-sort="none">Proof Score</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -550,7 +516,7 @@ php vendor/bin/zokeibi block add saas-shell analytics-dashboard
 php vendor/bin/zokeibi form App\\Dto\\CreateOrderInput --out=views/orders/form.kgn.html
 php vendor/bin/zokeibi table App\\Dto\\OrderRow --out=views/orders/table.kgn.html
 
-# Pure PHP CSS tree-shaker + optional 1.5 KB strict-CSP runtime
+# Pure PHP CSS tree-shaker + optional zero-dependency strict-CSP runtime
 php vendor/bin/zokeibi build --views=views --out=public/assets/zokeibi.min.css
 php vendor/bin/zokeibi runtime --out=public/assets/zokeibi-runtime.js
 
@@ -565,7 +531,7 @@ php vendor/bin/zokeibi studio --dir=. --port=8101</code></pre>
 Zokeibi (造形美) UI Proof Certificate — Grade A+ (100/100 · PASS · 20.7 ms)
   [1] WCAG 2.1 AA Contrast: PASS (100/100 · 2 theme(s) checked)
   [2] UI Schema &amp; CSP Audit: PASS (100/100 · 58 file(s), 0 err, 0 warn)
-  [3] Gzip CSS Budget:      PASS (100/100 · 9.40 KB / 10.00 KB max · 55 components)</code></pre>
+  [3] Gzip CSS Budget:      PASS (100/100 · 9.50 KB / 10.00 KB max · 55 components)</code></pre>
             <div class="z-card">
               <div class="z-card-body z-stack-sm">
                 <div class="z-card-kicker">AI-Native · Zero Hallucinations</div>
@@ -612,6 +578,41 @@ Zokeibi (造形美) UI Proof Certificate — Grade A+ (100/100 · PASS · 20.7 m
     </section>
   </main>
 
+  <!-- Live Command Palette (direct child of <body> so sticky header backdrop-filter never traps fixed positioning) -->
+  <div class="z-cmdk-backdrop" id="site-cmdk" data-z-cmdk="true" hidden>
+    <div class="z-cmdk" role="dialog" aria-modal="true" aria-label="Quick navigation">
+      <div class="z-cmdk-head">
+        <input type="search" class="z-cmdk-input" data-z-cmdk-input placeholder="Jump to section or external docs..." aria-label="Search commands" aria-controls="site-cmdk-list" autocomplete="off">
+        <button type="button" class="z-btn z-btn-ghost z-btn-sm" data-z-close="#site-cmdk" aria-label="Close command palette">Esc</button>
+      </div>
+      <ul id="site-cmdk-list" class="z-cmdk-list" role="listbox" aria-label="Quick navigation commands" data-z-cmdk-list>
+        <li role="option" aria-selected="true" data-z-cmdk-item="live demo interactive showcase components">
+          <a class="z-cmdk-item is-active" href="#live-demo" data-z-close="#site-cmdk"><span>Live Interactive Showcase</span><kbd class="z-kbd">Demo</kbd></a>
+        </li>
+        <li role="option" aria-selected="false" data-z-cmdk-item="55 components catalog saas blocks">
+          <a class="z-cmdk-item" href="#catalog" data-z-close="#site-cmdk"><span>Browse All 55 Components &amp; 8 Blocks</span><kbd class="z-kbd">Catalog</kbd></a>
+        </li>
+        <li role="option" aria-selected="false" data-z-cmdk-item="quickstart cli prove studio install">
+          <a class="z-cmdk-item" href="#quickstart" data-z-close="#site-cmdk"><span>CLI Quick Start &amp; zokeibi prove</span><kbd class="z-kbd">CLI</kbd></a>
+        </li>
+        <li role="option" aria-selected="false" data-z-cmdk-item="bring your own stack react vue svelte twig blade tailwind w3c tokens">
+          <a class="z-cmdk-item" href="#stacks" data-z-close="#site-cmdk"><span>Any Stack &amp; W3C / Tailwind Exports</span><kbd class="z-kbd">Export</kbd></a>
+        </li>
+        <li role="option" aria-selected="false" data-z-cmdk-item="kongono php framework home">
+          <a class="z-cmdk-item" href="https://kongono.com" target="_blank" rel="noopener"><span>Kongono PHP 8.5 Framework</span><kbd class="z-kbd">kongono.com</kbd></a>
+        </li>
+        <li role="option" aria-selected="false" data-z-cmdk-item="llms txt ai agent mcp registry">
+          <a class="z-cmdk-item" href="llms.txt"><span>LLM Documentation Index (llms.txt)</span><kbd class="z-kbd">AI</kbd></a>
+        </li>
+      </ul>
+      <div class="z-cmdk-empty" data-z-cmdk-empty hidden>No matching commands.</div>
+      <div class="z-cmdk-foot">
+        <span>↑↓ Navigate · ↵ Open</span>
+        <span>Esc Close</span>
+      </div>
+    </div>
+  </div>
+
   <!-- Live Modal Demo -->
   <div class="z-modal-backdrop" id="demo-modal" hidden>
     <div class="z-modal" role="dialog" aria-modal="true" aria-labelledby="demo-modal-title">
@@ -632,7 +633,7 @@ Zokeibi (造形美) UI Proof Certificate — Grade A+ (100/100 · PASS · 20.7 m
 
   <footer class="zs-footer">
     <div class="zs-container zs-footer-inner">
-      <div><strong>Zokeibi v1.0.0 (造形美)</strong> · MIT License · Part of the <a href="https://kongono.com" target="_blank" rel="noopener">Kongono</a> ecosystem</div>
+      <div><strong>Zokeibi v1.0.1 (造形美)</strong> · MIT License · Part of the <a href="https://kongono.com" target="_blank" rel="noopener">Kongono</a> ecosystem</div>
       <div class="zs-footer-links">
         <a href="#live-demo">Live Demo</a>
         <a href="#catalog">55 Components</a>

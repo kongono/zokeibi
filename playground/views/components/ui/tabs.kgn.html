@@ -3,8 +3,11 @@ $rawTabs = $tabs ?? 'overview:Overview|code:Code';
 $parsedTabs = [];
 if (is_array($rawTabs)) {
     foreach ($rawTabs as $item) {
-        if (is_array($item) && isset($item['id'], $item['label']) && is_string($item['id']) && is_string($item['label'])) {
-            $parsedTabs[] = ['id' => $item['id'], 'label' => $item['label']];
+        if (is_array($item) && isset($item['id'], $item['label']) && is_scalar($item['id']) && is_scalar($item['label'])) {
+            $tid = (string) preg_replace('/[^a-zA-Z0-9_-]/', '', (string) $item['id']);
+            if ($tid !== '') {
+                $parsedTabs[] = ['id' => $tid, 'label' => trim((string) $item['label'])];
+            }
         }
     }
 } elseif (is_string($rawTabs)) {
@@ -14,27 +17,30 @@ if (is_array($rawTabs)) {
             continue;
         }
         $parts = explode(':', $chunk, 2);
-        $tid = trim($parts[0]);
+        $tid = (string) preg_replace('/[^a-zA-Z0-9_-]/', '', trim($parts[0]));
         $tlabel = isset($parts[1]) ? trim($parts[1]) : ucfirst($tid);
         if ($tid !== '') {
             $parsedTabs[] = ['id' => $tid, 'label' => $tlabel];
         }
     }
 }
-$defaultTab = isset($default) && is_string($default) && $default !== ''
-    ? $default
-    : ($parsedTabs[0]['id'] ?? 'overview');
+$rawDefault = isset($default) && is_string($default) ? (string) preg_replace('/[^a-zA-Z0-9_-]/', '', $default) : '';
+$defaultTab = $rawDefault !== '' ? $rawDefault : ($parsedTabs[0]['id'] ?? 'overview');
 $class = isset($class) && is_string($class) ? trim($class) : '';
 $wrapClass = $class !== '' ? 'z-tabs ' . $class : 'z-tabs';
 $slot = isset($slot) && is_string($slot) ? $slot : '';
 @endphp
-<div class="{{ $wrapClass }}" @state(['tab' => $defaultTab])>
+<div class="{{ $wrapClass }}" data-z-tabs="true" @state(['tab' => $defaultTab])>
   <div class="z-tablist" role="tablist">
 @foreach ($parsedTabs as $item)
+@php $isInitial = $item['id'] === $defaultTab; @endphp
     <button
       type="button"
       role="tab"
-      class="z-tab"
+      class="z-tab{{ $isInitial ? ' is-active' : '' }}"
+      aria-selected="{{ $isInitial ? 'true' : 'false' }}"
+      tabindex="{{ $isInitial ? '0' : '-1' }}"
+      data-z-tab="{{ $item['id'] }}"
       k-class:is-active="tab === '{{ $item['id'] }}'"
       k-attr:aria-selected="tab === '{{ $item['id'] }}'"
       k-on:click="set(tab, '{{ $item['id'] }}')"

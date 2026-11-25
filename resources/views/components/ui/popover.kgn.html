@@ -1,5 +1,5 @@
 @php
-$id = isset($id) && is_string($id) && $id !== '' ? $id : 'z-popover-default';
+$id = isset($id) && is_string($id) && $id !== '' ? $id : 'z-popover-' . bin2hex(random_bytes(3));
 $trigger = isset($trigger) && is_string($trigger) && $trigger !== '' ? $trigger : 'Open Menu';
 $triggerVariant = isset($triggerVariant) && is_string($triggerVariant) ? $triggerVariant : 'outline';
 $triggerSize = isset($triggerSize) && is_string($triggerSize) ? $triggerSize : 'sm';
@@ -16,7 +16,7 @@ $btnClass = implode(' ', $btnClasses);
 $popClass = $class !== '' ? 'z-popover ' . $class : 'z-popover';
 $slot = isset($slot) && is_string($slot) ? $slot : '';
 @endphp
-<span class="z-popover-wrap">
+<div class="z-popover-wrap">
   <button type="button" class="{{ $btnClass }}" popovertarget="{{ $id }}">{{ $trigger }}</button>
   <div id="{{ $id }}" popover="auto" class="{{ $popClass }}">
 @if ($title !== null)
@@ -27,4 +27,4 @@ $slot = isset($slot) && is_string($slot) ? $slot : '';
 @endif
     <div class="z-popover-body">{!! $slot !!}</div>
   </div>
-</span>
+</div>

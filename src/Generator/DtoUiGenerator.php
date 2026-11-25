@@ -22,7 +22,35 @@ use ReflectionProperty;
 final readonly class DtoUiGenerator
 {
     /** @var list<string> */
-    private const array SENSITIVE_NAMES = ['password', 'passwordconfirmation', 'secret', 'token', 'apikey'];
+    private const array SENSITIVE_NAMES = [
+        'password',
+        'passwordconfirmation',
+        'secret',
+        'token',
+        'apikey',
+        'ssn',
+        'cvv',
+        'pin',
+        'totp',
+        'otp',
+    ];
+
+    /** @var list<string> */
+    private const array SENSITIVE_SUBSTRINGS = [
+        'password',
+        'secret',
+        'token',
+        'apikey',
+        'api_key',
+        'private_key',
+        'privatekey',
+        'credential',
+        'totp',
+        'recovery_code',
+    ];
+
+    /** @var list<string> */
+    private const array ALLOWED_HTTP_METHODS = ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'];
 
     /** @var list<string> */
     private const array MULTILINE_NAMES = ['bio', 'description', 'body', 'content', 'notes', 'summary', 'message'];
@@ -43,15 +71,19 @@ final readonly class DtoUiGenerator
             throw new InvalidArgumentException(sprintf('DTO class "%s" not found or not autoloaded.', $dtoClass));
         }
 
+        $safeAction = $this->assertSafeUrl($action, '/submit');
         $ref = new ReflectionClass($dtoClass);
         $fields = $this->extractFields($ref);
         $cardTitle = null !== $title && '' !== trim($title) ? trim($title) : $this->humanize($ref->getShortName());
         $httpMethod = strtoupper(trim($method));
+        if (!in_array($httpMethod, self::ALLOWED_HTTP_METHODS, true)) {
+            throw new InvalidArgumentException(sprintf('Unsupported HTTP method "%s". Allowed: %s.', $method, implode(', ', self::ALLOWED_HTTP_METHODS)));
+        }
 
-        $formAttrs = sprintf('method="%s" action="%s" class="z-stack"', 'GET' === $httpMethod ? 'GET' : 'POST', $this->escAttr($action));
+        $formAttrs = sprintf('method="%s" action="%s" class="z-stack"', 'GET' === $httpMethod ? 'GET' : 'POST', $this->escAttr($safeAction));
         if (null !== $liveTarget && '' !== trim($liveTarget)) {
             $kgnAttr = 'GET' === $httpMethod ? 'kgn-get' : 'kgn-post';
-            $formAttrs .= sprintf(' %s="%s" kgn-target="%s" kgn-swap="morph"', $kgnAttr, $this->escAttr($action), $this->escAttr(trim($liveTarget)));
+            $formAttrs .= sprintf(' %s="%s" kgn-target="%s" kgn-swap="morph"', $kgnAttr, $this->escAttr($safeAction), $this->escAttr(trim($liveTarget)));
         }
 
         $lines = [
@@ -102,7 +134,8 @@ final readonly class DtoUiGenerator
         ));
 
         $cleanVar = preg_replace('/[^a-zA-Z0-9_]/', '', $itemsVar);
-        $varName = is_string($cleanVar) && '' !== $cleanVar ? $cleanVar : 'items';
+        $cleanVar = is_string($cleanVar) ? (preg_replace('/\A[^a-zA-Z_]+/', '', $cleanVar) ?? '') : '';
+        $varName = '' !== $cleanVar ? $cleanVar : 'items';
         $tableCaption = null !== $caption && '' !== trim($caption) ? trim($caption) : $this->humanize($ref->getShortName()) . ' List';
 
         $lines = [
@@ -122,11 +155,13 @@ final readonly class DtoUiGenerator
         $lines[] = sprintf('      @forelse ($%s as $row)', $varName);
         $lines[] = '        <tr>';
         foreach ($fields as $f) {
-            $expr = sprintf('$row->%s ?? ($row[\'%s\'] ?? \'\')', $f['name'], $f['name']);
+            $expr = sprintf('($row->%s ?? ($row[\'%s\'] ?? \'\'))', $f['name'], $f['name']);
             if ('bool' === $f['type']) {
-                $lines[] = sprintf('          <td><x-ui.badge variant="emerald">{{ (%s) ? \'Yes\' : \'No\' }}</x-ui.badge></td>', $expr);
+                $lines[] = sprintf('          <td><x-ui.badge variant="emerald">{{ %s ? \'Yes\' : \'No\' }}</x-ui.badge></td>', $expr);
+            } elseif ('array' === $f['type']) {
+                $lines[] = sprintf('          <td>{{ is_array(%s) ? implode(\', \', array_map(static fn (mixed $v): string => $v instanceof \\BackedEnum ? (string) $v->value : (is_scalar($v) ? (string) $v : \'\'), %s)) : (is_scalar(%s) ? (string) %s : \'\') }}</td>', $expr, $expr, $expr, $expr);
             } elseif ([] !== $f['options']) {
-                $lines[] = sprintf('          <td><x-ui.badge variant="primary">{{ %s instanceof \\BackedEnum ? %s->value : (string) (%s) }}</x-ui.badge></td>', $expr, $expr, $expr);
+                $lines[] = sprintf('          <td><x-ui.badge variant="primary">{{ %s instanceof \\BackedEnum ? (string) %s->value : (is_scalar(%s) ? (string) %s : \'\') }}</x-ui.badge></td>', $expr, $expr, $expr, $expr);
             } else {
                 $lines[] = sprintf('          <td>{{ %s }}</td>', $expr);
             }
@@ -139,12 +174,13 @@ final readonly class DtoUiGenerator
         $lines[] = '  </x-ui.table>';
 
         if (null !== $baseUrl && '' !== trim($baseUrl)) {
+            $safeBaseUrl = $this->assertSafeUrl($baseUrl, '?page=');
             $liveAttr = null !== $liveTarget && '' !== trim($liveTarget)
                 ? sprintf(' live-target="%s"', $this->escAttr(trim($liveTarget)))
                 : '';
             $lines[] = sprintf(
-                '  <x-ui.pagination current="{{ $page ?? 1 }}" total="{{ $totalPages ?? 1 }}" base-url="%s"%s />',
-                $this->escAttr(trim($baseUrl)),
+                '  <x-ui.pagination :current="$page ?? 1" :total="$totalPages ?? 1" base-url="%s"%s />',
+                $this->escAttr($safeBaseUrl),
                 $liveAttr,
             );
         }
@@ -194,7 +230,15 @@ final readonly class DtoUiGenerator
 
             $required = isset($attrMap['Required']) || (!$allowsNull && !$hasDefault && 'bool' !== $typeName);
             $lowerName = strtolower($name);
-            $sensitive = in_array($lowerName, self::SENSITIVE_NAMES, true) || str_contains($lowerName, 'password') || str_contains($lowerName, 'secret');
+            $sensitive = in_array($lowerName, self::SENSITIVE_NAMES, true);
+            if (!$sensitive) {
+                foreach (self::SENSITIVE_SUBSTRINGS as $needle) {
+                    if (str_contains($lowerName, $needle)) {
+                        $sensitive = true;
+                        break;
+                    }
+                }
+            }
             $multiline = in_array($lowerName, self::MULTILINE_NAMES, true);
 
             $options = [];
@@ -270,14 +314,14 @@ final readonly class DtoUiGenerator
         }
 
         if ('date' === $f['inputType']) {
-            return sprintf('<x-ui.datepicker name="%s" label="%s" value="@old(\'%s\')"%s />', $name, $label, $name, $req);
+            return sprintf('<x-ui.datepicker name="%s" label="%s" :value="$old[\'%s\'] ?? \'\'"%s />', $name, $label, $name, $req);
         }
 
         if ([] !== $f['options']) {
             if ('array' === $f['type']) {
                 $pairs = [];
                 foreach ($f['options'] as $k => $v) {
-                    $pairs[] = $k . ':' . $v;
+                    $pairs[] = str_replace(['|', ':'], ' ', $k) . ':' . str_replace(['|', ':'], ' ', $v);
                 }
 
                 return sprintf('<x-ui.multi-select name="%s" label="%s" options="%s" />', $name, $label, $this->escAttr(implode('|', $pairs)));
@@ -285,10 +329,10 @@ final readonly class DtoUiGenerator
             if (count($f['options']) > 6) {
                 $pairs = [];
                 foreach ($f['options'] as $k => $v) {
-                    $pairs[] = $k . ':' . $v;
+                    $pairs[] = str_replace(['|', ':'], ' ', $k) . ':' . str_replace(['|', ':'], ' ', $v);
                 }
 
-                return sprintf('<x-ui.combobox name="%s" label="%s" options="%s" value="@old(\'%s\')"%s />', $name, $label, $this->escAttr(implode('|', $pairs)), $name, $req);
+                return sprintf('<x-ui.combobox name="%s" label="%s" options="%s" :value="$old[\'%s\'] ?? \'\'"%s />', $name, $label, $this->escAttr(implode('|', $pairs)), $name, $req);
             }
 
             $opts = [];
@@ -304,10 +348,10 @@ final readonly class DtoUiGenerator
                 return sprintf('<x-ui.editor name="%s" label="%s" rows="6" />', $name, $label);
             }
 
-            return sprintf('<x-ui.textarea name="%s" label="%s" rows="3"%s>@old(\'%s\')</x-ui.textarea>', $name, $label, $req, $name);
+            return sprintf('<x-ui.textarea name="%s" label="%s" rows="3"%s>{{ $old[\'%s\'] ?? \'\' }}</x-ui.textarea>', $name, $label, $req, $name);
         }
 
-        $valAttr = $f['sensitive'] ? '' : sprintf(' value="@old(\'%s\')"', $name);
+        $valAttr = $f['sensitive'] ? '' : sprintf(' :value="$old[\'%s\'] ?? \'\'"', $name);
         $hintAttr = '' !== $f['hint'] ? sprintf(' hint="%s"', $this->escAttr($f['hint'])) : '';
 
         return sprintf(
@@ -319,6 +363,31 @@ final readonly class DtoUiGenerator
             $hintAttr,
             $req,
         );
+    }
+
+    private function assertSafeUrl(string $raw, string $fallback): string
+    {
+        $clean = trim((string) preg_replace('/[\x00-\x1F\x7F]+/', '', $raw));
+        if ('' === $clean) {
+            return $fallback;
+        }
+        $lower = strtolower($clean);
+        if (str_starts_with($lower, '//') || str_starts_with($lower, '/\\')) {
+            throw new InvalidArgumentException(sprintf('Protocol-relative URL "%s" is not allowed.', $raw));
+        }
+        if (
+            str_starts_with($lower, '/')
+            || str_starts_with($lower, './')
+            || str_starts_with($lower, '../')
+            || str_starts_with($lower, '?')
+            || str_starts_with($lower, '#')
+            || str_starts_with($lower, 'https://')
+            || str_starts_with($lower, 'http://')
+        ) {
+            return $clean;
+        }
+
+        throw new InvalidArgumentException(sprintf('Unsafe URL scheme in "%s". Only relative paths and http(s) URLs are allowed.', $raw));
     }
 
     private function humanize(string $identifier): string

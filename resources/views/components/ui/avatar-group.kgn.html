@@ -2,15 +2,21 @@
 $max = isset($max) && is_numeric($max) ? max(1, min(12, (int) $max)) : 4;
 $size = isset($size) && is_string($size) && in_array($size, ['sm', 'md', 'lg'], true) ? $size : 'md';
 $sizeClass = $size !== 'md' ? ' is-' . $size : '';
+$sliceInit = static fn (string $s): string => function_exists('mb_substr') ? mb_strtoupper(mb_substr($s, 0, 2, 'UTF-8'), 'UTF-8') : strtoupper(substr($s, 0, 2));
 $people = [];
 if (isset($items) && is_array($items)) {
     foreach ($items as $k => $v) {
-        $people[] = ['initials' => strtoupper(substr((string) $k, 0, 2)), 'name' => (string) $v];
+        if (is_scalar($v)) {
+            $init = $sliceInit(trim((string) $k));
+            if ($init !== '') {
+                $people[] = ['initials' => $init, 'name' => trim((string) $v)];
+            }
+        }
     }
 } elseif (isset($items) && is_string($items) && trim($items) !== '') {
     foreach (explode('|', $items) as $seg) {
         $parts = explode(':', $seg, 2);
-        $init = strtoupper(substr(trim($parts[0]), 0, 2));
+        $init = $sliceInit(trim($parts[0]));
         if ($init !== '') {
             $people[] = ['initials' => $init, 'name' => trim($parts[1] ?? $init)];
         }
@@ -26,6 +32,6 @@ $wrapClass = $class !== '' ? 'z-avatar-group ' . $class : 'z-avatar-group';
   <span class="z-avatar-group-item{{ $sizeClass }}" role="img" aria-label="{{ $p['name'] }}" title="{{ $p['name'] }}">{{ $p['initials'] }}</span>
 @endforeach
 @if ($overflow > 0)
-  <span class="z-avatar-group-item is-more{{ $sizeClass }}" aria-label="{{ $overflow }} more members">+{{ $overflow }}</span>
+  <span class="z-avatar-group-item is-more{{ $sizeClass }}" role="img" aria-label="{{ $overflow }} more members">+{{ $overflow }}</span>
 @endif
 </div>

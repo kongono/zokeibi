@@ -1,11 +1,11 @@
 @php
 $name = isset($name) && is_string($name) && $name !== '' ? $name : 'date';
-$id = isset($id) && is_string($id) && $id !== '' ? $id : 'k-date-' . preg_replace('/[^a-z0-9_-]/i', '-', $name);
+$id = isset($id) && is_string($id) && $id !== '' ? $id : 'z-date-' . preg_replace('/[^a-z0-9_-]/i', '-', $name) . '-' . bin2hex(random_bytes(3));
 $label = isset($label) && is_string($label) ? $label : '';
 $value = isset($value) && is_string($value) ? $value : '';
 $min = isset($min) && is_string($min) ? $min : '';
 $max = isset($max) && is_string($max) ? $max : '';
-$presets = !isset($presets) || ($presets === true || $presets === 'true' || $presets === '1');
+$presets = !isset($presets) || ($presets === true || $presets === '' || $presets === 'true' || $presets === '1');
 $required = isset($required) && ($required === true || $required === 'true' || $required === '1');
 $error = isset($error) && is_string($error) ? $error : '';
 @endphp
@@ -23,6 +23,7 @@ $error = isset($error) && is_string($error) ? $error : '';
     @if ($min !== '') min="{{ $min }}" @endif
     @if ($max !== '') max="{{ $max }}" @endif
     @if ($required) required @endif
+    @if ($error !== '') aria-invalid="true" aria-describedby="{{ $id }}-err" @endif
   >
   @if ($presets)
     <div class="z-datepicker-presets">
@@ -32,6 +33,6 @@ $error = isset($error) && is_string($error) ? $error : '';
     </div>
   @endif
   @if ($error !== '')
-    <div class="z-field-error" role="alert">{{ $error }}</div>
+    <div id="{{ $id }}-err" class="z-field-err" role="alert">{{ $error }}</div>
   @endif
 </div>

@@ -262,11 +262,18 @@ try {
             $config = $zokeibi->studio->load($dir);
             $payload = $zokeibi->exporter->export($config, $format);
             if (null !== $out && '' !== trim($out)) {
-                $outDir = dirname($out);
-                if (!is_dir($outDir)) {
-                    mkdir($outDir, 0o775, true);
+                if (is_link($out)) {
+                    throw new RuntimeException('Refusing to overwrite symlinked export target.');
                 }
-                file_put_contents($out, $payload);
+                $outDir = dirname($out);
+                if (!is_dir($outDir) && !mkdir($outDir, 0o775, true) && !is_dir($outDir)) {
+                    throw new RuntimeException('Unable to create export output directory.');
+                }
+                $tmp = $out . '.tmp.' . bin2hex(random_bytes(4));
+                if (false === file_put_contents($tmp, $payload) || !rename($tmp, $out)) {
+                    @unlink($tmp);
+                    throw new RuntimeException('Unable to write exported Zokeibi tokens.');
+                }
                 echo sprintf("Exported Zokeibi tokens (%s) -> %s (%d bytes)\n", $format, $out, strlen($payload));
                 exit(0);
             }
@@ -276,7 +283,11 @@ try {
         case 'studio':
             $projectDir = is_string($opts['dir'] ?? null) ? $opts['dir'] : (getcwd() ?: '.');
             $resolvedProject = realpath($projectDir) ?: $projectDir;
-            $port = is_string($opts['port'] ?? null) && is_numeric($opts['port']) ? (int) $opts['port'] : 8101;
+            $port = is_string($opts['port'] ?? null) && ctype_digit($opts['port']) ? (int) $opts['port'] : 8101;
+            if ($port < 1 || $port > 65535) {
+                fwrite(STDERR, "Zokeibi Studio error: --port must be an integer between 1 and 65535.\n");
+                exit(1);
+            }
             $playgroundDir = dirname(__DIR__) . DIRECTORY_SEPARATOR . 'playground';
             $kongoBin = dirname(__DIR__) . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR . 'bin' . DIRECTORY_SEPARATOR . 'kongo';
             if (!is_file($kongoBin)) {
@@ -290,14 +301,16 @@ try {
             putenv('ZOKEIBI_STUDIO_PROJECT=' . $resolvedProject);
             echo sprintf("Zokeibi Studio (造形美) — Project: %s\n", $resolvedProject);
             echo sprintf("Open http://127.0.0.1:%d/studio (Ctrl+C to stop)\n\n", $port);
-            $cmd = sprintf(
-                '%s %s serve --app=%s --port=%d',
-                escapeshellarg(PHP_BINARY),
-                escapeshellarg($kongoBin),
-                escapeshellarg($playgroundDir),
-                $port,
+            $proc = proc_open(
+                [PHP_BINARY, $kongoBin, 'serve', '--app=' . $playgroundDir, '--port=' . (string) $port],
+                [0 => STDIN, 1 => STDOUT, 2 => STDERR],
+                $pipes,
             );
-            passthru($cmd, $exitCode);
+            if (!is_resource($proc)) {
+                fwrite(STDERR, "Zokeibi Studio error: unable to start local Kongono dev server.\n");
+                exit(1);
+            }
+            $exitCode = proc_close($proc);
             exit($exitCode);
 
         case 'block':
@@ -341,6 +354,9 @@ try {
             $dtoArg = $pos[0] ?? '';
             $fileOpt = is_string($opts['file'] ?? null) ? $opts['file'] : null;
             if (null !== $fileOpt && is_file($fileOpt)) {
+                if (!str_ends_with(strtolower($fileOpt), '.php')) {
+                    throw new RuntimeException('DTO source file must have a .php extension.');
+                }
                 $beforeClasses = get_declared_classes();
                 require_once $fileOpt;
                 if ('' === $dtoArg) {
@@ -348,6 +364,9 @@ try {
                     $dtoArg = $newClasses[count($newClasses) - 1] ?? '';
                 }
             } elseif ('' !== $dtoArg && is_file($dtoArg)) {
+                if (!str_ends_with(strtolower($dtoArg), '.php')) {
+                    throw new RuntimeException('DTO source file must have a .php extension.');
+                }
                 $beforeClasses = get_declared_classes();
                 require_once $dtoArg;
                 $newClasses = array_values(array_diff(get_declared_classes(), $beforeClasses));
@@ -374,11 +393,18 @@ try {
 
             $out = is_string($opts['out'] ?? null) ? $opts['out'] : null;
             if (null !== $out && '' !== trim($out)) {
-                $outDir = dirname($out);
-                if (!is_dir($outDir)) {
-                    mkdir($outDir, 0o775, true);
+                if (is_link($out)) {
+                    throw new RuntimeException('Refusing to overwrite symlinked output file.');
                 }
-                file_put_contents($out, $markup);
+                $outDir = dirname($out);
+                if (!is_dir($outDir) && !mkdir($outDir, 0o775, true) && !is_dir($outDir)) {
+                    throw new RuntimeException('Unable to create output directory.');
+                }
+                $tmp = $out . '.tmp.' . bin2hex(random_bytes(4));
+                if (false === file_put_contents($tmp, $markup) || !rename($tmp, $out)) {
+                    @unlink($tmp);
+                    throw new RuntimeException('Unable to write generated Zokeibi template.');
+                }
                 echo sprintf("Generated Zokeibi %s from %s -> %s (%d bytes)\n", $command, $dtoArg, $out, strlen($markup));
                 exit(0);
             }

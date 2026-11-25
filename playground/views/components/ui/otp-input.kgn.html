@@ -1,9 +1,10 @@
 @php
 $name = isset($name) && is_string($name) && $name !== '' ? $name : 'code';
+$id = isset($id) && is_string($id) && $id !== '' ? $id : 'z-otp-' . preg_replace('/[^a-zA-Z0-9_-]/', '-', $name) . '-' . bin2hex(random_bytes(3));
 $label = isset($label) && is_string($label) && $label !== '' ? $label : null;
 $length = isset($length) && is_numeric($length) ? max(4, min(8, (int) $length)) : 6;
 $hint = isset($hint) && is_string($hint) && $hint !== '' ? $hint : null;
-$value = isset($value) && is_string($value) ? preg_replace('/[^0-9]/', '', $value) ?? '' : '';
+$value = isset($value) && is_scalar($value) ? substr((string) (preg_replace('/[^0-9]/', '', (string) $value) ?? ''), 0, $length) : '';
 $indices = range(0, $length - 1);
 $class = isset($class) && is_string($class) ? trim($class) : '';
 $wrapClass = $class !== '' ? 'z-otp ' . $class : 'z-otp';
@@ -13,13 +14,13 @@ $wrapClass = $class !== '' ? 'z-otp ' . $class : 'z-otp';
   <span class="z-label">{{ $label }}</span>
 @endif
   <input type="hidden" name="{{ $name }}" value="{{ $value }}" data-z-otp-value>
-  <div class="z-otp-group" role="group" aria-label="{{ $label ?? 'One-time verification code' }}">
+  <div class="z-otp-group" role="group" aria-label="{{ $label ?? 'One-time verification code' }}" @if ($hint !== null) aria-describedby="{{ $id }}-hint" @endif>
 @foreach ($indices as $i)
     <input
       type="text"
       inputmode="numeric"
       pattern="[0-9]*"
-      maxlength="1"
+      @if ($i > 0) maxlength="1" @endif
       class="z-otp-digit"
       value="{{ $value[$i] ?? '' }}"
       autocomplete="{{ $i === 0 ? 'one-time-code' : 'off' }}"
@@ -29,6 +30,6 @@ $wrapClass = $class !== '' ? 'z-otp ' . $class : 'z-otp';
 @endforeach
   </div>
 @if ($hint !== null)
-  <span class="z-hint">{{ $hint }}</span>
+  <span id="{{ $id }}-hint" class="z-hint">{{ $hint }}</span>
 @endif
 </div>

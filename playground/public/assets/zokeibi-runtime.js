@@ -1,28 +1,93 @@
-/* Zokeibi Vanilla Runtime v1.0.0 — Zero dependencies, Strict-CSP safe, Zero innerHTML XSS sinks */
+/* Zokeibi Vanilla Runtime v1.0.1 — Zero dependencies, Strict-CSP safe, Zero innerHTML XSS sinks */
 (() => {
   "use strict";
+
+  if (window.__zokeibiRuntimeInit) return;
+  window.__zokeibiRuntimeInit = true;
 
   const MONTHS = [
     "January", "February", "March", "April", "May", "June",
     "July", "August", "September", "October", "November", "December",
   ];
 
+  const FOCUSABLE_SEL =
+    "a[href], button:not(:disabled), input:not([type='hidden']):not(:disabled), select:not(:disabled), textarea:not(:disabled), [tabindex]:not([tabindex='-1'])";
+
+  const OVERLAY_SEL = ".z-modal-backdrop, .z-drawer-backdrop, .z-cmdk-backdrop";
+  const openerMap = new WeakMap();
+  const copyTimers = new WeakMap();
+  let pointerDownTarget = null;
+
   function findTarget(selector) {
     if (!selector) return null;
-    if (selector.startsWith("#")) return document.getElementById(selector.slice(1));
-    return document.getElementById(selector) || document.querySelector(selector);
+    const trimmed = selector.trim();
+    if (!trimmed) return null;
+    if (trimmed.startsWith("#")) return document.getElementById(trimmed.slice(1));
+    const byId = document.getElementById(trimmed);
+    if (byId) return byId;
+    try {
+      const el = document.querySelector(trimmed);
+      if (el && el.matches(".z-modal-backdrop, .z-drawer-backdrop, .z-cmdk-backdrop, .z-modal, .z-drawer, .z-toast, .z-banner, [data-z-panel]")) {
+        return el;
+      }
+    } catch (_e) {
+      return null;
+    }
+    return null;
   }
 
-  function showEl(el) {
+  function resolveOverlay(el) {
+    if (!el) return null;
+    if (el.matches(OVERLAY_SEL)) return el;
+    return el.closest(OVERLAY_SEL) || el;
+  }
+
+  function visibleFocusables(container) {
+    return Array.from(container.querySelectorAll(FOCUSABLE_SEL)).filter((node) => {
+      if (!(node instanceof HTMLElement)) return false;
+      if (node.hidden || node.closest("[hidden]")) return false;
+      return node.offsetParent !== null || getComputedStyle(node).position === "fixed";
+    });
+  }
+
+  function showEl(rawEl) {
+    const el = resolveOverlay(rawEl);
     if (!el) return;
+    if (document.activeElement instanceof HTMLElement && !el.contains(document.activeElement)) {
+      openerMap.set(el, document.activeElement);
+    }
     el.hidden = false;
-    const focusable = el.querySelector("input:not([type='hidden']), select, textarea, button, [tabindex]:not([tabindex='-1'])");
-    if (focusable && typeof focusable.focus === "function") focusable.focus();
+    if (el.hasAttribute("data-z-cmdk")) {
+      const cmdInput = el.querySelector("[data-z-cmdk-input]");
+      if (cmdInput instanceof HTMLInputElement) {
+        cmdInput.value = "";
+      }
+      filterCmdk(el, "");
+    }
+    const focusables = visibleFocusables(el);
+    if (focusables.length > 0) focusables[0].focus();
   }
 
-  function hideEl(el) {
+  function hideEl(rawEl, fromLiveClick) {
+    const el = resolveOverlay(rawEl);
     if (!el) return;
+    const opener = openerMap.get(el);
+    openerMap.delete(el);
+
+    // Keep Kongono Live k-show state synchronized when closing via Esc or backdrop click
+    if (!fromLiveClick && el.hasAttribute("k-show")) {
+      const liveClose = el.querySelector("[k-on\\:click]");
+      if (liveClose instanceof HTMLElement && typeof liveClose.click === "function") {
+        liveClose.dataset.zRuntimeClosing = "1";
+        liveClose.click();
+        delete liveClose.dataset.zRuntimeClosing;
+      }
+    }
+
     el.hidden = true;
+    if (opener && opener.isConnected && typeof opener.focus === "function") {
+      opener.focus();
+    }
   }
 
   function formatIsoDate(date) {
@@ -32,12 +97,26 @@
     return `${y}-${m}-${d}`;
   }
 
+  function isSafeHref(raw) {
+    const clean = (raw || "").replace(/[\x00-\x1F\x7F]+/g, "").trim();
+    if (!clean) return false;
+    const lower = clean.toLowerCase();
+    if (lower.startsWith("//") || lower.startsWith("/\\")) return false;
+    if (lower.startsWith("/") || lower.startsWith("#")) return true;
+    try {
+      const parsed = new URL(clean, window.location.origin);
+      return parsed.protocol === "https:" || parsed.protocol === "http:" || parsed.protocol === "mailto:";
+    } catch (_e) {
+      return false;
+    }
+  }
+
   function filterCmdk(backdrop, query) {
     const q = (query || "").trim().toLowerCase();
     const items = Array.from(backdrop.querySelectorAll("[data-z-cmdk-item]"));
     let visible = 0;
     items.forEach((li) => {
-      const hay = li.getAttribute("data-z-cmdk-item") || li.textContent.toLowerCase();
+      const hay = (li.getAttribute("data-z-cmdk-item") || li.textContent || "").toLowerCase();
       const match = q === "" || hay.includes(q);
       li.hidden = !match;
       const link = li.querySelector(".z-cmdk-item");
@@ -68,10 +147,74 @@
     });
   }
 
+  function closeCombobox(root) {
+    const list = root.querySelector("[data-z-combobox-list]");
+    const input = root.querySelector("[data-z-combobox-input]");
+    if (list) list.hidden = true;
+    if (input) {
+      input.setAttribute("aria-expanded", "false");
+      input.removeAttribute("aria-activedescendant");
+    }
+    root.querySelectorAll("[data-z-combobox-option].is-active").forEach((o) => o.classList.remove("is-active"));
+  }
+
+  function closeMultiSelect(root) {
+    const list = root.querySelector("[data-z-ms-list]");
+    const input = root.querySelector("[data-z-ms-input]");
+    if (list) list.hidden = true;
+    if (input) {
+      input.setAttribute("aria-expanded", "false");
+      input.removeAttribute("aria-activedescendant");
+    }
+    root.querySelectorAll("[data-z-ms-option].is-active").forEach((o) => o.classList.remove("is-active"));
+  }
+
+  function selectComboboxOption(root, comboOpt) {
+    const val = comboOpt.getAttribute("data-value") || "";
+    const lbl = comboOpt.getAttribute("data-label") || (comboOpt.textContent || "").trim();
+    const hiddenInput = root.querySelector("[data-z-combobox-value]");
+    const textInput = root.querySelector("[data-z-combobox-input]");
+    if (hiddenInput) {
+      hiddenInput.value = val;
+      hiddenInput.dispatchEvent(new Event("change", { bubbles: true }));
+    }
+    if (textInput) {
+      textInput.value = lbl;
+      textInput.setCustomValidity("");
+    }
+    root.querySelectorAll("[data-z-combobox-option]").forEach((opt) => {
+      opt.hidden = false;
+      opt.setAttribute("aria-selected", opt === comboOpt ? "true" : "false");
+    });
+    closeCombobox(root);
+  }
+
+  function moveListHighlight(input, options, key) {
+    const visible = options.filter((opt) => !opt.hidden);
+    if (visible.length === 0) return null;
+    const curIdx = visible.findIndex((opt) => opt.classList.contains("is-active"));
+    let nextIdx = 0;
+    if (key === "ArrowDown") nextIdx = curIdx < 0 ? 0 : (curIdx + 1) % visible.length;
+    else if (key === "ArrowUp") nextIdx = curIdx < 0 ? visible.length - 1 : (curIdx - 1 + visible.length) % visible.length;
+    else if (key === "Home") nextIdx = 0;
+    else if (key === "End") nextIdx = visible.length - 1;
+
+    visible.forEach((opt, i) => opt.classList.toggle("is-active", i === nextIdx));
+    const active = visible[nextIdx];
+    if (active) {
+      if (active.id) input.setAttribute("aria-activedescendant", active.id);
+      if (typeof active.scrollIntoView === "function") active.scrollIntoView({ block: "nearest" });
+    }
+    return active;
+  }
+
   /* ---- Date Range Calendar ---- */
-  function renderDateRange(root) {
-    const year = parseInt(root.getAttribute("data-dr-year") || String(new Date().getFullYear()), 10);
-    const month = parseInt(root.getAttribute("data-dr-month") || String(new Date().getMonth() + 1), 10);
+  function renderDateRange(root, focusIso) {
+    const rawY = parseInt(root.getAttribute("data-dr-year") || "", 10);
+    const rawM = parseInt(root.getAttribute("data-dr-month") || "", 10);
+    const now = new Date();
+    const year = Number.isFinite(rawY) ? rawY : now.getFullYear();
+    const month = Number.isFinite(rawM) && rawM >= 1 && rawM <= 12 ? rawM : now.getMonth() + 1;
     const startInput = root.querySelector("[data-z-dr-start]");
     const endInput = root.querySelector("[data-z-dr-end]");
     const summary = root.querySelector("[data-z-dr-summary]");
@@ -94,6 +237,7 @@
       spacer.setAttribute("aria-hidden", "true");
       grid.appendChild(spacer);
     }
+    let toFocus = null;
     for (let d = 1; d <= daysInMonth; d++) {
       const iso = `${year}-${String(month).padStart(2, "0")}-${String(d).padStart(2, "0")}`;
       const btn = document.createElement("button");
@@ -101,14 +245,24 @@
       btn.className = "z-dr-day";
       btn.textContent = String(d);
       btn.setAttribute("data-z-dr-day", iso);
-      if (iso === todayIso) btn.classList.add("is-today");
+      btn.setAttribute("aria-label", iso);
+      let isSelected = false;
+      if (iso === todayIso) {
+        btn.classList.add("is-today");
+        btn.setAttribute("aria-current", "date");
+      }
       if (iso === start || (end && iso === end)) {
         btn.classList.add("is-edge");
+        isSelected = true;
       } else if (start && end && iso > start && iso < end) {
         btn.classList.add("is-in-range");
+        isSelected = true;
       }
+      btn.setAttribute("aria-pressed", isSelected ? "true" : "false");
+      if (focusIso && iso === focusIso) toFocus = btn;
       grid.appendChild(btn);
     }
+    if (toFocus) toFocus.focus();
   }
 
   /* ---- Multi-Select Tag Combobox ---- */
@@ -158,31 +312,56 @@
   }
 
   /* ---- Sortable & Filterable Data Tables ---- */
+  function directTableRows(table) {
+    const tbody = table && table.tBodies && table.tBodies[0];
+    return tbody ? Array.from(tbody.rows) : [];
+  }
+
   function updateTableCount(wrap) {
     const countEl = wrap.querySelector("[data-z-table-count]");
-    const tbody = wrap.querySelector("tbody");
-    if (!countEl || !tbody) return;
-    const rows = Array.from(tbody.querySelectorAll("tr"));
+    const table = wrap.querySelector("table");
+    if (!countEl || !table) return;
+    const rows = directTableRows(table);
     const visible = rows.filter((r) => !r.hidden).length;
     countEl.textContent = `Showing ${visible} of ${rows.length} rows`;
   }
 
-  function initSortableTables() {
-    document.querySelectorAll("[data-z-table]").forEach((wrap) => {
+  function initSortableTables(scope) {
+    (scope || document).querySelectorAll("[data-z-table]").forEach((wrap) => {
       if (wrap.getAttribute("data-z-table-sortable") === "true") {
-        wrap.querySelectorAll("thead th").forEach((th) => {
-          if (!th.hasAttribute("data-z-sort")) th.setAttribute("data-z-sort", "auto");
-          if (!th.hasAttribute("tabindex")) th.setAttribute("tabindex", "0");
-          if (!th.hasAttribute("aria-sort")) th.setAttribute("aria-sort", "none");
-        });
+        const table = wrap.querySelector("table");
+        const thead = table && table.tHead;
+        if (thead) {
+          thead.querySelectorAll("th").forEach((th) => {
+            if (!th.hasAttribute("data-z-sort")) th.setAttribute("data-z-sort", "auto");
+            if (!th.hasAttribute("tabindex")) th.setAttribute("tabindex", "0");
+            if (!th.hasAttribute("aria-sort")) th.setAttribute("aria-sort", "none");
+          });
+        }
       }
       updateTableCount(wrap);
     });
   }
 
+  function parseNumericCell(raw) {
+    const s = (raw || "").trim();
+    const m = s.replace(/[$€£¥,\s]/g, "").match(/^(-?\d+(?:\.\d+)?)(%|ms|s|gb|mb|kb|b)?$/i);
+    if (!m) return NaN;
+    const val = parseFloat(m[1]);
+    if (!Number.isFinite(val)) return NaN;
+    const unit = (m[2] || "").toLowerCase();
+    const mult =
+      unit === "ms" ? 0.001 :
+      unit === "kb" ? 1024 :
+      unit === "mb" ? 1048576 :
+      unit === "gb" ? 1073741824 :
+      1;
+    return val * mult;
+  }
+
   function sortTableByHeader(th) {
     const table = th.closest("table");
-    const tbody = table && table.querySelector("tbody");
+    const tbody = table && table.tBodies && table.tBodies[0];
     const row = th.parentElement;
     if (!table || !tbody || !row) return;
 
@@ -191,31 +370,31 @@
 
     const cur = th.getAttribute("aria-sort");
     const dir = cur === "ascending" ? "descending" : "ascending";
-    row.querySelectorAll("th[data-z-sort]").forEach((other) => {
-      other.setAttribute("aria-sort", other === th ? dir : "none");
+    Array.from(row.children).forEach((other) => {
+      if (other.matches("th[data-z-sort]")) {
+        other.setAttribute("aria-sort", other === th ? dir : "none");
+      }
     });
 
     const mode = th.getAttribute("data-z-sort") || "auto";
-    const rows = Array.from(tbody.querySelectorAll("tr"));
+    const rows = Array.from(tbody.rows);
     const parseVal = (tr) => {
-      const cell = tr.children[colIdx];
-      return cell ? (cell.textContent || "").trim() : "";
-    };
-    const toNum = (s) => {
-      const cleaned = s.replace(/[$€£¥,%\s]/g, "").replace(/ms$|kb$|mb$|s$/i, "");
-      if (cleaned === "" || !/^-?\d+(\.\d+)?$/.test(cleaned)) return NaN;
-      return parseFloat(cleaned);
+      const cell = tr.cells[colIdx];
+      if (!cell) return "";
+      const explicit = cell.getAttribute("data-sort-value");
+      return (explicit !== null ? explicit : cell.textContent || "").trim();
     };
 
     rows.sort((a, b) => {
       const va = parseVal(a);
       const vb = parseVal(b);
       if (mode !== "string") {
-        const na = toNum(va);
-        const nb = toNum(vb);
-        if (!Number.isNaN(na) && !Number.isNaN(nb)) {
-          return dir === "ascending" ? na - nb : nb - na;
-        }
+        const na = parseNumericCell(va);
+        const nb = parseNumericCell(vb);
+        const aNum = !Number.isNaN(na);
+        const bNum = !Number.isNaN(nb);
+        if (aNum && bNum) return dir === "ascending" ? na - nb : nb - na;
+        if (aNum !== bNum) return aNum ? -1 : 1;
       }
       const cmp = va.localeCompare(vb, undefined, { numeric: true, sensitivity: "base" });
       return dir === "ascending" ? cmp : -cmp;
@@ -226,7 +405,8 @@
 
   /* ---- XSS-Safe DOM Markdown Previewer ---- */
   function appendInlineMarkdown(parent, text) {
-    const tokenRe = /(\*\*([^*]+)\*\*|\*([^*]+)\*|`([^`]+)`|\[([^\]]+)\]\(([^)]+)\))/g;
+    // Non-backtracking character classes prevent ReDoS on repeated '[' or '*'
+    const tokenRe = /(\*\*([^*]+)\*\*|\*([^*]+)\*|`([^`]+)`|\[([^\]\[]+)\]\(([^)\s]+)\))/g;
     let last = 0;
     let m;
     while ((m = tokenRe.exec(text)) !== null) {
@@ -245,10 +425,9 @@
         parent.appendChild(code);
       } else if (m[5] !== undefined && m[6] !== undefined) {
         const href = m[6].trim();
-        const safe = href.startsWith("https://") || href.startsWith("http://") || href.startsWith("/") || href.startsWith("#");
         const a = document.createElement("a");
         a.textContent = m[5];
-        a.setAttribute("href", safe ? href : "#");
+        a.setAttribute("href", isSafeHref(href) ? href : "#");
         a.setAttribute("rel", "noopener noreferrer");
         parent.appendChild(a);
       }
@@ -288,9 +467,11 @@
         return;
       }
       currentUl = null;
-      if (/^#{1,3}\s+/.test(trimmed)) {
-        const h = document.createElement("h3");
-        appendInlineMarkdown(h, trimmed.replace(/^#{1,3}\s+/, ""));
+      const hMatch = trimmed.match(/^(#{1,3})\s+(.+)$/);
+      if (hMatch) {
+        const level = Math.min(3, Math.max(1, hMatch[1].length));
+        const h = document.createElement(`h${level}`);
+        appendInlineMarkdown(h, hMatch[2]);
         prev.appendChild(h);
       } else if (trimmed.startsWith("> ")) {
         const bq = document.createElement("blockquote");
@@ -317,11 +498,11 @@
     else if (cmd === "heading") replacement = `\n### ${sel}\n`;
     else if (cmd === "quote") replacement = `\n> ${sel}\n`;
     else if (cmd === "list") replacement = `\n- ${sel}\n`;
-    else if (cmd === "link") replacement = `[${sel}](https://kongono.com)`;
+    else if (cmd === "link") replacement = `[${sel}](https://example.com)`;
 
-    ta.value = ta.value.slice(0, s) + replacement + ta.value.slice(e);
     ta.focus();
-    ta.setSelectionRange(s, s + replacement.length);
+    ta.setRangeText(replacement, s, e, "select");
+    ta.dispatchEvent(new Event("input", { bubbles: true }));
     renderEditorPreview(root);
   }
 
@@ -329,7 +510,10 @@
   function syncOtp(root) {
     const hidden = root.querySelector("[data-z-otp-value]");
     const digits = Array.from(root.querySelectorAll("[data-z-otp-digit]"));
-    if (hidden) hidden.value = digits.map((d) => d.value || "").join("");
+    if (hidden) {
+      hidden.value = digits.map((d) => d.value || "").join("");
+      hidden.dispatchEvent(new Event("change", { bubbles: true }));
+    }
   }
 
   /* ---- Free-Form Tag Input ---- */
@@ -369,19 +553,74 @@
   }
 
   function addTagValue(root, raw) {
-    const clean = (raw || "").trim().replace(/,+$/, "").trim();
-    if (!clean) return;
+    const parts = (raw || "").split(",").map((p) => p.trim()).filter(Boolean);
+    if (parts.length === 0) return;
     const current = getTagValues(root);
-    if (!current.includes(clean)) {
-      current.push(clean);
-      syncTagInput(root, current);
-    }
+    let changed = false;
+    parts.forEach((clean) => {
+      if (!current.includes(clean)) {
+        current.push(clean);
+        changed = true;
+      }
+    });
+    if (changed) syncTagInput(root, current);
   }
+
+  function activateTab(group, tabBtn) {
+    const tabId = tabBtn.getAttribute("data-z-tab");
+    if (!tabId) return;
+    Array.from(group.querySelectorAll("[data-z-tab]"))
+      .filter((btn) => btn.closest("[data-z-tabs]") === group)
+      .forEach((btn) => {
+        const active = btn.getAttribute("data-z-tab") === tabId;
+        btn.classList.toggle("is-active", active);
+        btn.setAttribute("aria-selected", active ? "true" : "false");
+        btn.setAttribute("tabindex", active ? "0" : "-1");
+      });
+    Array.from(group.querySelectorAll("[data-z-panel]"))
+      .filter((panel) => panel.closest("[data-z-tabs]") === group)
+      .forEach((panel) => {
+        panel.hidden = panel.getAttribute("data-z-panel") !== tabId;
+      });
+  }
+
+  function announceCopy(btn, statusEl, ok) {
+    if (!btn.dataset.origLabel) btn.dataset.origLabel = btn.textContent || "Copy";
+    const prevTimer = copyTimers.get(btn);
+    if (prevTimer) window.clearTimeout(prevTimer);
+
+    if (ok) {
+      if (statusEl) statusEl.textContent = "Copied to clipboard";
+      btn.textContent = "Copied!";
+    } else {
+      if (statusEl) statusEl.textContent = "Unable to copy automatically";
+      btn.textContent = "Copy failed";
+    }
+    const timer = window.setTimeout(() => {
+      btn.textContent = btn.dataset.origLabel || "Copy";
+      if (statusEl) statusEl.textContent = "";
+      copyTimers.delete(btn);
+    }, 1600);
+    copyTimers.set(btn, timer);
+  }
+
+  /* ---- Pointerdown Tracking for Backdrop Drag Safety ---- */
+  document.addEventListener("pointerdown", (event) => {
+    pointerDownTarget = event.target instanceof Element ? event.target : null;
+  });
 
   /* ---- Global Click Delegation ---- */
   document.addEventListener("click", (event) => {
     const target = event.target;
     if (!(target instanceof Element)) return;
+
+    // Always close outside comboboxes & multi-selects before early-returning
+    document.querySelectorAll("[data-z-combobox]").forEach((root) => {
+      if (!root.contains(target)) closeCombobox(root);
+    });
+    document.querySelectorAll("[data-z-multiselect]").forEach((root) => {
+      if (!root.contains(target)) closeMultiSelect(root);
+    });
 
     const openBtn = target.closest("[data-z-open]");
     if (openBtn) {
@@ -391,14 +630,19 @@
 
     const closeBtn = target.closest("[data-z-close]");
     if (closeBtn) {
+      if (closeBtn instanceof HTMLElement && closeBtn.dataset.zRuntimeClosing === "1") return;
       const sel = closeBtn.getAttribute("data-z-close");
-      hideEl(sel ? findTarget(sel) : closeBtn.closest(".z-modal-backdrop, .z-drawer-backdrop, .z-cmdk-backdrop, .z-toast, .z-banner"));
+      const fromLive = closeBtn.hasAttribute("k-on:click");
+      hideEl(
+        sel ? findTarget(sel) : closeBtn.closest(".z-modal-backdrop, .z-drawer-backdrop, .z-cmdk-backdrop, .z-toast, .z-banner"),
+        fromLive
+      );
       return;
     }
 
     const toggleBtn = target.closest("[data-z-toggle]");
     if (toggleBtn) {
-      const el = findTarget(toggleBtn.getAttribute("data-z-toggle"));
+      const el = resolveOverlay(findTarget(toggleBtn.getAttribute("data-z-toggle")));
       if (el) el.hidden ? showEl(el) : hideEl(el);
       return;
     }
@@ -406,17 +650,7 @@
     const tabBtn = target.closest("[data-z-tab]");
     if (tabBtn) {
       const group = tabBtn.closest("[data-z-tabs]");
-      const tabId = tabBtn.getAttribute("data-z-tab");
-      if (group && tabId) {
-        group.querySelectorAll("[data-z-tab]").forEach((btn) => {
-          const active = btn.getAttribute("data-z-tab") === tabId;
-          btn.classList.toggle("is-active", active);
-          btn.setAttribute("aria-selected", active ? "true" : "false");
-        });
-        group.querySelectorAll("[data-z-panel]").forEach((panel) => {
-          panel.hidden = panel.getAttribute("data-z-panel") !== tabId;
-        });
-      }
+      if (group) activateTab(group, tabBtn);
       return;
     }
 
@@ -425,10 +659,18 @@
       const root = comboToggle.closest("[data-z-combobox]");
       const list = root && root.querySelector("[data-z-combobox-list]");
       const input = root && root.querySelector("[data-z-combobox-input]");
-      if (list && input) {
-        list.hidden = !list.hidden;
-        input.setAttribute("aria-expanded", list.hidden ? "false" : "true");
-        if (!list.hidden) input.focus();
+      if (root && list && input) {
+        const opening = list.hidden;
+        if (opening) {
+          root.querySelectorAll("[data-z-combobox-option]").forEach((opt) => {
+            opt.hidden = false;
+          });
+          list.hidden = false;
+          input.setAttribute("aria-expanded", "true");
+          input.focus();
+        } else {
+          closeCombobox(root);
+        }
       }
       return;
     }
@@ -436,22 +678,7 @@
     const comboOpt = target.closest("[data-z-combobox-option]");
     if (comboOpt) {
       const root = comboOpt.closest("[data-z-combobox]");
-      if (root) {
-        const val = comboOpt.getAttribute("data-value") || "";
-        const lbl = comboOpt.getAttribute("data-label") || comboOpt.textContent.trim();
-        const hiddenInput = root.querySelector("[data-z-combobox-value]");
-        const textInput = root.querySelector("[data-z-combobox-input]");
-        const list = root.querySelector("[data-z-combobox-list]");
-        if (hiddenInput) hiddenInput.value = val;
-        if (textInput) {
-          textInput.value = lbl;
-          textInput.setAttribute("aria-expanded", "false");
-        }
-        root.querySelectorAll("[data-z-combobox-option]").forEach((opt) => {
-          opt.setAttribute("aria-selected", opt === comboOpt ? "true" : "false");
-        });
-        if (list) list.hidden = true;
-      }
+      if (root) selectComboboxOption(root, comboOpt);
       return;
     }
 
@@ -469,6 +696,8 @@
       if (root && val) {
         const match = root.querySelector(`[data-z-ms-option][data-value="${CSS.escape(val)}"]`);
         if (match) toggleMultiOption(root, match);
+        const inp = root.querySelector("[data-z-ms-input]");
+        if (inp instanceof HTMLElement) inp.focus();
       }
       return;
     }
@@ -478,7 +707,12 @@
       const root = tiRm.closest("[data-z-taginput]");
       const val = tiRm.getAttribute("data-z-ti-remove");
       if (root && val) {
-        syncTagInput(root, getTagValues(root).filter((t) => t !== val));
+        const nextValues = getTagValues(root).filter((t) => t !== val);
+        syncTagInput(root, nextValues);
+        const nextRm = root.querySelector("[data-z-ti-remove]");
+        const field = root.querySelector("[data-z-ti-field]");
+        if (nextRm instanceof HTMLElement) nextRm.focus();
+        else if (field instanceof HTMLElement) field.focus();
       }
       return;
     }
@@ -487,13 +721,20 @@
     if (numBtn) {
       const root = numBtn.closest("[data-z-number]");
       const inp = root && root.querySelector("[data-z-num-input]");
-      if (inp) {
-        const step = parseFloat(inp.step || "1") || 1;
-        const min = inp.min !== "" ? parseFloat(inp.min) : -Infinity;
-        const max = inp.max !== "" ? parseFloat(inp.max) : Infinity;
-        const cur = parseFloat(inp.value || "0") || 0;
+      if (inp instanceof HTMLInputElement && !inp.disabled && !inp.readOnly) {
+        const rawStep = parseFloat(inp.step || "1");
+        const step = Number.isFinite(rawStep) && rawStep > 0 ? rawStep : 1;
+        const parsedMin = inp.min !== "" ? parseFloat(inp.min) : -Infinity;
+        const parsedMax = inp.max !== "" ? parseFloat(inp.max) : Infinity;
+        const min = Number.isFinite(parsedMin) ? parsedMin : -Infinity;
+        const max = Number.isFinite(parsedMax) ? parsedMax : Infinity;
+        const parsedCur = parseFloat(inp.value || "0");
+        const cur = Number.isFinite(parsedCur) ? parsedCur : 0;
         const delta = numBtn.hasAttribute("data-z-num-inc") ? step : -step;
-        const next = Math.max(min, Math.min(max, Math.round((cur + delta) * 1000) / 1000));
+        const stepStr = String(step);
+        const decimals = stepStr.includes(".") ? stepStr.split(".")[1].length : 0;
+        const factor = Math.pow(10, Math.min(8, decimals));
+        const next = Math.max(min, Math.min(max, Math.round((cur + delta) * factor) / factor));
         inp.value = String(next);
         inp.dispatchEvent(new Event("input", { bubbles: true }));
         inp.dispatchEvent(new Event("change", { bubbles: true }));
@@ -505,10 +746,11 @@
     if (pwToggle) {
       const root = pwToggle.closest("[data-z-password]");
       const inp = root && root.querySelector("[data-z-pw-input]");
-      if (inp) {
+      if (inp instanceof HTMLInputElement) {
         const showing = inp.type === "text";
         inp.type = showing ? "password" : "text";
         pwToggle.textContent = showing ? "Show" : "Hide";
+        pwToggle.setAttribute("aria-pressed", showing ? "false" : "true");
       }
       return;
     }
@@ -517,11 +759,14 @@
     if (datePreset) {
       const root = datePreset.closest("[data-z-datepicker]");
       const input = root && root.querySelector("[data-z-date-input]");
-      if (input) {
+      if (input instanceof HTMLInputElement && !input.disabled && !input.readOnly) {
         const days = parseInt(datePreset.getAttribute("data-z-date-offset") || "0", 10);
         const dt = new Date();
         dt.setDate(dt.getDate() + (Number.isNaN(days) ? 0 : days));
-        input.value = formatIsoDate(dt);
+        let iso = formatIsoDate(dt);
+        if (input.min && iso < input.min) iso = input.min;
+        if (input.max && iso > input.max) iso = input.max;
+        input.value = iso;
         input.dispatchEvent(new Event("change", { bubbles: true }));
       }
       return;
@@ -531,14 +776,15 @@
     if (drNav) {
       const root = drNav.closest("[data-z-daterange]");
       if (root) {
-        let y = parseInt(root.getAttribute("data-dr-year") || String(new Date().getFullYear()), 10);
-        let m = parseInt(root.getAttribute("data-dr-month") || String(new Date().getMonth() + 1), 10);
-        const delta = parseInt(drNav.getAttribute("data-z-dr-nav") || "0", 10);
-        m += delta;
-        if (m < 1) { m = 12; y--; }
-        if (m > 12) { m = 1; y++; }
-        root.setAttribute("data-dr-year", String(y));
-        root.setAttribute("data-dr-month", String(m));
+        const now = new Date();
+        const rawY = parseInt(root.getAttribute("data-dr-year") || "", 10);
+        const rawM = parseInt(root.getAttribute("data-dr-month") || "", 10);
+        const y = Number.isFinite(rawY) ? rawY : now.getFullYear();
+        const m = Number.isFinite(rawM) ? rawM : now.getMonth() + 1;
+        const delta = parseInt(drNav.getAttribute("data-z-dr-nav") || "0", 10) || 0;
+        const shifted = new Date(y, m - 1 + delta, 1);
+        root.setAttribute("data-dr-year", String(shifted.getFullYear()));
+        root.setAttribute("data-dr-month", String(shifted.getMonth() + 1));
         renderDateRange(root);
       }
       return;
@@ -564,7 +810,9 @@
             endInput.value = e;
             root.removeAttribute("data-dr-picking");
           }
-          renderDateRange(root);
+          startInput.dispatchEvent(new Event("change", { bubbles: true }));
+          endInput.dispatchEvent(new Event("change", { bubbles: true }));
+          renderDateRange(root, iso);
         }
       }
       return;
@@ -586,8 +834,14 @@
           const days = Math.max(1, parseInt(kind, 10) || 7);
           startDt.setDate(startDt.getDate() - (days - 1));
         }
-        if (startInput) startInput.value = formatIsoDate(startDt);
-        if (endInput) endInput.value = formatIsoDate(endDt);
+        if (startInput) {
+          startInput.value = formatIsoDate(startDt);
+          startInput.dispatchEvent(new Event("change", { bubbles: true }));
+        }
+        if (endInput) {
+          endInput.value = formatIsoDate(endDt);
+          endInput.dispatchEvent(new Event("change", { bubbles: true }));
+        }
         root.removeAttribute("data-dr-picking");
         root.setAttribute("data-dr-year", String(endDt.getFullYear()));
         root.setAttribute("data-dr-month", String(endDt.getMonth() + 1));
@@ -618,7 +872,9 @@
         const prev = root.querySelector("[data-z-ed-preview]");
         const panes = root.querySelector("[data-z-ed-panes]");
         root.querySelectorAll("[data-z-ed-mode]").forEach((b) => {
-          b.classList.toggle("is-active", b === edMode);
+          const isAct = b === edMode;
+          b.classList.toggle("is-active", isAct);
+          b.setAttribute("aria-selected", isAct ? "true" : "false");
         });
         if (panes) panes.classList.toggle("is-split", mode === "split");
         if (ta) ta.hidden = mode === "preview";
@@ -638,6 +894,7 @@
         root.setAttribute("data-copy-masked", isMasked ? "false" : "true");
         disp.textContent = isMasked ? val : "•".repeat(Math.min(24, Math.max(8, val.length)));
         copyReveal.textContent = isMasked ? "Hide" : "Show";
+        copyReveal.setAttribute("aria-pressed", isMasked ? "true" : "false");
       }
       return;
     }
@@ -647,45 +904,22 @@
       const root = copyBtn.closest("[data-z-copy]");
       const status = root && root.querySelector("[data-z-copy-status]");
       const val = (root && root.getAttribute("data-copy-value")) || "";
-      const announce = () => {
-        if (status) status.textContent = "Copied to clipboard";
-        const orig = copyBtn.textContent;
-        copyBtn.textContent = "Copied!";
-        window.setTimeout(() => {
-          copyBtn.textContent = orig;
-          if (status) status.textContent = "";
-        }, 1600);
-      };
       if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(val).then(announce).catch(announce);
+        navigator.clipboard
+          .writeText(val)
+          .then(() => announceCopy(copyBtn, status, true))
+          .catch(() => announceCopy(copyBtn, status, false));
       } else {
-        announce();
+        announceCopy(copyBtn, status, false);
       }
       return;
     }
 
-    // Close open comboboxes & multi-selects on outside click
-    document.querySelectorAll("[data-z-combobox]").forEach((root) => {
-      if (!root.contains(target)) {
-        const list = root.querySelector("[data-z-combobox-list]");
-        const input = root.querySelector("[data-z-combobox-input]");
-        if (list) list.hidden = true;
-        if (input) input.setAttribute("aria-expanded", "false");
-      }
-    });
-    document.querySelectorAll("[data-z-multiselect]").forEach((root) => {
-      if (!root.contains(target)) {
-        const list = root.querySelector("[data-z-ms-list]");
-        const input = root.querySelector("[data-z-ms-input]");
-        if (list) list.hidden = true;
-        if (input) input.setAttribute("aria-expanded", "false");
-      }
-    });
-
     if (
-      target.classList.contains("z-modal-backdrop") ||
-      target.classList.contains("z-drawer-backdrop") ||
-      target.classList.contains("z-cmdk-backdrop")
+      target === pointerDownTarget &&
+      (target.classList.contains("z-modal-backdrop") ||
+        target.classList.contains("z-drawer-backdrop") ||
+        target.classList.contains("z-cmdk-backdrop"))
     ) {
       hideEl(target);
     }
@@ -713,6 +947,28 @@
     }
   });
 
+  document.addEventListener("focusout", (event) => {
+    const target = event.target;
+    const related = event.relatedTarget instanceof Element ? event.relatedTarget : null;
+    if (!(target instanceof Element)) return;
+
+    const comboRoot = target.closest("[data-z-combobox]");
+    if (comboRoot && (!related || !comboRoot.contains(related))) {
+      closeCombobox(comboRoot);
+    }
+    const msRoot = target.closest("[data-z-multiselect]");
+    if (msRoot && (!related || !msRoot.contains(related))) {
+      closeMultiSelect(msRoot);
+    }
+    if (target instanceof HTMLInputElement && target.hasAttribute("data-z-ti-field") && target.value.trim() !== "") {
+      const root = target.closest("[data-z-taginput]");
+      if (root) {
+        addTagValue(root, target.value);
+        target.value = "";
+      }
+    }
+  });
+
   document.addEventListener("input", (event) => {
     const target = event.target;
     if (target instanceof HTMLTextAreaElement && target.hasAttribute("data-z-ed-input")) {
@@ -731,14 +987,23 @@
     if (target.hasAttribute("data-z-combobox-input")) {
       const root = target.closest("[data-z-combobox]");
       const list = root && root.querySelector("[data-z-combobox-list]");
+      const hiddenInput = root && root.querySelector("[data-z-combobox-value]");
       if (root && list) {
         const q = target.value.trim().toLowerCase();
         list.hidden = false;
         target.setAttribute("aria-expanded", "true");
+        let exactVal = "";
         root.querySelectorAll("[data-z-combobox-option]").forEach((opt) => {
-          const hay = ((opt.getAttribute("data-label") || "") + " " + (opt.getAttribute("data-value") || "")).toLowerCase();
+          const lbl = (opt.getAttribute("data-label") || "").toLowerCase();
+          const val = (opt.getAttribute("data-value") || "").toLowerCase();
+          const hay = lbl + " " + val;
           opt.hidden = q !== "" && !hay.includes(q);
+          opt.classList.remove("is-active");
+          if (q !== "" && (lbl === q || val === q)) {
+            exactVal = opt.getAttribute("data-value") || "";
+          }
         });
+        if (hiddenInput) hiddenInput.value = exactVal;
       }
       return;
     }
@@ -753,17 +1018,27 @@
         root.querySelectorAll("[data-z-ms-option]").forEach((opt) => {
           const hay = ((opt.getAttribute("data-label") || "") + " " + (opt.getAttribute("data-value") || "")).toLowerCase();
           opt.hidden = q !== "" && !hay.includes(q);
+          opt.classList.remove("is-active");
         });
+      }
+      return;
+    }
+
+    if (target.hasAttribute("data-z-ti-field") && target.value.includes(",")) {
+      const root = target.closest("[data-z-taginput]");
+      if (root) {
+        addTagValue(root, target.value);
+        target.value = "";
       }
       return;
     }
 
     if (target.hasAttribute("data-z-table-search")) {
       const wrap = target.closest("[data-z-table]");
-      const tbody = wrap && wrap.querySelector("tbody");
-      if (wrap && tbody) {
+      const table = wrap && wrap.querySelector("table");
+      if (wrap && table) {
         const q = target.value.trim().toLowerCase();
-        tbody.querySelectorAll("tr").forEach((tr) => {
+        directTableRows(table).forEach((tr) => {
           tr.hidden = q !== "" && !(tr.textContent || "").toLowerCase().includes(q);
         });
         updateTableCount(wrap);
@@ -799,34 +1074,59 @@
     if (target.hasAttribute("data-z-otp-digit")) {
       const root = target.closest("[data-z-otp]");
       const clean = target.value.replace(/\D/g, "");
-      target.value = clean.slice(0, 1);
       if (root) {
-        syncOtp(root);
-        if (target.value !== "") {
-          const digits = Array.from(root.querySelectorAll("[data-z-otp-digit]"));
-          const idx = digits.indexOf(target);
-          if (idx >= 0 && idx + 1 < digits.length) digits[idx + 1].focus();
+        const digits = Array.from(root.querySelectorAll("[data-z-otp-digit]"));
+        const idx = digits.indexOf(target);
+        if (clean.length > 1) {
+          const start = clean.length >= digits.length ? 0 : Math.max(0, idx);
+          for (let i = 0; i < clean.length && start + i < digits.length; i++) {
+            digits[start + i].value = clean[i];
+          }
+          syncOtp(root);
+          const nextFocus = Math.min(start + clean.length, digits.length) - 1;
+          if (nextFocus >= 0) digits[nextFocus].focus();
+          return;
         }
+        target.value = clean.slice(0, 1);
+        syncOtp(root);
+        if (target.value !== "" && idx >= 0 && idx + 1 < digits.length) {
+          digits[idx + 1].focus();
+        }
+      } else {
+        target.value = clean.slice(0, 1);
       }
     }
   });
 
   document.addEventListener("paste", (event) => {
     const target = event.target;
-    if (!(target instanceof HTMLInputElement) || !target.hasAttribute("data-z-otp-digit")) return;
-    const text = (event.clipboardData && event.clipboardData.getData("text")) || "";
-    const nums = text.replace(/\D/g, "");
-    if (nums.length > 1) {
-      event.preventDefault();
-      const root = target.closest("[data-z-otp]");
-      if (root) {
-        const digits = Array.from(root.querySelectorAll("[data-z-otp-digit]"));
-        digits.forEach((d, i) => {
-          d.value = nums[i] || "";
-        });
-        syncOtp(root);
-        const focusIdx = Math.min(nums.length, digits.length) - 1;
-        if (focusIdx >= 0) digits[focusIdx].focus();
+    if (!(target instanceof HTMLInputElement)) return;
+    if (target.hasAttribute("data-z-otp-digit")) {
+      const text = (event.clipboardData && event.clipboardData.getData("text")) || "";
+      const nums = text.replace(/\D/g, "");
+      if (nums.length > 1) {
+        event.preventDefault();
+        const root = target.closest("[data-z-otp]");
+        if (root) {
+          const digits = Array.from(root.querySelectorAll("[data-z-otp-digit]"));
+          const idx = digits.indexOf(target);
+          const start = nums.length >= digits.length ? 0 : Math.max(0, idx);
+          for (let i = 0; i < nums.length && start + i < digits.length; i++) {
+            digits[start + i].value = nums[i];
+          }
+          syncOtp(root);
+          const focusIdx = Math.min(start + nums.length, digits.length) - 1;
+          if (focusIdx >= 0) digits[focusIdx].focus();
+        }
+      }
+      return;
+    }
+    if (target.hasAttribute("data-z-ti-field")) {
+      const text = (event.clipboardData && event.clipboardData.getData("text")) || "";
+      if (text.includes(",")) {
+        event.preventDefault();
+        const root = target.closest("[data-z-taginput]");
+        if (root) addTagValue(root, text);
       }
     }
   });
@@ -852,7 +1152,9 @@
     const target = event.target;
     if (!(target instanceof Element)) return;
     const area = target.closest("[data-z-dropzone-area]");
-    if (area) area.classList.remove("is-dragover");
+    if (area && (!event.relatedTarget || !area.contains(event.relatedTarget))) {
+      area.classList.remove("is-dragover");
+    }
   });
 
   document.addEventListener("drop", (event) => {
@@ -864,18 +1166,72 @@
     area.classList.remove("is-dragover");
     const root = area.closest("[data-z-dropzone]");
     const input = root && root.querySelector("[data-z-dropzone-input]");
-    if (root && input && event.dataTransfer && event.dataTransfer.files) {
+    if (root && input instanceof HTMLInputElement && event.dataTransfer && event.dataTransfer.files) {
+      let assigned = false;
       try {
-        input.files = event.dataTransfer.files;
+        if (typeof DataTransfer === "function") {
+          const dt = new DataTransfer();
+          const dropped = Array.from(event.dataTransfer.files);
+          const subset = input.multiple ? dropped : dropped.slice(0, 1);
+          subset.forEach((f) => dt.items.add(f));
+          input.files = dt.files;
+          assigned = true;
+        }
       } catch (_e) {
-        // Fallback: still display selected file chips when DataTransfer assignment is restricted
+        assigned = false;
       }
-      updateDropzoneFiles(root, event.dataTransfer.files);
+      if (assigned) {
+        input.dispatchEvent(new Event("change", { bubbles: true }));
+      } else {
+        updateDropzoneFiles(root, input.files);
+      }
     }
   });
 
   document.addEventListener("keydown", (event) => {
     const target = event.target;
+
+    // Focus trap inside open aria-modal dialogs
+    if (event.key === "Tab") {
+      const openOverlays = document.querySelectorAll(".z-modal-backdrop:not([hidden]), .z-drawer-backdrop:not([hidden]), .z-cmdk-backdrop:not([hidden])");
+      if (openOverlays.length > 0) {
+        const top = openOverlays[openOverlays.length - 1];
+        const focusables = visibleFocusables(top);
+        if (focusables.length > 0) {
+          const first = focusables[0];
+          const last = focusables[focusables.length - 1];
+          if (event.shiftKey && (document.activeElement === first || !top.contains(document.activeElement))) {
+            event.preventDefault();
+            last.focus();
+            return;
+          }
+          if (!event.shiftKey && (document.activeElement === last || !top.contains(document.activeElement))) {
+            event.preventDefault();
+            first.focus();
+            return;
+          }
+        }
+      }
+    }
+
+    // Keyboard arrow navigation for Tabs (WAI-ARIA Tabs APG)
+    if (target instanceof Element && target.matches("[data-z-tab]") && ["ArrowLeft", "ArrowRight", "Home", "End"].includes(event.key)) {
+      const group = target.closest("[data-z-tabs]");
+      if (group) {
+        const tabs = Array.from(group.querySelectorAll("[data-z-tab]")).filter((btn) => btn.closest("[data-z-tabs]") === group);
+        const idx = tabs.indexOf(target);
+        if (idx >= 0 && tabs.length > 0) {
+          event.preventDefault();
+          const nextIdx =
+            event.key === "ArrowRight" ? (idx + 1) % tabs.length :
+            event.key === "ArrowLeft" ? (idx - 1 + tabs.length) % tabs.length :
+            event.key === "Home" ? 0 : tabs.length - 1;
+          activateTab(group, tabs[nextIdx]);
+          tabs[nextIdx].focus();
+          return;
+        }
+      }
+    }
 
     // Keyboard Enter/Space sorting on th[data-z-sort]
     if (target instanceof Element && target.matches("th[data-z-sort]") && (event.key === "Enter" || event.key === " ")) {
@@ -884,16 +1240,62 @@
       return;
     }
 
-    // Multi-select Backspace removes last selected chip when search input is empty
-    if (target instanceof HTMLInputElement && target.hasAttribute("data-z-ms-input") && event.key === "Backspace" && target.value === "") {
-      const root = target.closest("[data-z-multiselect]");
-      const selected = root ? Array.from(root.querySelectorAll('[data-z-ms-option][aria-selected="true"]')) : [];
-      if (root && selected.length > 0) toggleMultiOption(root, selected[selected.length - 1]);
-      return;
+    // Combobox keyboard navigation (WAI-ARIA Combobox APG)
+    if (target instanceof HTMLInputElement && target.hasAttribute("data-z-combobox-input")) {
+      const root = target.closest("[data-z-combobox]");
+      const list = root && root.querySelector("[data-z-combobox-list]");
+      if (root && list) {
+        const options = Array.from(root.querySelectorAll("[data-z-combobox-option]"));
+        if (["ArrowDown", "ArrowUp", "Home", "End"].includes(event.key)) {
+          event.preventDefault();
+          list.hidden = false;
+          target.setAttribute("aria-expanded", "true");
+          moveListHighlight(target, options, event.key);
+          return;
+        }
+        if (event.key === "Enter" && !list.hidden) {
+          const active = options.find((o) => !o.hidden && o.classList.contains("is-active")) || options.find((o) => !o.hidden);
+          if (active) {
+            event.preventDefault();
+            selectComboboxOption(root, active);
+            return;
+          }
+        }
+      }
     }
 
-    // Free-form tag-input Enter / Comma adds tag; Backspace on empty removes last tag
+    // Multi-select keyboard navigation & Backspace removal
+    if (target instanceof HTMLInputElement && target.hasAttribute("data-z-ms-input")) {
+      const root = target.closest("[data-z-multiselect]");
+      const list = root && root.querySelector("[data-z-ms-list]");
+      if (root && list) {
+        const options = Array.from(root.querySelectorAll("[data-z-ms-option]"));
+        if (["ArrowDown", "ArrowUp", "Home", "End"].includes(event.key)) {
+          event.preventDefault();
+          list.hidden = false;
+          target.setAttribute("aria-expanded", "true");
+          moveListHighlight(target, options, event.key);
+          return;
+        }
+        if (event.key === "Enter" && !list.hidden) {
+          const active = options.find((o) => !o.hidden && o.classList.contains("is-active")) || options.find((o) => !o.hidden);
+          if (active) {
+            event.preventDefault();
+            toggleMultiOption(root, active);
+            return;
+          }
+        }
+      }
+      if (event.key === "Backspace" && target.value === "") {
+        const selected = root ? Array.from(root.querySelectorAll('[data-z-ms-option][aria-selected="true"]')) : [];
+        if (root && selected.length > 0) toggleMultiOption(root, selected[selected.length - 1]);
+        return;
+      }
+    }
+
+    // Free-form tag-input Enter / Comma adds tag (IME-safe); Backspace on empty removes last tag
     if (target instanceof HTMLInputElement && target.hasAttribute("data-z-ti-field")) {
+      if (event.isComposing) return;
       const root = target.closest("[data-z-taginput]");
       if (root && (event.key === "Enter" || event.key === ",")) {
         event.preventDefault();
@@ -911,19 +1313,29 @@
       }
     }
 
-    // OTP Backspace jumps to previous box when empty
-    if (target instanceof HTMLInputElement && target.hasAttribute("data-z-otp-digit") && event.key === "Backspace" && target.value === "") {
+    // OTP Backspace & ArrowLeft/ArrowRight navigation
+    if (target instanceof HTMLInputElement && target.hasAttribute("data-z-otp-digit")) {
       const root = target.closest("[data-z-otp]");
       if (root) {
         const digits = Array.from(root.querySelectorAll("[data-z-otp-digit]"));
         const idx = digits.indexOf(target);
-        if (idx > 0) {
+        if (event.key === "Backspace" && target.value === "" && idx > 0) {
           digits[idx - 1].value = "";
           digits[idx - 1].focus();
           syncOtp(root);
+          return;
+        }
+        if (event.key === "ArrowLeft" && idx > 0) {
+          event.preventDefault();
+          digits[idx - 1].focus();
+          return;
+        }
+        if (event.key === "ArrowRight" && idx >= 0 && idx + 1 < digits.length) {
+          event.preventDefault();
+          digits[idx + 1].focus();
+          return;
         }
       }
-      return;
     }
 
     // Global Cmd+K / Ctrl+K shortcut toggles the first registered Command Palette
@@ -942,57 +1354,73 @@
       if (visible.length > 0) {
         const curIdx = visible.findIndex((li) => li.getAttribute("aria-selected") === "true");
         if (event.key === "Enter") {
-          const activeLi = visible[curIdx >= 0 ? curIdx : 0];
-          const link = activeLi && activeLi.querySelector("a, button");
-          if (link && typeof link.click === "function") {
-            event.preventDefault();
-            link.click();
+          if (target instanceof HTMLInputElement && target.hasAttribute("data-z-cmdk-input")) {
+            const activeLi = visible[curIdx >= 0 ? curIdx : 0];
+            const link = activeLi && activeLi.querySelector("a, button");
+            if (link && typeof link.click === "function") {
+              event.preventDefault();
+              link.click();
+            }
           }
           return;
         }
         event.preventDefault();
         const delta = event.key === "ArrowDown" ? 1 : -1;
-        const nextIdx = (curIdx + delta + visible.length) % visible.length;
+        const nextIdx =
+          curIdx < 0
+            ? (delta > 0 ? 0 : visible.length - 1)
+            : (curIdx + delta + visible.length) % visible.length;
         visible.forEach((li, i) => {
           const isAct = i === nextIdx;
           li.setAttribute("aria-selected", isAct ? "true" : "false");
           const a = li.querySelector(".z-cmdk-item");
           if (a) a.classList.toggle("is-active", isAct);
+          if (isAct && typeof li.scrollIntoView === "function") li.scrollIntoView({ block: "nearest" });
         });
       }
       return;
     }
 
     if (event.key !== "Escape") return;
+    let closedDropdown = false;
     document.querySelectorAll("[data-z-combobox]").forEach((root) => {
       const list = root.querySelector("[data-z-combobox-list]");
-      const input = root.querySelector("[data-z-combobox-input]");
       if (list && !list.hidden) {
-        list.hidden = true;
-        if (input) input.setAttribute("aria-expanded", "false");
+        closeCombobox(root);
+        closedDropdown = true;
       }
     });
     document.querySelectorAll("[data-z-multiselect]").forEach((root) => {
       const list = root.querySelector("[data-z-ms-list]");
-      const input = root.querySelector("[data-z-ms-input]");
       if (list && !list.hidden) {
-        list.hidden = true;
-        if (input) input.setAttribute("aria-expanded", "false");
+        closeMultiSelect(root);
+        closedDropdown = true;
       }
     });
+    if (closedDropdown) return;
+
     const openOverlays = document.querySelectorAll(".z-modal-backdrop:not([hidden]), .z-drawer-backdrop:not([hidden]), .z-cmdk-backdrop:not([hidden])");
     if (openOverlays.length > 0) {
       hideEl(openOverlays[openOverlays.length - 1]);
     }
   });
 
+  function initScope(scope) {
+    const root = scope || document;
+    initSortableTables(root);
+    root.querySelectorAll("[data-z-editor]").forEach(renderEditorPreview);
+  }
+
+  window.Zokeibi = { init: initScope };
+
+  document.addEventListener("kongono:morphed", (event) => {
+    const target = event.target instanceof Element ? event.target : document;
+    initScope(target);
+  });
+
   if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", () => {
-      initSortableTables();
-      document.querySelectorAll("[data-z-editor]").forEach(renderEditorPreview);
-    });
+    document.addEventListener("DOMContentLoaded", () => initScope(document));
   } else {
-    initSortableTables();
-    document.querySelectorAll("[data-z-editor]").forEach(renderEditorPreview);
+    initScope(document);
   }
 })();

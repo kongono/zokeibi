@@ -39,14 +39,18 @@ $isProduction = 'production' === $appEnv || 'prod' === $appEnv;
 $debug = !$isProduction && filter_var(Config::env('APP_DEBUG') ?? 'false', FILTER_VALIDATE_BOOL);
 
 $envKey = Config::env('APP_KEY');
-$appKey = (null !== $envKey && strlen($envKey) >= 16)
+$validEnvKey = null !== $envKey && strlen($envKey) >= 32 && !str_contains(strtolower($envKey), 'change-in-prod');
+if ($isProduction && !$validEnvKey) {
+    throw new RuntimeException('APP_KEY must be configured with at least 32 non-placeholder characters in production.');
+}
+$appKey = $validEnvKey
     ? $envKey
     : 'zokeibi-studio-local-signing-key-change-in-prod-v1';
 
 $varDir = $playgroundDir . DIRECTORY_SEPARATOR . 'var';
 $cacheDir = $varDir . DIRECTORY_SEPARATOR . 'cache' . DIRECTORY_SEPARATOR . 'app';
-if (!is_dir($cacheDir)) {
-    mkdir($cacheDir, 0o775, true);
+if (!is_dir($cacheDir) && !mkdir($cacheDir, 0o775, true) && !is_dir($cacheDir)) {
+    throw new RuntimeException('Unable to create Zokeibi Playground cache directory.');
 }
 
 $cache = new FileCache($cacheDir);
@@ -115,7 +119,7 @@ $app->middleware(
     new LiveMiddleware(),
     new StaticFilesMiddleware($playgroundDir . DIRECTORY_SEPARATOR . 'public' . DIRECTORY_SEPARATOR . 'assets', '/assets/'),
     new RateLimitMiddleware(cache: $cache, maxRequests: 300, windowSeconds: 60),
-    new SessionMiddleware(new CacheSessionStore($cache), cookieName: 'zokeibi_studio_session'),
+    new SessionMiddleware(new CacheSessionStore($cache), cookieName: 'zokeibi_studio_session', secure: $isProduction),
     new CsrfMiddleware(signer: $signer, sessionCookieName: 'zokeibi_studio_session', exemptPrefixes: ['/api/', '/_kongono']),
 );
 

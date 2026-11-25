@@ -101,8 +101,8 @@ final readonly class TokenExporter
                     'radiusSm' => ['$value' => max(0, (int) round($config->radiusPx * 0.66)) . 'px', '$type' => 'dimension'],
                 ],
                 'typography' => [
-                    'fontFamily' => ['$value' => ThemeTokenConfig::FONT_STACKS[$config->fontStack], '$type' => 'fontFamily'],
-                    'fontSize' => ['$value' => ThemeTokenConfig::FONT_SIZES[$config->fontScale], '$type' => 'dimension'],
+                    'fontFamily' => ['$value' => ThemeTokenConfig::FONT_STACKS[$config->fontStack] ?? ThemeTokenConfig::FONT_STACKS['system'], '$type' => 'fontFamily'],
+                    'fontSize' => ['$value' => ThemeTokenConfig::FONT_SIZES[$config->fontScale] ?? ThemeTokenConfig::FONT_SIZES['default'], '$type' => 'dimension'],
                 ],
                 'customColors' => $customColors,
                 'customThemes' => $themes,
@@ -128,11 +128,14 @@ final readonly class TokenExporter
             sprintf('  --color-brand-ink: %s;', $inkOklch),
             sprintf('  --radius-zokeibi: %dpx;', $config->radiusPx),
             sprintf('  --radius-zokeibi-sm: %dpx;', $radSm),
-            sprintf('  --font-zokeibi: %s;', ThemeTokenConfig::FONT_STACKS[$config->fontStack]),
+            sprintf('  --font-zokeibi: %s;', ThemeTokenConfig::FONT_STACKS[$config->fontStack] ?? ThemeTokenConfig::FONT_STACKS['system']),
         ];
 
         foreach ($config->customColors as $name => $val) {
-            $lines[] = sprintf('  --color-%s: %s;', $name, $val);
+            if (!ThemeTokenConfig::isValidTokenName($name) || !ThemeTokenConfig::isValidColorValue($val)) {
+                continue;
+            }
+            $lines[] = sprintf('  --color-%s: %s;', strtolower(trim($name)), trim($val));
         }
 
         $lines[] = '}';

@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Zokeibi\Audit;
 
+use FilesystemIterator;
 use Zokeibi\Registry\ComponentRegistry;
+use RecursiveCallbackFilterIterator;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use SplFileInfo;
@@ -17,6 +19,17 @@ use SplFileInfo;
  */
 final readonly class UiAuditor
 {
+    /** @var list<string> */
+    private const array IGNORED_DIRS = [
+        'vendor',
+        'node_modules',
+        '.git',
+        'var',
+        'storage',
+        'dist',
+        '.cache',
+    ];
+
     /** @var array<string, list<string>> */
     private const array COLOR_ALIAS_HINTS = [
         'green' => ['emerald', 'success'],
@@ -38,9 +51,21 @@ final readonly class UiAuditor
         $scannedFiles = 0;
 
         if (is_dir($viewsDir)) {
-            $iterator = new RecursiveIteratorIterator(
-                new RecursiveDirectoryIterator($viewsDir, RecursiveDirectoryIterator::SKIP_DOTS),
+            $dirIterator = new RecursiveDirectoryIterator($viewsDir, FilesystemIterator::SKIP_DOTS);
+            $filterIterator = new RecursiveCallbackFilterIterator(
+                $dirIterator,
+                static function (SplFileInfo $current): bool {
+                    if ($current->isLink()) {
+                        return false;
+                    }
+                    if ($current->isDir()) {
+                        return !in_array(strtolower($current->getFilename()), self::IGNORED_DIRS, true);
+                    }
+
+                    return true;
+                },
             );
+            $iterator = new RecursiveIteratorIterator($filterIterator);
 
             $baseNorm = rtrim(str_replace('\\', '/', $viewsDir), '/') . '/';
 
@@ -124,11 +149,12 @@ final readonly class UiAuditor
                 $schema = $this->registry->get($compId);
                 $attrString = $match[2][0];
 
-                if (preg_match_all('/(:?)([a-zA-Z_][a-zA-Z0-9_-]*)\s*=\s*"([^"]*)"/', $attrString, $attrMatches, PREG_SET_ORDER) > 0) {
+                if (preg_match_all('/(:?)([a-zA-Z_][a-zA-Z0-9_-]*)\s*=\s*(?:"([^"]*)"|\'([^\']*)\')/', $attrString, $attrMatches, PREG_SET_ORDER) > 0) {
                     foreach ($attrMatches as $attr) {
                         $isDynamic = ':' === $attr[1];
                         $propName = strtolower($attr[2]);
-                        $propVal = $attr[3];
+                        $doubleVal = $attr[3] ?? '';
+                        $propVal = '' !== $doubleVal ? $doubleVal : ($attr[4] ?? '');
 
                         if ($isDynamic || str_contains($propVal, '{{')) {
                             continue;
@@ -162,11 +188,11 @@ final readonly class UiAuditor
             }
         }
 
-        // 2. Strict CSP: forbid inline <script> blocks (without src="...")
+        // 2. Strict CSP: forbid inline <script> blocks (without real src="...", ignoring data-src=)
         if (preg_match_all('/<script\b([^>]*)>/i', $clean, $scriptMatches, PREG_SET_ORDER | PREG_OFFSET_CAPTURE) > 0) {
             foreach ($scriptMatches as $match) {
                 $attrs = $match[1][0];
-                if (1 !== preg_match('/\bsrc\s*=/i', $attrs)) {
+                if (1 !== preg_match('/(?<![a-zA-Z0-9:-])src\s*=/i', $attrs)) {
                     $findings[] = new AuditFinding(
                         rule: 'csp-inline-script',
                         severity: 'error',
@@ -180,43 +206,73 @@ final readonly class UiAuditor
             }
         }
 
-        // 3. Strict CSP: forbid inline DOM event handlers (onclick=, onload=, etc.)
-        if (preg_match_all('/(?<![a-zA-Z0-9:-])(on(?:click|dblclick|load|error|submit|change|input|keydown|keyup|mouseover|mouseout|focus|blur))\s*=/i', $clean, $handlerMatches, PREG_SET_ORDER | PREG_OFFSET_CAPTURE) > 0) {
-            foreach ($handlerMatches as $match) {
-                $handler = strtolower($match[1][0]);
-                $event = substr($handler, 2);
-                $findings[] = new AuditFinding(
-                    rule: 'csp-inline-handler',
-                    severity: 'error',
-                    file: $fileLabel,
-                    line: $this->lineNumber($clean, $match[0][1]),
-                    message: sprintf('Inline event handler `%s=` violates strict Content-Security-Policy.', $handler),
-                    hint: sprintf('Replace `%s="..."` with Kongono Live 2.5 `k-on:%s="set(open, true)"` (or `data-z-open="#id"` with `zokeibi-runtime.js`).', $handler, $event),
-                    why: 'Browsers block inline HTML `on*=` attributes whenever `script-src \'self\'` is active.',
-                );
+        // 3. Strict CSP & URL safety inside HTML opening tags (forbid any on*= handler, inline style=, and javascript:/vbscript:/data:text/html URLs)
+        if (preg_match_all('/<[a-zA-Z][a-zA-Z0-9.:_-]*\b((?:\s+(?:"[^"]*"|\'[^\']*\'|[^<>\/"\'])*)?)\s*\/?>/s', $clean, $tagMatches, PREG_SET_ORDER | PREG_OFFSET_CAPTURE) > 0) {
+            foreach ($tagMatches as $tagMatch) {
+                $attrs = $tagMatch[1][0];
+                $attrsOffset = $tagMatch[1][1];
+
+                if (preg_match_all('/(?<![a-zA-Z0-9:-])(on[a-z]{3,24})\s*=/i', $attrs, $handlerMatches, PREG_SET_ORDER | PREG_OFFSET_CAPTURE) > 0) {
+                    foreach ($handlerMatches as $match) {
+                        $handler = strtolower($match[1][0]);
+                        $event = substr($handler, 2);
+                        $findings[] = new AuditFinding(
+                            rule: 'csp-inline-handler',
+                            severity: 'error',
+                            file: $fileLabel,
+                            line: $this->lineNumber($clean, $attrsOffset + $match[0][1]),
+                            message: sprintf('Inline event handler `%s=` violates strict Content-Security-Policy.', $handler),
+                            hint: sprintf('Replace `%s="..."` with Kongono Live 2.5 `k-on:%s="set(open, true)"` (or `data-z-open="#id"` with `zokeibi-runtime.js`).', $handler, $event),
+                            why: 'Browsers block inline HTML `on*=` attributes whenever `script-src \'self\'` is active.',
+                        );
+                    }
+                }
+
+                if (preg_match_all('/(?<![a-zA-Z0-9:-])style\s*=\s*(?:["\']|[^\s>]+)/i', $attrs, $styleMatches, PREG_SET_ORDER | PREG_OFFSET_CAPTURE) > 0) {
+                    foreach ($styleMatches as $match) {
+                        $findings[] = new AuditFinding(
+                            rule: 'csp-inline-style',
+                            severity: 'warning',
+                            file: $fileLabel,
+                            line: $this->lineNumber($clean, $attrsOffset + $match[0][1]),
+                            message: 'Inline `style="..."` attribute breaks strict `style-src \'self\'` CSP.',
+                            hint: 'Move this rule into your stylesheet (`public/assets/app.css`) or use a Zokeibi utility class (`.z-row`, `.z-stack`, `.z-grid-2`).',
+                            why: 'Zokeibi ships zero inline styles so apps can enable `style-src \'self\'` without `\'unsafe-inline\'`.',
+                        );
+                    }
+                }
+
+                if (preg_match_all('/(?<![a-zA-Z0-9:-])(href|src|action|formaction|kgn-get|kgn-post)\s*=\s*(?:"([^"]*)"|\'([^\']*)\')/i', $attrs, $urlMatches, PREG_SET_ORDER | PREG_OFFSET_CAPTURE) > 0) {
+                    foreach ($urlMatches as $match) {
+                        $attrName = strtolower($match[1][0]);
+                        $doubleRaw = isset($match[2]) ? $match[2][0] : '';
+                        $rawUrl = '' !== $doubleRaw ? $doubleRaw : (isset($match[3]) ? $match[3][0] : '');
+                        $normalizedUrl = strtolower(trim((string) preg_replace('/[\x00-\x1F\x7F\s]+/', '', $rawUrl)));
+                        if (
+                            str_starts_with($normalizedUrl, 'javascript:')
+                            || str_starts_with($normalizedUrl, 'vbscript:')
+                            || str_starts_with($normalizedUrl, 'data:text/html')
+                        ) {
+                            $findings[] = new AuditFinding(
+                                rule: 'unsafe-url-scheme',
+                                severity: 'error',
+                                file: $fileLabel,
+                                line: $this->lineNumber($clean, $attrsOffset + $match[0][1]),
+                                message: sprintf('Unsafe URL scheme in `%s="..."` risks XSS execution.', $attrName),
+                                hint: sprintf('Use a relative path (`/path`), fragment (`#id`), or `https://` URL in `%s`.', $attrName),
+                                why: 'Executable URI schemes (`javascript:`, `vbscript:`, `data:text/html`) bypass HTML entity escaping and execute script on click.',
+                            );
+                        }
+                    }
+                }
             }
         }
 
-        // 4. Strict CSP style-src 'self': flag inline style="..." attributes
-        if (preg_match_all('/(?<![a-zA-Z0-9:-])style\s*=\s*["\']/i', $clean, $styleMatches, PREG_SET_ORDER | PREG_OFFSET_CAPTURE) > 0) {
-            foreach ($styleMatches as $match) {
-                $findings[] = new AuditFinding(
-                    rule: 'csp-inline-style',
-                    severity: 'warning',
-                    file: $fileLabel,
-                    line: $this->lineNumber($clean, $match[0][1]),
-                    message: 'Inline `style="..."` attribute breaks strict `style-src \'self\'` CSP.',
-                    hint: 'Move this rule into your stylesheet (`public/assets/app.css`) or use a Zokeibi utility class (`.z-row`, `.z-stack`, `.z-grid-2`).',
-                    why: 'Zokeibi ships zero inline styles so apps can enable `style-src \'self\'` without `\'unsafe-inline\'`.',
-                );
-            }
-        }
-
-        // 5. Accessibility: empty <button> or <x-ui.button> without aria-label
+        // 5. Accessibility: empty <button> or <x-ui.button> without aria-label/aria-labelledby/title
         if (preg_match_all('/<(button|x-ui\.button)\b([^>]*)>\s*<\/\1>/i', $clean, $btnMatches, PREG_SET_ORDER | PREG_OFFSET_CAPTURE) > 0) {
             foreach ($btnMatches as $match) {
                 $attrs = $match[2][0];
-                if (1 !== preg_match('/\baria-label\s*=/i', $attrs)) {
+                if (1 !== preg_match('/\b(?:aria-label|aria-labelledby|title)\s*=/i', $attrs)) {
                     $tag = strtolower($match[1][0]);
                     $findings[] = new AuditFinding(
                         rule: 'a11y-empty-button',
@@ -238,8 +294,11 @@ final readonly class UiAuditor
      */
     private function suggestClosest(string $needle, array $candidates): array
     {
-        $scored = [];
         $lowerNeedle = strtolower($needle);
+        if (strlen($lowerNeedle) > 64) {
+            return [];
+        }
+        $scored = [];
         foreach ($candidates as $cand) {
             $dist = levenshtein($lowerNeedle, strtolower($cand));
             if ($dist <= max(2, (int) floor(strlen($lowerNeedle) / 2))) {
@@ -285,7 +344,7 @@ final readonly class UiAuditor
             if ('error' === $finding->severity) {
                 $errors++;
                 $penalty += match ($finding->rule) {
-                    'csp-inline-script' => 20,
+                    'csp-inline-script', 'unsafe-url-scheme' => 20,
                     'unknown-component', 'csp-inline-handler' => 15,
                     default => 10,
                 };

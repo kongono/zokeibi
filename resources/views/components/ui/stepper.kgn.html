@@ -27,7 +27,7 @@ if (is_array($stepsRaw)) {
       @endphp
       <li class="{{ $stepCls }}"@if ($isActive) aria-current="step"@endif>
         <span class="z-step-num" aria-hidden="true">{{ $isDone ? '✓' : (string) $num }}</span>
-        <span>{{ $stepLabel }}</span>
+        <span>{{ $stepLabel }}@if ($isDone)<span class="z-sr-only"> (completed)</span>@endif</span>
       </li>
     @endforeach
   </ol>

@@ -1,4 +1,5 @@
 @php
+$id = isset($id) && is_string($id) && $id !== '' ? $id : 'z-tip-' . bin2hex(random_bytes(3));
 $text = isset($text) && is_string($text) ? $text : '';
 $position = isset($position) && is_string($position) ? $position : 'top';
 $class = isset($class) && is_string($class) ? trim($class) : '';
@@ -6,7 +7,7 @@ $wrapClass = $class !== '' ? 'z-tooltip ' . $class : 'z-tooltip';
 $bubbleClass = $position === 'bottom' ? 'z-tooltip-bubble is-bottom' : 'z-tooltip-bubble';
 $slot = isset($slot) && is_string($slot) ? $slot : '';
 @endphp
-<span class="{{ $wrapClass }}">
+<span class="{{ $wrapClass }}" aria-describedby="{{ $id }}">
   {!! $slot !!}
-  <span class="{{ $bubbleClass }}" role="tooltip">{{ $text }}</span>
+  <span id="{{ $id }}" class="{{ $bubbleClass }}" role="tooltip">{{ $text }}</span>
 </span>
