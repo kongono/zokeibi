@@ -1,5 +1,10 @@
 # Zokeibi (造形美 — "Beauty of Form")
 
+[![Discord](https://img.shields.io/badge/Discord-Join%20Community-5865F2?logo=discord&logoColor=white)](https://discord.gg/SXWjgBGwrZ)
+![PHP 8.5.13+](https://img.shields.io/badge/PHP-8.5.13%2B-777BB4?logo=php&logoColor=white)
+![Zero npm](https://img.shields.io/badge/npm-0%20deps-16a34a)
+![License MIT](https://img.shields.io/badge/License-MIT-0284c7)
+
 Modern, zero-npm, strict-CSP, AI-native UI component framework and pure PHP 8.5 OKLCH CSS compiler for **Kongono**.
 
 ## Why Zokeibi?
