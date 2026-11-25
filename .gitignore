@@ -4,4 +4,3 @@
 /playground/var/
 /.phpunit.result.cache
 *.log
-*.lock
