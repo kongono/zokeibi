@@ -1,0 +1,34 @@
+@php
+$name = isset($name) && is_string($name) && $name !== '' ? $name : 'file';
+$id = isset($id) && is_string($id) && $id !== '' ? $id : 'k-drop-' . preg_replace('/[^a-z0-9_-]/i', '-', $name);
+$label = isset($label) && is_string($label) ? $label : '';
+$title = isset($title) && is_string($title) && $title !== '' ? $title : 'Drop files here or click to browse';
+$hint = isset($hint) && is_string($hint) && $hint !== '' ? $hint : 'PNG, JPG, PDF up to 10 MB (validated via magic bytes)';
+$accept = isset($accept) && is_string($accept) ? $accept : '';
+$multiple = isset($multiple) && ($multiple === true || $multiple === 'true' || $multiple === '1');
+$required = isset($required) && ($required === true || $required === 'true' || $required === '1');
+$error = isset($error) && is_string($error) ? $error : '';
+@endphp
+<div class="z-dropzone" data-z-dropzone="true">
+  @if ($label !== '')
+    <label class="z-label" for="{{ $id }}">{{ $label }}</label>
+  @endif
+  <div class="z-dropzone-area" data-z-dropzone-area>
+    <input
+      id="{{ $id }}"
+      type="file"
+      name="{{ $multiple ? $name . '[]' : $name }}"
+      class="z-dropzone-input"
+      data-z-dropzone-input
+      @if ($accept !== '') accept="{{ $accept }}" @endif
+      @if ($multiple) multiple @endif
+      @if ($required) required @endif
+    >
+    <div class="z-dropzone-title">{{ $title }}</div>
+    <div class="z-dropzone-hint">{{ $hint }}</div>
+  </div>
+  <ul class="z-dropzone-files" data-z-dropzone-files aria-live="polite"></ul>
+  @if ($error !== '')
+    <div class="z-field-error" role="alert">{{ $error }}</div>
+  @endif
+</div>

@@ -1,0 +1,1705 @@
+@extends('layouts/app')
+
+@section('title', 'Zokeibi 形 — Zero-npm OKLCH UI Framework for Kongono')
+
+@section('content')
+  {{-- Hero + Live 1-Knob OKLCH Theme Studio --}}
+  <section class="pg-hero" id="studio">
+    <div>
+      <div class="pg-hero-kicker">形 Zokeibi · Future + Form · Pure PHP 8.5 CSS Compiler</div>
+      <h1 class="pg-hero-title">Superior UI for Kongono.<br>Zero Node. Zero npm. Pure Web Standards.</h1>
+      <p class="pg-hero-sub">
+        55 accessible <code>&lt;x-ui.*&gt;</code> components + 8 turnkey SaaS page blocks built on native 2026 CSS (<code>@layer</code>, OKLCH, <code>@container</code>, <code>:has()</code>, Top-Layer Popover API, <code>@starting-style</code>), pure-SVG charts, DTO-to-UI reflection, and <code>zokeibi prove</code> under strict CSP (<code>script-src 'self'</code> &amp; <code>style-src 'self'</code>).
+      </p>
+      <div class="z-row z-stack-gap-top">
+        <x-ui.button variant="primary" href="/studio">Open Token Studio GUI</x-ui.button>
+        <x-ui.button variant="outline" href="#components">Explore 55 Components</x-ui.button>
+        <x-ui.button variant="ghost" href="/studio/prove">UI Proof JSON</x-ui.button>
+        <x-ui.button variant="ghost" href="/api/registry.json">Registry JSON</x-ui.button>
+      </div>
+    </div>
+
+    <div class="pg-studio-box">
+      <div>
+        <div class="pg-studio-label">Live OKLCH Perceptual Theme (1-Knob --z-hue · Zero Rebuild)</div>
+        <div class="pg-swatches">
+          <button id="theme-sumi" type="button" class="pg-swatch" k-class:is-active="theme === 'sumi'" k-on:click="set(theme, 'sumi')"><span class="pg-dot is-sumi" aria-hidden="true"></span>Sumi</button>
+          <button id="theme-washi" type="button" class="pg-swatch" k-class:is-active="theme === 'washi'" k-on:click="set(theme, 'washi')"><span class="pg-dot is-washi" aria-hidden="true"></span>Washi Light</button>
+          <button id="theme-indigo" type="button" class="pg-swatch" k-class:is-active="theme === 'indigo'" k-on:click="set(theme, 'indigo')"><span class="pg-dot is-indigo" aria-hidden="true"></span>Ai Indigo</button>
+          <button id="theme-matcha" type="button" class="pg-swatch" k-class:is-active="theme === 'matcha'" k-on:click="set(theme, 'matcha')"><span class="pg-dot is-matcha" aria-hidden="true"></span>Matcha</button>
+          <button id="theme-kintsugi" type="button" class="pg-swatch" k-class:is-active="theme === 'kintsugi'" k-on:click="set(theme, 'kintsugi')"><span class="pg-dot is-kintsugi" aria-hidden="true"></span>Kintsugi</button>
+        </div>
+      </div>
+
+      <div>
+        <div class="pg-studio-label">Corner Geometry Preset (--z-radius)</div>
+        <div class="pg-swatches">
+          <button id="radius-sharp" type="button" class="pg-swatch" k-class:is-active="radius === 'sharp'" k-on:click="set(radius, 'sharp')">Sharp (4px)</button>
+          <button id="radius-default" type="button" class="pg-swatch" k-class:is-active="radius === 'default'" k-on:click="set(radius, 'default')">Default (12px)</button>
+          <button id="radius-rounded" type="button" class="pg-swatch" k-class:is-active="radius === 'rounded'" k-on:click="set(radius, 'rounded')">Rounded (18px)</button>
+        </div>
+      </div>
+
+      <div class="z-between">
+        <span class="z-soft z-mono">Active: <strong k-text="theme">sumi</strong> / <strong k-text="radius">default</strong></span>
+        <x-ui.badge variant="emerald">Persisted in localStorage</x-ui.badge>
+      </div>
+    </div>
+  </section>
+
+  {{-- Live Measured KPI Telemetry Strip --}}
+  <section class="z-grid-4 pg-kpi-strip" aria-label="Live build metrics">
+    <x-ui.kpi label="Primitives + SaaS Blocks" :value="$componentCount . ' + ' . $blockCount" delta="100% owned" trend="up" variant="accent" hint="zokeibi add & zokeibi block add" />
+    <x-ui.kpi label="Playground CSS (Gzip)" :value="$telemetry['full_gz_kb']" :delta="$telemetry['full_min_kb'] . ' min'" trend="up" variant="emerald" hint="Compiled by PHP CssTreeShaker" />
+    <x-ui.kpi label="zokeibi prove Certificate" :value="'Grade ' . $telemetry['proof_grade']" :delta="$telemetry['proof_score'] . '/100 · ' . $telemetry['audit_errors'] . ' err'" trend="up" variant="emerald" :hint="'WCAG AA + CSP + KB budget (' . $telemetry['audit_files'] . ' files)'" />
+    <x-ui.kpi label="Node / npm Packages" value="0" delta="0 KB JS core" trend="up" hint="Pure PHP 8.5 + Web Standards" />
+  </section>
+
+  {{-- Live PHP CSS Tree-Shaker Benchmark --}}
+  <section id="tree-shaker">
+    <div class="pg-section-head">
+      <div>
+        <h2 class="pg-section-title">Pure PHP 8.5 CSS Tree-Shaker (Live Measured Telemetry)</h2>
+        <p class="pg-section-sub">Zokeibi scans your <code>views/**/*.kgn.html</code> templates for <code>&lt;x-ui.*&gt;</code> tags, resolves transitive CSS dependencies, and strips every unused primitive — zero Node, zero Vite, zero PostCSS.</p>
+      </div>
+      <x-ui.badge variant="blue">php bin/zokeibi build</x-ui.badge>
+    </div>
+
+    <div class="z-grid-2">
+      <x-ui.card kicker="Tree-Shaking Proof" title="Bundle Size by App Complexity" badge="Measured Live" badge-variant="emerald">
+        <x-ui.table caption="Zokeibi pure PHP CSS tree-shaking benchmark">
+          <thead>
+            <tr>
+              <th>Workload</th>
+              <th>Components</th>
+              <th>Minified</th>
+              <th>Gzipped</th>
+              <th>Trimmed</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Landing Page</strong></td>
+              <td class="z-mono">{{ $telemetry['landing_used'] }}/{{ $componentCount }}</td>
+              <td class="z-mono">{{ $telemetry['landing_min_kb'] }}</td>
+              <td class="z-mono"><strong>{{ $telemetry['landing_gz_kb'] }}</strong></td>
+              <td><x-ui.badge variant="emerald">-{{ $telemetry['landing_savings'] }}</x-ui.badge></td>
+            </tr>
+            <tr>
+              <td><strong>SaaS Dashboard</strong></td>
+              <td class="z-mono">{{ $telemetry['dash_used'] }}/{{ $componentCount }}</td>
+              <td class="z-mono">{{ $telemetry['dash_min_kb'] }}</td>
+              <td class="z-mono"><strong>{{ $telemetry['dash_gz_kb'] }}</strong></td>
+              <td><x-ui.badge variant="primary">-{{ $telemetry['dash_savings'] }}</x-ui.badge></td>
+            </tr>
+            <tr>
+              <td><strong>Full 55-Component Playground</strong></td>
+              <td class="z-mono">{{ $telemetry['full_used'] }}/{{ $componentCount }}</td>
+              <td class="z-mono">{{ $telemetry['full_min_kb'] }}</td>
+              <td class="z-mono"><strong>{{ $telemetry['full_gz_kb'] }}</strong></td>
+              <td><x-ui.badge>Full Set</x-ui.badge></td>
+            </tr>
+          </tbody>
+        </x-ui.table>
+      </x-ui.card>
+
+      <x-ui.card kicker="Developer Workflow" title="DTO-to-UI + SaaS Blocks + Proof Gate" badge="CLI Ready" badge-variant="primary">
+        <div class="z-stack-sm">
+          <pre class="z-code">composer require kongono/zokeibi
+php vendor/bin/zokeibi init --theme=sumi
+php vendor/bin/zokeibi block add saas-shell analytics-dashboard api-keys-audit
+php vendor/bin/zokeibi form App\\Dto\\CreateUserInput --action=/users
+php vendor/bin/zokeibi watch --views=views --out=public/assets/zokeibi.min.css
+php vendor/bin/zokeibi prove --views=views --strict</pre>
+          <x-ui.alert variant="info" title="AI-Native MCP & Schema Guardrails">
+            Oshie, Chie, Hantei, Cursor, Claude, and Codex can inspect <code>kongono_zokeibi_registry</code> via MCP or <code>/api/registry.json</code> so they never hallucinate invalid component tags or prop enums.
+          </x-ui.alert>
+        </div>
+      </x-ui.card>
+    </div>
+  </section>
+
+  {{-- Interactive 55-Component Gallery --}}
+  <section id="components">
+    <div class="pg-section-head">
+      <div>
+        <h2 class="pg-section-title">All 55 Live Zokeibi Components</h2>
+        <p class="pg-section-sub">Every preview below renders the real installed <code>&lt;x-ui.*&gt;</code> component template. Switch themes above or toggle <strong>Preview / Markup / CLI</strong> on any card.</p>
+      </div>
+      <div class="pg-seg" role="tablist" aria-label="Filter components by category">
+        <button id="cat-all" type="button" class="pg-seg-btn" k-class:is-active="cat === 'all'" k-on:click="set(cat, 'all')">All (55)</button>
+        <button id="cat-primitives" type="button" class="pg-seg-btn" k-class:is-active="cat === 'primitives'" k-on:click="set(cat, 'primitives')">Primitives (12)</button>
+        <button id="cat-forms" type="button" class="pg-seg-btn" k-class:is-active="cat === 'forms'" k-on:click="set(cat, 'forms')">Forms (19)</button>
+        <button id="cat-data" type="button" class="pg-seg-btn" k-class:is-active="cat === 'data'" k-on:click="set(cat, 'data')">Data (9)</button>
+        <button id="cat-navigation" type="button" class="pg-seg-btn" k-class:is-active="cat === 'navigation'" k-on:click="set(cat, 'navigation')">Navigation (8)</button>
+        <button id="cat-overlays" type="button" class="pg-seg-btn" k-class:is-active="cat === 'overlays'" k-on:click="set(cat, 'overlays')">Overlays (7)</button>
+      </div>
+    </div>
+
+    <div class="z-grid-2">
+
+      {{-- 1. Button --}}
+      <div k-show="cat === 'all' || cat === 'primitives'">
+        <section class="pg-demo-card" @state(['view' => 'preview', 'clicks' => 0])>
+          <div class="pg-demo-head">
+            <div>
+              <h3 class="pg-demo-title">{{ $schemas['button']['name'] }} <x-ui.badge variant="emerald">{{ $schemas['button']['js_mode'] }}</x-ui.badge></h3>
+              <p class="pg-demo-desc">{{ $schemas['button']['description'] }}</p>
+            </div>
+            <div class="pg-seg">
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'preview'" k-on:click="set(view, 'preview')">Preview</button>
+              <button id="btn-markup-button" type="button" class="pg-seg-btn" k-class:is-active="view === 'code'" k-on:click="set(view, 'code')">Markup</button>
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'cli'" k-on:click="set(view, 'cli')">CLI</button>
+            </div>
+          </div>
+          <div class="pg-demo-body">
+            <div class="pg-stage z-stack-sm" k-show="view === 'preview'">
+              <div class="z-row">
+                <x-ui.button variant="primary" k-click="inc(clicks)"><span>Primary (<span k-text="clicks">0</span>)</span></x-ui.button>
+                <x-ui.button variant="emerald">Emerald</x-ui.button>
+                <x-ui.button variant="danger">Danger</x-ui.button>
+                <x-ui.button variant="outline">Outline</x-ui.button>
+                <x-ui.button variant="ghost">Ghost</x-ui.button>
+                <x-ui.button disabled="true">Disabled</x-ui.button>
+              </div>
+              <div class="z-row">
+                <x-ui.button size="sm" variant="primary">Small</x-ui.button>
+                <x-ui.button size="md" variant="primary">Medium</x-ui.button>
+                <x-ui.button size="lg" variant="primary">Large</x-ui.button>
+              </div>
+            </div>
+            <pre id="code-button" class="z-code" k-show="view === 'code'" hidden>{{ $schemas['button']['example'] }}</pre>
+            <pre class="z-code" k-show="view === 'cli'" hidden>{{ $schemas['button']['cli'] }}</pre>
+          </div>
+          <div class="pg-demo-foot"><span>&lt;{{ $schemas['button']['tag'] }}&gt;</span><span>{{ $schemas['button']['standards'] }}</span></div>
+        </section>
+      </div>
+
+      {{-- 2. Badge --}}
+      <div k-show="cat === 'all' || cat === 'primitives'">
+        <section class="pg-demo-card" @state(['view' => 'preview'])>
+          <div class="pg-demo-head">
+            <div>
+              <h3 class="pg-demo-title">{{ $schemas['badge']['name'] }} <x-ui.badge variant="emerald">{{ $schemas['badge']['js_mode'] }}</x-ui.badge></h3>
+              <p class="pg-demo-desc">{{ $schemas['badge']['description'] }}</p>
+            </div>
+            <div class="pg-seg">
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'preview'" k-on:click="set(view, 'preview')">Preview</button>
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'code'" k-on:click="set(view, 'code')">Markup</button>
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'cli'" k-on:click="set(view, 'cli')">CLI</button>
+            </div>
+          </div>
+          <div class="pg-demo-body">
+            <div class="pg-stage z-row" k-show="view === 'preview'">
+              <x-ui.badge>Default</x-ui.badge>
+              <x-ui.badge variant="primary" dot="true">OKLCH Accent</x-ui.badge>
+              <x-ui.badge variant="emerald" dot="true">Healthy 100/100</x-ui.badge>
+              <x-ui.badge variant="amber" dot="true">Degraded</x-ui.badge>
+              <x-ui.badge variant="crimson" dot="true">Revoked</x-ui.badge>
+              <x-ui.badge variant="blue">PHP 8.5</x-ui.badge>
+            </div>
+            <pre class="z-code" k-show="view === 'code'" hidden>{{ $schemas['badge']['example'] }}</pre>
+            <pre class="z-code" k-show="view === 'cli'" hidden>{{ $schemas['badge']['cli'] }}</pre>
+          </div>
+          <div class="pg-demo-foot"><span>&lt;{{ $schemas['badge']['tag'] }}&gt;</span><span>{{ $schemas['badge']['standards'] }}</span></div>
+        </section>
+      </div>
+
+      {{-- 3. Card --}}
+      <div k-show="cat === 'all' || cat === 'primitives'">
+        <section class="pg-demo-card" @state(['view' => 'preview'])>
+          <div class="pg-demo-head">
+            <div>
+              <h3 class="pg-demo-title">{{ $schemas['card']['name'] }} <x-ui.badge variant="emerald">{{ $schemas['card']['js_mode'] }}</x-ui.badge></h3>
+              <p class="pg-demo-desc">{{ $schemas['card']['description'] }}</p>
+            </div>
+            <div class="pg-seg">
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'preview'" k-on:click="set(view, 'preview')">Preview</button>
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'code'" k-on:click="set(view, 'code')">Markup</button>
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'cli'" k-on:click="set(view, 'cli')">CLI</button>
+            </div>
+          </div>
+          <div class="pg-demo-body">
+            <div class="pg-stage" k-show="view === 'preview'">
+              <x-ui.card kicker="Container Query Ready" title="Production Cluster" subtitle="us-east-1 · FrankenPHP Worker Pool" badge="Active" badge-variant="emerald" featured="true" footer="Responds to parent container width via @container — no viewport media hacks.">
+                Zero static mutable state across 128 persistent workers.
+              </x-ui.card>
+            </div>
+            <pre class="z-code" k-show="view === 'code'" hidden>{{ $schemas['card']['example'] }}</pre>
+            <pre class="z-code" k-show="view === 'cli'" hidden>{{ $schemas['card']['cli'] }}</pre>
+          </div>
+          <div class="pg-demo-foot"><span>&lt;{{ $schemas['card']['tag'] }}&gt;</span><span>{{ $schemas['card']['standards'] }}</span></div>
+        </section>
+      </div>
+
+      {{-- 4. Alert --}}
+      <div k-show="cat === 'all' || cat === 'primitives'">
+        <section class="pg-demo-card" @state(['view' => 'preview'])>
+          <div class="pg-demo-head">
+            <div>
+              <h3 class="pg-demo-title">{{ $schemas['alert']['name'] }} <x-ui.badge variant="emerald">{{ $schemas['alert']['js_mode'] }}</x-ui.badge></h3>
+              <p class="pg-demo-desc">{{ $schemas['alert']['description'] }}</p>
+            </div>
+            <div class="pg-seg">
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'preview'" k-on:click="set(view, 'preview')">Preview</button>
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'code'" k-on:click="set(view, 'code')">Markup</button>
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'cli'" k-on:click="set(view, 'cli')">CLI</button>
+            </div>
+          </div>
+          <div class="pg-demo-body">
+            <div class="pg-stage z-stack-sm" k-show="view === 'preview'">
+              <x-ui.alert variant="success" title="Integrity Verified">All 22 templates passed strict CSP and ARIA checks.</x-ui.alert>
+              <x-ui.alert variant="warning" title="Key Rotation Scheduled">HMAC signing key rotates automatically in 48 hours.</x-ui.alert>
+              <x-ui.alert variant="danger" title="Rate Limit Reached">Throttle tripped after 60 failed auth attempts.</x-ui.alert>
+            </div>
+            <pre class="z-code" k-show="view === 'code'" hidden>{{ $schemas['alert']['example'] }}</pre>
+            <pre class="z-code" k-show="view === 'cli'" hidden>{{ $schemas['alert']['cli'] }}</pre>
+          </div>
+          <div class="pg-demo-foot"><span>&lt;{{ $schemas['alert']['tag'] }}&gt;</span><span>{{ $schemas['alert']['standards'] }}</span></div>
+        </section>
+      </div>
+
+      {{-- 5. Kbd --}}
+      <div k-show="cat === 'all' || cat === 'primitives'">
+        <section class="pg-demo-card" @state(['view' => 'preview'])>
+          <div class="pg-demo-head">
+            <div>
+              <h3 class="pg-demo-title">{{ $schemas['kbd']['name'] }} <x-ui.badge variant="emerald">{{ $schemas['kbd']['js_mode'] }}</x-ui.badge></h3>
+              <p class="pg-demo-desc">{{ $schemas['kbd']['description'] }}</p>
+            </div>
+            <div class="pg-seg">
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'preview'" k-on:click="set(view, 'preview')">Preview</button>
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'code'" k-on:click="set(view, 'code')">Markup</button>
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'cli'" k-on:click="set(view, 'cli')">CLI</button>
+            </div>
+          </div>
+          <div class="pg-demo-body">
+            <div class="pg-stage z-stack-sm" k-show="view === 'preview'">
+              <div class="z-between">
+                <span class="z-muted">Command Palette</span>
+                <span class="z-row"><x-ui.kbd>⌘</x-ui.kbd><x-ui.kbd>K</x-ui.kbd></span>
+              </div>
+              <div class="z-between">
+                <span class="z-muted">Run Zokeibi Audit</span>
+                <span class="z-row"><x-ui.kbd>Ctrl</x-ui.kbd><x-ui.kbd>Shift</x-ui.kbd><x-ui.kbd>A</x-ui.kbd></span>
+              </div>
+              <div class="z-between">
+                <span class="z-muted">Dismiss Top-Layer Popover</span>
+                <x-ui.kbd>Esc</x-ui.kbd>
+              </div>
+            </div>
+            <pre class="z-code" k-show="view === 'code'" hidden>{{ $schemas['kbd']['example'] }}</pre>
+            <pre class="z-code" k-show="view === 'cli'" hidden>{{ $schemas['kbd']['cli'] }}</pre>
+          </div>
+          <div class="pg-demo-foot"><span>&lt;{{ $schemas['kbd']['tag'] }}&gt;</span><span>{{ $schemas['kbd']['standards'] }}</span></div>
+        </section>
+      </div>
+
+      {{-- 6. Avatar --}}
+      <div k-show="cat === 'all' || cat === 'primitives'">
+        <section class="pg-demo-card" @state(['view' => 'preview'])>
+          <div class="pg-demo-head">
+            <div>
+              <h3 class="pg-demo-title">{{ $schemas['avatar']['name'] }} <x-ui.badge variant="emerald">{{ $schemas['avatar']['js_mode'] }}</x-ui.badge></h3>
+              <p class="pg-demo-desc">{{ $schemas['avatar']['description'] }}</p>
+            </div>
+            <div class="pg-seg">
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'preview'" k-on:click="set(view, 'preview')">Preview</button>
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'code'" k-on:click="set(view, 'code')">Markup</button>
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'cli'" k-on:click="set(view, 'cli')">CLI</button>
+            </div>
+          </div>
+          <div class="pg-demo-body">
+            <div class="pg-stage z-row" k-show="view === 'preview'">
+              <x-ui.avatar initials="OS" name="Oshie Tutor" size="sm" status="online" />
+              <x-ui.avatar initials="CH" name="Chie Scaffolder" size="md" status="online" />
+              <x-ui.avatar initials="HT" name="Hantei Guard" size="lg" status="busy" />
+              <x-ui.avatar initials="KT" name="Zokeibi Studio" size="md" status="away" />
+            </div>
+            <pre class="z-code" k-show="view === 'code'" hidden>{{ $schemas['avatar']['example'] }}</pre>
+            <pre class="z-code" k-show="view === 'cli'" hidden>{{ $schemas['avatar']['cli'] }}</pre>
+          </div>
+          <div class="pg-demo-foot"><span>&lt;{{ $schemas['avatar']['tag'] }}&gt;</span><span>{{ $schemas['avatar']['standards'] }}</span></div>
+        </section>
+      </div>
+
+      {{-- 7. Input --}}
+      <div k-show="cat === 'all' || cat === 'forms'">
+        <section class="pg-demo-card" @state(['view' => 'preview', 'email' => 'founder@kongono.dev'])>
+          <div class="pg-demo-head">
+            <div>
+              <h3 class="pg-demo-title">{{ $schemas['input']['name'] }} <x-ui.badge variant="emerald">{{ $schemas['input']['js_mode'] }}</x-ui.badge></h3>
+              <p class="pg-demo-desc">{{ $schemas['input']['description'] }}</p>
+            </div>
+            <div class="pg-seg">
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'preview'" k-on:click="set(view, 'preview')">Preview</button>
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'code'" k-on:click="set(view, 'code')">Markup</button>
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'cli'" k-on:click="set(view, 'cli')">CLI</button>
+            </div>
+          </div>
+          <div class="pg-demo-body">
+            <div class="pg-stage z-stack-sm" k-show="view === 'preview'">
+              <x-ui.input name="demo_email" type="email" label="Work Email (focus to watch :has() label highlight)" placeholder="you@company.dev" hint="Live signal mirror below." k-model="email" />
+              <x-ui.input name="demo_slug" label="Invalid State (:has([aria-invalid='true']))" value="bad slug!" error="Only lowercase letters and hyphens are allowed." />
+              <div class="z-mono z-soft">Bound signal: <strong k-text="email">founder@kongono.dev</strong></div>
+            </div>
+            <pre class="z-code" k-show="view === 'code'" hidden>{{ $schemas['input']['example'] }}</pre>
+            <pre class="z-code" k-show="view === 'cli'" hidden>{{ $schemas['input']['cli'] }}</pre>
+          </div>
+          <div class="pg-demo-foot"><span>&lt;{{ $schemas['input']['tag'] }}&gt;</span><span>{{ $schemas['input']['standards'] }}</span></div>
+        </section>
+      </div>
+
+      {{-- 8. Select --}}
+      <div k-show="cat === 'all' || cat === 'forms'">
+        <section class="pg-demo-card" @state(['view' => 'preview', 'region' => 'us-east'])>
+          <div class="pg-demo-head">
+            <div>
+              <h3 class="pg-demo-title">{{ $schemas['select']['name'] }} <x-ui.badge variant="emerald">{{ $schemas['select']['js_mode'] }}</x-ui.badge></h3>
+              <p class="pg-demo-desc">{{ $schemas['select']['description'] }}</p>
+            </div>
+            <div class="pg-seg">
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'preview'" k-on:click="set(view, 'preview')">Preview</button>
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'code'" k-on:click="set(view, 'code')">Markup</button>
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'cli'" k-on:click="set(view, 'cli')">CLI</button>
+            </div>
+          </div>
+          <div class="pg-demo-body">
+            <div class="pg-stage z-stack-sm" k-show="view === 'preview'">
+              <x-ui.select name="demo_region" label="Primary Edge Region" hint="Bound to Live 2.5 k-model." k-model="region">
+                <option value="us-east">US East (Virginia)</option>
+                <option value="eu-west">EU West (Frankfurt)</option>
+                <option value="ap-northeast">AP Northeast (Tokyo)</option>
+              </x-ui.select>
+              <div class="z-mono z-soft">Selected: <strong k-text="region">us-east</strong></div>
+            </div>
+            <pre class="z-code" k-show="view === 'code'" hidden>{{ $schemas['select']['example'] }}</pre>
+            <pre class="z-code" k-show="view === 'cli'" hidden>{{ $schemas['select']['cli'] }}</pre>
+          </div>
+          <div class="pg-demo-foot"><span>&lt;{{ $schemas['select']['tag'] }}&gt;</span><span>{{ $schemas['select']['standards'] }}</span></div>
+        </section>
+      </div>
+
+      {{-- 9. Textarea --}}
+      <div k-show="cat === 'all' || cat === 'forms'">
+        <section class="pg-demo-card" @state(['view' => 'preview'])>
+          <div class="pg-demo-head">
+            <div>
+              <h3 class="pg-demo-title">{{ $schemas['textarea']['name'] }} <x-ui.badge variant="emerald">{{ $schemas['textarea']['js_mode'] }}</x-ui.badge></h3>
+              <p class="pg-demo-desc">{{ $schemas['textarea']['description'] }}</p>
+            </div>
+            <div class="pg-seg">
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'preview'" k-on:click="set(view, 'preview')">Preview</button>
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'code'" k-on:click="set(view, 'code')">Markup</button>
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'cli'" k-on:click="set(view, 'cli')">CLI</button>
+            </div>
+          </div>
+          <div class="pg-demo-body">
+            <div class="pg-stage" k-show="view === 'preview'">
+              <x-ui.textarea name="demo_notes" label="Release Changelog" placeholder="Describe what shipped in this Zokeibi release..." rows="3" hint="Supports vertical resize and strict accessible labels." />
+            </div>
+            <pre class="z-code" k-show="view === 'code'" hidden>{{ $schemas['textarea']['example'] }}</pre>
+            <pre class="z-code" k-show="view === 'cli'" hidden>{{ $schemas['textarea']['cli'] }}</pre>
+          </div>
+          <div class="pg-demo-foot"><span>&lt;{{ $schemas['textarea']['tag'] }}&gt;</span><span>{{ $schemas['textarea']['standards'] }}</span></div>
+        </section>
+      </div>
+
+      {{-- 10. Switch --}}
+      <div k-show="cat === 'all' || cat === 'forms'">
+        <section class="pg-demo-card" @state(['view' => 'preview'])>
+          <div class="pg-demo-head">
+            <div>
+              <h3 class="pg-demo-title">{{ $schemas['switch']['name'] }} <x-ui.badge variant="emerald">{{ $schemas['switch']['js_mode'] }}</x-ui.badge></h3>
+              <p class="pg-demo-desc">{{ $schemas['switch']['description'] }}</p>
+            </div>
+            <div class="pg-seg">
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'preview'" k-on:click="set(view, 'preview')">Preview</button>
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'code'" k-on:click="set(view, 'code')">Markup</button>
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'cli'" k-on:click="set(view, 'cli')">CLI</button>
+            </div>
+          </div>
+          <div class="pg-demo-body">
+            <div class="pg-stage z-stack-sm" k-show="view === 'preview'">
+              <x-ui.switch id="demo-sw-csp" name="sw_csp" label="Enforce Strict CSP (zero inline JS/style)" checked="true" />
+              <x-ui.switch id="demo-sw-audit" name="sw_audit" label="Block unknown component tags in CI" />
+            </div>
+            <pre class="z-code" k-show="view === 'code'" hidden>{{ $schemas['switch']['example'] }}</pre>
+            <pre class="z-code" k-show="view === 'cli'" hidden>{{ $schemas['switch']['cli'] }}</pre>
+          </div>
+          <div class="pg-demo-foot"><span>&lt;{{ $schemas['switch']['tag'] }}&gt;</span><span>{{ $schemas['switch']['standards'] }}</span></div>
+        </section>
+      </div>
+
+      {{-- 11. Progress --}}
+      <div k-show="cat === 'all' || cat === 'data'">
+        <section class="pg-demo-card" @state(['view' => 'preview'])>
+          <div class="pg-demo-head">
+            <div>
+              <h3 class="pg-demo-title">{{ $schemas['progress']['name'] }} <x-ui.badge variant="emerald">{{ $schemas['progress']['js_mode'] }}</x-ui.badge></h3>
+              <p class="pg-demo-desc">{{ $schemas['progress']['description'] }}</p>
+            </div>
+            <div class="pg-seg">
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'preview'" k-on:click="set(view, 'preview')">Preview</button>
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'code'" k-on:click="set(view, 'code')">Markup</button>
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'cli'" k-on:click="set(view, 'cli')">CLI</button>
+            </div>
+          </div>
+          <div class="pg-demo-body">
+            <div class="pg-stage z-stack-sm" k-show="view === 'preview'">
+              <x-ui.progress label="Strict CSP & A11y Score" value="100" max="100" variant="emerald" />
+              <x-ui.progress label="Monthly AI Token Quota" value="68" max="100" variant="amber" />
+              <x-ui.progress label="Brand Accent Meter" value="44" max="100" />
+            </div>
+            <pre class="z-code" k-show="view === 'code'" hidden>{{ $schemas['progress']['example'] }}</pre>
+            <pre class="z-code" k-show="view === 'cli'" hidden>{{ $schemas['progress']['cli'] }}</pre>
+          </div>
+          <div class="pg-demo-foot"><span>&lt;{{ $schemas['progress']['tag'] }}&gt;</span><span>{{ $schemas['progress']['standards'] }}</span></div>
+        </section>
+      </div>
+
+      {{-- 12. Skeleton --}}
+      <div k-show="cat === 'all' || cat === 'data'">
+        <section class="pg-demo-card" @state(['view' => 'preview'])>
+          <div class="pg-demo-head">
+            <div>
+              <h3 class="pg-demo-title">{{ $schemas['skeleton']['name'] }} <x-ui.badge variant="emerald">{{ $schemas['skeleton']['js_mode'] }}</x-ui.badge></h3>
+              <p class="pg-demo-desc">{{ $schemas['skeleton']['description'] }}</p>
+            </div>
+            <div class="pg-seg">
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'preview'" k-on:click="set(view, 'preview')">Preview</button>
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'code'" k-on:click="set(view, 'code')">Markup</button>
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'cli'" k-on:click="set(view, 'cli')">CLI</button>
+            </div>
+          </div>
+          <div class="pg-demo-body">
+            <div class="pg-stage z-stack-sm" k-show="view === 'preview'">
+              <div class="z-row">
+                <x-ui.skeleton variant="circle" />
+                <x-ui.skeleton variant="title" />
+              </div>
+              <x-ui.skeleton variant="line" lines="2" />
+            </div>
+            <pre class="z-code" k-show="view === 'code'" hidden>{{ $schemas['skeleton']['example'] }}</pre>
+            <pre class="z-code" k-show="view === 'cli'" hidden>{{ $schemas['skeleton']['cli'] }}</pre>
+          </div>
+          <div class="pg-demo-foot"><span>&lt;{{ $schemas['skeleton']['tag'] }}&gt;</span><span>{{ $schemas['skeleton']['standards'] }}</span></div>
+        </section>
+      </div>
+
+      {{-- 13. Empty State --}}
+      <div k-show="cat === 'all' || cat === 'data'">
+        <section class="pg-demo-card" @state(['view' => 'preview'])>
+          <div class="pg-demo-head">
+            <div>
+              <h3 class="pg-demo-title">{{ $schemas['empty-state']['name'] }} <x-ui.badge variant="emerald">{{ $schemas['empty-state']['js_mode'] }}</x-ui.badge></h3>
+              <p class="pg-demo-desc">{{ $schemas['empty-state']['description'] }}</p>
+            </div>
+            <div class="pg-seg">
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'preview'" k-on:click="set(view, 'preview')">Preview</button>
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'code'" k-on:click="set(view, 'code')">Markup</button>
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'cli'" k-on:click="set(view, 'cli')">CLI</button>
+            </div>
+          </div>
+          <div class="pg-demo-body">
+            <div class="pg-stage" k-show="view === 'preview'">
+              <x-ui.empty-state icon="形" title="No webhook endpoints configured" description="Register a signed HMAC-SHA256 destination to stream live events.">
+                <x-ui.button variant="primary" size="sm">Add Endpoint</x-ui.button>
+                <x-ui.button variant="ghost" size="sm">Read Spec</x-ui.button>
+              </x-ui.empty-state>
+            </div>
+            <pre class="z-code" k-show="view === 'code'" hidden>{{ $schemas['empty-state']['example'] }}</pre>
+            <pre class="z-code" k-show="view === 'cli'" hidden>{{ $schemas['empty-state']['cli'] }}</pre>
+          </div>
+          <div class="pg-demo-foot"><span>&lt;{{ $schemas['empty-state']['tag'] }}&gt;</span><span>{{ $schemas['empty-state']['standards'] }}</span></div>
+        </section>
+      </div>
+
+      {{-- 14. KPI --}}
+      <div k-show="cat === 'all' || cat === 'data'">
+        <section class="pg-demo-card" @state(['view' => 'preview'])>
+          <div class="pg-demo-head">
+            <div>
+              <h3 class="pg-demo-title">{{ $schemas['kpi']['name'] }} <x-ui.badge variant="emerald">{{ $schemas['kpi']['js_mode'] }}</x-ui.badge></h3>
+              <p class="pg-demo-desc">{{ $schemas['kpi']['description'] }}</p>
+            </div>
+            <div class="pg-seg">
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'preview'" k-on:click="set(view, 'preview')">Preview</button>
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'code'" k-on:click="set(view, 'code')">Markup</button>
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'cli'" k-on:click="set(view, 'cli')">CLI</button>
+            </div>
+          </div>
+          <div class="pg-demo-body">
+            <div class="pg-stage z-grid-2" k-show="view === 'preview'">
+              <x-ui.kpi label="P95 Render" value="0.9 ms" delta="-42%" trend="up" variant="emerald" hint="OPcache + compiled PHP" />
+              <x-ui.kpi label="Errors" value="0" delta="Clean" trend="up" variant="accent" hint="PHPStan Level 9 strict" />
+            </div>
+            <pre class="z-code" k-show="view === 'code'" hidden>{{ $schemas['kpi']['example'] }}</pre>
+            <pre class="z-code" k-show="view === 'cli'" hidden>{{ $schemas['kpi']['cli'] }}</pre>
+          </div>
+          <div class="pg-demo-foot"><span>&lt;{{ $schemas['kpi']['tag'] }}&gt;</span><span>{{ $schemas['kpi']['standards'] }}</span></div>
+        </section>
+      </div>
+
+      {{-- 15. Table --}}
+      <div k-show="cat === 'all' || cat === 'data'">
+        <section class="pg-demo-card" @state(['view' => 'preview'])>
+          <div class="pg-demo-head">
+            <div>
+              <h3 class="pg-demo-title">{{ $schemas['table']['name'] }} <x-ui.badge variant="emerald">{{ $schemas['table']['js_mode'] }}</x-ui.badge></h3>
+              <p class="pg-demo-desc">{{ $schemas['table']['description'] }}</p>
+            </div>
+            <div class="pg-seg">
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'preview'" k-on:click="set(view, 'preview')">Preview</button>
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'code'" k-on:click="set(view, 'code')">Markup</button>
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'cli'" k-on:click="set(view, 'cli')">CLI</button>
+            </div>
+          </div>
+          <div class="pg-demo-body">
+            <div class="pg-stage" k-show="view === 'preview'">
+              <x-ui.table caption="UI framework comparison" searchable="true" sortable="true" search-placeholder="Filter frameworks...">
+                <thead>
+                  <tr>
+                    <th scope="col" data-z-sort="string">Framework</th>
+                    <th scope="col" data-z-sort="number">Gzip KB</th>
+                    <th scope="col" data-z-sort="string">Strict CSP</th>
+                    <th scope="col" data-z-sort="string">AI Schema</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><strong>Zokeibi (造形美)</strong></td>
+                    <td>{{ $telemetry['full_gz_kb'] }}</td>
+                    <td><x-ui.badge variant="emerald">100%</x-ui.badge></td>
+                    <td><x-ui.badge variant="primary">Built-In</x-ui.badge></td>
+                  </tr>
+                  <tr>
+                    <td>Tailwind + Shadcn</td>
+                    <td>96.0 KB</td>
+                    <td>Manual</td>
+                    <td>Partial</td>
+                  </tr>
+                  <tr>
+                    <td>Legacy Bootstrap</td>
+                    <td>47.0 KB</td>
+                    <td>Partial</td>
+                    <td>None</td>
+                  </tr>
+                </tbody>
+              </x-ui.table>
+            </div>
+            <pre class="z-code" k-show="view === 'code'" hidden>{{ $schemas['table']['example'] }}</pre>
+            <pre class="z-code" k-show="view === 'cli'" hidden>{{ $schemas['table']['cli'] }}</pre>
+          </div>
+          <div class="pg-demo-foot"><span>&lt;{{ $schemas['table']['tag'] }}&gt;</span><span>{{ $schemas['table']['standards'] }}</span></div>
+        </section>
+      </div>
+
+      {{-- 16. Tabs --}}
+      <div k-show="cat === 'all' || cat === 'navigation'">
+        <section class="pg-demo-card" @state(['view' => 'preview'])>
+          <div class="pg-demo-head">
+            <div>
+              <h3 class="pg-demo-title">{{ $schemas['tabs']['name'] }} <x-ui.badge variant="blue">{{ $schemas['tabs']['js_mode'] }}</x-ui.badge></h3>
+              <p class="pg-demo-desc">{{ $schemas['tabs']['description'] }}</p>
+            </div>
+            <div class="pg-seg">
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'preview'" k-on:click="set(view, 'preview')">Preview</button>
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'code'" k-on:click="set(view, 'code')">Markup</button>
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'cli'" k-on:click="set(view, 'cli')">CLI</button>
+            </div>
+          </div>
+          <div class="pg-demo-body">
+            <div class="pg-stage" k-show="view === 'preview'">
+              <x-ui.tabs tabs="oklch:OKLCH Engine|layers:CSS @layer|ai:AI Guardrails" default="oklch">
+                <div class="z-tabpanel" role="tabpanel" k-show="tab === 'oklch'">
+                  Change a single <code>--z-hue</code> token and every surface, border, and focus ring recalculates with uniform perceptual brightness.
+                </div>
+                <div class="z-tabpanel" role="tabpanel" k-show="tab === 'layers'" hidden>
+                  Deterministic cascade layers (<code>zokeibi.tokens</code> → <code>zokeibi.utilities</code>) eliminate <code>!important</code> wars forever.
+                </div>
+                <div class="z-tabpanel" role="tabpanel" k-show="tab === 'ai'" hidden>
+                  <code>zokeibi audit</code> validates every <code>&lt;x-ui.*&gt;</code> tag and enum prop against <code>registry.json</code> in CI.
+                </div>
+              </x-ui.tabs>
+            </div>
+            <pre class="z-code" k-show="view === 'code'" hidden>{{ $schemas['tabs']['example'] }}</pre>
+            <pre class="z-code" k-show="view === 'cli'" hidden>{{ $schemas['tabs']['cli'] }}</pre>
+          </div>
+          <div class="pg-demo-foot"><span>&lt;{{ $schemas['tabs']['tag'] }}&gt;</span><span>{{ $schemas['tabs']['standards'] }}</span></div>
+        </section>
+      </div>
+
+      {{-- 17. Accordion --}}
+      <div k-show="cat === 'all' || cat === 'navigation'">
+        <section class="pg-demo-card" @state(['view' => 'preview'])>
+          <div class="pg-demo-head">
+            <div>
+              <h3 class="pg-demo-title">{{ $schemas['accordion']['name'] }} <x-ui.badge variant="emerald">{{ $schemas['accordion']['js_mode'] }}</x-ui.badge></h3>
+              <p class="pg-demo-desc">{{ $schemas['accordion']['description'] }}</p>
+            </div>
+            <div class="pg-seg">
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'preview'" k-on:click="set(view, 'preview')">Preview</button>
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'code'" k-on:click="set(view, 'code')">Markup</button>
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'cli'" k-on:click="set(view, 'cli')">CLI</button>
+            </div>
+          </div>
+          <div class="pg-demo-body">
+            <div class="pg-stage z-stack-sm" k-show="view === 'preview'">
+              <x-ui.accordion title="How does exclusive accordion work with 0 B JS?" name="zokeibi-faq" open="true">
+                Native HTML <code>&lt;details name="zokeibi-faq"&gt;</code> coordinates open/close state in the browser engine with full keyboard accessibility.
+              </x-ui.accordion>
+              <x-ui.accordion title="Can teams still add npm or Vite if they want?" name="zokeibi-faq">
+                Yes — Zokeibi ships standard CSS layers, so Vite, React islands, or Chart.js work cleanly alongside it whenever needed.
+              </x-ui.accordion>
+            </div>
+            <pre class="z-code" k-show="view === 'code'" hidden>{{ $schemas['accordion']['example'] }}</pre>
+            <pre class="z-code" k-show="view === 'cli'" hidden>{{ $schemas['accordion']['cli'] }}</pre>
+          </div>
+          <div class="pg-demo-foot"><span>&lt;{{ $schemas['accordion']['tag'] }}&gt;</span><span>{{ $schemas['accordion']['standards'] }}</span></div>
+        </section>
+      </div>
+
+      {{-- 18. Top-Layer Popover --}}
+      <div k-show="cat === 'all' || cat === 'overlays'">
+        <section class="pg-demo-card" @state(['view' => 'preview'])>
+          <div class="pg-demo-head">
+            <div>
+              <h3 class="pg-demo-title">{{ $schemas['popover']['name'] }} <x-ui.badge variant="emerald">{{ $schemas['popover']['js_mode'] }}</x-ui.badge></h3>
+              <p class="pg-demo-desc">{{ $schemas['popover']['description'] }}</p>
+            </div>
+            <div class="pg-seg">
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'preview'" k-on:click="set(view, 'preview')">Preview</button>
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'code'" k-on:click="set(view, 'code')">Markup</button>
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'cli'" k-on:click="set(view, 'cli')">CLI</button>
+            </div>
+          </div>
+          <div class="pg-demo-body">
+            <div class="pg-stage z-row" k-show="view === 'preview'">
+              <x-ui.popover id="demo-popover" trigger="Open Native Popover" trigger-variant="primary" trigger-size="sm" title="HTML Top-Layer Popover">
+                <p>Rendered in the browser's native Top Layer with CSS <code>@starting-style</code> entry transitions. Zero JavaScript, zero z-index fighting, automatic Esc &amp; outside-click light-dismiss.</p>
+              </x-ui.popover>
+              <span class="z-soft">Press Esc or click outside to dismiss.</span>
+            </div>
+            <pre class="z-code" k-show="view === 'code'" hidden>{{ $schemas['popover']['example'] }}</pre>
+            <pre class="z-code" k-show="view === 'cli'" hidden>{{ $schemas['popover']['cli'] }}</pre>
+          </div>
+          <div class="pg-demo-foot"><span>&lt;{{ $schemas['popover']['tag'] }}&gt;</span><span>{{ $schemas['popover']['standards'] }}</span></div>
+        </section>
+      </div>
+
+      {{-- 19. Tooltip --}}
+      <div k-show="cat === 'all' || cat === 'overlays'">
+        <section class="pg-demo-card" @state(['view' => 'preview'])>
+          <div class="pg-demo-head">
+            <div>
+              <h3 class="pg-demo-title">{{ $schemas['tooltip']['name'] }} <x-ui.badge variant="emerald">{{ $schemas['tooltip']['js_mode'] }}</x-ui.badge></h3>
+              <p class="pg-demo-desc">{{ $schemas['tooltip']['description'] }}</p>
+            </div>
+            <div class="pg-seg">
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'preview'" k-on:click="set(view, 'preview')">Preview</button>
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'code'" k-on:click="set(view, 'code')">Markup</button>
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'cli'" k-on:click="set(view, 'cli')">CLI</button>
+            </div>
+          </div>
+          <div class="pg-demo-body">
+            <div class="pg-stage z-row" k-show="view === 'preview'">
+              <x-ui.tooltip text="Zero-JS CSS tooltip (top)" position="top">
+                <x-ui.button size="sm" variant="outline">Hover / Focus Top</x-ui.button>
+              </x-ui.tooltip>
+              <x-ui.tooltip text="Works on keyboard focus too!" position="bottom">
+                <x-ui.button size="sm" variant="outline">Hover / Focus Bottom</x-ui.button>
+              </x-ui.tooltip>
+            </div>
+            <pre class="z-code" k-show="view === 'code'" hidden>{{ $schemas['tooltip']['example'] }}</pre>
+            <pre class="z-code" k-show="view === 'cli'" hidden>{{ $schemas['tooltip']['cli'] }}</pre>
+          </div>
+          <div class="pg-demo-foot"><span>&lt;{{ $schemas['tooltip']['tag'] }}&gt;</span><span>{{ $schemas['tooltip']['standards'] }}</span></div>
+        </section>
+      </div>
+
+      {{-- 20. Modal Dialog --}}
+      <div k-show="cat === 'all' || cat === 'overlays'">
+        <section class="pg-demo-card" @state(['view' => 'preview', 'modalOpen' => false, 'confirmText' => ''])>
+          <div class="pg-demo-head">
+            <div>
+              <h3 class="pg-demo-title">{{ $schemas['modal']['name'] }} <x-ui.badge variant="blue">{{ $schemas['modal']['js_mode'] }}</x-ui.badge></h3>
+              <p class="pg-demo-desc">{{ $schemas['modal']['description'] }}</p>
+            </div>
+            <div class="pg-seg">
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'preview'" k-on:click="set(view, 'preview')">Preview</button>
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'code'" k-on:click="set(view, 'code')">Markup</button>
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'cli'" k-on:click="set(view, 'cli')">CLI</button>
+            </div>
+          </div>
+          <div class="pg-demo-body">
+            <div class="pg-stage z-row" k-show="view === 'preview'">
+              <x-ui.button id="open-demo-modal" variant="danger" size="sm" k-click="set(modalOpen, true); set(confirmText, '')">Open Destructive Modal</x-ui.button>
+              <span class="z-soft">Requires typing <code>DELETE</code> to unlock.</span>
+            </div>
+            <pre class="z-code" k-show="view === 'code'" hidden>{{ $schemas['modal']['example'] }}</pre>
+            <pre class="z-code" k-show="view === 'cli'" hidden>{{ $schemas['modal']['cli'] }}</pre>
+          </div>
+          <x-ui.modal id="demo-confirm-modal" title="Revoke Production API Key" show="modalOpen" variant="danger">
+            <div class="z-stack-sm">
+              <p>Type <strong>DELETE</strong> below to unlock the destructive action button via Live 2.5 zero-eval signals.</p>
+              <x-ui.input id="modal-confirm-input" name="confirm_delete" label="Confirmation" placeholder="Type DELETE" k-model="confirmText" />
+              <div class="z-row">
+                <x-ui.button id="modal-cancel-btn" variant="outline" size="sm" k-click="set(modalOpen, false)">Cancel</x-ui.button>
+                <x-ui.button id="modal-confirm-btn" variant="danger" size="sm" k-disabled="confirmText !== 'DELETE'" k-click="set(modalOpen, false)">Confirm Revoke</x-ui.button>
+              </div>
+            </div>
+          </x-ui.modal>
+          <div class="pg-demo-foot"><span>&lt;{{ $schemas['modal']['tag'] }}&gt;</span><span>{{ $schemas['modal']['standards'] }}</span></div>
+        </section>
+      </div>
+
+      {{-- 21. Slide-Over Drawer --}}
+      <div k-show="cat === 'all' || cat === 'overlays'">
+        <section class="pg-demo-card" @state(['view' => 'preview', 'drawerOpen' => false])>
+          <div class="pg-demo-head">
+            <div>
+              <h3 class="pg-demo-title">{{ $schemas['drawer']['name'] }} <x-ui.badge variant="blue">{{ $schemas['drawer']['js_mode'] }}</x-ui.badge></h3>
+              <p class="pg-demo-desc">{{ $schemas['drawer']['description'] }}</p>
+            </div>
+            <div class="pg-seg">
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'preview'" k-on:click="set(view, 'preview')">Preview</button>
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'code'" k-on:click="set(view, 'code')">Markup</button>
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'cli'" k-on:click="set(view, 'cli')">CLI</button>
+            </div>
+          </div>
+          <div class="pg-demo-body">
+            <div class="pg-stage z-row" k-show="view === 'preview'">
+              <x-ui.button id="open-demo-drawer" variant="primary" size="sm" k-click="set(drawerOpen, true)">Open Inspector Drawer</x-ui.button>
+              <span class="z-soft">Right-edge detail inspector sheet.</span>
+            </div>
+            <pre class="z-code" k-show="view === 'code'" hidden>{{ $schemas['drawer']['example'] }}</pre>
+            <pre class="z-code" k-show="view === 'cli'" hidden>{{ $schemas['drawer']['cli'] }}</pre>
+          </div>
+          <x-ui.drawer id="demo-inspector-drawer" title="Zokeibi Build Inspector" show="drawerOpen">
+            <div class="z-stack-sm">
+              <x-ui.alert variant="success" title="Zero Node Build">Compiled directly inside PHP 8.5 with zero external runtimes.</x-ui.alert>
+              <x-ui.kpi label="Gzipped CSS" :value="$telemetry['full_gz_kb']" delta="All 22" trend="up" variant="emerald" />
+              <x-ui.button id="close-demo-drawer" variant="outline" size="sm" k-click="set(drawerOpen, false)">Close Drawer</x-ui.button>
+            </div>
+          </x-ui.drawer>
+          <div class="pg-demo-foot"><span>&lt;{{ $schemas['drawer']['tag'] }}&gt;</span><span>{{ $schemas['drawer']['standards'] }}</span></div>
+        </section>
+      </div>
+
+      {{-- 22. Toast Notification --}}
+      <div k-show="cat === 'all' || cat === 'overlays'">
+        <section class="pg-demo-card" @state(['view' => 'preview', 'toastOpen' => false])>
+          <div class="pg-demo-head">
+            <div>
+              <h3 class="pg-demo-title">{{ $schemas['toast']['name'] }} <x-ui.badge variant="blue">{{ $schemas['toast']['js_mode'] }}</x-ui.badge></h3>
+              <p class="pg-demo-desc">{{ $schemas['toast']['description'] }}</p>
+            </div>
+            <div class="pg-seg">
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'preview'" k-on:click="set(view, 'preview')">Preview</button>
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'code'" k-on:click="set(view, 'code')">Markup</button>
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'cli'" k-on:click="set(view, 'cli')">CLI</button>
+            </div>
+          </div>
+          <div class="pg-demo-body">
+            <div class="pg-stage z-stack-sm" k-show="view === 'preview'">
+              <x-ui.toast title="zokeibi.min.css Compiled" description="Tree-shaken in PHP 8.5 with strict CSP verification." variant="emerald" />
+              <div>
+                <x-ui.button id="trigger-floating-toast" variant="emerald" size="sm" k-click="set(toastOpen, true)">Trigger Floating Toast</x-ui.button>
+              </div>
+            </div>
+            <pre class="z-code" k-show="view === 'code'" hidden>{{ $schemas['toast']['example'] }}</pre>
+            <pre class="z-code" k-show="view === 'cli'" hidden>{{ $schemas['toast']['cli'] }}</pre>
+          </div>
+          <x-ui.toast
+            title="Live Zokeibi Floating Toast"
+            description="Zero npm, zero inline JS, strict CSP compliant."
+            variant="emerald"
+            floating="true"
+            show="toastOpen"
+            close-expr="set(toastOpen, false)"
+          />
+          <div class="pg-demo-foot"><span>&lt;{{ $schemas['toast']['tag'] }}&gt;</span><span>{{ $schemas['toast']['standards'] }}</span></div>
+        </section>
+      </div>
+
+      {{-- 23. Command Palette (Cmd+K) --}}
+      <div k-show="cat === 'all' || cat === 'overlays'">
+        <section class="pg-demo-card" @state(['view' => 'preview'])>
+          <div class="pg-demo-head">
+            <div>
+              <h3 class="pg-demo-title">{{ $schemas['command-palette']['name'] }} <x-ui.badge variant="blue">{{ $schemas['command-palette']['js_mode'] }}</x-ui.badge></h3>
+              <p class="pg-demo-desc">{{ $schemas['command-palette']['description'] }}</p>
+            </div>
+            <div class="pg-seg">
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'preview'" k-on:click="set(view, 'preview')">Preview</button>
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'code'" k-on:click="set(view, 'code')">Markup</button>
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'cli'" k-on:click="set(view, 'cli')">CLI</button>
+            </div>
+          </div>
+          <div class="pg-demo-body">
+            <div class="pg-stage z-row" k-show="view === 'preview'">
+              <x-ui.command-palette
+                id="demo-cmdk"
+                trigger-label="Launch Command Palette"
+                items="studio:Open Token Studio:/studio:S|prove:Inspect UI Proof JSON:/studio/prove:P|registry:View Registry JSON:/api/registry.json:R|health:Check App Health:/api/v1/health:H"
+              />
+              <span class="z-soft">Press <code>Cmd+K</code> or <code>Ctrl+K</code> anywhere on this page.</span>
+            </div>
+            <pre class="z-code" k-show="view === 'code'" hidden>{{ $schemas['command-palette']['example'] }}</pre>
+            <pre class="z-code" k-show="view === 'cli'" hidden>{{ $schemas['command-palette']['cli'] }}</pre>
+          </div>
+          <div class="pg-demo-foot"><span>&lt;{{ $schemas['command-palette']['tag'] }}&gt;</span><span>{{ $schemas['command-palette']['standards'] }}</span></div>
+        </section>
+      </div>
+
+      {{-- 24. Searchable Combobox --}}
+      <div k-show="cat === 'all' || cat === 'forms'">
+        <section class="pg-demo-card" @state(['view' => 'preview'])>
+          <div class="pg-demo-head">
+            <div>
+              <h3 class="pg-demo-title">{{ $schemas['combobox']['name'] }} <x-ui.badge variant="blue">{{ $schemas['combobox']['js_mode'] }}</x-ui.badge></h3>
+              <p class="pg-demo-desc">{{ $schemas['combobox']['description'] }}</p>
+            </div>
+            <div class="pg-seg">
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'preview'" k-on:click="set(view, 'preview')">Preview</button>
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'code'" k-on:click="set(view, 'code')">Markup</button>
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'cli'" k-on:click="set(view, 'cli')">CLI</button>
+            </div>
+          </div>
+          <div class="pg-demo-body">
+            <div class="pg-stage" k-show="view === 'preview'">
+              <x-ui.combobox
+                name="demo_cluster"
+                label="Search Deploy Region (ARIA 1.2 Combobox)"
+                placeholder="Type to filter regions..."
+                options="us-east:US East (Virginia)|us-west:US West (Oregon)|eu-central:EU Central (Frankfurt)|ap-northeast:AP Northeast (Tokyo)|ap-south:AP South (Singapore)"
+                value="ap-northeast"
+              />
+            </div>
+            <pre class="z-code" k-show="view === 'code'" hidden>{{ $schemas['combobox']['example'] }}</pre>
+            <pre class="z-code" k-show="view === 'cli'" hidden>{{ $schemas['combobox']['cli'] }}</pre>
+          </div>
+          <div class="pg-demo-foot"><span>&lt;{{ $schemas['combobox']['tag'] }}&gt;</span><span>{{ $schemas['combobox']['standards'] }}</span></div>
+        </section>
+      </div>
+
+      {{-- 25. File Dropzone --}}
+      <div k-show="cat === 'all' || cat === 'forms'">
+        <section class="pg-demo-card" @state(['view' => 'preview'])>
+          <div class="pg-demo-head">
+            <div>
+              <h3 class="pg-demo-title">{{ $schemas['dropzone']['name'] }} <x-ui.badge variant="blue">{{ $schemas['dropzone']['js_mode'] }}</x-ui.badge></h3>
+              <p class="pg-demo-desc">{{ $schemas['dropzone']['description'] }}</p>
+            </div>
+            <div class="pg-seg">
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'preview'" k-on:click="set(view, 'preview')">Preview</button>
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'code'" k-on:click="set(view, 'code')">Markup</button>
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'cli'" k-on:click="set(view, 'cli')">CLI</button>
+            </div>
+          </div>
+          <div class="pg-demo-body">
+            <div class="pg-stage" k-show="view === 'preview'">
+              <x-ui.dropzone
+                name="demo_attachment"
+                label="Upload Invoice or Spec Sheet"
+                title="Drop files here or click to browse"
+                hint="PNG, PDF, or CSV up to 10 MB — pairs with Kongono UploadedFileStore."
+                accept="image/png,application/pdf,.csv"
+                multiple="true"
+              />
+            </div>
+            <pre class="z-code" k-show="view === 'code'" hidden>{{ $schemas['dropzone']['example'] }}</pre>
+            <pre class="z-code" k-show="view === 'cli'" hidden>{{ $schemas['dropzone']['cli'] }}</pre>
+          </div>
+          <div class="pg-demo-foot"><span>&lt;{{ $schemas['dropzone']['tag'] }}&gt;</span><span>{{ $schemas['dropzone']['standards'] }}</span></div>
+        </section>
+      </div>
+
+      {{-- 26. Date Picker --}}
+      <div k-show="cat === 'all' || cat === 'forms'">
+        <section class="pg-demo-card" @state(['view' => 'preview'])>
+          <div class="pg-demo-head">
+            <div>
+              <h3 class="pg-demo-title">{{ $schemas['datepicker']['name'] }} <x-ui.badge variant="blue">{{ $schemas['datepicker']['js_mode'] }}</x-ui.badge></h3>
+              <p class="pg-demo-desc">{{ $schemas['datepicker']['description'] }}</p>
+            </div>
+            <div class="pg-seg">
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'preview'" k-on:click="set(view, 'preview')">Preview</button>
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'code'" k-on:click="set(view, 'code')">Markup</button>
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'cli'" k-on:click="set(view, 'cli')">CLI</button>
+            </div>
+          </div>
+          <div class="pg-demo-body">
+            <div class="pg-stage" k-show="view === 'preview'">
+              <x-ui.datepicker name="demo_launch_date" label="Target Release Date" value="2026-12-01" presets="true" />
+            </div>
+            <pre class="z-code" k-show="view === 'code'" hidden>{{ $schemas['datepicker']['example'] }}</pre>
+            <pre class="z-code" k-show="view === 'cli'" hidden>{{ $schemas['datepicker']['cli'] }}</pre>
+          </div>
+          <div class="pg-demo-foot"><span>&lt;{{ $schemas['datepicker']['tag'] }}&gt;</span><span>{{ $schemas['datepicker']['standards'] }}</span></div>
+        </section>
+      </div>
+
+      {{-- 27. Step Indicator --}}
+      <div k-show="cat === 'all' || cat === 'navigation'">
+        <section class="pg-demo-card" @state(['view' => 'preview'])>
+          <div class="pg-demo-head">
+            <div>
+              <h3 class="pg-demo-title">{{ $schemas['stepper']['name'] }} <x-ui.badge variant="emerald">{{ $schemas['stepper']['js_mode'] }}</x-ui.badge></h3>
+              <p class="pg-demo-desc">{{ $schemas['stepper']['description'] }}</p>
+            </div>
+            <div class="pg-seg">
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'preview'" k-on:click="set(view, 'preview')">Preview</button>
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'code'" k-on:click="set(view, 'code')">Markup</button>
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'cli'" k-on:click="set(view, 'cli')">CLI</button>
+            </div>
+          </div>
+          <div class="pg-demo-body">
+            <div class="pg-stage" k-show="view === 'preview'">
+              <x-ui.stepper steps="Account|Schema|zokeibi prove|Ship" current="3" />
+            </div>
+            <pre class="z-code" k-show="view === 'code'" hidden>{{ $schemas['stepper']['example'] }}</pre>
+            <pre class="z-code" k-show="view === 'cli'" hidden>{{ $schemas['stepper']['cli'] }}</pre>
+          </div>
+          <div class="pg-demo-foot"><span>&lt;{{ $schemas['stepper']['tag'] }}&gt;</span><span>{{ $schemas['stepper']['standards'] }}</span></div>
+        </section>
+      </div>
+
+      {{-- 28. Pagination --}}
+      <div k-show="cat === 'all' || cat === 'navigation'">
+        <section class="pg-demo-card" @state(['view' => 'preview'])>
+          <div class="pg-demo-head">
+            <div>
+              <h3 class="pg-demo-title">{{ $schemas['pagination']['name'] }} <x-ui.badge variant="emerald">{{ $schemas['pagination']['js_mode'] }}</x-ui.badge></h3>
+              <p class="pg-demo-desc">{{ $schemas['pagination']['description'] }}</p>
+            </div>
+            <div class="pg-seg">
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'preview'" k-on:click="set(view, 'preview')">Preview</button>
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'code'" k-on:click="set(view, 'code')">Markup</button>
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'cli'" k-on:click="set(view, 'cli')">CLI</button>
+            </div>
+          </div>
+          <div class="pg-demo-body">
+            <div class="pg-stage" k-show="view === 'preview'">
+              <x-ui.pagination current="3" total="7" base-url="#page-" />
+            </div>
+            <pre class="z-code" k-show="view === 'code'" hidden>{{ $schemas['pagination']['example'] }}</pre>
+            <pre class="z-code" k-show="view === 'cli'" hidden>{{ $schemas['pagination']['cli'] }}</pre>
+          </div>
+          <div class="pg-demo-foot"><span>&lt;{{ $schemas['pagination']['tag'] }}&gt;</span><span>{{ $schemas['pagination']['standards'] }}</span></div>
+        </section>
+      </div>
+
+      {{-- 29. Interactive Date-Range Calendar --}}
+      <div k-show="cat === 'all' || cat === 'forms'">
+        <section class="pg-demo-card" @state(['view' => 'preview'])>
+          <div class="pg-demo-head">
+            <div>
+              <h3 class="pg-demo-title">{{ $schemas['date-range']['name'] }} <x-ui.badge variant="blue">{{ $schemas['date-range']['js_mode'] }}</x-ui.badge></h3>
+              <p class="pg-demo-desc">{{ $schemas['date-range']['description'] }}</p>
+            </div>
+            <div class="pg-seg">
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'preview'" k-on:click="set(view, 'preview')">Preview</button>
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'code'" k-on:click="set(view, 'code')">Markup</button>
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'cli'" k-on:click="set(view, 'cli')">CLI</button>
+            </div>
+          </div>
+          <div class="pg-demo-body">
+            <div class="pg-stage" k-show="view === 'preview'">
+              <x-ui.date-range name="demo_window" label="Analytics Reporting Window" start="2026-11-08" end="2026-11-22" presets="true" />
+            </div>
+            <pre class="z-code" k-show="view === 'code'" hidden>{{ $schemas['date-range']['example'] }}</pre>
+            <pre class="z-code" k-show="view === 'cli'" hidden>{{ $schemas['date-range']['cli'] }}</pre>
+          </div>
+          <div class="pg-demo-foot"><span>&lt;{{ $schemas['date-range']['tag'] }}&gt;</span><span>{{ $schemas['date-range']['standards'] }}</span></div>
+        </section>
+      </div>
+
+      {{-- 30. Multi-Select Tag Combobox --}}
+      <div k-show="cat === 'all' || cat === 'forms'">
+        <section class="pg-demo-card" @state(['view' => 'preview'])>
+          <div class="pg-demo-head">
+            <div>
+              <h3 class="pg-demo-title">{{ $schemas['multi-select']['name'] }} <x-ui.badge variant="blue">{{ $schemas['multi-select']['js_mode'] }}</x-ui.badge></h3>
+              <p class="pg-demo-desc">{{ $schemas['multi-select']['description'] }}</p>
+            </div>
+            <div class="pg-seg">
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'preview'" k-on:click="set(view, 'preview')">Preview</button>
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'code'" k-on:click="set(view, 'code')">Markup</button>
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'cli'" k-on:click="set(view, 'cli')">CLI</button>
+            </div>
+          </div>
+          <div class="pg-demo-body">
+            <div class="pg-stage" k-show="view === 'preview'">
+              <x-ui.multi-select
+                name="demo_scopes"
+                label="API Token Scopes (Submits demo_scopes[])"
+                options="read:Read Data|write:Write Records|deploy:Zero-Downtime Deploy|billing:Manage Billing|audit:Read Audit Logs"
+                selected="read,deploy"
+              />
+            </div>
+            <pre class="z-code" k-show="view === 'code'" hidden>{{ $schemas['multi-select']['example'] }}</pre>
+            <pre class="z-code" k-show="view === 'cli'" hidden>{{ $schemas['multi-select']['cli'] }}</pre>
+          </div>
+          <div class="pg-demo-foot"><span>&lt;{{ $schemas['multi-select']['tag'] }}&gt;</span><span>{{ $schemas['multi-select']['standards'] }}</span></div>
+        </section>
+      </div>
+
+      {{-- 31. Pure SVG Charts & Sparklines (0 B JS) --}}
+      <div k-show="cat === 'all' || cat === 'data'">
+        <section class="pg-demo-card" @state(['view' => 'preview'])>
+          <div class="pg-demo-head">
+            <div>
+              <h3 class="pg-demo-title">{{ $schemas['chart']['name'] }} <x-ui.badge variant="emerald">{{ $schemas['chart']['js_mode'] }}</x-ui.badge></h3>
+              <p class="pg-demo-desc">{{ $schemas['chart']['description'] }}</p>
+            </div>
+            <div class="pg-seg">
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'preview'" k-on:click="set(view, 'preview')">Preview</button>
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'code'" k-on:click="set(view, 'code')">Markup</button>
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'cli'" k-on:click="set(view, 'cli')">CLI</button>
+            </div>
+          </div>
+          <div class="pg-demo-body">
+            <div class="pg-stage z-stack-sm" k-show="view === 'preview'">
+              <x-ui.chart type="bar" title="Daily Requests (k)" meta="+18%" data="Mon:28|Tue:44|Wed:39|Thu:62|Fri:55" />
+              <x-ui.chart type="donut" title="Plan Mix" meta="100% SVG" data="Starter:42|Pro:38|Enterprise:20" />
+              <x-ui.chart type="sparkline" title="P95 Latency Velocity" meta="0 B JS" data="D1:22|D2:19|D3:24|D4:16|D5:14|D6:12|D7:11" />
+            </div>
+            <pre class="z-code" k-show="view === 'code'" hidden>{{ $schemas['chart']['example'] }}</pre>
+            <pre class="z-code" k-show="view === 'cli'" hidden>{{ $schemas['chart']['cli'] }}</pre>
+          </div>
+          <div class="pg-demo-foot"><span>&lt;{{ $schemas['chart']['tag'] }}&gt;</span><span>{{ $schemas['chart']['standards'] }}</span></div>
+        </section>
+      </div>
+
+      {{-- 32. Markdown / Rich-Text Editor --}}
+      <div k-show="cat === 'all' || cat === 'forms'">
+        <section class="pg-demo-card" @state(['view' => 'preview'])>
+          <div class="pg-demo-head">
+            <div>
+              <h3 class="pg-demo-title">{{ $schemas['editor']['name'] }} <x-ui.badge variant="blue">{{ $schemas['editor']['js_mode'] }}</x-ui.badge></h3>
+              <p class="pg-demo-desc">{{ $schemas['editor']['description'] }}</p>
+            </div>
+            <div class="pg-seg">
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'preview'" k-on:click="set(view, 'preview')">Preview</button>
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'code'" k-on:click="set(view, 'code')">Markup</button>
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'cli'" k-on:click="set(view, 'cli')">CLI</button>
+            </div>
+          </div>
+          <div class="pg-demo-body">
+            <div class="pg-stage" k-show="view === 'preview'">
+              <x-ui.editor name="demo_markdown" label="Release Notes Editor (Try Split or Preview Mode)" rows="6">### Zokeibi v1.2 Shipped
+Build **strict-CSP** SaaS apps with `0 npm` packages.
+- Pure SVG charts (0 B JS)
+- Safe DOM preview (zero innerHTML)</x-ui.editor>
+            </div>
+            <pre class="z-code" k-show="view === 'code'" hidden>{{ $schemas['editor']['example'] }}</pre>
+            <pre class="z-code" k-show="view === 'cli'" hidden>{{ $schemas['editor']['cli'] }}</pre>
+          </div>
+          <div class="pg-demo-foot"><span>&lt;{{ $schemas['editor']['tag'] }}&gt;</span><span>{{ $schemas['editor']['standards'] }}</span></div>
+        </section>
+      </div>
+
+      {{-- 33. OTP / 2FA Code Input --}}
+      <div k-show="cat === 'all' || cat === 'forms'">
+        <section class="pg-demo-card" @state(['view' => 'preview'])>
+          <div class="pg-demo-head">
+            <div>
+              <h3 class="pg-demo-title">{{ $schemas['otp-input']['name'] }} <x-ui.badge variant="blue">{{ $schemas['otp-input']['js_mode'] }}</x-ui.badge></h3>
+              <p class="pg-demo-desc">{{ $schemas['otp-input']['description'] }}</p>
+            </div>
+            <div class="pg-seg">
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'preview'" k-on:click="set(view, 'preview')">Preview</button>
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'code'" k-on:click="set(view, 'code')">Markup</button>
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'cli'" k-on:click="set(view, 'cli')">CLI</button>
+            </div>
+          </div>
+          <div class="pg-demo-body">
+            <div class="pg-stage" k-show="view === 'preview'">
+              <x-ui.otp-input name="demo_totp" label="Two-Factor Verification Code" length="6" hint="Type digits or paste a 6-digit code like 482915 — auto-advances cleanly." />
+            </div>
+            <pre class="z-code" k-show="view === 'code'" hidden>{{ $schemas['otp-input']['example'] }}</pre>
+            <pre class="z-code" k-show="view === 'cli'" hidden>{{ $schemas['otp-input']['cli'] }}</pre>
+          </div>
+          <div class="pg-demo-foot"><span>&lt;{{ $schemas['otp-input']['tag'] }}&gt;</span><span>{{ $schemas['otp-input']['standards'] }}</span></div>
+        </section>
+      </div>
+
+      {{-- 34. Copy-to-Clipboard Field --}}
+      <div k-show="cat === 'all' || cat === 'primitives'">
+        <section class="pg-demo-card" @state(['view' => 'preview'])>
+          <div class="pg-demo-head">
+            <div>
+              <h3 class="pg-demo-title">{{ $schemas['copy-field']['name'] }} <x-ui.badge variant="blue">{{ $schemas['copy-field']['js_mode'] }}</x-ui.badge></h3>
+              <p class="pg-demo-desc">{{ $schemas['copy-field']['description'] }}</p>
+            </div>
+            <div class="pg-seg">
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'preview'" k-on:click="set(view, 'preview')">Preview</button>
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'code'" k-on:click="set(view, 'code')">Markup</button>
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'cli'" k-on:click="set(view, 'cli')">CLI</button>
+            </div>
+          </div>
+          <div class="pg-demo-body">
+            <div class="pg-stage z-stack-sm" k-show="view === 'preview'">
+              <x-ui.copy-field label="Masked API Token (Click Show or Copy)" value="kgn_pat_demo_9f4a8c2e1b7d" masked="true" />
+              <x-ui.copy-field label="Install Command" value="composer require kongono/zokeibi" />
+            </div>
+            <pre class="z-code" k-show="view === 'code'" hidden>{{ $schemas['copy-field']['example'] }}</pre>
+            <pre class="z-code" k-show="view === 'cli'" hidden>{{ $schemas['copy-field']['cli'] }}</pre>
+          </div>
+          <div class="pg-demo-foot"><span>&lt;{{ $schemas['copy-field']['tag'] }}&gt;</span><span>{{ $schemas['copy-field']['standards'] }}</span></div>
+        </section>
+      </div>
+
+      {{-- 35. Activity Timeline --}}
+      <div k-show="cat === 'all' || cat === 'data'">
+        <section class="pg-demo-card" @state(['view' => 'preview'])>
+          <div class="pg-demo-head">
+            <div>
+              <h3 class="pg-demo-title">{{ $schemas['timeline']['name'] }} <x-ui.badge variant="emerald">{{ $schemas['timeline']['js_mode'] }}</x-ui.badge></h3>
+              <p class="pg-demo-desc">{{ $schemas['timeline']['description'] }}</p>
+            </div>
+            <div class="pg-seg">
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'preview'" k-on:click="set(view, 'preview')">Preview</button>
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'code'" k-on:click="set(view, 'code')">Markup</button>
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'cli'" k-on:click="set(view, 'cli')">CLI</button>
+            </div>
+          </div>
+          <div class="pg-demo-body">
+            <div class="pg-stage" k-show="view === 'preview'">
+              <x-ui.timeline items="zokeibi prove passed Grade A+|Just now|36 components · 0 CSP errors · WCAG AA across all themes|emerald;;Deployed FrankenPHP Cluster|14m ago|Zero-downtime rollout to us-east-1|blue;;Rotated Webhook Secret|2h ago|HMAC-SHA256 signing key refreshed cleanly|amber" />
+            </div>
+            <pre class="z-code" k-show="view === 'code'" hidden>{{ $schemas['timeline']['example'] }}</pre>
+            <pre class="z-code" k-show="view === 'cli'" hidden>{{ $schemas['timeline']['cli'] }}</pre>
+          </div>
+          <div class="pg-demo-foot"><span>&lt;{{ $schemas['timeline']['tag'] }}&gt;</span><span>{{ $schemas['timeline']['standards'] }}</span></div>
+        </section>
+      </div>
+
+      {{-- 36. Breadcrumb Trail --}}
+      <div k-show="cat === 'all' || cat === 'navigation'">
+        <section class="pg-demo-card" @state(['view' => 'preview'])>
+          <div class="pg-demo-head">
+            <div>
+              <h3 class="pg-demo-title">{{ $schemas['breadcrumb']['name'] }} <x-ui.badge variant="emerald">{{ $schemas['breadcrumb']['js_mode'] }}</x-ui.badge></h3>
+              <p class="pg-demo-desc">{{ $schemas['breadcrumb']['description'] }}</p>
+            </div>
+            <div class="pg-seg">
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'preview'" k-on:click="set(view, 'preview')">Preview</button>
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'code'" k-on:click="set(view, 'code')">Markup</button>
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'cli'" k-on:click="set(view, 'cli')">CLI</button>
+            </div>
+          </div>
+          <div class="pg-demo-body">
+            <div class="pg-stage" k-show="view === 'preview'">
+              <x-ui.breadcrumb items="Zokeibi:/|Token Studio:/studio|API Keys & Audit" />
+            </div>
+            <pre class="z-code" k-show="view === 'code'" hidden>{{ $schemas['breadcrumb']['example'] }}</pre>
+            <pre class="z-code" k-show="view === 'cli'" hidden>{{ $schemas['breadcrumb']['cli'] }}</pre>
+          </div>
+          <div class="pg-demo-foot"><span>&lt;{{ $schemas['breadcrumb']['tag'] }}&gt;</span><span>{{ $schemas['breadcrumb']['standards'] }}</span></div>
+        </section>
+      </div>
+
+      {{-- 37. Checkbox --}}
+      <div k-show="cat === 'all' || cat === 'forms'">
+        <section class="pg-demo-card" @state(['view' => 'preview'])>
+          <div class="pg-demo-head">
+            <div>
+              <h3 class="pg-demo-title">{{ $schemas['checkbox']['name'] }} <x-ui.badge variant="emerald">{{ $schemas['checkbox']['js_mode'] }}</x-ui.badge></h3>
+              <p class="pg-demo-desc">{{ $schemas['checkbox']['description'] }}</p>
+            </div>
+            <div class="pg-seg">
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'preview'" k-on:click="set(view, 'preview')">Preview</button>
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'code'" k-on:click="set(view, 'code')">Markup</button>
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'cli'" k-on:click="set(view, 'cli')">CLI</button>
+            </div>
+          </div>
+          <div class="pg-demo-body">
+            <div class="pg-stage z-stack-sm" k-show="view === 'preview'">
+              <x-ui.checkbox name="demo_cb_terms" label="Enforce Strict Content-Security-Policy" description="Blocks inline scripts and inline styles across every route." checked="true" />
+              <x-ui.checkbox name="demo_cb_email" label="Send weekly readiness certificates" description="Delivered via Kongono Mail with zero tracking pixels." />
+            </div>
+            <pre class="z-code" k-show="view === 'code'" hidden>{{ $schemas['checkbox']['example'] }}</pre>
+            <pre class="z-code" k-show="view === 'cli'" hidden>{{ $schemas['checkbox']['cli'] }}</pre>
+          </div>
+          <div class="pg-demo-foot"><span>&lt;{{ $schemas['checkbox']['tag'] }}&gt;</span><span>{{ $schemas['checkbox']['standards'] }}</span></div>
+        </section>
+      </div>
+
+      {{-- 38. Radio & Card Group --}}
+      <div k-show="cat === 'all' || cat === 'forms'">
+        <section class="pg-demo-card" @state(['view' => 'preview'])>
+          <div class="pg-demo-head">
+            <div>
+              <h3 class="pg-demo-title">{{ $schemas['radio-group']['name'] }} <x-ui.badge variant="emerald">{{ $schemas['radio-group']['js_mode'] }}</x-ui.badge></h3>
+              <p class="pg-demo-desc">{{ $schemas['radio-group']['description'] }}</p>
+            </div>
+            <div class="pg-seg">
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'preview'" k-on:click="set(view, 'preview')">Preview</button>
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'code'" k-on:click="set(view, 'code')">Markup</button>
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'cli'" k-on:click="set(view, 'cli')">CLI</button>
+            </div>
+          </div>
+          <div class="pg-demo-body">
+            <div class="pg-stage" k-show="view === 'preview'">
+              <x-ui.radio-group name="demo_plan_tier" label="Choose Deployment Tier (CSS :has(:checked) Cards)" layout="cards" value="pro" options="starter:Starter:Free · 1 worker|pro:Pro:$29/mo · Autoscale|enterprise:Enterprise:Dedicated cluster" />
+            </div>
+            <pre class="z-code" k-show="view === 'code'" hidden>{{ $schemas['radio-group']['example'] }}</pre>
+            <pre class="z-code" k-show="view === 'cli'" hidden>{{ $schemas['radio-group']['cli'] }}</pre>
+          </div>
+          <div class="pg-demo-foot"><span>&lt;{{ $schemas['radio-group']['tag'] }}&gt;</span><span>{{ $schemas['radio-group']['standards'] }}</span></div>
+        </section>
+      </div>
+
+      {{-- 39. Dropdown Action Menu --}}
+      <div k-show="cat === 'all' || cat === 'overlays'">
+        <section class="pg-demo-card" @state(['view' => 'preview'])>
+          <div class="pg-demo-head">
+            <div>
+              <h3 class="pg-demo-title">{{ $schemas['dropdown']['name'] }} <x-ui.badge variant="emerald">{{ $schemas['dropdown']['js_mode'] }}</x-ui.badge></h3>
+              <p class="pg-demo-desc">{{ $schemas['dropdown']['description'] }}</p>
+            </div>
+            <div class="pg-seg">
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'preview'" k-on:click="set(view, 'preview')">Preview</button>
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'code'" k-on:click="set(view, 'code')">Markup</button>
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'cli'" k-on:click="set(view, 'cli')">CLI</button>
+            </div>
+          </div>
+          <div class="pg-demo-body">
+            <div class="pg-stage z-row" k-show="view === 'preview'">
+              <x-ui.dropdown id="demo-dropdown-menu" trigger="Workspace Actions ▾" trigger-variant="primary" items="Open Token Studio:/studio:S|Inspect Proof JSON:/studio/prove:P|View Registry:/api/registry.json:R|---|danger:Revoke API Key:#revoke:⌫" />
+              <span class="z-soft">0 B JS — Native HTML Top-Layer Popover API.</span>
+            </div>
+            <pre class="z-code" k-show="view === 'code'" hidden>{{ $schemas['dropdown']['example'] }}</pre>
+            <pre class="z-code" k-show="view === 'cli'" hidden>{{ $schemas['dropdown']['cli'] }}</pre>
+          </div>
+          <div class="pg-demo-foot"><span>&lt;{{ $schemas['dropdown']['tag'] }}&gt;</span><span>{{ $schemas['dropdown']['standards'] }}</span></div>
+        </section>
+      </div>
+
+      {{-- 40. Segmented Control --}}
+      <div k-show="cat === 'all' || cat === 'navigation'">
+        <section class="pg-demo-card" @state(['view' => 'preview'])>
+          <div class="pg-demo-head">
+            <div>
+              <h3 class="pg-demo-title">{{ $schemas['segmented']['name'] }} <x-ui.badge variant="emerald">{{ $schemas['segmented']['js_mode'] }}</x-ui.badge></h3>
+              <p class="pg-demo-desc">{{ $schemas['segmented']['description'] }}</p>
+            </div>
+            <div class="pg-seg">
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'preview'" k-on:click="set(view, 'preview')">Preview</button>
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'code'" k-on:click="set(view, 'code')">Markup</button>
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'cli'" k-on:click="set(view, 'cli')">CLI</button>
+            </div>
+          </div>
+          <div class="pg-demo-body">
+            <div class="pg-stage z-stack-sm" k-show="view === 'preview'">
+              <x-ui.segmented name="demo_billing_cycle" label="Billing Cycle" value="annual" options="monthly:Monthly|annual:Annual (-20%)|enterprise:Enterprise" />
+              <x-ui.segmented name="demo_view_mode" label="Layout Mode" value="grid" options="list:List View|grid:Grid View|board:Board" />
+            </div>
+            <pre class="z-code" k-show="view === 'code'" hidden>{{ $schemas['segmented']['example'] }}</pre>
+            <pre class="z-code" k-show="view === 'cli'" hidden>{{ $schemas['segmented']['cli'] }}</pre>
+          </div>
+          <div class="pg-demo-foot"><span>&lt;{{ $schemas['segmented']['tag'] }}&gt;</span><span>{{ $schemas['segmented']['standards'] }}</span></div>
+        </section>
+      </div>
+
+      {{-- 41. Loading Spinner --}}
+      <div k-show="cat === 'all' || cat === 'primitives'">
+        <section class="pg-demo-card" @state(['view' => 'preview'])>
+          <div class="pg-demo-head">
+            <div>
+              <h3 class="pg-demo-title">{{ $schemas['spinner']['name'] }} <x-ui.badge variant="emerald">{{ $schemas['spinner']['js_mode'] }}</x-ui.badge></h3>
+              <p class="pg-demo-desc">{{ $schemas['spinner']['description'] }}</p>
+            </div>
+            <div class="pg-seg">
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'preview'" k-on:click="set(view, 'preview')">Preview</button>
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'code'" k-on:click="set(view, 'code')">Markup</button>
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'cli'" k-on:click="set(view, 'cli')">CLI</button>
+            </div>
+          </div>
+          <div class="pg-demo-body">
+            <div class="pg-stage z-row" k-show="view === 'preview'">
+              <x-ui.spinner size="sm" variant="primary" label="Compiling CSS..." />
+              <x-ui.spinner size="md" variant="emerald" label="Proving WCAG AA..." />
+              <x-ui.spinner size="lg" variant="muted" />
+            </div>
+            <pre class="z-code" k-show="view === 'code'" hidden>{{ $schemas['spinner']['example'] }}</pre>
+            <pre class="z-code" k-show="view === 'cli'" hidden>{{ $schemas['spinner']['cli'] }}</pre>
+          </div>
+          <div class="pg-demo-foot"><span>&lt;{{ $schemas['spinner']['tag'] }}&gt;</span><span>{{ $schemas['spinner']['standards'] }}</span></div>
+        </section>
+      </div>
+
+      {{-- 42. Range Slider --}}
+      <div k-show="cat === 'all' || cat === 'forms'">
+        <section class="pg-demo-card" @state(['view' => 'preview'])>
+          <div class="pg-demo-head">
+            <div>
+              <h3 class="pg-demo-title">{{ $schemas['slider']['name'] }} <x-ui.badge variant="blue">{{ $schemas['slider']['js_mode'] }}</x-ui.badge></h3>
+              <p class="pg-demo-desc">{{ $schemas['slider']['description'] }}</p>
+            </div>
+            <div class="pg-seg">
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'preview'" k-on:click="set(view, 'preview')">Preview</button>
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'code'" k-on:click="set(view, 'code')">Markup</button>
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'cli'" k-on:click="set(view, 'cli')">CLI</button>
+            </div>
+          </div>
+          <div class="pg-demo-body">
+            <div class="pg-stage z-stack-sm" k-show="view === 'preview'">
+              <x-ui.slider name="demo_seats" label="Team Seat Quota" min="5" max="100" step="5" value="25" unit=" seats" />
+              <x-ui.slider name="demo_budget" label="CSS Gzip Ceiling" min="2" max="15" step="1" value="10" unit=" KB" />
+            </div>
+            <pre class="z-code" k-show="view === 'code'" hidden>{{ $schemas['slider']['example'] }}</pre>
+            <pre class="z-code" k-show="view === 'cli'" hidden>{{ $schemas['slider']['cli'] }}</pre>
+          </div>
+          <div class="pg-demo-foot"><span>&lt;{{ $schemas['slider']['tag'] }}&gt;</span><span>{{ $schemas['slider']['standards'] }}</span></div>
+        </section>
+      </div>
+
+      {{-- 43. Divider --}}
+      <div k-show="cat === 'all' || cat === 'primitives'">
+        <section class="pg-demo-card" @state(['view' => 'preview'])>
+          <div class="pg-demo-head">
+            <div>
+              <h3 class="pg-demo-title">{{ $schemas['divider']['name'] }} <x-ui.badge variant="emerald">{{ $schemas['divider']['js_mode'] }}</x-ui.badge></h3>
+              <p class="pg-demo-desc">{{ $schemas['divider']['description'] }}</p>
+            </div>
+            <div class="pg-seg">
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'preview'" k-on:click="set(view, 'preview')">Preview</button>
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'code'" k-on:click="set(view, 'code')">Markup</button>
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'cli'" k-on:click="set(view, 'cli')">CLI</button>
+            </div>
+          </div>
+          <div class="pg-demo-body">
+            <div class="pg-stage z-stack-sm" k-show="view === 'preview'">
+              <x-ui.divider />
+              <x-ui.divider label="Or sign in with Passkey" />
+              <div class="z-row">
+                <span>PHP 8.5</span>
+                <x-ui.divider orientation="vertical" />
+                <span>Zero npm</span>
+                <x-ui.divider orientation="vertical" />
+                <span>Strict CSP</span>
+              </div>
+            </div>
+            <pre class="z-code" k-show="view === 'code'" hidden>{{ $schemas['divider']['example'] }}</pre>
+            <pre class="z-code" k-show="view === 'cli'" hidden>{{ $schemas['divider']['cli'] }}</pre>
+          </div>
+          <div class="pg-demo-foot"><span>&lt;{{ $schemas['divider']['tag'] }}&gt;</span><span>{{ $schemas['divider']['standards'] }}</span></div>
+        </section>
+      </div>
+
+      {{-- 44. Description List --}}
+      <div k-show="cat === 'all' || cat === 'data'">
+        <section class="pg-demo-card" @state(['view' => 'preview'])>
+          <div class="pg-demo-head">
+            <div>
+              <h3 class="pg-demo-title">{{ $schemas['description-list']['name'] }} <x-ui.badge variant="emerald">{{ $schemas['description-list']['js_mode'] }}</x-ui.badge></h3>
+              <p class="pg-demo-desc">{{ $schemas['description-list']['description'] }}</p>
+            </div>
+            <div class="pg-seg">
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'preview'" k-on:click="set(view, 'preview')">Preview</button>
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'code'" k-on:click="set(view, 'code')">Markup</button>
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'cli'" k-on:click="set(view, 'cli')">CLI</button>
+            </div>
+          </div>
+          <div class="pg-demo-body">
+            <div class="pg-stage" k-show="view === 'preview'">
+              <x-ui.description-list columns="2" items="Package:kongono/zokeibi v1.3|Runtime Deps:0 (PHP 8.5+ only)|UI Proof:Grade A+ (100/100)|License:MIT Open Source" />
+            </div>
+            <pre class="z-code" k-show="view === 'code'" hidden>{{ $schemas['description-list']['example'] }}</pre>
+            <pre class="z-code" k-show="view === 'cli'" hidden>{{ $schemas['description-list']['cli'] }}</pre>
+          </div>
+          <div class="pg-demo-foot"><span>&lt;{{ $schemas['description-list']['tag'] }}&gt;</span><span>{{ $schemas['description-list']['standards'] }}</span></div>
+        </section>
+      </div>
+
+      {{-- 45. Code Block --}}
+      <div k-show="cat === 'all' || cat === 'primitives'">
+        <section class="pg-demo-card" @state(['view' => 'preview'])>
+          <div class="pg-demo-head">
+            <div>
+              <h3 class="pg-demo-title">{{ $schemas['code-block']['name'] }} <x-ui.badge variant="blue">{{ $schemas['code-block']['js_mode'] }}</x-ui.badge></h3>
+              <p class="pg-demo-desc">{{ $schemas['code-block']['description'] }}</p>
+            </div>
+            <div class="pg-seg">
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'preview'" k-on:click="set(view, 'preview')">Preview</button>
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'code'" k-on:click="set(view, 'code')">Markup</button>
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'cli'" k-on:click="set(view, 'cli')">CLI</button>
+            </div>
+          </div>
+          <div class="pg-demo-body">
+            <div class="pg-stage" k-show="view === 'preview'">
+              <x-ui.code-block filename="OrderController.php" language="php">#[Get('/orders')]
+#[ReadOnlyDb]
+public function index(): Response
+{
+    return Response::html($this->views->render('orders/index'));
+}</x-ui.code-block>
+            </div>
+            <pre class="z-code" k-show="view === 'code'" hidden>{{ $schemas['code-block']['example'] }}</pre>
+            <pre class="z-code" k-show="view === 'cli'" hidden>{{ $schemas['code-block']['cli'] }}</pre>
+          </div>
+          <div class="pg-demo-foot"><span>&lt;{{ $schemas['code-block']['tag'] }}&gt;</span><span>{{ $schemas['code-block']['standards'] }}</span></div>
+        </section>
+      </div>
+
+      {{-- 46. Free-Form Tag Input --}}
+      <div k-show="cat === 'all' || cat === 'forms'">
+        <section class="pg-demo-card" @state(['view' => 'preview'])>
+          <div class="pg-demo-head">
+            <div>
+              <h3 class="pg-demo-title">{{ $schemas['tag-input']['name'] }} <x-ui.badge variant="blue">{{ $schemas['tag-input']['js_mode'] }}</x-ui.badge></h3>
+              <p class="pg-demo-desc">{{ $schemas['tag-input']['description'] }}</p>
+            </div>
+            <div class="pg-seg">
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'preview'" k-on:click="set(view, 'preview')">Preview</button>
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'code'" k-on:click="set(view, 'code')">Markup</button>
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'cli'" k-on:click="set(view, 'cli')">CLI</button>
+            </div>
+          </div>
+          <div class="pg-demo-body">
+            <div class="pg-stage" k-show="view === 'preview'">
+              <x-ui.tag-input name="demo_topics" label="Webhook Topics (Type + Enter or Comma)" value="order.paid,invoice.sent,key.rotated" />
+            </div>
+            <pre class="z-code" k-show="view === 'code'" hidden>{{ $schemas['tag-input']['example'] }}</pre>
+            <pre class="z-code" k-show="view === 'cli'" hidden>{{ $schemas['tag-input']['cli'] }}</pre>
+          </div>
+          <div class="pg-demo-foot"><span>&lt;{{ $schemas['tag-input']['tag'] }}&gt;</span><span>{{ $schemas['tag-input']['standards'] }}</span></div>
+        </section>
+      </div>
+
+      {{-- 47. Announcement Banner --}}
+      <div k-show="cat === 'all' || cat === 'primitives'">
+        <section class="pg-demo-card" @state(['view' => 'preview'])>
+          <div class="pg-demo-head">
+            <div>
+              <h3 class="pg-demo-title">{{ $schemas['banner']['name'] }} <x-ui.badge variant="emerald">{{ $schemas['banner']['js_mode'] }}</x-ui.badge></h3>
+              <p class="pg-demo-desc">{{ $schemas['banner']['description'] }}</p>
+            </div>
+            <div class="pg-seg">
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'preview'" k-on:click="set(view, 'preview')">Preview</button>
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'code'" k-on:click="set(view, 'code')">Markup</button>
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'cli'" k-on:click="set(view, 'cli')">CLI</button>
+            </div>
+          </div>
+          <div class="pg-demo-body">
+            <div class="pg-stage z-stack-sm" k-show="view === 'preview'">
+              <x-ui.banner variant="emerald" title="Zokeibi v1.3 Shipped" action-label="Token Studio" action-href="/studio" dismissible="true">49 strict-CSP components under 10 KB gzipped.</x-ui.banner>
+              <x-ui.banner variant="amber" title="Trial Ending Soon" action-label="Upgrade" action-href="/studio">3 days remaining on your workspace trial.</x-ui.banner>
+            </div>
+            <pre class="z-code" k-show="view === 'code'" hidden>{{ $schemas['banner']['example'] }}</pre>
+            <pre class="z-code" k-show="view === 'cli'" hidden>{{ $schemas['banner']['cli'] }}</pre>
+          </div>
+          <div class="pg-demo-foot"><span>&lt;{{ $schemas['banner']['tag'] }}&gt;</span><span>{{ $schemas['banner']['standards'] }}</span></div>
+        </section>
+      </div>
+
+      {{-- 48. Star Rating --}}
+      <div k-show="cat === 'all' || cat === 'forms'">
+        <section class="pg-demo-card" @state(['view' => 'preview'])>
+          <div class="pg-demo-head">
+            <div>
+              <h3 class="pg-demo-title">{{ $schemas['rating']['name'] }} <x-ui.badge variant="emerald">{{ $schemas['rating']['js_mode'] }}</x-ui.badge></h3>
+              <p class="pg-demo-desc">{{ $schemas['rating']['description'] }}</p>
+            </div>
+            <div class="pg-seg">
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'preview'" k-on:click="set(view, 'preview')">Preview</button>
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'code'" k-on:click="set(view, 'code')">Markup</button>
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'cli'" k-on:click="set(view, 'cli')">CLI</button>
+            </div>
+          </div>
+          <div class="pg-demo-body">
+            <div class="pg-stage" k-show="view === 'preview'">
+              <x-ui.rating name="demo_dx_rating" label="Rate Kongono + Zokeibi Developer Experience (0 B JS)" value="5" />
+            </div>
+            <pre class="z-code" k-show="view === 'code'" hidden>{{ $schemas['rating']['example'] }}</pre>
+            <pre class="z-code" k-show="view === 'cli'" hidden>{{ $schemas['rating']['cli'] }}</pre>
+          </div>
+          <div class="pg-demo-foot"><span>&lt;{{ $schemas['rating']['tag'] }}&gt;</span><span>{{ $schemas['rating']['standards'] }}</span></div>
+        </section>
+      </div>
+
+      {{-- 49. Sidebar Navigation --}}
+      <div k-show="cat === 'all' || cat === 'navigation'">
+        <section class="pg-demo-card" @state(['view' => 'preview'])>
+          <div class="pg-demo-head">
+            <div>
+              <h3 class="pg-demo-title">{{ $schemas['sidebar']['name'] }} <x-ui.badge variant="emerald">{{ $schemas['sidebar']['js_mode'] }}</x-ui.badge></h3>
+              <p class="pg-demo-desc">{{ $schemas['sidebar']['description'] }}</p>
+            </div>
+            <div class="pg-seg">
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'preview'" k-on:click="set(view, 'preview')">Preview</button>
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'code'" k-on:click="set(view, 'code')">Markup</button>
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'cli'" k-on:click="set(view, 'cli')">CLI</button>
+            </div>
+          </div>
+          <div class="pg-demo-body">
+            <div class="pg-stage" k-show="view === 'preview'">
+              <x-ui.sidebar active="/studio" items="#Workspace|Component Gallery:/:49|Token Studio:/studio:Live|UI Proof JSON:/studio/prove:A+|#Security|Registry JSON:/api/registry.json|Health Check:/api/v1/health:OK" />
+            </div>
+            <pre class="z-code" k-show="view === 'code'" hidden>{{ $schemas['sidebar']['example'] }}</pre>
+            <pre class="z-code" k-show="view === 'cli'" hidden>{{ $schemas['sidebar']['cli'] }}</pre>
+          </div>
+          <div class="pg-demo-foot"><span>&lt;{{ $schemas['sidebar']['tag'] }}&gt;</span><span>{{ $schemas['sidebar']['standards'] }}</span></div>
+        </section>
+      </div>
+
+      {{-- 50. Input Group (Addons) --}}
+      <div k-show="cat === 'all' || cat === 'forms'">
+        <section class="pg-demo-card" @state(['view' => 'preview'])>
+          <div class="pg-demo-head">
+            <div>
+              <h3 class="pg-demo-title">{{ $schemas['input-group']['name'] }} <x-ui.badge variant="emerald">{{ $schemas['input-group']['js_mode'] }}</x-ui.badge></h3>
+              <p class="pg-demo-desc">{{ $schemas['input-group']['description'] }}</p>
+            </div>
+            <div class="pg-seg">
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'preview'" k-on:click="set(view, 'preview')">Preview</button>
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'code'" k-on:click="set(view, 'code')">Markup</button>
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'cli'" k-on:click="set(view, 'cli')">CLI</button>
+            </div>
+          </div>
+          <div class="pg-demo-body">
+            <div class="pg-stage z-stack-sm" k-show="view === 'preview'">
+              <x-ui.input-group name="demo_domain" label="Workspace Subdomain" prefix="https://" suffix=".kongono.dev" value="acme-cloud" />
+              <x-ui.input-group name="demo_price" type="number" label="Monthly Cap" prefix="$" suffix="USD" value="49" />
+            </div>
+            <pre class="z-code" k-show="view === 'code'" hidden>{{ $schemas['input-group']['example'] }}</pre>
+            <pre class="z-code" k-show="view === 'cli'" hidden>{{ $schemas['input-group']['cli'] }}</pre>
+          </div>
+          <div class="pg-demo-foot"><span>&lt;{{ $schemas['input-group']['tag'] }}&gt;</span><span>{{ $schemas['input-group']['standards'] }}</span></div>
+        </section>
+      </div>
+
+      {{-- 51. Number Stepper --}}
+      <div k-show="cat === 'all' || cat === 'forms'">
+        <section class="pg-demo-card" @state(['view' => 'preview'])>
+          <div class="pg-demo-head">
+            <div>
+              <h3 class="pg-demo-title">{{ $schemas['number-input']['name'] }} <x-ui.badge variant="blue">{{ $schemas['number-input']['js_mode'] }}</x-ui.badge></h3>
+              <p class="pg-demo-desc">{{ $schemas['number-input']['description'] }}</p>
+            </div>
+            <div class="pg-seg">
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'preview'" k-on:click="set(view, 'preview')">Preview</button>
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'code'" k-on:click="set(view, 'code')">Markup</button>
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'cli'" k-on:click="set(view, 'cli')">CLI</button>
+            </div>
+          </div>
+          <div class="pg-demo-body">
+            <div class="pg-stage z-row" k-show="view === 'preview'">
+              <x-ui.number-input name="demo_workers" label="FrankenPHP Workers" min="1" max="32" step="1" value="4" />
+              <x-ui.number-input name="demo_replicas" label="Read Replicas" min="0" max="8" step="1" value="2" />
+            </div>
+            <pre class="z-code" k-show="view === 'code'" hidden>{{ $schemas['number-input']['example'] }}</pre>
+            <pre class="z-code" k-show="view === 'cli'" hidden>{{ $schemas['number-input']['cli'] }}</pre>
+          </div>
+          <div class="pg-demo-foot"><span>&lt;{{ $schemas['number-input']['tag'] }}&gt;</span><span>{{ $schemas['number-input']['standards'] }}</span></div>
+        </section>
+      </div>
+
+      {{-- 52. Avatar Group --}}
+      <div k-show="cat === 'all' || cat === 'primitives'">
+        <section class="pg-demo-card" @state(['view' => 'preview'])>
+          <div class="pg-demo-head">
+            <div>
+              <h3 class="pg-demo-title">{{ $schemas['avatar-group']['name'] }} <x-ui.badge variant="emerald">{{ $schemas['avatar-group']['js_mode'] }}</x-ui.badge></h3>
+              <p class="pg-demo-desc">{{ $schemas['avatar-group']['description'] }}</p>
+            </div>
+            <div class="pg-seg">
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'preview'" k-on:click="set(view, 'preview')">Preview</button>
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'code'" k-on:click="set(view, 'code')">Markup</button>
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'cli'" k-on:click="set(view, 'cli')">CLI</button>
+            </div>
+          </div>
+          <div class="pg-demo-body">
+            <div class="pg-stage z-between" k-show="view === 'preview'">
+              <x-ui.avatar-group max="4" size="md" items="OS:Oshie Tutor|CH:Chie Scaffolder|HT:Hantei Guard|KT:Zokeibi Studio|AK:Aiko Sato|RY:Ryu Tanaka|MN:Mina Ito" />
+              <x-ui.avatar-group max="3" size="lg" items="OS:Oshie|CH:Chie|HT:Hantei|KT:Zokeibi|AK:Aiko" />
+            </div>
+            <pre class="z-code" k-show="view === 'code'" hidden>{{ $schemas['avatar-group']['example'] }}</pre>
+            <pre class="z-code" k-show="view === 'cli'" hidden>{{ $schemas['avatar-group']['cli'] }}</pre>
+          </div>
+          <div class="pg-demo-foot"><span>&lt;{{ $schemas['avatar-group']['tag'] }}&gt;</span><span>{{ $schemas['avatar-group']['standards'] }}</span></div>
+        </section>
+      </div>
+
+      {{-- 53. Scroll-Snap Carousel --}}
+      <div k-show="cat === 'all' || cat === 'data'">
+        <section class="pg-demo-card" @state(['view' => 'preview'])>
+          <div class="pg-demo-head">
+            <div>
+              <h3 class="pg-demo-title">{{ $schemas['carousel']['name'] }} <x-ui.badge variant="emerald">{{ $schemas['carousel']['js_mode'] }}</x-ui.badge></h3>
+              <p class="pg-demo-desc">{{ $schemas['carousel']['description'] }}</p>
+            </div>
+            <div class="pg-seg">
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'preview'" k-on:click="set(view, 'preview')">Preview</button>
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'code'" k-on:click="set(view, 'code')">Markup</button>
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'cli'" k-on:click="set(view, 'cli')">CLI</button>
+            </div>
+          </div>
+          <div class="pg-demo-body">
+            <div class="pg-stage" k-show="view === 'preview'">
+              <x-ui.carousel label="Zokeibi Pillars" items="Pure PHP 8.5 CSS Compiler|Tree-shakes unused primitives with zero Node or npm.;;Executable UI Proof Gate|zokeibi prove enforces WCAG AA, strict CSP, and CSS KB budgets.;;Zero Vendor Lock-In|Every component template is copied into your app under MIT." />
+            </div>
+            <pre class="z-code" k-show="view === 'code'" hidden>{{ $schemas['carousel']['example'] }}</pre>
+            <pre class="z-code" k-show="view === 'cli'" hidden>{{ $schemas['carousel']['cli'] }}</pre>
+          </div>
+          <div class="pg-demo-foot"><span>&lt;{{ $schemas['carousel']['tag'] }}&gt;</span><span>{{ $schemas['carousel']['standards'] }}</span></div>
+        </section>
+      </div>
+
+      {{-- 54. Tree View --}}
+      <div k-show="cat === 'all' || cat === 'navigation'">
+        <section class="pg-demo-card" @state(['view' => 'preview'])>
+          <div class="pg-demo-head">
+            <div>
+              <h3 class="pg-demo-title">{{ $schemas['tree']['name'] }} <x-ui.badge variant="emerald">{{ $schemas['tree']['js_mode'] }}</x-ui.badge></h3>
+              <p class="pg-demo-desc">{{ $schemas['tree']['description'] }}</p>
+            </div>
+            <div class="pg-seg">
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'preview'" k-on:click="set(view, 'preview')">Preview</button>
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'code'" k-on:click="set(view, 'code')">Markup</button>
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'cli'" k-on:click="set(view, 'cli')">CLI</button>
+            </div>
+          </div>
+          <div class="pg-demo-body">
+            <div class="pg-stage" k-show="view === 'preview'">
+              <x-ui.tree label="Kongono App Structure" items="app/bootstrap.php|app/invariants.php|src/Http/OrderController.php|src/Dto/CreateOrderInput.php|views/components/ui/button.kgn.html|views/pages/home.kgn.html|zokeibi.json" />
+            </div>
+            <pre class="z-code" k-show="view === 'code'" hidden>{{ $schemas['tree']['example'] }}</pre>
+            <pre class="z-code" k-show="view === 'cli'" hidden>{{ $schemas['tree']['cli'] }}</pre>
+          </div>
+          <div class="pg-demo-foot"><span>&lt;{{ $schemas['tree']['tag'] }}&gt;</span><span>{{ $schemas['tree']['standards'] }}</span></div>
+        </section>
+      </div>
+
+      {{-- 55. Password Input & Strength --}}
+      <div k-show="cat === 'all' || cat === 'forms'">
+        <section class="pg-demo-card" @state(['view' => 'preview'])>
+          <div class="pg-demo-head">
+            <div>
+              <h3 class="pg-demo-title">{{ $schemas['password-input']['name'] }} <x-ui.badge variant="blue">{{ $schemas['password-input']['js_mode'] }}</x-ui.badge></h3>
+              <p class="pg-demo-desc">{{ $schemas['password-input']['description'] }}</p>
+            </div>
+            <div class="pg-seg">
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'preview'" k-on:click="set(view, 'preview')">Preview</button>
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'code'" k-on:click="set(view, 'code')">Markup</button>
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'cli'" k-on:click="set(view, 'cli')">CLI</button>
+            </div>
+          </div>
+          <div class="pg-demo-body">
+            <div class="pg-stage" k-show="view === 'preview'">
+              <x-ui.password-input name="demo_signup_pw" label="Create Account Password (Live 4-Segment Strength)" strength="true" />
+            </div>
+            <pre class="z-code" k-show="view === 'code'" hidden>{{ $schemas['password-input']['example'] }}</pre>
+            <pre class="z-code" k-show="view === 'cli'" hidden>{{ $schemas['password-input']['cli'] }}</pre>
+          </div>
+          <div class="pg-demo-foot"><span>&lt;{{ $schemas['password-input']['tag'] }}&gt;</span><span>{{ $schemas['password-input']['standards'] }}</span></div>
+        </section>
+      </div>
+
+    </div>
+  </section>
+@endsection

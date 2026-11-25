@@ -1,0 +1,30 @@
+@layer zokeibi.components {
+  .z-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.14rem 0.5rem;
+    border-radius: 999px;
+    font-family: var(--z-mono);
+    font-size: 0.67rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    border: 1px solid var(--z-border-strong);
+    background: var(--z-surface-2);
+    color: var(--z-ink-muted);
+    white-space: nowrap;
+
+    &.z-badge-primary { background: var(--z-accent-soft); border-color: var(--z-accent-border); color: var(--z-accent); }
+    &.z-badge-emerald { background: var(--z-emerald-soft); border-color: var(--z-emerald-border); color: var(--z-emerald); }
+    &.z-badge-amber { background: var(--z-amber-soft); border-color: var(--z-amber-border); color: var(--z-amber); }
+    &.z-badge-crimson { background: var(--z-danger-soft); border-color: var(--z-danger-border); color: var(--z-danger); }
+    &.z-badge-blue { background: var(--z-blue-soft); border-color: var(--z-blue-border); color: var(--z-blue); }
+  }
+
+  .z-badge-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 999px;
+    background: currentColor;
+  }
+}

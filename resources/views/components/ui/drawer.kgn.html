@@ -1,0 +1,18 @@
+@php
+$title = isset($title) && is_string($title) && $title !== '' ? $title : 'Inspector';
+$show = isset($show) && is_string($show) && $show !== '' ? $show : 'drawerOpen';
+$closeExpr = isset($closeExpr) && is_string($closeExpr) && $closeExpr !== '' ? $closeExpr : 'set(' . $show . ', false)';
+$id = isset($id) && is_string($id) && $id !== '' ? $id : 'z-drawer';
+$class = isset($class) && is_string($class) ? trim($class) : '';
+$drawerClass = $class !== '' ? 'z-drawer ' . $class : 'z-drawer';
+$slot = isset($slot) && is_string($slot) ? $slot : '';
+@endphp
+<div class="z-drawer-backdrop" k-show="{{ $show }}" hidden>
+  <aside class="{{ $drawerClass }}" id="{{ $id }}" role="dialog" aria-modal="true" aria-labelledby="{{ $id }}-title">
+    <div class="z-drawer-head">
+      <h3 class="z-drawer-title" id="{{ $id }}-title">{{ $title }}</h3>
+      <button type="button" class="z-btn z-btn-ghost z-btn-sm" k-on:click="{{ $closeExpr }}" aria-label="Close drawer">✕</button>
+    </div>
+    <div class="z-drawer-body">{!! $slot !!}</div>
+  </aside>
+</div>

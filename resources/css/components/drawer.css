@@ -1,0 +1,51 @@
+@layer zokeibi.components {
+  .z-drawer-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 88;
+    background: oklch(0 0 0 / 0.56);
+    backdrop-filter: blur(4px);
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .z-drawer {
+    width: min(410px, 94vw);
+    height: 100%;
+    background: var(--z-surface);
+    border-left: 1px solid var(--z-border-strong);
+    box-shadow: var(--z-shadow);
+    display: flex;
+    flex-direction: column;
+  }
+
+  .z-drawer-head {
+    padding: 0.95rem 1.1rem;
+    border-bottom: 1px solid var(--z-border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+  }
+
+  .z-drawer-title { margin: 0; font-size: 0.96rem; font-weight: 780; }
+
+  .z-drawer-body {
+    padding: 1rem 1.1rem;
+    flex: 1;
+    overflow-y: auto;
+    font-size: 0.82rem;
+    color: var(--z-ink-muted);
+    line-height: 1.55;
+  }
+
+  .z-drawer-foot {
+    padding: 0.8rem 1.1rem;
+    border-top: 1px solid var(--z-border);
+    background: var(--z-surface-2);
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.5rem;
+  }
+}

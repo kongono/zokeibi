@@ -1,0 +1,50 @@
+@layer zokeibi.components {
+  .z-tabs {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .z-tablist {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.24rem;
+    border-radius: var(--z-radius-sm);
+    background: var(--z-surface-2);
+    border: 1px solid var(--z-border);
+    flex-wrap: wrap;
+  }
+
+  .z-tab {
+    appearance: none;
+    border: 1px solid transparent;
+    background: transparent;
+    color: var(--z-ink-muted);
+    font-family: var(--z-sans);
+    font-size: 0.78rem;
+    font-weight: 650;
+    padding: 0.34rem 0.72rem;
+    border-radius: calc(var(--z-radius-sm) - 2px);
+    cursor: pointer;
+    transition: background-color 120ms ease, color 120ms ease, border-color 120ms ease;
+
+    &:hover { color: var(--z-ink); }
+
+    &.is-active,
+    &[aria-selected="true"] {
+      background: var(--z-surface);
+      border-color: var(--z-border-strong);
+      color: var(--z-ink);
+    }
+  }
+
+  .z-tabpanel {
+    border: 1px solid var(--z-border);
+    border-radius: var(--z-radius-sm);
+    background: var(--z-surface);
+    padding: 0.85rem 0.95rem;
+    font-size: 0.81rem;
+    color: var(--z-ink-muted);
+  }
+}

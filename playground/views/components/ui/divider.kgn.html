@@ -1,0 +1,14 @@
+@php
+$orientation = isset($orientation) && is_string($orientation) && in_array($orientation, ['horizontal', 'vertical'], true) ? $orientation : 'horizontal';
+$label = isset($label) && is_string($label) && $label !== '' ? $label : null;
+$class = isset($class) && is_string($class) ? trim($class) : '';
+@endphp
+@if ($orientation === 'vertical')
+<span class="z-divider-vertical {{ $class }}" role="separator" aria-orientation="vertical"></span>
+@else
+<div class="z-divider {{ $label === null ? 'is-plain ' : '' }}{{ $class }}" role="separator" aria-orientation="horizontal">
+@if ($label !== null)
+  <span>{{ $label }}</span>
+@endif
+</div>
+@endif

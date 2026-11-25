@@ -1,0 +1,40 @@
+@php
+$name = isset($name) && is_string($name) ? $name : 'select';
+$id = isset($id) && is_string($id) && $id !== '' ? $id : 'z-select-' . preg_replace('/[^a-zA-Z0-9_-]/', '-', $name);
+$label = isset($label) && is_string($label) && $label !== '' ? $label : null;
+$hint = isset($hint) && is_string($hint) && $hint !== '' ? $hint : null;
+$error = isset($error) && is_string($error) && $error !== '' ? $error : null;
+$required = isset($required) && ($required === true || $required === 'true' || $required === '1');
+$disabled = isset($disabled) && ($disabled === true || $disabled === 'true' || $disabled === '1');
+$kModel = isset($kModel) && is_string($kModel) && $kModel !== '' ? $kModel : null;
+$class = isset($class) && is_string($class) ? trim($class) : '';
+$fieldClass = $class !== '' ? 'z-field ' . $class : 'z-field';
+$slot = isset($slot) && is_string($slot) ? $slot : '';
+@endphp
+<div class="{{ $fieldClass }}">
+@if ($label !== null)
+  <label class="z-label" for="{{ $id }}">{{ $label }}</label>
+@endif
+  <select
+    class="z-select"
+    id="{{ $id }}"
+    name="{{ $name }}"
+@if ($required)
+    required
+@endif
+@if ($disabled)
+    disabled
+@endif
+@if ($kModel !== null)
+    k-model="{{ $kModel }}"
+@endif
+@if ($error !== null)
+    aria-invalid="true"
+@endif
+  >{!! $slot !!}</select>
+@if ($error !== null)
+  <span class="z-field-err">{{ $error }}</span>
+@elseif ($hint !== null)
+  <span class="z-hint">{{ $hint }}</span>
+@endif
+</div>

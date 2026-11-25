@@ -1,0 +1,32 @@
+@layer zokeibi.components {
+  .z-slider {
+    display: grid;
+    gap: 0.36rem;
+  }
+
+  .z-slider-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+  }
+
+  .z-slider-val {
+    font-family: var(--z-mono);
+    font-size: 0.74rem;
+    font-weight: 720;
+    color: var(--z-accent);
+  }
+
+  .z-slider-input {
+    width: 100%;
+    height: 8px;
+    accent-color: var(--z-accent);
+    cursor: pointer;
+
+    &:focus-visible {
+      outline: 2px solid var(--z-accent);
+      outline-offset: 3px;
+    }
+  }
+}

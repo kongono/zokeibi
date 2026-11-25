@@ -1,0 +1,79 @@
+@layer zokeibi.components {
+  .z-radio-group {
+    border: 0;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 0.48rem;
+  }
+
+  .z-radio-list {
+    display: grid;
+    gap: 0.45rem;
+
+    &.is-cards {
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 0.55rem;
+    }
+  }
+
+  .z-radio-opt {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.55rem;
+    cursor: pointer;
+
+    & input[type="radio"] {
+      appearance: none;
+      width: 17px;
+      height: 17px;
+      margin-top: 0.12rem;
+      flex-shrink: 0;
+      border-radius: 999px;
+      border: 1.5px solid var(--z-border-strong);
+      background: var(--z-surface-2);
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+
+      &::after {
+        content: "";
+        width: 7px;
+        height: 7px;
+        border-radius: 999px;
+        background: var(--z-accent-ink);
+        transform: scale(0);
+        transition: transform 110ms ease;
+      }
+
+      &:checked {
+        background: var(--z-accent);
+        border-color: var(--z-accent);
+        &::after { transform: scale(1); }
+      }
+
+      &:focus-visible {
+        outline: 2px solid var(--z-accent);
+        outline-offset: 2px;
+      }
+    }
+  }
+
+  .z-radio-list.is-cards .z-radio-opt {
+    padding: 0.68rem 0.78rem;
+    border-radius: var(--z-radius-sm);
+    border: 1px solid var(--z-border);
+    background: var(--z-surface);
+    transition: border-color 120ms ease, background-color 120ms ease;
+
+    &:hover { border-color: var(--z-border-strong); }
+    &:has(input:checked) {
+      border-color: var(--z-accent);
+      background: var(--z-accent-soft);
+    }
+  }
+
+  .z-radio-body { display: grid; gap: 0.14rem; }
+  .z-radio-title { font-size: 0.82rem; font-weight: 680; color: var(--z-ink); }
+  .z-radio-desc { font-size: 0.73rem; color: var(--z-ink-muted); }
+}

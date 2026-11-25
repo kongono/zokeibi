@@ -1,0 +1,44 @@
+@layer zokeibi.components {
+  .z-card {
+    container-type: inline-size;
+    background: var(--z-surface);
+    border: 1px solid var(--z-border);
+    border-radius: var(--z-radius);
+    overflow: hidden;
+    min-width: 0;
+
+    &.z-card-featured {
+      border-color: var(--z-accent-border);
+      box-shadow: 0 0 0 1px var(--z-accent-soft), var(--z-shadow);
+    }
+  }
+
+  .z-card-head {
+    padding: 0.88rem 1.05rem;
+    border-bottom: 1px solid var(--z-border);
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+  }
+
+  .z-card-kicker {
+    font-family: var(--z-mono);
+    font-size: 0.67rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--z-accent);
+    margin-bottom: 0.18rem;
+  }
+
+  .z-card-title { margin: 0; font-size: 0.94rem; font-weight: 760; letter-spacing: -0.015em; }
+  .z-card-sub { margin: 0.2rem 0 0; font-size: 0.76rem; color: var(--z-ink-muted); }
+  .z-card-body { padding: 1rem 1.05rem; }
+  .z-card-foot { padding: 0.72rem 1.05rem; border-top: 1px solid var(--z-border); background: var(--z-surface-2); font-size: 0.77rem; color: var(--z-ink-muted); }
+
+  @container (max-width: 320px) {
+    .z-card-head, .z-card-body { padding: 0.75rem 0.8rem; }
+  }
+}

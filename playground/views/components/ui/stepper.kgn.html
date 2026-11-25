@@ -1,0 +1,34 @@
+@php
+$stepsRaw = isset($steps) ? $steps : 'Account|Workspace|Launch';
+$current = isset($current) && is_numeric($current) ? max(1, (int) $current) : 1;
+$parsedSteps = [];
+if (is_array($stepsRaw)) {
+    foreach ($stepsRaw as $s) {
+        if (is_string($s) && trim($s) !== '') {
+            $parsedSteps[] = trim($s);
+        }
+    }
+} elseif (is_string($stepsRaw) && trim($stepsRaw) !== '') {
+    foreach (explode('|', $stepsRaw) as $s) {
+        if (trim($s) !== '') {
+            $parsedSteps[] = trim($s);
+        }
+    }
+}
+@endphp
+<nav aria-label="Progress steps">
+  <ol class="z-stepper" role="list">
+    @foreach ($parsedSteps as $idx => $stepLabel)
+      @php
+        $num = $idx + 1;
+        $isDone = $num < $current;
+        $isActive = $num === $current;
+        $stepCls = 'z-step' . ($isDone ? ' is-done' : ($isActive ? ' is-active' : ''));
+      @endphp
+      <li class="{{ $stepCls }}"@if ($isActive) aria-current="step"@endif>
+        <span class="z-step-num" aria-hidden="true">{{ $isDone ? '✓' : (string) $num }}</span>
+        <span>{{ $stepLabel }}</span>
+      </li>
+    @endforeach
+  </ol>
+</nav>

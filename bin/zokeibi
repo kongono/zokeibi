@@ -1,0 +1,451 @@
+#!/usr/bin/env php
+<?php
+
+declare(strict_types=1);
+
+use Zokeibi\Zokeibi;
+
+$autoloadPaths = [
+    dirname(__DIR__) . '/vendor/autoload.php',
+    dirname(__DIR__, 3) . '/autoload.php',
+];
+
+$loaded = false;
+foreach ($autoloadPaths as $path) {
+    if (is_file($path)) {
+        require $path;
+        $loaded = true;
+        break;
+    }
+}
+
+if (!$loaded) {
+    fwrite(STDERR, "Zokeibi CLI error: Composer autoloader not found. Run `composer install`.\n");
+    exit(1);
+}
+
+$args = array_slice($argv, 1);
+$command = $args[0] ?? 'help';
+$rest = array_slice($args, 1);
+
+/**
+ * @param list<string> $argvList
+ * @return array{options: array<string, string|bool>, positionals: list<string>}
+ */
+$parseArgs = static function (array $argvList): array {
+    $options = [];
+    $positionals = [];
+    foreach ($argvList as $token) {
+        if (str_starts_with($token, '--')) {
+            $body = substr($token, 2);
+            $eqPos = strpos($body, '=');
+            if (false !== $eqPos) {
+                $options[substr($body, 0, $eqPos)] = substr($body, $eqPos + 1);
+            } else {
+                $options[$body] = true;
+            }
+        } else {
+            $positionals[] = $token;
+        }
+    }
+
+    return ['options' => $options, 'positionals' => $positionals];
+};
+
+$parsed = $parseArgs($rest);
+$opts = $parsed['options'];
+$pos = $parsed['positionals'];
+$asJson = true === ($opts['json'] ?? false);
+
+$zokeibi = new Zokeibi();
+
+try {
+    switch ($command) {
+        case 'help':
+        case '--help':
+        case '-h':
+            echo "Zokeibi (造形美) v{$zokeibi->version()} — Modern Pure-PHP UI Framework for Kongono\n\n";
+            echo "Commands:\n";
+            echo "  zokeibi list [--category=primitives|forms|data|navigation|overlays] [--json]\n";
+            echo "  zokeibi init [--dir=.] [--theme=sumi|washi|indigo|matcha|kintsugi] [--radius=default|sharp|rounded]\n";
+            echo "  zokeibi add <component...> [--all] [--dir=.] [--force]\n";
+            echo "  zokeibi block list [--json] | zokeibi block add <block...> [--all] [--dir=.] [--force]\n";
+            echo "  zokeibi form <DtoClass> [--file=path.php] [--action=/submit] [--method=POST] [--live-target=#out] [--out=...]\n";
+            echo "  zokeibi table <DtoClass> [--file=path.php] [--items=items] [--base-url=?page=] [--live-target=#tbl] [--out=...]\n";
+            echo "  zokeibi eject [component...] [--all] [--dir=.] [--force]\n";
+            echo "  zokeibi runtime [--dir=.] [--out=public/assets/zokeibi-runtime.js] [--force]\n";
+            echo "  zokeibi build [--views=views] [--out=public/assets/zokeibi.min.css] [--all] [--json]\n";
+            echo "  zokeibi watch [--dir=.] [--views=views] [--out=public/assets/zokeibi.min.css] [--interval=400] [--once]\n";
+            echo "  zokeibi export [--format=css|w3c-tokens|tailwind] [--dir=.] [--out=...]\n";
+            echo "  zokeibi audit [--views=views] [--strict] [--json]\n";
+            echo "  zokeibi prove [--dir=.] [--views=views] [--max-gzip-kb=10.0] [--strict] [--json]\n";
+            echo "  zokeibi schema [component] [--pretty]\n";
+            echo "  zokeibi studio [--dir=.] [--port=8101]  (Launch local Design Token Studio GUI)\n";
+            exit(0);
+
+        case 'list':
+            $category = is_string($opts['category'] ?? null) ? $opts['category'] : null;
+            $items = null !== $category ? $zokeibi->registry->byCategory($category) : $zokeibi->registry->all();
+            if ($asJson) {
+                echo json_encode(
+                    array_values(array_map(static fn ($s): array => $s->toArray(), $items)),
+                    JSON_THROW_ON_ERROR | JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE,
+                ) . "\n";
+                exit(0);
+            }
+            echo sprintf("Zokeibi (造形美) v%s — %d components\n\n", $zokeibi->version(), count($items));
+            foreach ($items as $schema) {
+                echo sprintf(
+                    "  %-13s  %-19s  %-10s  %-8s  %s\n",
+                    $schema->id,
+                    '<' . $schema->tag . '>',
+                    $schema->category,
+                    $schema->jsMode,
+                    $schema->name,
+                );
+            }
+            exit(0);
+
+        case 'init':
+            $dir = is_string($opts['dir'] ?? null) ? $opts['dir'] : (getcwd() ?: '.');
+            $theme = is_string($opts['theme'] ?? null) ? $opts['theme'] : 'sumi';
+            $radius = is_string($opts['radius'] ?? null) ? $opts['radius'] : 'default';
+            $report = $zokeibi->installer->init($dir, $theme, $radius);
+            if ($asJson) {
+                echo json_encode($report->toArray(), JSON_THROW_ON_ERROR | JSON_PRETTY_PRINT) . "\n";
+                exit(0);
+            }
+            echo "Zokeibi (造形美) initialized in {$report->projectDir}\n";
+            echo "  Theme: {$theme} | Radius: {$radius}\n";
+            echo "  Next:  zokeibi add button card modal && zokeibi build\n";
+            exit(0);
+
+        case 'add':
+            $dir = is_string($opts['dir'] ?? null) ? $opts['dir'] : (getcwd() ?: '.');
+            $force = true === ($opts['force'] ?? false);
+            $ids = true === ($opts['all'] ?? false) ? $zokeibi->registry->ids() : $pos;
+            if ([] === $ids) {
+                fwrite(STDERR, "Usage: zokeibi add <component...> [--all] [--dir=.] [--force]\n");
+                exit(1);
+            }
+            $report = $zokeibi->installer->add($dir, $ids, $force);
+            if ($asJson) {
+                echo json_encode($report->toArray(), JSON_THROW_ON_ERROR | JSON_PRETTY_PRINT) . "\n";
+                exit(0);
+            }
+            echo sprintf(
+                "Zokeibi add complete: %d written, %d skipped in %s\n",
+                count($report->written),
+                count($report->skipped),
+                $report->projectDir,
+            );
+            foreach ($report->written as $file) {
+                echo "  + {$file}\n";
+            }
+            exit(0);
+
+        case 'eject':
+            $dir = is_string($opts['dir'] ?? null) ? $opts['dir'] : (getcwd() ?: '.');
+            $force = true === ($opts['force'] ?? false);
+            $ids = (true === ($opts['all'] ?? false) || [] === $pos) ? $zokeibi->registry->ids() : $pos;
+            $report = $zokeibi->installer->ejectCss($dir, $ids, $force);
+            if ($asJson) {
+                echo json_encode($report->toArray(), JSON_THROW_ON_ERROR | JSON_PRETTY_PRINT) . "\n";
+                exit(0);
+            }
+            echo sprintf(
+                "Zokeibi CSS ejected: %d written, %d skipped in %s\n",
+                count($report->written),
+                count($report->skipped),
+                $report->projectDir,
+            );
+            exit(0);
+
+        case 'build':
+            $views = is_string($opts['views'] ?? null) ? $opts['views'] : 'views';
+            $out = is_string($opts['out'] ?? null) ? $opts['out'] : 'public/assets/zokeibi.min.css';
+            $includeAll = true === ($opts['all'] ?? false);
+            $report = $zokeibi->compiler->buildFromDirectory($views, $out, $includeAll);
+            if ($asJson) {
+                echo json_encode($report->toArray(), JSON_THROW_ON_ERROR | JSON_PRETTY_PRINT) . "\n";
+                exit(0);
+            }
+            echo sprintf(
+                "Zokeibi CSS built: %s\n  Scanned:    %d template(s)\n  Components: %d/%d used (%d tree-shaken out)\n  Size:       %s raw -> %s min -> %s gzip (%.1f%% smaller than full bundle)\n",
+                $out,
+                $report->scannedFiles,
+                count($report->usedComponents),
+                $zokeibi->registry->count(),
+                count($report->skippedComponents),
+                number_format($report->rawBytes) . ' B',
+                number_format($report->minifiedBytes) . ' B',
+                number_format($report->gzipBytes) . ' B',
+                $report->treeShakeSavingsPercent,
+            );
+            exit(0);
+
+        case 'audit':
+            $views = is_string($opts['views'] ?? null) ? $opts['views'] : 'views';
+            $strict = true === ($opts['strict'] ?? false);
+            $report = $zokeibi->auditor->auditDirectory($views);
+            if ($asJson) {
+                echo json_encode($report->toArray(), JSON_THROW_ON_ERROR | JSON_PRETTY_PRINT) . "\n";
+            } else {
+                echo sprintf(
+                    "Zokeibi UI Audit — Score: %d/100 (%s)\n  Templates scanned: %d | Errors: %d | Warnings: %d\n",
+                    $report->score,
+                    $report->passed ? 'PASS' : 'FAIL',
+                    $report->scannedFiles,
+                    $report->errorCount,
+                    $report->warningCount,
+                );
+                foreach ($report->findings as $finding) {
+                    echo sprintf(
+                        "\n  [%s] %s (%s:%d)\n    What: %s\n",
+                        strtoupper($finding->severity),
+                        $finding->rule,
+                        $finding->file,
+                        $finding->line,
+                        $finding->message,
+                    );
+                    if ('' !== $finding->why) {
+                        echo sprintf("    Why:  %s\n", $finding->why);
+                    }
+                    if ([] !== $finding->didYouMean) {
+                        echo sprintf("    Did you mean: %s\n", implode(', ', $finding->didYouMean));
+                    }
+                    if ('' !== $finding->hint) {
+                        echo sprintf("    Fix:  %s\n", $finding->hint);
+                    }
+                }
+            }
+            $failed = !$report->passed || ($strict && $report->warningCount > 0);
+            exit($failed ? 1 : 0);
+
+        case 'schema':
+            $pretty = true === ($opts['pretty'] ?? false) || !$asJson;
+            $target = $pos[0] ?? null;
+            if (null !== $target) {
+                $schema = $zokeibi->registry->get($target);
+                echo json_encode(
+                    $schema->toArray(),
+                    JSON_THROW_ON_ERROR | ($pretty ? JSON_PRETTY_PRINT : 0) | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE,
+                ) . "\n";
+                exit(0);
+            }
+            echo $zokeibi->registry->toJson($pretty) . "\n";
+            exit(0);
+
+        case 'runtime':
+            $dir = is_string($opts['dir'] ?? null) ? $opts['dir'] : (getcwd() ?: '.');
+            $out = is_string($opts['out'] ?? null) ? $opts['out'] : null;
+            $force = true === ($opts['force'] ?? false);
+            $report = $zokeibi->installer->installRuntime($dir, $out, $force);
+            if ($asJson) {
+                echo json_encode($report->toArray(), JSON_THROW_ON_ERROR | JSON_PRETTY_PRINT) . "\n";
+                exit(0);
+            }
+            echo sprintf(
+                "Zokeibi vanilla runtime: %d written, %d skipped\n",
+                count($report->written),
+                count($report->skipped),
+            );
+            foreach ($report->written as $file) {
+                echo "  + {$file}\n";
+            }
+            exit(0);
+
+        case 'export':
+            $dir = is_string($opts['dir'] ?? null) ? $opts['dir'] : (getcwd() ?: '.');
+            $format = is_string($opts['format'] ?? null) ? $opts['format'] : 'css';
+            $out = is_string($opts['out'] ?? null) ? $opts['out'] : null;
+            $config = $zokeibi->studio->load($dir);
+            $payload = $zokeibi->exporter->export($config, $format);
+            if (null !== $out && '' !== trim($out)) {
+                $outDir = dirname($out);
+                if (!is_dir($outDir)) {
+                    mkdir($outDir, 0o775, true);
+                }
+                file_put_contents($out, $payload);
+                echo sprintf("Exported Zokeibi tokens (%s) -> %s (%d bytes)\n", $format, $out, strlen($payload));
+                exit(0);
+            }
+            echo $payload;
+            exit(0);
+
+        case 'studio':
+            $projectDir = is_string($opts['dir'] ?? null) ? $opts['dir'] : (getcwd() ?: '.');
+            $resolvedProject = realpath($projectDir) ?: $projectDir;
+            $port = is_string($opts['port'] ?? null) && is_numeric($opts['port']) ? (int) $opts['port'] : 8101;
+            $playgroundDir = dirname(__DIR__) . DIRECTORY_SEPARATOR . 'playground';
+            $kongoBin = dirname(__DIR__) . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR . 'bin' . DIRECTORY_SEPARATOR . 'kongo';
+            if (!is_file($kongoBin)) {
+                $kongoBin = dirname(__DIR__, 3) . DIRECTORY_SEPARATOR . 'bin' . DIRECTORY_SEPARATOR . 'kongo';
+            }
+            if (!is_dir($playgroundDir) || !is_file($kongoBin)) {
+                fwrite(STDERR, "Zokeibi Studio GUI requires `kongono/framework` in dev dependencies (`composer require --dev kongono/framework`).\n");
+                fwrite(STDERR, "All other CLI commands (`build`, `export`, `eject`, `runtime`, `audit`, `schema`) work standalone with zero dependencies.\n");
+                exit(1);
+            }
+            putenv('ZOKEIBI_STUDIO_PROJECT=' . $resolvedProject);
+            echo sprintf("Zokeibi Studio (造形美) — Project: %s\n", $resolvedProject);
+            echo sprintf("Open http://127.0.0.1:%d/studio (Ctrl+C to stop)\n\n", $port);
+            $cmd = sprintf(
+                '%s %s serve --app=%s --port=%d',
+                escapeshellarg(PHP_BINARY),
+                escapeshellarg($kongoBin),
+                escapeshellarg($playgroundDir),
+                $port,
+            );
+            passthru($cmd, $exitCode);
+            exit($exitCode);
+
+        case 'block':
+            $sub = $pos[0] ?? 'list';
+            if ('list' === $sub) {
+                $blocks = $zokeibi->blocks->list();
+                if ($asJson) {
+                    echo json_encode($blocks, JSON_THROW_ON_ERROR | JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) . "\n";
+                    exit(0);
+                }
+                echo sprintf("Zokeibi (造形美) v%s — %d turnkey SaaS blocks\n\n", $zokeibi->version(), count($blocks));
+                foreach ($blocks as $block) {
+                    echo sprintf("  %-18s  %-10s  %s\n", $block['id'], $block['category'], $block['name']);
+                }
+                exit(0);
+            }
+            if ('add' === $sub) {
+                $dir = is_string($opts['dir'] ?? null) ? $opts['dir'] : (getcwd() ?: '.');
+                $force = true === ($opts['force'] ?? false);
+                $ids = true === ($opts['all'] ?? false) ? $zokeibi->blocks->ids() : array_slice($pos, 1);
+                if ([] === $ids) {
+                    fwrite(STDERR, "Usage: zokeibi block add <block...> [--all] [--dir=.] [--force]\n");
+                    exit(1);
+                }
+                $report = $zokeibi->blocks->install($dir, $ids, $zokeibi->installer, $force);
+                if ($asJson) {
+                    echo json_encode($report->toArray(), JSON_THROW_ON_ERROR | JSON_PRETTY_PRINT) . "\n";
+                    exit(0);
+                }
+                echo sprintf("Zokeibi blocks installed: %d written, %d skipped in %s\n", count($report->written), count($report->skipped), $report->projectDir);
+                foreach ($report->written as $file) {
+                    echo "  + {$file}\n";
+                }
+                exit(0);
+            }
+            fwrite(STDERR, "Usage: zokeibi block list [--json] | zokeibi block add <block...> [--all] [--dir=.] [--force]\n");
+            exit(1);
+
+        case 'form':
+        case 'table':
+            $dtoArg = $pos[0] ?? '';
+            $fileOpt = is_string($opts['file'] ?? null) ? $opts['file'] : null;
+            if (null !== $fileOpt && is_file($fileOpt)) {
+                $beforeClasses = get_declared_classes();
+                require_once $fileOpt;
+                if ('' === $dtoArg) {
+                    $newClasses = array_values(array_diff(get_declared_classes(), $beforeClasses));
+                    $dtoArg = $newClasses[count($newClasses) - 1] ?? '';
+                }
+            } elseif ('' !== $dtoArg && is_file($dtoArg)) {
+                $beforeClasses = get_declared_classes();
+                require_once $dtoArg;
+                $newClasses = array_values(array_diff(get_declared_classes(), $beforeClasses));
+                $dtoArg = $newClasses[count($newClasses) - 1] ?? '';
+            }
+            if ('' === $dtoArg || !class_exists($dtoArg)) {
+                fwrite(STDERR, sprintf("Usage: zokeibi %s <DtoClass|path/to/Dto.php> [--file=path.php] [--out=views/...kgn.html]\n", $command));
+                exit(1);
+            }
+
+            if ('form' === $command) {
+                $action = is_string($opts['action'] ?? null) ? $opts['action'] : '/submit';
+                $method = is_string($opts['method'] ?? null) ? $opts['method'] : 'POST';
+                $liveTarget = is_string($opts['live-target'] ?? null) ? $opts['live-target'] : null;
+                $title = is_string($opts['title'] ?? null) ? $opts['title'] : null;
+                $markup = $zokeibi->generator->generateForm($dtoArg, $action, $method, $liveTarget, $title);
+            } else {
+                $itemsVar = is_string($opts['items'] ?? null) ? $opts['items'] : 'items';
+                $caption = is_string($opts['caption'] ?? null) ? $opts['caption'] : null;
+                $baseUrl = is_string($opts['base-url'] ?? null) ? $opts['base-url'] : null;
+                $liveTarget = is_string($opts['live-target'] ?? null) ? $opts['live-target'] : null;
+                $markup = $zokeibi->generator->generateTable($dtoArg, $itemsVar, $caption, $baseUrl, $liveTarget);
+            }
+
+            $out = is_string($opts['out'] ?? null) ? $opts['out'] : null;
+            if (null !== $out && '' !== trim($out)) {
+                $outDir = dirname($out);
+                if (!is_dir($outDir)) {
+                    mkdir($outDir, 0o775, true);
+                }
+                file_put_contents($out, $markup);
+                echo sprintf("Generated Zokeibi %s from %s -> %s (%d bytes)\n", $command, $dtoArg, $out, strlen($markup));
+                exit(0);
+            }
+            echo $markup;
+            exit(0);
+
+        case 'prove':
+            $dir = is_string($opts['dir'] ?? null) ? $opts['dir'] : (getcwd() ?: '.');
+            $views = is_string($opts['views'] ?? null) ? $opts['views'] : null;
+            $maxGzipKb = is_string($opts['max-gzip-kb'] ?? null) && is_numeric($opts['max-gzip-kb'])
+                ? (float) $opts['max-gzip-kb']
+                : 10.0;
+            $strict = true === ($opts['strict'] ?? false);
+            $cert = $zokeibi->prover->prove($dir, $views, $maxGzipKb, $strict);
+            if ($asJson) {
+                echo json_encode($cert, JSON_THROW_ON_ERROR | JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES) . "\n";
+            } else {
+                echo sprintf(
+                    "Zokeibi (造形美) UI Proof Certificate — Grade %s (%d/100 · %s · %.1f ms)\n",
+                    $cert['grade'],
+                    $cert['score'],
+                    $cert['passed'] ? 'PASS' : 'FAIL',
+                    $cert['elapsed_ms'],
+                );
+                $p = $cert['pillars'];
+                echo sprintf(
+                    "  [1] WCAG 2.1 AA Contrast: %s (%d/100 · %d theme(s) checked)\n",
+                    $p['contrast']['passed'] ? 'PASS' : 'FAIL',
+                    $p['contrast']['score'],
+                    $p['contrast']['themes_checked'],
+                );
+                foreach ($p['contrast']['failures'] as $fail) {
+                    echo "      ! {$fail}\n";
+                }
+                echo sprintf(
+                    "  [2] UI Schema & CSP Audit: %s (%d/100 · %d file(s), %d err, %d warn)\n",
+                    $p['audit']['passed'] ? 'PASS' : 'FAIL',
+                    $p['audit']['score'],
+                    $p['audit']['scanned_files'],
+                    $p['audit']['errors'],
+                    $p['audit']['warnings'],
+                );
+                echo sprintf(
+                    "  [3] Gzip CSS Budget:      %s (%d/100 · %.2f KB / %.2f KB max · %d components)\n",
+                    $p['budget']['passed'] ? 'PASS' : 'FAIL',
+                    $p['budget']['score'],
+                    $p['budget']['gzip_kb'],
+                    $p['budget']['max_gzip_kb'],
+                    $p['budget']['components_used'],
+                );
+            }
+            exit($cert['passed'] ? 0 : 1);
+
+        case 'watch':
+            $dir = is_string($opts['dir'] ?? null) ? $opts['dir'] : (getcwd() ?: '.');
+            $views = is_string($opts['views'] ?? null) ? $opts['views'] : ($dir . DIRECTORY_SEPARATOR . 'views');
+            $out = is_string($opts['out'] ?? null) ? $opts['out'] : ($dir . DIRECTORY_SEPARATOR . 'public' . DIRECTORY_SEPARATOR . 'assets' . DIRECTORY_SEPARATOR . 'zokeibi.min.css');
+            $interval = is_string($opts['interval'] ?? null) && is_numeric($opts['interval']) ? (int) $opts['interval'] : 400;
+            $once = true === ($opts['once'] ?? false);
+            $zokeibi->watcher->watch($dir, $views, $out, $interval, $once);
+            exit(0);
+
+        default:
+            fwrite(STDERR, sprintf("Unknown Zokeibi command \"%s\". Run `zokeibi help`.\n", $command));
+            exit(1);
+    }
+} catch (Throwable $e) {
+    fwrite(STDERR, 'Zokeibi error: ' . $e->getMessage() . "\n");
+    exit(1);
+}

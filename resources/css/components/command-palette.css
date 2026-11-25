@@ -1,0 +1,92 @@
+@layer zokeibi.components {
+  .z-cmdk-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 95;
+    background: oklch(0 0 0 / 0.64);
+    backdrop-filter: blur(6px);
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 12vh 1rem 1rem;
+  }
+
+  .z-cmdk {
+    width: 100%;
+    max-width: 560px;
+    background: var(--z-surface);
+    border: 1px solid var(--z-border-strong);
+    border-radius: var(--z-radius);
+    box-shadow: var(--z-shadow);
+    overflow: hidden;
+  }
+
+  .z-cmdk-head {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.78rem 1rem;
+    border-bottom: 1px solid var(--z-border);
+  }
+
+  .z-cmdk-input {
+    width: 100%;
+    border: 0;
+    background: transparent;
+    color: var(--z-ink);
+    font: inherit;
+    font-size: 0.92rem;
+    outline: none;
+  }
+
+  .z-cmdk-list {
+    list-style: none;
+    margin: 0;
+    padding: 0.45rem;
+    max-height: 320px;
+    overflow-y: auto;
+    display: grid;
+    gap: 0.2rem;
+  }
+
+  .z-cmdk-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    padding: 0.56rem 0.72rem;
+    border-radius: var(--z-radius-sm);
+    color: var(--z-ink);
+    text-decoration: none;
+    font-size: 0.84rem;
+    cursor: pointer;
+    border: 1px solid transparent;
+    background: transparent;
+    width: 100%;
+    text-align: left;
+
+    &:hover,
+    &.is-active {
+      background: var(--z-surface-hover);
+      border-color: var(--z-border);
+    }
+  }
+
+  .z-cmdk-empty {
+    padding: 1.25rem;
+    text-align: center;
+    font-size: 0.82rem;
+    color: var(--z-ink-muted);
+  }
+
+  .z-cmdk-foot {
+    padding: 0.55rem 0.9rem;
+    border-top: 1px solid var(--z-border);
+    background: var(--z-surface-2);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 0.73rem;
+    color: var(--z-ink-muted);
+  }
+}

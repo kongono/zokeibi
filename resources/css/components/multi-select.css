@@ -1,0 +1,112 @@
+@layer zokeibi.components {
+  .z-ms {
+    position: relative;
+    display: grid;
+    gap: 0.36rem;
+  }
+
+  .z-ms-box {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.32rem;
+    min-height: 40px;
+    padding: 0.3rem 0.55rem;
+    border-radius: var(--z-radius-sm);
+    border: 1px solid var(--z-border-strong);
+    background: var(--z-surface-2);
+
+    &:focus-within {
+      outline: 2px solid var(--z-accent);
+      outline-offset: 1px;
+      border-color: var(--z-accent);
+    }
+  }
+
+  .z-ms-chips {
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: 0.28rem;
+  }
+
+  .z-ms-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.28rem;
+    padding: 0.16rem 0.45rem;
+    border-radius: 999px;
+    background: var(--z-accent-soft);
+    border: 1px solid var(--z-accent-border);
+    color: var(--z-ink);
+    font-size: 0.72rem;
+    font-weight: 650;
+  }
+
+  .z-ms-chip-rm {
+    border: 0;
+    background: transparent;
+    color: var(--z-ink-muted);
+    cursor: pointer;
+    padding: 0 0.1rem;
+    font-size: 0.78rem;
+    line-height: 1;
+
+    &:hover { color: var(--z-danger); }
+  }
+
+  .z-ms-input {
+    flex: 1 1 110px;
+    min-width: 90px;
+    border: 0;
+    background: transparent;
+    color: var(--z-ink);
+    font: inherit;
+    font-size: 0.82rem;
+    padding: 0.2rem 0.15rem;
+
+    &:focus { outline: none; }
+  }
+
+  .z-ms-list {
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0;
+    right: 0;
+    z-index: 45;
+    list-style: none;
+    margin: 0;
+    padding: 0.32rem;
+    max-height: 220px;
+    overflow-y: auto;
+    background: var(--z-surface);
+    border: 1px solid var(--z-border-strong);
+    border-radius: var(--z-radius-sm);
+    box-shadow: var(--z-shadow);
+    display: grid;
+    gap: 0.14rem;
+  }
+
+  .z-ms-option {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    padding: 0.42rem 0.62rem;
+    border-radius: calc(var(--z-radius-sm) - 2px);
+    font-size: 0.81rem;
+    color: var(--z-ink);
+    cursor: pointer;
+
+    &:hover { background: var(--z-surface-hover); }
+    &[aria-selected="true"] {
+      background: var(--z-accent-soft);
+      font-weight: 680;
+    }
+  }
+
+  .z-ms-check {
+    font-family: var(--z-mono);
+    font-size: 0.72rem;
+    color: var(--z-accent);
+  }
+}

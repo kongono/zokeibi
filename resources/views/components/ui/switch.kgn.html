@@ -1,0 +1,38 @@
+@php
+$name = isset($name) && is_string($name) ? $name : 'toggle';
+$id = isset($id) && is_string($id) && $id !== '' ? $id : 'z-switch-' . preg_replace('/[^a-zA-Z0-9_-]/', '-', $name);
+$label = isset($label) && is_string($label) ? $label : '';
+$value = isset($value) && is_scalar($value) ? (string) $value : '1';
+$checked = isset($checked) && ($checked === true || $checked === 'true' || $checked === '1');
+$disabled = isset($disabled) && ($disabled === true || $disabled === 'true' || $disabled === '1');
+$kModel = isset($kModel) && is_string($kModel) && $kModel !== '' ? $kModel : null;
+$class = isset($class) && is_string($class) ? trim($class) : '';
+$switchClass = $class !== '' ? 'z-switch ' . $class : 'z-switch';
+$slot = isset($slot) && is_string($slot) ? $slot : '';
+@endphp
+<label class="{{ $switchClass }}" for="{{ $id }}">
+  <input
+    type="checkbox"
+    role="switch"
+    id="{{ $id }}"
+    name="{{ $name }}"
+    value="{{ $value }}"
+@if ($checked)
+    checked
+@endif
+@if ($disabled)
+    disabled
+@endif
+@if ($kModel !== null)
+    k-model="{{ $kModel }}"
+@endif
+  >
+  <span class="z-switch-track" aria-hidden="true"><span class="z-switch-thumb"></span></span>
+  <span>
+@if ($label !== '')
+    {{ $label }}
+@else
+    {!! $slot !!}
+@endif
+  </span>
+</label>

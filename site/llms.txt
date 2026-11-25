@@ -1,0 +1,43 @@
+# Zokeibi (造形美 — Architectural Beauty of Form) v1.0.0
+
+> Standalone, zero-npm, strict-CSP, AI-native UI component framework, pure PHP 8.5 OKLCH CSS compiler, pure-SVG charting engine, DTO-to-UI generator, executable UI proof gate, and local Design Token & Theme Studio GUI for Kongono (and any HTML/HTMX/Twig/Blade/React/Vue/Svelte stack).
+
+- Website: https://zokeibi.com/
+- GitHub: https://github.com/anthonyiovanna/zokeibi
+- Companion Framework: https://kongono.com/
+- Composer Package: `kongono/zokeibi` (zero runtime Composer dependencies; `php >= 8.5.13` only; MIT license)
+- Full-Catalog Bundle Size: `9.40 KB` gzipped for all 55 components combined (`~2.4 KB` tree-shaken for a landing page)
+- CSS/JS Prefixes: `.z-*` classes, `--z-*` OKLCH tokens, `data-z-*` runtime hooks, `data-zokeibi-theme` / `data-zokeibi-radius`
+
+## Quick Start
+
+```bash
+composer require kongono/zokeibi
+php vendor/bin/zokeibi init --theme=sumi
+php vendor/bin/zokeibi add button card dropdown checkbox input-group password-input chart editor tree
+php vendor/bin/zokeibi block add saas-shell analytics-dashboard api-keys-audit
+php vendor/bin/zokeibi build --views=views --out=public/assets/zokeibi.min.css
+php vendor/bin/zokeibi runtime --out=public/assets/zokeibi-runtime.js
+php vendor/bin/zokeibi prove --dir=. --views=views --strict
+php vendor/bin/zokeibi studio --dir=. --port=8101
+```
+
+## Complete Catalog (55 Components + 8 SaaS Blocks)
+
+- **Primitives (12):** `button`, `badge`, `card`, `alert`, `kbd`, `avatar`, `copy-field`, `spinner`, `divider`, `code-block`, `banner`, `avatar-group`
+- **Forms (19):** `input`, `select`, `textarea`, `switch`, `checkbox`, `radio-group`, `combobox`, `multi-select`, `tag-input`, `dropzone`, `datepicker`, `date-range`, `slider`, `otp-input`, `editor`, `rating`, `input-group`, `number-input`, `password-input`
+- **Data (9):** `progress`, `skeleton`, `empty-state`, `kpi`, `table`, `chart`, `timeline`, `description-list`, `carousel`
+- **Navigation (8):** `tabs`, `accordion`, `stepper`, `pagination`, `breadcrumb`, `segmented`, `sidebar`, `tree`
+- **Overlays (7):** `popover`, `tooltip`, `modal`, `drawer`, `toast`, `command-palette`, `dropdown`
+- **Full-Page SaaS Blocks (8):** `saas-shell`, `auth-login`, `settings-billing`, `pricing-grid`, `empty-onboarding`, `error-page`, `analytics-dashboard`, `api-keys-audit`
+
+## Themes & Radius Presets
+
+- Themes (`data-zokeibi-theme`): `sumi` (default dark), `washi` (warm light), `indigo`, `matcha`, `kintsugi`
+- Radius presets (`data-zokeibi-radius`): `sharp` (`4px`), `default` (`12px`), `rounded` (`18px`)
+
+## Kongono MCP & Proof Gate
+
+- Kongono MCP tool: `kongono_zokeibi_registry` (exposes `zokeibi.json`, installed `<x-ui.*>` components, full prop schemas/enums, and SaaS blocks)
+- Proof gate: `php vendor/bin/zokeibi prove --strict` certifies WCAG 2.1 AA contrast across active + custom themes, static ARIA/schema/CSP audit, and gzipped CSS KB budget.
+- Token exports: `php vendor/bin/zokeibi export --format=w3c-tokens|tailwind`

@@ -1,0 +1,42 @@
+@php
+$name = isset($name) && is_string($name) && $name !== '' ? $name : 'content';
+$id = isset($id) && is_string($id) && $id !== '' ? $id : 'k-ed-' . preg_replace('/[^a-zA-Z0-9_-]/', '', $name);
+$label = isset($label) && is_string($label) && $label !== '' ? $label : null;
+$slotText = isset($slot) && is_string($slot) ? trim($slot) : '';
+$value = isset($value) && is_string($value) && $value !== '' ? $value : $slotText;
+$placeholder = isset($placeholder) && is_string($placeholder) && $placeholder !== '' ? $placeholder : 'Write Markdown with **bold**, `code`, > quotes, or - lists...';
+$rows = isset($rows) && is_numeric($rows) ? max(3, min(24, (int) $rows)) : 6;
+$class = isset($class) && is_string($class) ? trim($class) : '';
+$wrapClass = $class !== '' ? 'z-editor ' . $class : 'z-editor';
+@endphp
+<div class="{{ $wrapClass }}" data-z-editor="true">
+@if ($label !== null)
+  <label class="z-label" for="{{ $id }}">{{ $label }}</label>
+@endif
+  <div class="z-editor-shell">
+    <div class="z-editor-bar">
+      <div class="z-editor-tools" role="toolbar" aria-label="Markdown formatting">
+        <button type="button" class="z-editor-btn" data-z-ed-cmd="bold" aria-label="Bold">B</button>
+        <button type="button" class="z-editor-btn" data-z-ed-cmd="italic" aria-label="Italic">I</button>
+        <button type="button" class="z-editor-btn" data-z-ed-cmd="code" aria-label="Inline code">&lt;/&gt;</button>
+        <button type="button" class="z-editor-btn" data-z-ed-cmd="heading" aria-label="Heading">H3</button>
+        <button type="button" class="z-editor-btn" data-z-ed-cmd="quote" aria-label="Quote">“</button>
+        <button type="button" class="z-editor-btn" data-z-ed-cmd="list" aria-label="Bullet list">• List</button>
+        <button type="button" class="z-editor-btn" data-z-ed-cmd="link" aria-label="Insert link">Link</button>
+      </div>
+      <div class="z-editor-modes" role="tablist" aria-label="Editor view mode">
+        <button type="button" class="z-editor-btn is-active" data-z-ed-mode="write">Write</button>
+        <button type="button" class="z-editor-btn" data-z-ed-mode="split">Split</button>
+        <button type="button" class="z-editor-btn" data-z-ed-mode="preview">Preview</button>
+      </div>
+    </div>
+    <div class="z-editor-panes" data-z-ed-panes>
+      <textarea id="{{ $id }}" name="{{ $name }}" rows="{{ $rows }}" class="z-editor-input" placeholder="{{ $placeholder }}" data-z-ed-input>{{ $value }}</textarea>
+      <div class="z-editor-preview" data-z-ed-preview hidden></div>
+    </div>
+    <div class="z-editor-foot">
+      <span>Markdown · Safe DOM Preview</span>
+      <span data-z-ed-count aria-live="polite">0 words · 0 chars</span>
+    </div>
+  </div>
+</div>

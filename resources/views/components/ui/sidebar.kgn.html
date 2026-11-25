@@ -1,0 +1,42 @@
+@php
+$label = isset($label) && is_string($label) && $label !== '' ? $label : 'Sidebar navigation';
+$active = isset($active) && is_string($active) ? trim($active) : '';
+$groups = [];
+if (isset($items) && is_string($items) && trim($items) !== '') {
+    $currentGroup = 'Navigation';
+    foreach (explode('|', $items) as $seg) {
+        $seg = trim($seg);
+        if ($seg === '') {
+            continue;
+        }
+        if (str_starts_with($seg, '#')) {
+            $currentGroup = trim(substr($seg, 1));
+            continue;
+        }
+        $parts = explode(':', $seg, 3);
+        $lbl = trim($parts[0]);
+        $href = isset($parts[1]) && trim($parts[1]) !== '' ? trim($parts[1]) : '#';
+        $badge = isset($parts[2]) ? trim($parts[2]) : '';
+        if ($lbl !== '') {
+            $groups[$currentGroup][] = ['label' => $lbl, 'href' => $href, 'badge' => $badge];
+        }
+    }
+}
+$class = isset($class) && is_string($class) ? trim($class) : '';
+$navClass = $class !== '' ? 'z-sidebar ' . $class : 'z-sidebar';
+@endphp
+<nav class="{{ $navClass }}" aria-label="{{ $label }}">
+@foreach ($groups as $heading => $links)
+  <div class="z-sidebar-group">
+    <div class="z-sidebar-heading">{{ $heading }}</div>
+@foreach ($links as $link)
+    <a class="z-sidebar-link" href="{{ $link['href'] }}" @if ($active !== '' && ($link['href'] === $active || strtolower($link['label']) === strtolower($active))) aria-current="page" @endif>
+      <span>{{ $link['label'] }}</span>
+@if ($link['badge'] !== '')
+      <span class="z-sidebar-count">{{ $link['badge'] }}</span>
+@endif
+    </a>
+@endforeach
+  </div>
+@endforeach
+</nav>

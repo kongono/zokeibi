@@ -1,0 +1,6 @@
+@php
+$class = isset($class) && is_string($class) ? trim($class) : '';
+$kbdClass = $class !== '' ? 'z-kbd ' . $class : 'z-kbd';
+$slot = isset($slot) && is_string($slot) ? $slot : '';
+@endphp
+<kbd class="{{ $kbdClass }}">{!! $slot !!}</kbd>

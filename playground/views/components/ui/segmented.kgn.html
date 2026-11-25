@@ -1,0 +1,32 @@
+@php
+$name = isset($name) && is_string($name) && $name !== '' ? $name : 'segment';
+$selected = isset($value) && is_string($value) ? $value : '';
+$ariaLabel = isset($label) && is_string($label) && $label !== '' ? $label : 'Options';
+$opts = [];
+if (isset($options) && is_array($options)) {
+    foreach ($options as $k => $v) {
+        $opts[(string) $k] = (string) $v;
+    }
+} elseif (isset($options) && is_string($options) && trim($options) !== '') {
+    foreach (explode('|', $options) as $seg) {
+        $parts = explode(':', $seg, 2);
+        $k = trim($parts[0]);
+        if ($k !== '') {
+            $opts[$k] = trim($parts[1] ?? $k);
+        }
+    }
+}
+if ($selected === '' && $opts !== []) {
+    $selected = (string) array_key_first($opts);
+}
+$class = isset($class) && is_string($class) ? trim($class) : '';
+$wrapClass = $class !== '' ? 'z-segmented ' . $class : 'z-segmented';
+@endphp
+<div class="{{ $wrapClass }}" role="radiogroup" aria-label="{{ $ariaLabel }}">
+@foreach ($opts as $optVal => $optLbl)
+  <label class="z-seg-item">
+    <input type="radio" name="{{ $name }}" value="{{ $optVal }}" @if ($optVal === $selected) checked @endif>
+    <span>{{ $optLbl }}</span>
+  </label>
+@endforeach
+</div>

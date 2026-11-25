@@ -1,0 +1,26 @@
+@php
+$label = isset($label) && is_string($label) && $label !== '' ? $label : null;
+$value = isset($value) && is_numeric($value) ? (float) $value : 0.0;
+$max = isset($max) && is_numeric($max) && (float) $max > 0 ? (float) $max : 100.0;
+$clamped = max(0.0, min($max, $value));
+$pct = (int) round(($clamped / $max) * 100);
+$variant = isset($variant) && is_string($variant) ? $variant : 'default';
+$showValue = !isset($showValue) || ($showValue !== false && $showValue !== 'false' && $showValue !== '0');
+$class = isset($class) && is_string($class) ? trim($class) : '';
+$wrapClass = $class !== '' ? 'z-progress ' . $class : 'z-progress';
+$barClass = 'z-progress-native';
+if (in_array($variant, ['emerald', 'amber', 'danger'], true)) {
+    $barClass .= ' is-' . $variant;
+}
+@endphp
+<div class="{{ $wrapClass }}">
+@if ($label !== null || $showValue)
+  <div class="z-progress-head">
+    <span class="z-muted">{{ $label ?? 'Progress' }}</span>
+@if ($showValue)
+    <span class="z-mono">{{ $pct }}%</span>
+@endif
+  </div>
+@endif
+  <progress class="{{ $barClass }}" value="{{ $clamped }}" max="{{ $max }}" aria-label="{{ $label ?? 'Progress' }}">{{ $pct }}%</progress>
+</div>

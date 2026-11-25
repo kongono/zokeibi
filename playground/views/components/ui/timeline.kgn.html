@@ -1,0 +1,47 @@
+@php
+$rows = [];
+if (isset($items) && is_array($items)) {
+    foreach ($items as $item) {
+        if (is_array($item) && isset($item['title'])) {
+            $rows[] = [
+                'title' => (string) $item['title'],
+                'time' => isset($item['time']) ? (string) $item['time'] : '',
+                'meta' => isset($item['meta']) ? (string) $item['meta'] : '',
+                'variant' => isset($item['variant']) && in_array($item['variant'], ['accent', 'emerald', 'amber', 'danger', 'blue'], true) ? $item['variant'] : 'accent',
+            ];
+        }
+    }
+} elseif (isset($items) && is_string($items) && trim($items) !== '') {
+    foreach (explode(';;', $items) as $seg) {
+        $parts = explode('|', trim($seg));
+        $title = trim($parts[0] ?? '');
+        if ($title !== '') {
+            $variant = trim($parts[3] ?? 'accent');
+            $rows[] = [
+                'title' => $title,
+                'time' => trim($parts[1] ?? ''),
+                'meta' => trim($parts[2] ?? ''),
+                'variant' => in_array($variant, ['accent', 'emerald', 'amber', 'danger', 'blue'], true) ? $variant : 'accent',
+            ];
+        }
+    }
+}
+$class = isset($class) && is_string($class) ? trim($class) : '';
+$listClass = $class !== '' ? 'z-timeline ' . $class : 'z-timeline';
+@endphp
+<ol class="{{ $listClass }}">
+@foreach ($rows as $row)
+  <li class="z-timeline-item">
+    <span class="z-timeline-dot is-{{ $row['variant'] }}" aria-hidden="true"></span>
+    <div class="z-timeline-head">
+      <span class="z-timeline-title">{{ $row['title'] }}</span>
+@if ($row['time'] !== '')
+      <time class="z-timeline-time">{{ $row['time'] }}</time>
+@endif
+    </div>
+@if ($row['meta'] !== '')
+    <p class="z-timeline-meta">{{ $row['meta'] }}</p>
+@endif
+  </li>
+@endforeach
+</ol>

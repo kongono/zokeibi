@@ -1,0 +1,45 @@
+@layer zokeibi.components {
+  .z-carousel {
+    display: grid;
+    gap: 0.5rem;
+  }
+
+  .z-carousel-track {
+    display: flex;
+    gap: 0.75rem;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    padding-bottom: 0.35rem;
+  }
+
+  .z-carousel-slide {
+    flex: 0 0 82%;
+    min-width: 220px;
+    scroll-snap-align: start;
+    padding: 0.9rem 1rem;
+    border-radius: var(--z-radius);
+    border: 1px solid var(--z-border);
+    background: var(--z-surface);
+    display: grid;
+    gap: 0.32rem;
+  }
+
+  .z-carousel-title {
+    font-size: 0.86rem;
+    font-weight: 760;
+    color: var(--z-ink);
+  }
+
+  .z-carousel-body {
+    margin: 0;
+    font-size: 0.78rem;
+    color: var(--z-ink-muted);
+  }
+
+  .z-carousel-hint {
+    font-family: var(--z-mono);
+    font-size: 0.68rem;
+    color: var(--z-ink-soft);
+  }
+}

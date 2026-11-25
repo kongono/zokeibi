@@ -1,0 +1,34 @@
+@php
+$name = isset($name) && is_string($name) && $name !== '' ? $name : 'code';
+$label = isset($label) && is_string($label) && $label !== '' ? $label : null;
+$length = isset($length) && is_numeric($length) ? max(4, min(8, (int) $length)) : 6;
+$hint = isset($hint) && is_string($hint) && $hint !== '' ? $hint : null;
+$value = isset($value) && is_string($value) ? preg_replace('/[^0-9]/', '', $value) ?? '' : '';
+$indices = range(0, $length - 1);
+$class = isset($class) && is_string($class) ? trim($class) : '';
+$wrapClass = $class !== '' ? 'z-otp ' . $class : 'z-otp';
+@endphp
+<div class="{{ $wrapClass }}" data-z-otp="true" data-otp-length="{{ $length }}">
+@if ($label !== null)
+  <span class="z-label">{{ $label }}</span>
+@endif
+  <input type="hidden" name="{{ $name }}" value="{{ $value }}" data-z-otp-value>
+  <div class="z-otp-group" role="group" aria-label="{{ $label ?? 'One-time verification code' }}">
+@foreach ($indices as $i)
+    <input
+      type="text"
+      inputmode="numeric"
+      pattern="[0-9]*"
+      maxlength="1"
+      class="z-otp-digit"
+      value="{{ $value[$i] ?? '' }}"
+      autocomplete="{{ $i === 0 ? 'one-time-code' : 'off' }}"
+      aria-label="Digit {{ $i + 1 }} of {{ $length }}"
+      data-z-otp-digit="{{ $i }}"
+    >
+@endforeach
+  </div>
+@if ($hint !== null)
+  <span class="z-hint">{{ $hint }}</span>
+@endif
+</div>

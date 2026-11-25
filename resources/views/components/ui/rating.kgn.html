@@ -1,0 +1,22 @@
+@php
+$name = isset($name) && is_string($name) && $name !== '' ? $name : 'rating';
+$label = isset($label) && is_string($label) && $label !== '' ? $label : null;
+$max = isset($max) && is_numeric($max) ? max(3, min(10, (int) $max)) : 5;
+$value = isset($value) && is_numeric($value) ? max(0, min($max, (int) $value)) : 0;
+$stars = range($max, 1);
+$class = isset($class) && is_string($class) ? trim($class) : '';
+$wrapClass = $class !== '' ? 'z-rating ' . $class : 'z-rating';
+@endphp
+<fieldset class="{{ $wrapClass }}">
+@if ($label !== null)
+  <legend class="z-label">{{ $label }}</legend>
+@endif
+  <div class="z-rating-stars">
+@foreach ($stars as $s)
+    <label class="z-rating-star" aria-label="{{ $s }} of {{ $max }} stars">
+      <input type="radio" name="{{ $name }}" value="{{ $s }}" @if ($s === $value) checked @endif>
+      <span aria-hidden="true">★</span>
+    </label>
+@endforeach
+  </div>
+</fieldset>

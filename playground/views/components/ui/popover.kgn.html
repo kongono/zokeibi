@@ -1,0 +1,30 @@
+@php
+$id = isset($id) && is_string($id) && $id !== '' ? $id : 'z-popover-default';
+$trigger = isset($trigger) && is_string($trigger) && $trigger !== '' ? $trigger : 'Open Menu';
+$triggerVariant = isset($triggerVariant) && is_string($triggerVariant) ? $triggerVariant : 'outline';
+$triggerSize = isset($triggerSize) && is_string($triggerSize) ? $triggerSize : 'sm';
+$title = isset($title) && is_string($title) && $title !== '' ? $title : null;
+$class = isset($class) && is_string($class) ? trim($class) : '';
+$btnClasses = ['z-btn'];
+if (in_array($triggerVariant, ['primary', 'emerald', 'danger', 'ghost', 'outline'], true)) {
+    $btnClasses[] = 'z-btn-' . $triggerVariant;
+}
+if (in_array($triggerSize, ['sm', 'lg'], true)) {
+    $btnClasses[] = 'z-btn-' . $triggerSize;
+}
+$btnClass = implode(' ', $btnClasses);
+$popClass = $class !== '' ? 'z-popover ' . $class : 'z-popover';
+$slot = isset($slot) && is_string($slot) ? $slot : '';
+@endphp
+<span class="z-popover-wrap">
+  <button type="button" class="{{ $btnClass }}" popovertarget="{{ $id }}">{{ $trigger }}</button>
+  <div id="{{ $id }}" popover="auto" class="{{ $popClass }}">
+@if ($title !== null)
+    <div class="z-popover-head">
+      <h4 class="z-popover-title">{{ $title }}</h4>
+      <button type="button" class="z-btn z-btn-ghost z-btn-sm" popovertarget="{{ $id }}" popovertargetaction="hide" aria-label="Close popover">✕</button>
+    </div>
+@endif
+    <div class="z-popover-body">{!! $slot !!}</div>
+  </div>
+</span>

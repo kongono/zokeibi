@@ -1,0 +1,45 @@
+@php
+$rawTabs = $tabs ?? 'overview:Overview|code:Code';
+$parsedTabs = [];
+if (is_array($rawTabs)) {
+    foreach ($rawTabs as $item) {
+        if (is_array($item) && isset($item['id'], $item['label']) && is_string($item['id']) && is_string($item['label'])) {
+            $parsedTabs[] = ['id' => $item['id'], 'label' => $item['label']];
+        }
+    }
+} elseif (is_string($rawTabs)) {
+    foreach (explode('|', $rawTabs) as $chunk) {
+        $chunk = trim($chunk);
+        if ($chunk === '') {
+            continue;
+        }
+        $parts = explode(':', $chunk, 2);
+        $tid = trim($parts[0]);
+        $tlabel = isset($parts[1]) ? trim($parts[1]) : ucfirst($tid);
+        if ($tid !== '') {
+            $parsedTabs[] = ['id' => $tid, 'label' => $tlabel];
+        }
+    }
+}
+$defaultTab = isset($default) && is_string($default) && $default !== ''
+    ? $default
+    : ($parsedTabs[0]['id'] ?? 'overview');
+$class = isset($class) && is_string($class) ? trim($class) : '';
+$wrapClass = $class !== '' ? 'z-tabs ' . $class : 'z-tabs';
+$slot = isset($slot) && is_string($slot) ? $slot : '';
+@endphp
+<div class="{{ $wrapClass }}" @state(['tab' => $defaultTab])>
+  <div class="z-tablist" role="tablist">
+@foreach ($parsedTabs as $item)
+    <button
+      type="button"
+      role="tab"
+      class="z-tab"
+      k-class:is-active="tab === '{{ $item['id'] }}'"
+      k-attr:aria-selected="tab === '{{ $item['id'] }}'"
+      k-on:click="set(tab, '{{ $item['id'] }}')"
+    >{{ $item['label'] }}</button>
+@endforeach
+  </div>
+  {!! $slot !!}
+</div>

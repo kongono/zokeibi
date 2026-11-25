@@ -1,0 +1,32 @@
+@php
+$label = isset($label) && is_string($label) && $label !== '' ? $label : 'Highlights';
+$slides = [];
+if (isset($items) && is_string($items) && trim($items) !== '') {
+    foreach (explode(';;', $items) as $seg) {
+        $parts = explode('|', trim($seg), 2);
+        $title = trim($parts[0]);
+        if ($title !== '') {
+            $slides[] = ['title' => $title, 'body' => trim($parts[1] ?? '')];
+        }
+    }
+}
+$slot = isset($slot) && is_string($slot) ? trim($slot) : '';
+$class = isset($class) && is_string($class) ? trim($class) : '';
+$wrapClass = $class !== '' ? 'z-carousel ' . $class : 'z-carousel';
+@endphp
+<section class="{{ $wrapClass }}" aria-roledescription="carousel" aria-label="{{ $label }}">
+  <div class="z-carousel-track" tabindex="0">
+@foreach ($slides as $slide)
+    <article class="z-carousel-slide" aria-roledescription="slide">
+      <div class="z-carousel-title">{{ $slide['title'] }}</div>
+@if ($slide['body'] !== '')
+      <p class="z-carousel-body">{{ $slide['body'] }}</p>
+@endif
+    </article>
+@endforeach
+@if ($slot !== '')
+    {!! $slot !!}
+@endif
+  </div>
+  <span class="z-carousel-hint">Scroll or swipe horizontally — 0 B JS CSS scroll-snap</span>
+</section>

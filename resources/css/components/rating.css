@@ -1,0 +1,47 @@
+@layer zokeibi.components {
+  .z-rating {
+    border: 0;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 0.34rem;
+  }
+
+  .z-rating-stars {
+    display: inline-flex;
+    flex-direction: row-reverse;
+    justify-content: flex-end;
+    gap: 0.16rem;
+  }
+
+  .z-rating-star {
+    position: relative;
+    font-size: 1.35rem;
+    line-height: 1;
+    color: var(--z-border-strong);
+    cursor: pointer;
+    transition: color 100ms ease, transform 100ms ease;
+
+    & input[type="radio"] {
+      position: absolute;
+      opacity: 0;
+      width: 1px;
+      height: 1px;
+      margin: 0;
+    }
+
+    &:hover,
+    &:hover ~ .z-rating-star,
+    &:has(input:checked),
+    &:has(input:checked) ~ .z-rating-star {
+      color: var(--z-amber);
+    }
+
+    &:hover { transform: scale(1.1); }
+
+    &:has(input:focus-visible) {
+      outline: 2px solid var(--z-accent);
+      border-radius: 4px;
+    }
+  }
+}

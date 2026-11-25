@@ -1,0 +1,21 @@
+@layer zokeibi.components {
+  .z-alert {
+    padding: 0.78rem 0.95rem;
+    border-radius: var(--z-radius-sm);
+    border: 1px solid var(--z-border-strong);
+    background: var(--z-surface-2);
+    color: var(--z-ink);
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 0.75rem;
+    font-size: 0.82rem;
+
+    &.z-alert-info { background: var(--z-blue-soft); border-color: var(--z-blue-border); color: var(--z-blue); }
+    &.z-alert-success { background: var(--z-emerald-soft); border-color: var(--z-emerald-border); color: var(--z-emerald); }
+    &.z-alert-warning { background: var(--z-amber-soft); border-color: var(--z-amber-border); color: var(--z-amber); }
+    &.z-alert-danger { background: var(--z-danger-soft); border-color: var(--z-danger-border); color: var(--z-danger); }
+  }
+
+  .z-alert-title { font-weight: 750; margin-bottom: 0.15rem; }
+}

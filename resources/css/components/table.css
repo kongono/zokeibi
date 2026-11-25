@@ -1,0 +1,111 @@
+@layer zokeibi.components {
+  .z-table-wrap {
+    container-type: inline-size;
+    width: 100%;
+    overflow-x: auto;
+    border: 1px solid var(--z-border);
+    border-radius: var(--z-radius);
+    background: var(--z-surface);
+  }
+
+  .z-table-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.65rem;
+    flex-wrap: wrap;
+    padding: 0.58rem 0.85rem;
+    border-bottom: 1px solid var(--z-border);
+    background: var(--z-surface-2);
+  }
+
+  .z-table-search {
+    min-width: 200px;
+    max-width: 300px;
+    flex: 1 1 200px;
+    padding: 0.38rem 0.68rem;
+    border-radius: var(--z-radius-sm);
+    border: 1px solid var(--z-border-strong);
+    background: var(--z-surface);
+    color: var(--z-ink);
+    font: inherit;
+    font-size: 0.78rem;
+
+    &:focus {
+      outline: 2px solid var(--z-accent);
+      outline-offset: 1px;
+      border-color: var(--z-accent);
+    }
+  }
+
+  .z-table-count {
+    font-family: var(--z-mono);
+    font-size: 0.7rem;
+    color: var(--z-ink-soft);
+  }
+
+  .z-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.81rem;
+
+    & th {
+      text-align: left;
+      padding: 0.62rem 0.85rem;
+      font-family: var(--z-mono);
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--z-ink-soft);
+      background: var(--z-surface-2);
+      border-bottom: 1px solid var(--z-border);
+      white-space: nowrap;
+    }
+
+    & th[data-z-sort] {
+      cursor: pointer;
+      user-select: none;
+      transition: color 120ms ease, background-color 120ms ease;
+
+      &:hover,
+      &:focus-visible {
+        color: var(--z-ink);
+        background: var(--z-surface-hover);
+      }
+
+      &::after {
+        content: " ↕";
+        opacity: 0.45;
+        font-size: 0.72em;
+      }
+
+      &[aria-sort="ascending"] {
+        color: var(--z-accent);
+        &::after { content: " ↑"; opacity: 1; }
+      }
+
+      &[aria-sort="descending"] {
+        color: var(--z-accent);
+        &::after { content: " ↓"; opacity: 1; }
+      }
+    }
+
+    & td {
+      padding: 0.66rem 0.85rem;
+      border-bottom: 1px solid var(--z-border);
+      color: var(--z-ink);
+      vertical-align: middle;
+    }
+
+    & tbody tr:last-child td { border-bottom: none; }
+
+    & tbody tr:hover td {
+      background: color-mix(in oklch, var(--z-surface-2) 60%, transparent);
+    }
+  }
+
+  @container (max-width: 520px) {
+    .z-table th, .z-table td { padding: 0.5rem 0.62rem; font-size: 0.76rem; }
+  }
+}

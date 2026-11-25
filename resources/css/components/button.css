@@ -1,0 +1,86 @@
+@layer zokeibi.components {
+  .z-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.42rem;
+    padding: 0.48rem 0.9rem;
+    border-radius: var(--z-radius-sm);
+    border: 1px solid var(--z-border-strong);
+    background: var(--z-surface-2);
+    color: var(--z-ink);
+    font-family: var(--z-sans);
+    font-size: 0.81rem;
+    font-weight: 650;
+    line-height: 1.25;
+    text-decoration: none;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background-color 120ms ease, border-color 120ms ease, transform 80ms ease;
+
+    &:hover:not(:disabled) {
+      background: var(--z-surface-hover);
+      border-color: var(--z-ink-soft);
+    }
+
+    &:active:not(:disabled) {
+      transform: translateY(1px);
+    }
+
+    &:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+    }
+
+    &.z-btn-sm { padding: 0.32rem 0.64rem; font-size: 0.74rem; }
+    &.z-btn-lg { padding: 0.68rem 1.22rem; font-size: 0.9rem; }
+
+    &.z-btn-primary {
+      background: linear-gradient(135deg, var(--z-accent), var(--z-accent-strong));
+      border-color: var(--z-accent-border);
+      color: var(--z-accent-ink);
+
+      &:hover:not(:disabled) {
+        background: var(--z-accent);
+        border-color: var(--z-accent);
+      }
+    }
+
+    &.z-btn-emerald {
+      background: var(--z-emerald-soft);
+      border-color: var(--z-emerald-border);
+      color: var(--z-emerald);
+
+      &:hover:not(:disabled) {
+        background: color-mix(in oklch, var(--z-emerald) 24%, transparent);
+      }
+    }
+
+    &.z-btn-danger {
+      background: var(--z-danger-soft);
+      border-color: var(--z-danger-border);
+      color: var(--z-danger);
+
+      &:hover:not(:disabled) {
+        background: color-mix(in oklch, var(--z-danger) 24%, transparent);
+      }
+    }
+
+    &.z-btn-ghost {
+      background: transparent;
+      border-color: transparent;
+      color: var(--z-ink-muted);
+
+      &:hover:not(:disabled) {
+        background: var(--z-surface-2);
+        color: var(--z-ink);
+      }
+    }
+
+    &.z-btn-outline {
+      background: transparent;
+      border-color: var(--z-border-strong);
+      color: var(--z-ink);
+    }
+  }
+}

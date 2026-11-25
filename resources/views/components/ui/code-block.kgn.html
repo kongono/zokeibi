@@ -1,0 +1,23 @@
+@php
+$filename = isset($filename) && is_string($filename) && $filename !== '' ? $filename : null;
+$language = isset($language) && is_string($language) && $language !== '' ? $language : 'php';
+$slotText = isset($slot) && is_string($slot) ? trim($slot) : '';
+$code = isset($code) && is_string($code) && $code !== '' ? $code : $slotText;
+$class = isset($class) && is_string($class) ? trim($class) : '';
+$wrapClass = $class !== '' ? 'z-codeblock ' . $class : 'z-codeblock';
+@endphp
+<div class="{{ $wrapClass }}" data-z-copy="true" data-copy-value="{{ $code }}">
+  <div class="z-codeblock-head">
+    <span class="z-row">
+@if ($filename !== null)
+      <strong>{{ $filename }}</strong>
+@endif
+      <span class="z-badge">{{ $language }}</span>
+    </span>
+    <span class="z-row">
+      <span class="z-copy-status" data-z-copy-status aria-live="polite"></span>
+      <button type="button" class="z-btn z-btn-outline z-btn-sm" data-z-copy-btn>Copy</button>
+    </span>
+  </div>
+  <pre class="z-codeblock-pre"><code>{{ $code }}</code></pre>
+</div>

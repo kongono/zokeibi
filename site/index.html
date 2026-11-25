@@ -1,0 +1,650 @@
+<!doctype html>
+<html lang="en" data-zokeibi-theme="sumi" data-zokeibi-radius="default">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Zokeibi (造形美) v1.0.0 — Zero-npm, Strict-CSP UI Framework &amp; Pure PHP 8.5 OKLCH Compiler</title>
+  <meta name="description" content="Zokeibi (造形美 — Architectural Beauty of Form): 55 accessible UI components, 8 turnkey SaaS blocks, pure PHP 8.5 OKLCH CSS tree-shaker (9.40 KB gzip), pure-SVG charts (0 B JS), DTO-to-UI generator, Design Token Studio, and zokeibi prove Grade A+ readiness gate.">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Zokeibi (造形美) — Zero-npm, Strict-CSP UI Framework for PHP 8.5+">
+  <meta property="og:description" content="55 accessible components + 8 SaaS blocks in 9.40 KB gzip. Zero npm, strict CSP (style-src 'self'), pure PHP OKLCH compiler, pure-SVG charts, and Grade A+ automated WCAG/CSP proofs.">
+  <meta property="og:url" content="https://zokeibi.com/">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Zokeibi (造形美) — Zero-npm, Strict-CSP UI Framework">
+  <meta name="twitter:description" content="55 accessible components + 8 SaaS blocks in 9.40 KB gzip. Pure PHP 8.5 OKLCH compiler, 0 B JS SVG charts, and zokeibi prove Grade A+ gate.">
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+  <link rel="stylesheet" href="assets/zokeibi.min.css">
+  <link rel="stylesheet" href="assets/site.css">
+  <link rel="alternate" type="text/markdown" title="Zokeibi LLM Documentation Index" href="llms.txt">
+</head>
+<body>
+  <header class="zs-topbar">
+    <div class="zs-topbar-inner">
+      <a class="zs-brand" href="#top">
+        <img src="assets/favicon.svg" width="26" height="26" alt="Zokeibi mark">
+        <span>Zokeibi</span>
+        <span class="zs-brand-kanji">造形美</span>
+        <span class="z-badge">v1.0.0</span>
+      </a>
+      <nav class="zs-nav" aria-label="Primary">
+        <a href="#live-demo">Live Demo</a>
+        <a href="#catalog">55 Components</a>
+        <a href="#quickstart">CLI &amp; Proof</a>
+        <a href="#stacks">Any Stack</a>
+        <a href="https://kongono.com" target="_blank" rel="noopener">Kongono &rarr;</a>
+        <a href="https://github.com/anthonyiovanna/zokeibi" target="_blank" rel="noopener">GitHub</a>
+        <a href="llms.txt">llms.txt</a>
+        <div class="z-cmdk-wrap" data-z-cmdk-root="site-cmdk">
+          <button type="button" class="z-btn z-btn-outline z-btn-sm" data-z-open="#site-cmdk" aria-haspopup="dialog" aria-controls="site-cmdk">
+            <span>Jump</span>
+            <kbd class="z-kbd">⌘K</kbd>
+          </button>
+          <div class="z-cmdk-backdrop" id="site-cmdk" data-z-cmdk="true" hidden>
+            <div class="z-cmdk" role="dialog" aria-modal="true" aria-label="Quick navigation">
+              <div class="z-cmdk-head">
+                <input type="search" class="z-cmdk-input" data-z-cmdk-input placeholder="Jump to section or external docs..." aria-label="Search commands" autocomplete="off">
+                <button type="button" class="z-btn z-btn-ghost z-btn-sm" data-z-close="#site-cmdk" aria-label="Close command palette">Esc</button>
+              </div>
+              <ul class="z-cmdk-list" role="listbox" data-z-cmdk-list>
+                <li role="option" aria-selected="true" data-z-cmdk-item="live demo interactive showcase components">
+                  <a class="z-cmdk-item is-active" href="#live-demo" data-z-close="#site-cmdk"><span>Live Interactive Showcase</span><kbd class="z-kbd">Demo</kbd></a>
+                </li>
+                <li role="option" aria-selected="false" data-z-cmdk-item="55 components catalog saas blocks">
+                  <a class="z-cmdk-item" href="#catalog" data-z-close="#site-cmdk"><span>Browse All 55 Components &amp; 8 Blocks</span><kbd class="z-kbd">Catalog</kbd></a>
+                </li>
+                <li role="option" aria-selected="false" data-z-cmdk-item="quickstart cli prove studio install">
+                  <a class="z-cmdk-item" href="#quickstart" data-z-close="#site-cmdk"><span>CLI Quick Start &amp; zokeibi prove</span><kbd class="z-kbd">CLI</kbd></a>
+                </li>
+                <li role="option" aria-selected="false" data-z-cmdk-item="bring your own stack react vue svelte twig blade tailwind w3c tokens">
+                  <a class="z-cmdk-item" href="#stacks" data-z-close="#site-cmdk"><span>Any Stack &amp; W3C / Tailwind Exports</span><kbd class="z-kbd">Export</kbd></a>
+                </li>
+                <li role="option" aria-selected="false" data-z-cmdk-item="kongono php framework home">
+                  <a class="z-cmdk-item" href="https://kongono.com" target="_blank" rel="noopener"><span>Kongono PHP 8.5 Framework</span><kbd class="z-kbd">kongono.com</kbd></a>
+                </li>
+                <li role="option" aria-selected="false" data-z-cmdk-item="llms txt ai agent mcp registry">
+                  <a class="z-cmdk-item" href="llms.txt"><span>LLM Documentation Index (llms.txt)</span><kbd class="z-kbd">AI</kbd></a>
+                </li>
+              </ul>
+              <div class="z-cmdk-empty" data-z-cmdk-empty hidden>No matching commands.</div>
+              <div class="z-cmdk-foot">
+                <span>↑↓ Navigate · ↵ Open</span>
+                <span>Esc Close</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <main id="top">
+    <section class="zs-hero">
+      <div class="zs-container">
+        <div class="zs-kicker">造形美 · Architectural Beauty of Form · PHP 8.5+ · 0 npm · 9.40 KB Gzip · MIT</div>
+        <h1>Zero-npm, Strict-CSP UI <span class="zs-hero-accent">Proven on Every Build</span></h1>
+        <p class="zs-lead">
+          <strong>Zokeibi</strong> (<code>kongono/zokeibi</code>) is a standalone UI component framework and pure PHP 8.5 OKLCH CSS tree-shaker with <strong>zero runtime Composer dependencies</strong> and <strong>zero Node.js</strong>. Ship 55 accessible components, 8 turnkey SaaS blocks, pure-SVG charts, DTO-to-UI generators, a local Design Token Studio, and automated Grade A+ WCAG &amp; CSP proofs — on <strong>Kongono</strong> or any HTML stack.
+        </p>
+
+        <div class="zs-install">
+          <span class="zs-install-prompt">$</span>
+          <code>composer require kongono/zokeibi</code>
+          <button type="button" class="z-btn z-btn-outline z-btn-sm" data-copy-cmd="composer require kongono/zokeibi">Copy</button>
+        </div>
+
+        <div class="zs-cta-row">
+          <a class="z-btn z-btn-primary" href="#live-demo">Try Live Components &rarr;</a>
+          <a class="z-btn z-btn-outline" href="#catalog">View All 55 Components</a>
+          <a class="z-btn z-btn-ghost" href="https://kongono.com" target="_blank" rel="noopener">Built for Kongono &rarr;</a>
+        </div>
+
+        <div class="zs-stats">
+          <div class="zs-stat"><div class="zs-stat-num">0</div><div class="zs-stat-lbl">npm or Runtime Composer Deps</div></div>
+          <div class="zs-stat"><div class="zs-stat-num">55 + 8</div><div class="zs-stat-lbl">Components &amp; SaaS Blocks (MIT)</div></div>
+          <div class="zs-stat"><div class="zs-stat-num">9.40 KB</div><div class="zs-stat-lbl">Full 55-Component Gzip Bundle</div></div>
+          <div class="zs-stat"><div class="zs-stat-num">Grade A+</div><div class="zs-stat-lbl">zokeibi prove --strict (100/100)</div></div>
+          <div class="zs-stat"><div class="zs-stat-num">Strict CSP</div><div class="zs-stat-lbl">script-src 'self' · style-src 'self'</div></div>
+        </div>
+
+        <div class="zs-theme-bar" role="region" aria-label="Live OKLCH theme and radius controls">
+          <div class="zs-theme-group">
+            <span class="zs-theme-label">OKLCH Theme</span>
+            <button type="button" class="zs-pill is-active" data-set-theme="sumi" aria-pressed="true">Sumi</button>
+            <button type="button" class="zs-pill" data-set-theme="washi" aria-pressed="false">Washi Light</button>
+            <button type="button" class="zs-pill" data-set-theme="indigo" aria-pressed="false">Indigo</button>
+            <button type="button" class="zs-pill" data-set-theme="matcha" aria-pressed="false">Matcha</button>
+            <button type="button" class="zs-pill" data-set-theme="kintsugi" aria-pressed="false">Kintsugi</button>
+          </div>
+          <div class="zs-theme-group">
+            <span class="zs-theme-label">Radius</span>
+            <button type="button" class="zs-pill" data-set-radius="sharp" aria-pressed="false">Sharp</button>
+            <button type="button" class="zs-pill is-active" data-set-radius="default" aria-pressed="true">Default</button>
+            <button type="button" class="zs-pill" data-set-radius="rounded" aria-pressed="false">Rounded</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="zs-section" id="live-demo">
+      <div class="zs-container">
+        <div class="zs-section-head">
+          <h2>Live Interactive Showcase — Powered by Zokeibi Itself</h2>
+          <p>This page is styled with Zokeibi's own compiled <code>zokeibi.min.css</code> and <code>zokeibi-runtime.js</code> under strict <code>style-src 'self'</code> CSP. Click the theme pills above or interact with every component below.</p>
+        </div>
+
+        <div class="zs-demo-grid">
+          <!-- 1. Primitives & Native 0 B JS Popover Menu -->
+          <article class="z-card">
+            <div class="z-card-head">
+              <div>
+                <div class="z-card-kicker">0 B JS · Top-Layer Popover API</div>
+                <h3 class="z-card-title">Buttons, Badges &amp; Native Dropdown</h3>
+              </div>
+              <span class="z-dropdown">
+                <button type="button" class="z-btn z-btn-outline z-btn-sm" popovertarget="demo-menu" aria-haspopup="menu">Actions ▾</button>
+                <div id="demo-menu" class="z-dropdown-panel" popover="auto" role="menu">
+                  <ul class="z-dropdown-list">
+                    <li role="none"><a class="z-dropdown-item" role="menuitem" href="#quickstart"><span>Install via Composer</span><kbd class="z-kbd">I</kbd></a></li>
+                    <li role="none"><a class="z-dropdown-item" role="menuitem" href="#catalog"><span>Browse 55 Components</span><kbd class="z-kbd">C</kbd></a></li>
+                    <li class="z-dropdown-sep" role="separator"></li>
+                    <li role="none"><a class="z-dropdown-item" role="menuitem" href="https://kongono.com" target="_blank" rel="noopener"><span>Open Kongono</span><kbd class="z-kbd">↗</kbd></a></li>
+                  </ul>
+                </div>
+              </span>
+            </div>
+            <div class="z-card-body z-stack">
+              <div class="z-row">
+                <button type="button" class="z-btn z-btn-primary">Primary</button>
+                <button type="button" class="z-btn z-btn-outline">Outline</button>
+                <button type="button" class="z-btn z-btn-emerald">Verified</button>
+                <button type="button" class="z-btn z-btn-ghost">Ghost</button>
+                <button type="button" class="z-btn z-btn-outline z-btn-sm" data-z-open="#demo-modal">Open Modal</button>
+              </div>
+              <div class="z-row">
+                <span class="z-badge z-badge-primary">OKLCH Tokens</span>
+                <span class="z-badge z-badge-emerald">Grade A+</span>
+                <span class="z-badge z-badge-blue">Strict CSP</span>
+                <span class="z-badge z-badge-amber">9.40 KB Gzip</span>
+              </div>
+              <div class="z-alert z-alert-success" role="status">
+                <div class="z-alert-title">Zero Inline Styles or Eval</div>
+                <div>Every transition and focus ring runs on native CSS <code>@layer zokeibi.*</code>, <code>color-mix(in oklch, ...)</code>, and Top-Layer <code>[popover]</code>.</div>
+              </div>
+            </div>
+          </article>
+
+          <!-- 2. Password Strength Meter & Number Stepper -->
+          <article class="z-card">
+            <div class="z-card-head">
+              <div>
+                <div class="z-card-kicker">Forms · Strict-CSP Controls</div>
+                <h3 class="z-card-title">Password Meter &amp; Number Stepper</h3>
+              </div>
+              <span class="z-badge">Interactive</span>
+            </div>
+            <div class="z-card-body z-stack">
+              <div class="z-pw" data-z-password="true" data-strength="0">
+                <label class="z-label" for="demo-pw">Workspace Passphrase (try typing)</label>
+                <div class="z-pw-row">
+                  <input id="demo-pw" type="password" class="z-pw-input" placeholder="Try: Zokeibi-2026!OKLCH" autocomplete="new-password" data-z-pw-input>
+                  <button type="button" class="z-btn z-btn-ghost z-btn-sm" data-z-pw-toggle aria-label="Toggle password visibility">Show</button>
+                </div>
+                <div class="z-pw-meter" aria-hidden="true">
+                  <span class="z-pw-bar"></span>
+                  <span class="z-pw-bar"></span>
+                  <span class="z-pw-bar"></span>
+                  <span class="z-pw-bar"></span>
+                </div>
+                <div class="z-pw-meta">
+                  <span>Strength</span>
+                  <span data-z-pw-label aria-live="polite">Enter password</span>
+                </div>
+              </div>
+
+              <div class="z-grid-2">
+                <div class="z-num" data-z-number="true">
+                  <label class="z-label" for="demo-workers">Worker Replicas</label>
+                  <div class="z-num-row">
+                    <button type="button" class="z-num-btn" data-z-num-dec aria-label="Decrease value">−</button>
+                    <input id="demo-workers" type="number" class="z-num-input" min="1" max="64" step="1" value="4" data-z-num-input>
+                    <button type="button" class="z-num-btn" data-z-num-inc aria-label="Increase value">+</button>
+                  </div>
+                </div>
+                <div class="z-field">
+                  <label class="z-label" for="demo-domain">Custom Domain</label>
+                  <div class="z-input-group-row">
+                    <span class="z-input-addon">https://</span>
+                    <input id="demo-domain" type="text" class="z-input-group-field" value="zokeibi.com" aria-label="Domain name">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <!-- 3. Pure-SVG Charts (0 B JS) -->
+          <article class="z-card">
+            <div class="z-card-head">
+              <div>
+                <div class="z-card-kicker">0 B JS · Pure Server-Rendered SVG</div>
+                <h3 class="z-card-title">Pure-SVG Bar &amp; Donut Charts</h3>
+              </div>
+              <span class="z-badge z-badge-emerald">0 B JS</span>
+            </div>
+            <div class="z-card-body z-stack">
+              <figure class="z-chart">
+                <figcaption class="z-chart-head">
+                  <span class="z-chart-title">Tree-Shaken CSS Size by App (KB Gzip)</span>
+                  <span class="z-chart-meta">Pure PHP 8.5</span>
+                </figcaption>
+                <svg class="z-chart-svg" viewBox="0 0 360 152" role="img" aria-label="Tree-shaken CSS size bar chart">
+                  <line class="z-chart-grid" x1="16" y1="74" x2="344" y2="74" />
+                  <line class="z-chart-grid" x1="16" y1="128" x2="344" y2="128" />
+                  <rect class="z-chart-bar" x="29.8" y="100.4" width="38.0" height="27.6"><title>Landing: 2.4 KB</title></rect>
+                  <text class="z-chart-val" x="48.8" y="95.4" text-anchor="middle">2.4</text>
+                  <text class="z-chart-label" x="48.8" y="144" text-anchor="middle">Landing</text>
+                  <rect class="z-chart-bar" x="95.4" y="84.3" width="38.0" height="43.7"><title>Auth: 3.8 KB</title></rect>
+                  <text class="z-chart-val" x="114.4" y="79.3" text-anchor="middle">3.8</text>
+                  <text class="z-chart-label" x="114.4" y="144" text-anchor="middle">Auth</text>
+                  <rect class="z-chart-bar" x="161.0" y="69.4" width="38.0" height="58.6"><title>CRUD: 5.1 KB</title></rect>
+                  <text class="z-chart-val" x="180.0" y="64.4" text-anchor="middle">5.1</text>
+                  <text class="z-chart-label" x="180.0" y="144" text-anchor="middle">CRUD</text>
+                  <rect class="z-chart-bar" x="226.6" y="45.2" width="38.0" height="82.8"><title>SaaS: 7.2 KB</title></rect>
+                  <text class="z-chart-val" x="245.6" y="40.2" text-anchor="middle">7.2</text>
+                  <text class="z-chart-label" x="245.6" y="144" text-anchor="middle">SaaS</text>
+                  <rect class="z-chart-bar" x="292.2" y="20.0" width="38.0" height="108.0"><title>All 55: 9.4 KB</title></rect>
+                  <text class="z-chart-val" x="311.2" y="15.0" text-anchor="middle">9.4</text>
+                  <text class="z-chart-label" x="311.2" y="144" text-anchor="middle">All 55</text>
+                </svg>
+              </figure>
+              <figure class="z-chart">
+                <figcaption class="z-chart-head">
+                  <span class="z-chart-title">55 Components by Category</span>
+                  <span class="z-chart-meta">100% MIT</span>
+                </figcaption>
+                <div class="z-chart-donut-wrap">
+                  <svg class="z-chart-donut" viewBox="0 0 120 120" role="img" aria-label="Component breakdown donut chart">
+                    <circle class="z-chart-track" cx="60" cy="60" r="46" />
+                    <circle class="z-chart-seg z-chart-tone-0" cx="60" cy="60" r="46" stroke-dasharray="99.85 289.03" stroke-dashoffset="0.00" transform="rotate(-90 60 60)"><title>Forms: 19 (35%)</title></circle>
+                    <circle class="z-chart-seg z-chart-tone-1" cx="60" cy="60" r="46" stroke-dasharray="63.06 289.03" stroke-dashoffset="-99.85" transform="rotate(-90 60 60)"><title>Primitives: 12 (22%)</title></circle>
+                    <circle class="z-chart-seg z-chart-tone-2" cx="60" cy="60" r="46" stroke-dasharray="47.30 289.03" stroke-dashoffset="-162.91" transform="rotate(-90 60 60)"><title>Data: 9 (16%)</title></circle>
+                    <circle class="z-chart-seg z-chart-tone-3" cx="60" cy="60" r="46" stroke-dasharray="42.04 289.03" stroke-dashoffset="-210.21" transform="rotate(-90 60 60)"><title>Navigation: 8 (15%)</title></circle>
+                    <circle class="z-chart-seg z-chart-tone-4" cx="60" cy="60" r="46" stroke-dasharray="36.79 289.03" stroke-dashoffset="-252.25" transform="rotate(-90 60 60)"><title>Overlays: 7 (13%)</title></circle>
+                    <text class="z-chart-center" x="60" y="65" text-anchor="middle">55</text>
+                  </svg>
+                  <ul class="z-chart-legend">
+                    <li><span><span class="z-chart-swatch z-chart-tone-0" aria-hidden="true"></span>Forms</span><span class="z-mono">19</span></li>
+                    <li><span><span class="z-chart-swatch z-chart-tone-1" aria-hidden="true"></span>Primitives</span><span class="z-mono">12</span></li>
+                    <li><span><span class="z-chart-swatch z-chart-tone-2" aria-hidden="true"></span>Data</span><span class="z-mono">9</span></li>
+                    <li><span><span class="z-chart-swatch z-chart-tone-3" aria-hidden="true"></span>Navigation</span><span class="z-mono">8</span></li>
+                    <li><span><span class="z-chart-swatch z-chart-tone-4" aria-hidden="true"></span>Overlays</span><span class="z-mono">7</span></li>
+                  </ul>
+                </div>
+              </figure>
+            </div>
+          </article>
+
+          <!-- 4. Multi-Select Combobox & Native Tree View -->
+          <article class="z-card">
+            <div class="z-card-head">
+              <div>
+                <div class="z-card-kicker">Interactive Combobox + 0 B JS Tree</div>
+                <h3 class="z-card-title">Multi-Select Tags &amp; File Tree</h3>
+              </div>
+              <span class="z-badge z-badge-blue">ARIA</span>
+            </div>
+            <div class="z-card-body z-stack">
+              <div class="z-ms" data-z-multiselect="true" data-ms-name="capabilities">
+                <label class="z-label" for="demo-ms-input">Select Stack Targets (click to search)</label>
+                <div data-z-ms-hidden>
+                  <input type="hidden" name="capabilities[]" value="kongono">
+                  <input type="hidden" name="capabilities[]" value="strict-csp">
+                </div>
+                <div class="z-ms-box" data-z-ms-box>
+                  <div class="z-ms-chips" data-z-ms-chips>
+                    <span class="z-ms-chip" data-ms-chip="kongono"><span>Kongono Live 2.5</span><button type="button" class="z-ms-chip-rm" data-z-ms-remove="kongono" aria-label="Remove Kongono Live 2.5">×</button></span>
+                    <span class="z-ms-chip" data-ms-chip="strict-csp"><span>Strict CSP</span><button type="button" class="z-ms-chip-rm" data-z-ms-remove="strict-csp" aria-label="Remove Strict CSP">×</button></span>
+                  </div>
+                  <input id="demo-ms-input" type="text" class="z-ms-input" placeholder="Add target..." autocomplete="off" role="combobox" aria-expanded="false" aria-autocomplete="list" aria-controls="demo-ms-list" data-z-ms-input>
+                </div>
+                <ul id="demo-ms-list" class="z-ms-list" role="listbox" aria-multiselectable="true" data-z-ms-list hidden>
+                  <li class="z-ms-option" role="option" data-z-ms-option data-value="kongono" data-label="Kongono Live 2.5" aria-selected="true"><span>Kongono Live 2.5</span><span class="z-ms-check" aria-hidden="true">✓</span></li>
+                  <li class="z-ms-option" role="option" data-z-ms-option data-value="strict-csp" data-label="Strict CSP" aria-selected="true"><span>Strict CSP</span><span class="z-ms-check" aria-hidden="true">✓</span></li>
+                  <li class="z-ms-option" role="option" data-z-ms-option data-value="htmx" data-label="HTMX / Plain HTML" aria-selected="false"><span>HTMX / Plain HTML</span><span class="z-ms-check" aria-hidden="true"></span></li>
+                  <li class="z-ms-option" role="option" data-z-ms-option data-value="twig" data-label="Twig / Blade" aria-selected="false"><span>Twig / Blade</span><span class="z-ms-check" aria-hidden="true"></span></li>
+                  <li class="z-ms-option" role="option" data-z-ms-option data-value="react" data-label="React / Vue / Svelte" aria-selected="false"><span>React / Vue / Svelte</span><span class="z-ms-check" aria-hidden="true"></span></li>
+                </ul>
+              </div>
+
+              <div class="z-tree" role="tree" aria-label="Zokeibi project layout">
+                <ul class="z-tree-list" role="group">
+                  <li role="treeitem">
+                    <details class="z-tree-dir" open>
+                      <summary>views/</summary>
+                      <ul class="z-tree-list" role="group">
+                        <li role="treeitem">
+                          <details class="z-tree-dir" open>
+                            <summary>components/ui/</summary>
+                            <ul class="z-tree-list" role="group">
+                              <li class="z-tree-file" role="treeitem">button.kgn.html</li>
+                              <li class="z-tree-file" role="treeitem">chart.kgn.html</li>
+                              <li class="z-tree-file" role="treeitem">editor.kgn.html</li>
+                              <li class="z-tree-file" role="treeitem">password-input.kgn.html</li>
+                            </ul>
+                          </details>
+                        </li>
+                        <li class="z-tree-file" role="treeitem">dashboard.kgn.html</li>
+                      </ul>
+                    </details>
+                  </li>
+                  <li class="z-tree-file" role="treeitem">zokeibi.json</li>
+                </ul>
+              </div>
+            </div>
+          </article>
+
+          <!-- 5. XSS-Safe Split Markdown Editor (Full Width) -->
+          <article class="z-card zs-span-2">
+            <div class="z-card-head">
+              <div>
+                <div class="z-card-kicker">Zero innerHTML · Safe DOM Tree Preview</div>
+                <h3 class="z-card-title">XSS-Safe Markdown Editor (Try Write / Split / Preview)</h3>
+              </div>
+              <span class="z-badge z-badge-emerald">0 XSS Sinks</span>
+            </div>
+            <div class="z-card-body">
+              <div class="z-editor" data-z-editor="true">
+                <div class="z-editor-shell">
+                  <div class="z-editor-bar">
+                    <div class="z-editor-tools" role="toolbar" aria-label="Markdown formatting">
+                      <button type="button" class="z-editor-btn" data-z-ed-cmd="bold" aria-label="Bold">B</button>
+                      <button type="button" class="z-editor-btn" data-z-ed-cmd="italic" aria-label="Italic">I</button>
+                      <button type="button" class="z-editor-btn" data-z-ed-cmd="code" aria-label="Inline code">&lt;/&gt;</button>
+                      <button type="button" class="z-editor-btn" data-z-ed-cmd="heading" aria-label="Heading">H3</button>
+                      <button type="button" class="z-editor-btn" data-z-ed-cmd="quote" aria-label="Quote">“</button>
+                      <button type="button" class="z-editor-btn" data-z-ed-cmd="list" aria-label="Bullet list">• List</button>
+                      <button type="button" class="z-editor-btn" data-z-ed-cmd="link" aria-label="Insert link">Link</button>
+                    </div>
+                    <div class="z-editor-modes" role="tablist" aria-label="Editor view mode">
+                      <button type="button" class="z-editor-btn" data-z-ed-mode="write">Write</button>
+                      <button type="button" class="z-editor-btn is-active" data-z-ed-mode="split">Split</button>
+                      <button type="button" class="z-editor-btn" data-z-ed-mode="preview">Preview</button>
+                    </div>
+                  </div>
+                  <div class="z-editor-panes is-split" data-z-ed-panes>
+                    <textarea id="demo-editor" name="notes" rows="6" class="z-editor-input" aria-label="Markdown release notes" data-z-ed-input>### Zokeibi v1.0.0 (造形美)
+Ship **55 accessible components** in `9.40 KB` gzipped with *zero npm*.
+
+> Built for strict CSP: zero `eval()`, zero `innerHTML`, zero inline styles.
+
+- Run `php vendor/bin/zokeibi prove --strict` for Grade A+ contrast &amp; audit proofs.
+- Pair with [Kongono PHP 8.5](https://kongono.com) or drop `.z-*` classes into any stack.</textarea>
+                    <div class="z-editor-preview" data-z-ed-preview></div>
+                  </div>
+                  <div class="z-editor-foot">
+                    <span>Markdown · Safe DOM Preview</span>
+                    <span data-z-ed-count aria-live="polite">0 words · 0 chars</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <!-- 6. Sortable & Filterable Data Table (Full Width) -->
+          <article class="z-card zs-span-2">
+            <div class="z-card-head">
+              <div>
+                <div class="z-card-kicker">Click Any Header to Sort · Type to Filter</div>
+                <h3 class="z-card-title">Sortable &amp; Searchable Data Table</h3>
+              </div>
+              <span class="z-badge">DTO-Generated</span>
+            </div>
+            <div class="z-card-body">
+              <div class="z-table-wrap" data-z-table="true" data-z-table-sortable="true">
+                <div class="z-table-toolbar">
+                  <input type="search" class="z-table-search" data-z-table-search placeholder="Filter components, categories, or sizes..." aria-label="Filter components table">
+                  <span class="z-table-count" data-z-table-count aria-live="polite"></span>
+                </div>
+                <table class="z-table">
+                  <caption class="z-sr-only">Sample Zokeibi component benchmarks</caption>
+                  <thead>
+                    <tr>
+                      <th data-z-sort="string" tabindex="0" aria-sort="none">Component</th>
+                      <th data-z-sort="string" tabindex="0" aria-sort="none">Category</th>
+                      <th data-z-sort="string" tabindex="0" aria-sort="none">JS Requirement</th>
+                      <th data-z-sort="auto" tabindex="0" aria-sort="none">Proof Score</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr><td><code>&lt;x-ui.chart&gt;</code></td><td>Data (Bar, Donut, Sparkline)</td><td><span class="z-badge z-badge-emerald">0 B JS</span></td><td>100</td></tr>
+                    <tr><td><code>&lt;x-ui.dropdown&gt;</code></td><td>Overlays (Top-Layer Popover)</td><td><span class="z-badge z-badge-emerald">0 B JS</span></td><td>100</td></tr>
+                    <tr><td><code>&lt;x-ui.tree&gt;</code></td><td>Navigation (Native &lt;details&gt;)</td><td><span class="z-badge z-badge-emerald">0 B JS</span></td><td>100</td></tr>
+                    <tr><td><code>&lt;x-ui.accordion&gt;</code></td><td>Navigation (Exclusive &lt;details&gt;)</td><td><span class="z-badge z-badge-emerald">0 B JS</span></td><td>100</td></tr>
+                    <tr><td><code>&lt;x-ui.editor&gt;</code></td><td>Forms (XSS-Safe Split Markdown)</td><td><span class="z-badge z-badge-blue">Runtime</span></td><td>100</td></tr>
+                    <tr><td><code>&lt;x-ui.date-range&gt;</code></td><td>Forms (Interactive Range Calendar)</td><td><span class="z-badge z-badge-blue">Runtime</span></td><td>100</td></tr>
+                    <tr><td><code>&lt;x-ui.command-palette&gt;</code></td><td>Overlays (Cmd+K Launcher)</td><td><span class="z-badge z-badge-blue">Runtime</span></td><td>100</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="zs-section" id="catalog">
+      <div class="zs-container">
+        <div class="zs-section-head">
+          <h2>Complete Catalog: 55 Components + 8 Turnkey SaaS Blocks</h2>
+          <p>Install only what you use (<code>zokeibi add ...</code>) or everything at once (<code>zokeibi add --all</code>). Every component is 100% MIT licensed and copied directly into your codebase with zero black-box vendor lock-in.</p>
+        </div>
+
+        <div class="zs-catalog-filters" role="group" aria-label="Filter component catalog by category">
+          <button type="button" class="zs-pill is-active" data-catalog-filter="all" aria-pressed="true">All (63)</button>
+          <button type="button" class="zs-pill" data-catalog-filter="primitives" aria-pressed="false">Primitives (12)</button>
+          <button type="button" class="zs-pill" data-catalog-filter="forms" aria-pressed="false">Forms (19)</button>
+          <button type="button" class="zs-pill" data-catalog-filter="data" aria-pressed="false">Data (9)</button>
+          <button type="button" class="zs-pill" data-catalog-filter="navigation" aria-pressed="false">Navigation (8)</button>
+          <button type="button" class="zs-pill" data-catalog-filter="overlays" aria-pressed="false">Overlays (7)</button>
+          <button type="button" class="zs-pill" data-catalog-filter="blocks" aria-pressed="false">SaaS Blocks (8)</button>
+        </div>
+
+        <div class="zs-catalog-grid">
+          <!-- Primitives (12) -->
+          <div class="zs-comp-card" data-catalog-item="primitives"><div class="zs-comp-top"><span class="zs-comp-tag">button</span><span class="z-badge z-badge-emerald">0 B JS</span></div><p class="zs-comp-desc">Primary, outline, emerald, danger, and ghost variants with OKLCH hover states.</p></div>
+          <div class="zs-comp-card" data-catalog-item="primitives"><div class="zs-comp-top"><span class="zs-comp-tag">badge</span><span class="z-badge z-badge-emerald">0 B JS</span></div><p class="zs-comp-desc">Semantic status pills with optional pulse dot indicator.</p></div>
+          <div class="zs-comp-card" data-catalog-item="primitives"><div class="zs-comp-top"><span class="zs-comp-tag">card</span><span class="z-badge z-badge-emerald">0 B JS</span></div><p class="zs-comp-desc">Structured surface with kicker, header, body, footer, and featured highlight.</p></div>
+          <div class="zs-comp-card" data-catalog-item="primitives"><div class="zs-comp-top"><span class="zs-comp-tag">alert</span><span class="z-badge z-badge-emerald">0 B JS</span></div><p class="zs-comp-desc">Accessible status/error callouts for info, success, warning, and danger.</p></div>
+          <div class="zs-comp-card" data-catalog-item="primitives"><div class="zs-comp-top"><span class="zs-comp-tag">kbd</span><span class="z-badge z-badge-emerald">0 B JS</span></div><p class="zs-comp-desc">Tactile keyboard shortcut keycaps.</p></div>
+          <div class="zs-comp-card" data-catalog-item="primitives"><div class="zs-comp-top"><span class="zs-comp-tag">avatar</span><span class="z-badge z-badge-emerald">0 B JS</span></div><p class="zs-comp-desc">Image or initial fallback avatars with presence dot.</p></div>
+          <div class="zs-comp-card" data-catalog-item="primitives"><div class="zs-comp-top"><span class="zs-comp-tag">avatar-group</span><span class="z-badge z-badge-emerald">0 B JS</span></div><p class="zs-comp-desc">Overlapping team avatar stacks with automatic +N overflow pill.</p></div>
+          <div class="zs-comp-card" data-catalog-item="primitives"><div class="zs-comp-top"><span class="zs-comp-tag">copy-field</span><span class="z-badge z-badge-blue">Runtime</span></div><p class="zs-comp-desc">Masked API key / secret reveal + one-click clipboard copy with ARIA feedback.</p></div>
+          <div class="zs-comp-card" data-catalog-item="primitives"><div class="zs-comp-top"><span class="zs-comp-tag">spinner</span><span class="z-badge z-badge-emerald">0 B JS</span></div><p class="zs-comp-desc">Reduced-motion-aware pure CSS loading spinner.</p></div>
+          <div class="zs-comp-card" data-catalog-item="primitives"><div class="zs-comp-top"><span class="zs-comp-tag">divider</span><span class="z-badge z-badge-emerald">0 B JS</span></div><p class="zs-comp-desc">Horizontal, labeled, or vertical hairline separators.</p></div>
+          <div class="zs-comp-card" data-catalog-item="primitives"><div class="zs-comp-top"><span class="zs-comp-tag">code-block</span><span class="z-badge z-badge-blue">Runtime</span></div><p class="zs-comp-desc">Filename/language header bar with strict-CSP copy button.</p></div>
+          <div class="zs-comp-card" data-catalog-item="primitives"><div class="zs-comp-top"><span class="zs-comp-tag">banner</span><span class="z-badge z-badge-blue">Runtime</span></div><p class="zs-comp-desc">Dismissible full-width announcement &amp; release notice strip.</p></div>
+
+          <!-- Forms (19) -->
+          <div class="zs-comp-card" data-catalog-item="forms"><div class="zs-comp-top"><span class="zs-comp-tag">input</span><span class="z-badge z-badge-emerald">0 B JS</span></div><p class="zs-comp-desc">Labeled text/email/url field with hint and validation error state.</p></div>
+          <div class="zs-comp-card" data-catalog-item="forms"><div class="zs-comp-top"><span class="zs-comp-tag">input-group</span><span class="z-badge z-badge-emerald">0 B JS</span></div><p class="zs-comp-desc">Inputs with prefix/suffix addons (https://, USD, .com).</p></div>
+          <div class="zs-comp-card" data-catalog-item="forms"><div class="zs-comp-top"><span class="zs-comp-tag">number-input</span><span class="z-badge z-badge-blue">Runtime</span></div><p class="zs-comp-desc">Accessible −/+ numeric stepper honoring min, max, and step.</p></div>
+          <div class="zs-comp-card" data-catalog-item="forms"><div class="zs-comp-top"><span class="zs-comp-tag">password-input</span><span class="z-badge z-badge-blue">Runtime</span></div><p class="zs-comp-desc">Show/hide reveal toggle + live 4-segment strength meter.</p></div>
+          <div class="zs-comp-card" data-catalog-item="forms"><div class="zs-comp-top"><span class="zs-comp-tag">select</span><span class="z-badge z-badge-emerald">0 B JS</span></div><p class="zs-comp-desc">Native select styled consistently across dark/light OKLCH themes.</p></div>
+          <div class="zs-comp-card" data-catalog-item="forms"><div class="zs-comp-top"><span class="zs-comp-tag">textarea</span><span class="z-badge z-badge-emerald">0 B JS</span></div><p class="zs-comp-desc">Multi-line text input with label, hint, and error feedback.</p></div>
+          <div class="zs-comp-card" data-catalog-item="forms"><div class="zs-comp-top"><span class="zs-comp-tag">switch</span><span class="z-badge z-badge-emerald">0 B JS</span></div><p class="zs-comp-desc">Pure CSS :has() toggle switch with smooth thumb transition.</p></div>
+          <div class="zs-comp-card" data-catalog-item="forms"><div class="zs-comp-top"><span class="zs-comp-tag">checkbox</span><span class="z-badge z-badge-emerald">0 B JS</span></div><p class="zs-comp-desc">Accessible custom checkbox with optional description text.</p></div>
+          <div class="zs-comp-card" data-catalog-item="forms"><div class="zs-comp-top"><span class="zs-comp-tag">radio-group</span><span class="z-badge z-badge-emerald">0 B JS</span></div><p class="zs-comp-desc">Selectable radio cards powered by CSS :has(:checked).</p></div>
+          <div class="zs-comp-card" data-catalog-item="forms"><div class="zs-comp-top"><span class="zs-comp-tag">combobox</span><span class="z-badge z-badge-blue">Runtime</span></div><p class="zs-comp-desc">Searchable ARIA single-select dropdown with hidden value binding.</p></div>
+          <div class="zs-comp-card" data-catalog-item="forms"><div class="zs-comp-top"><span class="zs-comp-tag">multi-select</span><span class="z-badge z-badge-blue">Runtime</span></div><p class="zs-comp-desc">Filterable multi-select tag combobox emitting array form inputs.</p></div>
+          <div class="zs-comp-card" data-catalog-item="forms"><div class="zs-comp-top"><span class="zs-comp-tag">tag-input</span><span class="z-badge z-badge-blue">Runtime</span></div><p class="zs-comp-desc">Free-form Enter/comma tag chip builder with Backspace removal.</p></div>
+          <div class="zs-comp-card" data-catalog-item="forms"><div class="zs-comp-top"><span class="zs-comp-tag">dropzone</span><span class="z-badge z-badge-blue">Runtime</span></div><p class="zs-comp-desc">Drag-and-drop file upload zone listing selected file names &amp; sizes.</p></div>
+          <div class="zs-comp-card" data-catalog-item="forms"><div class="zs-comp-top"><span class="zs-comp-tag">datepicker</span><span class="z-badge z-badge-blue">Runtime</span></div><p class="zs-comp-desc">Native date input enhanced with quick relative offset presets.</p></div>
+          <div class="zs-comp-card" data-catalog-item="forms"><div class="zs-comp-top"><span class="zs-comp-tag">date-range</span><span class="z-badge z-badge-blue">Runtime</span></div><p class="zs-comp-desc">Interactive month grid calendar with start/end range highlight &amp; presets.</p></div>
+          <div class="zs-comp-card" data-catalog-item="forms"><div class="zs-comp-top"><span class="zs-comp-tag">slider</span><span class="z-badge z-badge-blue">Runtime</span></div><p class="zs-comp-desc">Range slider with live unit-formatted readout.</p></div>
+          <div class="zs-comp-card" data-catalog-item="forms"><div class="zs-comp-top"><span class="zs-comp-tag">otp-input</span><span class="z-badge z-badge-blue">Runtime</span></div><p class="zs-comp-desc">6-digit verification code inputs with paste distribution &amp; auto-advance.</p></div>
+          <div class="zs-comp-card" data-catalog-item="forms"><div class="zs-comp-top"><span class="zs-comp-tag">editor</span><span class="z-badge z-badge-blue">Runtime</span></div><p class="zs-comp-desc">XSS-safe split Markdown editor using safe DOM creation (zero innerHTML).</p></div>
+          <div class="zs-comp-card" data-catalog-item="forms"><div class="zs-comp-top"><span class="zs-comp-tag">rating</span><span class="z-badge z-badge-emerald">0 B JS</span></div><p class="zs-comp-desc">Pure CSS radio star rating input (zero JavaScript).</p></div>
+
+          <!-- Data (9) -->
+          <div class="zs-comp-card" data-catalog-item="data"><div class="zs-comp-top"><span class="zs-comp-tag">chart</span><span class="z-badge z-badge-emerald">0 B JS</span></div><p class="zs-comp-desc">Pure server-rendered SVG Bar, Donut, and Sparkline charts.</p></div>
+          <div class="zs-comp-card" data-catalog-item="data"><div class="zs-comp-top"><span class="zs-comp-tag">table</span><span class="z-badge z-badge-blue">Runtime</span></div><p class="zs-comp-desc">Responsive table with instant search filtering and numeric/text column sort.</p></div>
+          <div class="zs-comp-card" data-catalog-item="data"><div class="zs-comp-top"><span class="zs-comp-tag">kpi</span><span class="z-badge z-badge-emerald">0 B JS</span></div><p class="zs-comp-desc">Executive metric tiles with delta indicators and accent tones.</p></div>
+          <div class="zs-comp-card" data-catalog-item="data"><div class="zs-comp-top"><span class="zs-comp-tag">progress</span><span class="z-badge z-badge-emerald">0 B JS</span></div><p class="zs-comp-desc">Native &lt;progress&gt; bar styled with semantic OKLCH tokens.</p></div>
+          <div class="zs-comp-card" data-catalog-item="data"><div class="zs-comp-top"><span class="zs-comp-tag">skeleton</span><span class="z-badge z-badge-emerald">0 B JS</span></div><p class="zs-comp-desc">Shimmer placeholders for text lines, circles, and cards.</p></div>
+          <div class="zs-comp-card" data-catalog-item="data"><div class="zs-comp-top"><span class="zs-comp-tag">empty-state</span><span class="z-badge z-badge-emerald">0 B JS</span></div><p class="zs-comp-desc">Focused zero-data callout with primary and secondary actions.</p></div>
+          <div class="zs-comp-card" data-catalog-item="data"><div class="zs-comp-top"><span class="zs-comp-tag">timeline</span><span class="z-badge z-badge-emerald">0 B JS</span></div><p class="zs-comp-desc">Vertical audit log &amp; activity feed timeline.</p></div>
+          <div class="zs-comp-card" data-catalog-item="data"><div class="zs-comp-top"><span class="zs-comp-tag">description-list</span><span class="z-badge z-badge-emerald">0 B JS</span></div><p class="zs-comp-desc">Structured key/value metadata grids (1, 2, or 3 columns).</p></div>
+          <div class="zs-comp-card" data-catalog-item="data"><div class="zs-comp-top"><span class="zs-comp-tag">carousel</span><span class="z-badge z-badge-emerald">0 B JS</span></div><p class="zs-comp-desc">Smooth CSS scroll-snap horizontal showcase strip.</p></div>
+
+          <!-- Navigation (8) -->
+          <div class="zs-comp-card" data-catalog-item="navigation"><div class="zs-comp-top"><span class="zs-comp-tag">tabs</span><span class="z-badge z-badge-blue">Runtime</span></div><p class="zs-comp-desc">ARIA tablist + tabpanels with live selection state.</p></div>
+          <div class="zs-comp-card" data-catalog-item="navigation"><div class="zs-comp-top"><span class="zs-comp-tag">accordion</span><span class="z-badge z-badge-emerald">0 B JS</span></div><p class="zs-comp-desc">Native HTML &lt;details name="..."&gt; exclusive accordions.</p></div>
+          <div class="zs-comp-card" data-catalog-item="navigation"><div class="zs-comp-top"><span class="zs-comp-tag">stepper</span><span class="z-badge z-badge-emerald">0 B JS</span></div><p class="zs-comp-desc">Multi-step onboarding and checkout progress rail.</p></div>
+          <div class="zs-comp-card" data-catalog-item="navigation"><div class="zs-comp-top"><span class="zs-comp-tag">pagination</span><span class="z-badge z-badge-emerald">0 B JS</span></div><p class="zs-comp-desc">Accessible page navigation with prev/next and current-page state.</p></div>
+          <div class="zs-comp-card" data-catalog-item="navigation"><div class="zs-comp-top"><span class="zs-comp-tag">breadcrumb</span><span class="z-badge z-badge-emerald">0 B JS</span></div><p class="zs-comp-desc">Semantic &lt;nav aria-label="Breadcrumb"&gt; hierarchy trail.</p></div>
+          <div class="zs-comp-card" data-catalog-item="navigation"><div class="zs-comp-top"><span class="zs-comp-tag">segmented</span><span class="z-badge z-badge-emerald">0 B JS</span></div><p class="zs-comp-desc">Compact segmented radio/link mode switcher.</p></div>
+          <div class="zs-comp-card" data-catalog-item="navigation"><div class="zs-comp-top"><span class="zs-comp-tag">sidebar</span><span class="z-badge z-badge-emerald">0 B JS</span></div><p class="zs-comp-desc">Grouped workspace navigation rail with item counters.</p></div>
+          <div class="zs-comp-card" data-catalog-item="navigation"><div class="zs-comp-top"><span class="zs-comp-tag">tree</span><span class="z-badge z-badge-emerald">0 B JS</span></div><p class="zs-comp-desc">Nested directory/file tree built on native &lt;details&gt; elements.</p></div>
+
+          <!-- Overlays (7) -->
+          <div class="zs-comp-card" data-catalog-item="overlays"><div class="zs-comp-top"><span class="zs-comp-tag">dropdown</span><span class="z-badge z-badge-emerald">0 B JS</span></div><p class="zs-comp-desc">Native HTML Top-Layer [popover] action menu with shortcuts.</p></div>
+          <div class="zs-comp-card" data-catalog-item="overlays"><div class="zs-comp-top"><span class="zs-comp-tag">popover</span><span class="z-badge z-badge-emerald">0 B JS</span></div><p class="zs-comp-desc">Native Top-Layer floating info card with @starting-style animation.</p></div>
+          <div class="zs-comp-card" data-catalog-item="overlays"><div class="zs-comp-top"><span class="zs-comp-tag">tooltip</span><span class="z-badge z-badge-emerald">0 B JS</span></div><p class="zs-comp-desc">Pure CSS hover and focus-visible hint bubble.</p></div>
+          <div class="zs-comp-card" data-catalog-item="overlays"><div class="zs-comp-top"><span class="zs-comp-tag">modal</span><span class="z-badge z-badge-blue">Runtime</span></div><p class="zs-comp-desc">Accessible modal dialog with Esc, backdrop click, and focus shift.</p></div>
+          <div class="zs-comp-card" data-catalog-item="overlays"><div class="zs-comp-top"><span class="zs-comp-tag">drawer</span><span class="z-badge z-badge-blue">Runtime</span></div><p class="zs-comp-desc">Slide-over panel for detail editors and inspectors.</p></div>
+          <div class="zs-comp-card" data-catalog-item="overlays"><div class="zs-comp-top"><span class="zs-comp-tag">toast</span><span class="z-badge z-badge-blue">Runtime</span></div><p class="zs-comp-desc">Dismissible live-region notifications for async feedback.</p></div>
+          <div class="zs-comp-card" data-catalog-item="overlays"><div class="zs-comp-top"><span class="zs-comp-tag">command-palette</span><span class="z-badge z-badge-blue">Runtime</span></div><p class="zs-comp-desc">Global Cmd+K / Ctrl+K keyboard command launcher.</p></div>
+
+          <!-- Full-Page SaaS Blocks (8) -->
+          <div class="zs-comp-card" data-catalog-item="blocks"><div class="zs-comp-top"><span class="zs-comp-tag">saas-shell</span><span class="z-badge z-badge-primary">Block</span></div><p class="zs-comp-desc">Full workspace shell with sidebar, topbar, Cmd+K, and content frame.</p></div>
+          <div class="zs-comp-card" data-catalog-item="blocks"><div class="zs-comp-top"><span class="zs-comp-tag">auth-login</span><span class="z-badge z-badge-primary">Block</span></div><p class="zs-comp-desc">Strict-CSP login, passkey, and OTP sign-in page.</p></div>
+          <div class="zs-comp-card" data-catalog-item="blocks"><div class="zs-comp-top"><span class="zs-comp-tag">settings-billing</span><span class="z-badge z-badge-primary">Block</span></div><p class="zs-comp-desc">Workspace profile, plan usage, and invoice table layout.</p></div>
+          <div class="zs-comp-card" data-catalog-item="blocks"><div class="zs-comp-top"><span class="zs-comp-tag">pricing-grid</span><span class="z-badge z-badge-primary">Block</span></div><p class="zs-comp-desc">Three-tier SaaS pricing comparison with highlighted pro card.</p></div>
+          <div class="zs-comp-card" data-catalog-item="blocks"><div class="zs-comp-top"><span class="zs-comp-tag">empty-onboarding</span><span class="z-badge z-badge-primary">Block</span></div><p class="zs-comp-desc">Guided first-run checklist and stepper page.</p></div>
+          <div class="zs-comp-card" data-catalog-item="blocks"><div class="zs-comp-top"><span class="zs-comp-tag">error-page</span><span class="z-badge z-badge-primary">Block</span></div><p class="zs-comp-desc">Clean 404 / 500 error page with KGN-* incident reference.</p></div>
+          <div class="zs-comp-card" data-catalog-item="blocks"><div class="zs-comp-top"><span class="zs-comp-tag">analytics-dashboard</span><span class="z-badge z-badge-primary">Block</span></div><p class="zs-comp-desc">KPIs, pure-SVG charts, date-range picker, and sortable table.</p></div>
+          <div class="zs-comp-card" data-catalog-item="blocks"><div class="zs-comp-top"><span class="zs-comp-tag">api-keys-audit</span><span class="z-badge z-badge-primary">Block</span></div><p class="zs-comp-desc">Masked token management, copy fields, and security audit timeline.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="zs-section" id="quickstart">
+      <div class="zs-container">
+        <div class="zs-section-head">
+          <h2>CLI Workflow, DTO-to-UI &amp; Executable Proof Gate</h2>
+          <p>Zero Node.js, zero PostCSS, zero Vite plugins required. Compile OKLCH CSS, scaffold DTO forms and tables, launch the local Token Studio, and mathematically prove accessibility &amp; bundle budgets from one PHP binary.</p>
+        </div>
+
+        <div class="zs-demo-grid">
+          <div class="z-stack">
+            <h3 class="z-card-title">1. Install, Scaffold &amp; Tree-Shake</h3>
+            <pre class="zs-pre"><code>composer require kongono/zokeibi
+
+# Initialize project tokens (zokeibi.json)
+php vendor/bin/zokeibi init --theme=sumi
+
+# Copy owned &lt;x-ui.*&gt; templates into views/components/ui/
+php vendor/bin/zokeibi add button card chart editor tree password-input
+php vendor/bin/zokeibi block add saas-shell analytics-dashboard
+
+# Generate forms &amp; sortable tables directly from PHP 8.5 DTOs
+php vendor/bin/zokeibi form App\\Dto\\CreateOrderInput --out=views/orders/form.kgn.html
+php vendor/bin/zokeibi table App\\Dto\\OrderRow --out=views/orders/table.kgn.html
+
+# Pure PHP CSS tree-shaker + optional 1.5 KB strict-CSP runtime
+php vendor/bin/zokeibi build --views=views --out=public/assets/zokeibi.min.css
+php vendor/bin/zokeibi runtime --out=public/assets/zokeibi-runtime.js
+
+# Local OKLCH Design Token Studio GUI (with Live Hot-Swap Sync)
+php vendor/bin/zokeibi studio --dir=. --port=8101</code></pre>
+          </div>
+
+          <div class="z-stack">
+            <h3 class="z-card-title">2. Executable UI Proof Certificate</h3>
+            <pre class="zs-pre"><code>$ php vendor/bin/zokeibi prove --dir=. --views=views --strict
+
+Zokeibi (造形美) UI Proof Certificate — Grade A+ (100/100 · PASS · 20.7 ms)
+  [1] WCAG 2.1 AA Contrast: PASS (100/100 · 2 theme(s) checked)
+  [2] UI Schema &amp; CSP Audit: PASS (100/100 · 58 file(s), 0 err, 0 warn)
+  [3] Gzip CSS Budget:      PASS (100/100 · 9.40 KB / 10.00 KB max · 55 components)</code></pre>
+            <div class="z-card">
+              <div class="z-card-body z-stack-sm">
+                <div class="z-card-kicker">AI-Native · Zero Hallucinations</div>
+                <h4 class="z-card-title">Kongono MCP Tool: <code>kongono_zokeibi_registry</code></h4>
+                <p class="z-muted">Exposes your app's <code>zokeibi.json</code>, installed <code>&lt;x-ui.*&gt;</code> templates, prop enums, and SaaS blocks over stdio MCP so Cursor, Claude Code, Codex, and Antigravity generate 100% schema-valid UI.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="zs-section" id="stacks">
+      <div class="zs-container">
+        <div class="zs-section-head">
+          <h2>Built for Kongono — Zero Lock-In on Any Stack</h2>
+          <p><code>kongono/zokeibi</code> requires only PHP <code>&gt;= 8.5.13</code> with zero runtime Composer dependencies. Use it directly with Kongono Live 2.5 or export tokens and tree-shake <code>.z-*</code> classes across HTML, HTMX, Twig, Blade, React, Vue, and Svelte.</p>
+        </div>
+
+        <div class="z-grid-3">
+          <div class="z-card">
+            <div class="z-card-body z-stack-sm">
+              <span class="z-badge z-badge-primary">Tree-Shaker</span>
+              <h3 class="z-card-title">Multi-Template Scanner</h3>
+              <p class="z-muted">Scans <code>.kgn.html</code>, <code>.html</code>, <code>.php</code>, <code>.twig</code>, <code>.blade.php</code>, <code>.jsx</code>, <code>.tsx</code>, <code>.vue</code>, and <code>.svelte</code> for both <code>&lt;x-ui.*&gt;</code> tags and <code>.z-*</code> classes.</p>
+            </div>
+          </div>
+          <div class="z-card">
+            <div class="z-card-body z-stack-sm">
+              <span class="z-badge z-badge-emerald">W3C &amp; Tailwind v4</span>
+              <h3 class="z-card-title">Universal Token Export</h3>
+              <p class="z-muted">Run <code>zokeibi export --format=w3c-tokens</code> for Figma/Design Tokens or <code>--format=tailwind</code> for Tailwind v4 <code>@theme</code> blocks.</p>
+            </div>
+          </div>
+          <div class="z-card">
+            <div class="z-card-body z-stack-sm">
+              <span class="z-badge z-badge-blue">Standalone Runtime</span>
+              <h3 class="z-card-title">Zero-Dependency JS</h3>
+              <p class="z-muted">Drop <code>zokeibi-runtime.js</code> into plain HTML or HTMX apps for modals, drawers, Cmd+K, comboboxes, date ranges, sortable tables, and safe Markdown preview.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Live Modal Demo -->
+  <div class="z-modal-backdrop" id="demo-modal" hidden>
+    <div class="z-modal" role="dialog" aria-modal="true" aria-labelledby="demo-modal-title">
+      <div class="z-modal-head">
+        <h3 class="z-modal-title" id="demo-modal-title">Zokeibi Strict-CSP Modal</h3>
+        <button type="button" class="z-btn z-btn-ghost z-btn-sm" data-z-close="#demo-modal" aria-label="Close modal">✕</button>
+      </div>
+      <div class="z-modal-body z-stack-sm">
+        <p>Opened purely via <code>data-z-open="#demo-modal"</code> with zero inline JavaScript and zero inline styles. Press <kbd class="z-kbd">Esc</kbd> or click the backdrop to close.</p>
+        <p class="z-muted">All 55 Zokeibi components share this exact zero-bloat, strict-CSP architecture.</p>
+      </div>
+      <div class="z-modal-foot">
+        <button type="button" class="z-btn z-btn-outline z-btn-sm" data-z-close="#demo-modal">Close</button>
+        <a class="z-btn z-btn-primary z-btn-sm" href="#quickstart" data-z-close="#demo-modal">Get Started</a>
+      </div>
+    </div>
+  </div>
+
+  <footer class="zs-footer">
+    <div class="zs-container zs-footer-inner">
+      <div><strong>Zokeibi v1.0.0 (造形美)</strong> · MIT License · Part of the <a href="https://kongono.com" target="_blank" rel="noopener">Kongono</a> ecosystem</div>
+      <div class="zs-footer-links">
+        <a href="#live-demo">Live Demo</a>
+        <a href="#catalog">55 Components</a>
+        <a href="#quickstart">CLI &amp; Proof</a>
+        <a href="llms.txt">llms.txt</a>
+        <a href="https://github.com/anthonyiovanna/zokeibi" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://kongono.com" target="_blank" rel="noopener">kongono.com</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="assets/zokeibi-runtime.js" defer></script>
+  <script src="assets/site.js" defer></script>
+</body>
+</html>

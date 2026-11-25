@@ -1,0 +1,33 @@
+@layer zokeibi.components {
+  @keyframes k-spin {
+    to { transform: rotate(360deg); }
+  }
+
+  .z-spinner-wrap {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.48rem;
+    font-size: 0.8rem;
+    color: var(--z-ink-muted);
+  }
+
+  .z-spinner {
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    border-radius: 999px;
+    border: 2px solid color-mix(in oklch, currentColor 22%, transparent);
+    border-top-color: currentColor;
+    animation: k-spin 0.72s linear infinite;
+    color: var(--z-accent);
+
+    &.z-spinner-sm { width: 14px; height: 14px; border-width: 2px; }
+    &.z-spinner-lg { width: 26px; height: 26px; border-width: 2.5px; }
+    &.z-spinner-emerald { color: var(--z-emerald); }
+    &.z-spinner-muted { color: var(--z-ink-muted); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .z-spinner { animation-duration: 2.4s; }
+  }
+}

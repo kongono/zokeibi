@@ -1,0 +1,53 @@
+@layer zokeibi.components {
+  .z-stepper {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.65rem 1.15rem;
+  }
+
+  .z-step {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    font-size: 0.82rem;
+    color: var(--z-ink-muted);
+  }
+
+  .z-step-num {
+    width: 1.6rem;
+    height: 1.6rem;
+    border-radius: 999px;
+    display: inline-grid;
+    place-items: center;
+    font-size: 0.74rem;
+    font-weight: 720;
+    border: 1px solid var(--z-border-strong);
+    background: var(--z-surface-2);
+    color: var(--z-ink-muted);
+  }
+
+  .z-step.is-active {
+    color: var(--z-ink);
+    font-weight: 680;
+
+    & .z-step-num {
+      background: var(--z-accent);
+      border-color: var(--z-accent);
+      color: var(--z-accent-ink);
+    }
+  }
+
+  .z-step.is-done {
+    color: var(--z-ink);
+
+    & .z-step-num {
+      background: var(--z-emerald);
+      border-color: var(--z-emerald);
+      color: oklch(0.15 0.02 162);
+    }
+  }
+}

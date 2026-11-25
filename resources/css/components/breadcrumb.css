@@ -1,0 +1,39 @@
+@layer zokeibi.components {
+  .z-breadcrumb ol {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    font-size: 0.78rem;
+  }
+
+  .z-breadcrumb li {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    color: var(--z-ink-soft);
+
+    &:not(:last-child)::after {
+      content: "/";
+      opacity: 0.5;
+    }
+  }
+
+  .z-breadcrumb a {
+    color: var(--z-ink-muted);
+    text-decoration: none;
+
+    &:hover {
+      color: var(--z-ink);
+      text-decoration: underline;
+    }
+  }
+
+  .z-breadcrumb [aria-current="page"] {
+    color: var(--z-ink);
+    font-weight: 700;
+  }
+}

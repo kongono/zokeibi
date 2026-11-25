@@ -1,0 +1,21 @@
+@php
+$initials = isset($initials) && is_string($initials) && $initials !== '' ? strtoupper(substr($initials, 0, 2)) : 'KT';
+$name = isset($name) && is_string($name) && $name !== '' ? $name : $initials;
+$size = isset($size) && is_string($size) ? $size : 'md';
+$status = isset($status) && is_string($status) ? $status : 'none';
+$class = isset($class) && is_string($class) ? trim($class) : '';
+$classes = ['z-avatar'];
+if (in_array($size, ['sm', 'lg'], true)) {
+    $classes[] = 'z-avatar-' . $size;
+}
+if ($class !== '') {
+    $classes[] = $class;
+}
+$classAttr = implode(' ', $classes);
+@endphp
+<span class="{{ $classAttr }}" role="img" aria-label="{{ $name }}">
+  <span>{{ $initials }}</span>
+@if (in_array($status, ['online', 'busy', 'away'], true))
+  <span class="z-avatar-dot is-{{ $status }}" aria-hidden="true"></span>
+@endif
+</span>

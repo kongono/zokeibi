@@ -1,0 +1,46 @@
+@layer zokeibi.base {
+  *, *::before, *::after {
+    box-sizing: border-box;
+  }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: var(--z-bg);
+    color: var(--z-ink);
+    font-family: var(--z-sans);
+    font-size: 14px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+    transition: background-color 180ms ease, color 180ms ease;
+  }
+
+  a {
+    color: inherit;
+  }
+
+  code, pre {
+    font-family: var(--z-mono);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--z-accent);
+    outline-offset: 2px;
+  }
+
+  [hidden] {
+    display: none !important;
+  }
+
+  .z-sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+}

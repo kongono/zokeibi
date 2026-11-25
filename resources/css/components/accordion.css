@@ -1,0 +1,53 @@
+@layer zokeibi.components {
+  /* Native HTML <details>/<summary> Accordion (0 bytes JavaScript!) */
+  .z-accordion {
+    border: 1px solid var(--z-border);
+    border-radius: var(--z-radius-sm);
+    background: var(--z-surface);
+    overflow: hidden;
+    transition: border-color 140ms ease;
+
+    &[open] {
+      border-color: var(--z-accent-border);
+    }
+
+    & > summary {
+      list-style: none;
+      cursor: pointer;
+      padding: 0.74rem 0.92rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      font-size: 0.83rem;
+      font-weight: 700;
+      color: var(--z-ink);
+      user-select: none;
+
+      &::-webkit-details-marker { display: none; }
+
+      &::after {
+        content: "+";
+        font-family: var(--z-mono);
+        font-size: 0.95rem;
+        font-weight: 700;
+        color: var(--z-ink-soft);
+        transition: transform 150ms ease, color 150ms ease;
+      }
+    }
+
+    &[open] > summary::after {
+      content: "−";
+      color: var(--z-accent);
+    }
+  }
+
+  .z-accordion-body {
+    padding: 0 0.92rem 0.82rem;
+    font-size: 0.79rem;
+    color: var(--z-ink-muted);
+    line-height: 1.55;
+    border-top: 1px solid var(--z-border);
+    padding-top: 0.72rem;
+  }
+}

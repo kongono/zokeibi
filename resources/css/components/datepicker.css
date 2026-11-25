@@ -1,0 +1,46 @@
+@layer zokeibi.components {
+  .z-datepicker {
+    display: grid;
+    gap: 0.4rem;
+  }
+
+  .z-datepicker-input {
+    width: 100%;
+    padding: 0.52rem 0.74rem;
+    border-radius: var(--z-radius-sm);
+    border: 1px solid var(--z-border-strong);
+    background: var(--z-surface-2);
+    color: var(--z-ink);
+    font: inherit;
+    font-size: 0.84rem;
+    color-scheme: dark light;
+
+    &:focus {
+      outline: 2px solid var(--z-accent);
+      outline-offset: 1px;
+      border-color: var(--z-accent);
+    }
+  }
+
+  .z-datepicker-presets {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+  }
+
+  .z-datepicker-preset {
+    padding: 0.22rem 0.55rem;
+    border-radius: 999px;
+    border: 1px solid var(--z-border);
+    background: var(--z-surface);
+    color: var(--z-ink-muted);
+    font: inherit;
+    font-size: 0.72rem;
+    cursor: pointer;
+
+    &:hover {
+      border-color: var(--z-accent);
+      color: var(--z-ink);
+    }
+  }
+}

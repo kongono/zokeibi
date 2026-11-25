@@ -1,0 +1,58 @@
+@php
+$name = isset($name) && is_string($name) ? $name : 'field';
+$id = isset($id) && is_string($id) && $id !== '' ? $id : 'z-input-' . preg_replace('/[^a-zA-Z0-9_-]/', '-', $name);
+$label = isset($label) && is_string($label) && $label !== '' ? $label : null;
+$type = isset($type) && is_string($type) ? $type : 'text';
+$value = isset($value) && is_scalar($value) ? (string) $value : '';
+$placeholder = isset($placeholder) && is_string($placeholder) ? $placeholder : '';
+$hint = isset($hint) && is_string($hint) && $hint !== '' ? $hint : null;
+$error = isset($error) && is_string($error) && $error !== '' ? $error : null;
+$required = isset($required) && ($required === true || $required === 'true' || $required === '1');
+$disabled = isset($disabled) && ($disabled === true || $disabled === 'true' || $disabled === '1');
+$autocomplete = isset($autocomplete) && is_string($autocomplete) && $autocomplete !== '' ? $autocomplete : null;
+$kModel = isset($kModel) && is_string($kModel) && $kModel !== '' ? $kModel : null;
+$ariaLabel = isset($ariaLabel) && is_string($ariaLabel) && $ariaLabel !== '' ? $ariaLabel : null;
+$class = isset($class) && is_string($class) ? trim($class) : '';
+$fieldClass = $class !== '' ? 'z-field ' . $class : 'z-field';
+@endphp
+<div class="{{ $fieldClass }}">
+@if ($label !== null)
+  <label class="z-label" for="{{ $id }}">{{ $label }}</label>
+@endif
+  <input
+    class="z-input"
+    id="{{ $id }}"
+    name="{{ $name }}"
+    type="{{ $type }}"
+    value="{{ $value }}"
+@if ($placeholder !== '')
+    placeholder="{{ $placeholder }}"
+@endif
+@if ($required)
+    required
+@endif
+@if ($disabled)
+    disabled
+@endif
+@if ($autocomplete !== null)
+    autocomplete="{{ $autocomplete }}"
+@endif
+@if ($kModel !== null)
+    k-model="{{ $kModel }}"
+@endif
+@if ($ariaLabel !== null)
+    aria-label="{{ $ariaLabel }}"
+@endif
+@if ($error !== null)
+    aria-invalid="true"
+    aria-describedby="{{ $id }}-err"
+@elseif ($hint !== null)
+    aria-describedby="{{ $id }}-hint"
+@endif
+  >
+@if ($error !== null)
+  <span class="z-field-err" id="{{ $id }}-err">{{ $error }}</span>
+@elseif ($hint !== null)
+  <span class="z-hint" id="{{ $id }}-hint">{{ $hint }}</span>
+@endif
+</div>

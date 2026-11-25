@@ -1,0 +1,68 @@
+@layer zokeibi.components {
+  .z-taginput {
+    display: grid;
+    gap: 0.36rem;
+  }
+
+  .z-taginput-box {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.32rem;
+    min-height: 40px;
+    padding: 0.3rem 0.55rem;
+    border-radius: var(--z-radius-sm);
+    border: 1px solid var(--z-border-strong);
+    background: var(--z-surface-2);
+
+    &:focus-within {
+      outline: 2px solid var(--z-accent);
+      outline-offset: 1px;
+      border-color: var(--z-accent);
+    }
+  }
+
+  .z-taginput-chips {
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: 0.28rem;
+  }
+
+  .z-taginput-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.28rem;
+    padding: 0.16rem 0.46rem;
+    border-radius: 999px;
+    background: var(--z-accent-soft);
+    border: 1px solid var(--z-accent-border);
+    color: var(--z-ink);
+    font-size: 0.73rem;
+    font-weight: 650;
+  }
+
+  .z-taginput-rm {
+    border: 0;
+    background: transparent;
+    color: var(--z-ink-muted);
+    cursor: pointer;
+    padding: 0 0.1rem;
+    font-size: 0.78rem;
+    line-height: 1;
+
+    &:hover { color: var(--z-danger); }
+  }
+
+  .z-taginput-field {
+    flex: 1 1 120px;
+    min-width: 90px;
+    border: 0;
+    background: transparent;
+    color: var(--z-ink);
+    font: inherit;
+    font-size: 0.82rem;
+    padding: 0.2rem 0.15rem;
+
+    &:focus { outline: none; }
+  }
+}

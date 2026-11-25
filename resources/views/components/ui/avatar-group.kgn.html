@@ -1,0 +1,31 @@
+@php
+$max = isset($max) && is_numeric($max) ? max(1, min(12, (int) $max)) : 4;
+$size = isset($size) && is_string($size) && in_array($size, ['sm', 'md', 'lg'], true) ? $size : 'md';
+$sizeClass = $size !== 'md' ? ' is-' . $size : '';
+$people = [];
+if (isset($items) && is_array($items)) {
+    foreach ($items as $k => $v) {
+        $people[] = ['initials' => strtoupper(substr((string) $k, 0, 2)), 'name' => (string) $v];
+    }
+} elseif (isset($items) && is_string($items) && trim($items) !== '') {
+    foreach (explode('|', $items) as $seg) {
+        $parts = explode(':', $seg, 2);
+        $init = strtoupper(substr(trim($parts[0]), 0, 2));
+        if ($init !== '') {
+            $people[] = ['initials' => $init, 'name' => trim($parts[1] ?? $init)];
+        }
+    }
+}
+$visible = array_slice($people, 0, $max);
+$overflow = max(0, count($people) - count($visible));
+$class = isset($class) && is_string($class) ? trim($class) : '';
+$wrapClass = $class !== '' ? 'z-avatar-group ' . $class : 'z-avatar-group';
+@endphp
+<div class="{{ $wrapClass }}" role="group" aria-label="Team members">
+@foreach ($visible as $p)
+  <span class="z-avatar-group-item{{ $sizeClass }}" role="img" aria-label="{{ $p['name'] }}" title="{{ $p['name'] }}">{{ $p['initials'] }}</span>
+@endforeach
+@if ($overflow > 0)
+  <span class="z-avatar-group-item is-more{{ $sizeClass }}" aria-label="{{ $overflow }} more members">+{{ $overflow }}</span>
+@endif
+</div>

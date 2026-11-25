@@ -1,0 +1,12 @@
+@php
+$variant = isset($variant) && is_string($variant) ? $variant : 'line';
+$lines = isset($lines) && is_numeric($lines) ? max(1, min(8, (int) $lines)) : 1;
+$class = isset($class) && is_string($class) ? trim($class) : '';
+$safeVariant = in_array($variant, ['line', 'title', 'block', 'circle'], true) ? $variant : 'line';
+$itemClass = 'z-skeleton z-skeleton-' . $safeVariant . ($class !== '' ? ' ' . $class : '');
+@endphp
+<div class="z-stack" role="status" aria-label="Loading content">
+@foreach (range(1, $lines) as $lineIdx)
+  <span class="{{ $itemClass }}" aria-hidden="true"></span>
+@endforeach
+</div>

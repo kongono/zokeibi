@@ -1,0 +1,19 @@
+@layer zokeibi.components {
+  .z-select {
+    width: 100%;
+    padding: 0.5rem 0.74rem;
+    border-radius: var(--z-radius-sm);
+    border: 1px solid var(--z-border-strong);
+    background: var(--z-bg);
+    color: var(--z-ink);
+    font-family: var(--z-sans);
+    font-size: 0.83rem;
+    cursor: pointer;
+
+    &:focus {
+      outline: none;
+      border-color: var(--z-accent);
+      box-shadow: 0 0 0 3px var(--z-accent-soft);
+    }
+  }
+}

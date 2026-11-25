@@ -1,0 +1,307 @@
+@extends('layouts/app')
+
+@section('title', 'Zokeibi Studio 形 — Central Design Token & Theme GUI')
+
+@section('content')
+  <section class="pg-hero">
+    <div>
+      <div class="pg-hero-kicker">形 Zokeibi Studio · Dev-Only Design Token Workbench · Git-Backed</div>
+      <h1 class="pg-hero-title">Central Color, Theme &amp; Typography Studio.</h1>
+      <p class="pg-hero-sub">
+        Dial in OKLCH brand hues, light/dark surfaces, corner radius, typography, and custom named colors with live WCAG 2.1 contrast checks. Saving writes clean JSON to <code>{{ $projectLabel }}</code> and recompiles <code>zokeibi.min.css</code> purely in PHP 8.5.
+      </p>
+    </div>
+    <div class="pg-studio-box">
+      <div class="pg-studio-label">Local Dev Command (Works on Any Kongono App)</div>
+      <pre class="z-code">php vendor/bin/zokeibi studio --dir=. --port=8101</pre>
+      <div class="z-between">
+        <x-ui.badge variant="emerald" dot="true">Source of Truth: zokeibi.json</x-ui.badge>
+        <div class="z-row">
+          <x-ui.button size="sm" variant="outline" href="/studio/export?format=css">CSS</x-ui.button>
+          <x-ui.button size="sm" variant="outline" href="/studio/export?format=w3c-tokens">W3C JSON</x-ui.button>
+          <x-ui.button size="sm" variant="outline" href="/studio/export?format=tailwind">Tailwind v4</x-ui.button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+@if ($flash !== null)
+  <div class="z-stack-gap-top" id="studio-flash">
+    <x-ui.alert :variant="$flash['variant']" title="Zokeibi Studio">{{ $flash['message'] }}</x-ui.alert>
+  </div>
+@endif
+
+  <div class="st-layout" id="studio-workbench">
+    {{-- LEFT SIDEBAR: Central Token Controls, Custom Themes, and Custom Color Tokens --}}
+    <div class="z-stack">
+      <x-ui.card kicker="1. Brand & Surface Tokens" title="Live OKLCH Knobs" badge="Auto-Compile" badge-variant="primary">
+        <div class="z-stack-sm">
+          <div class="pg-studio-label">Load Starter Preset</div>
+          <div class="pg-swatches">
+            <button type="button" class="pg-swatch" data-studio-preset="sumi" data-hue="355" data-chroma="0.145" data-lightness="0.65" data-mode="dark" data-radius="12"><span class="pg-dot is-sumi" aria-hidden="true"></span>Sumi</button>
+            <button type="button" class="pg-swatch" data-studio-preset="washi" data-hue="355" data-chroma="0.145" data-lightness="0.51" data-mode="light" data-radius="12"><span class="pg-dot is-washi" aria-hidden="true"></span>Washi</button>
+            <button type="button" class="pg-swatch" data-studio-preset="indigo" data-hue="268" data-chroma="0.175" data-lightness="0.65" data-mode="dark" data-radius="12"><span class="pg-dot is-indigo" aria-hidden="true"></span>Indigo</button>
+            <button type="button" class="pg-swatch" data-studio-preset="matcha" data-hue="158" data-chroma="0.145" data-lightness="0.65" data-mode="dark" data-radius="12"><span class="pg-dot is-matcha" aria-hidden="true"></span>Matcha</button>
+            <button type="button" class="pg-swatch" data-studio-preset="kintsugi" data-hue="74" data-chroma="0.145" data-lightness="0.72" data-mode="dark" data-radius="10"><span class="pg-dot is-kintsugi" aria-hidden="true"></span>Kintsugi</button>
+          </div>
+
+          <form method="POST" action="/studio/save" class="z-stack-sm z-stack-gap-top" id="studio-save-form">
+            <input type="hidden" name="_csrf" value="{{ $csrf }}">
+
+            <div class="st-slider-row">
+              <div class="st-slider-head">
+                <label for="st-hue">Brand Hue (--z-hue)</label>
+                <span class="z-row">
+                  <span class="st-chip" id="st-accent-chip" aria-hidden="true"></span>
+                  <span id="st-accent-hex">{{ $accentHex }}</span>
+                  <span id="st-hue-out">{{ (int) round($config->hue) }}°</span>
+                </span>
+              </div>
+              <input class="st-range st-range-hue" id="st-hue" name="hue" type="range" min="0" max="360" step="1" value="{{ $config->hue }}">
+            </div>
+
+            <div class="st-slider-row">
+              <div class="st-slider-head">
+                <label for="st-chroma">Color Vividness (--z-chroma)</label>
+                <span id="st-chroma-out">{{ sprintf('%.3f', $config->chroma) }}</span>
+              </div>
+              <input class="st-range" id="st-chroma" name="chroma" type="range" min="0.02" max="0.26" step="0.005" value="{{ $config->chroma }}">
+            </div>
+
+            <div class="st-slider-row">
+              <div class="st-slider-head">
+                <label for="st-lightness">Accent Lightness (L)</label>
+                <span id="st-lightness-out">{{ sprintf('%.2f', $config->accentLightness) }}</span>
+              </div>
+              <input class="st-range" id="st-lightness" name="accent_lightness" type="range" min="0.42" max="0.78" step="0.01" value="{{ $config->accentLightness }}">
+            </div>
+
+            <div class="st-slider-row">
+              <div class="st-slider-head">
+                <label for="st-radius">Corner Radius (--z-radius)</label>
+                <span id="st-radius-out">{{ $config->radiusPx }}px</span>
+              </div>
+              <input class="st-range" id="st-radius" name="radius_px" type="range" min="0" max="24" step="1" value="{{ $config->radiusPx }}">
+            </div>
+
+            <div class="z-grid-2">
+              <x-ui.select id="st-mode" name="mode" label="Surface Mode">
+                <option value="dark" {{ $config->mode === 'dark' ? 'selected' : '' }}>Dark Atelier</option>
+                <option value="light" {{ $config->mode === 'light' ? 'selected' : '' }}>Light Paper</option>
+              </x-ui.select>
+
+              <x-ui.select id="st-font-scale" name="font_scale" label="Text Density">
+                <option value="compact" {{ $config->fontScale === 'compact' ? 'selected' : '' }}>Compact (13px)</option>
+                <option value="default" {{ $config->fontScale === 'default' ? 'selected' : '' }}>Default (14px)</option>
+                <option value="comfortable" {{ $config->fontScale === 'comfortable' ? 'selected' : '' }}>Comfortable (15px)</option>
+              </x-ui.select>
+            </div>
+
+            <x-ui.select id="st-font-stack" name="font_stack" label="Typography Stack (Zero Webfont CDN)">
+              <option value="system" {{ $config->fontStack === 'system' ? 'selected' : '' }}>System UI Sans (Fastest)</option>
+              <option value="geometric" {{ $config->fontStack === 'geometric' ? 'selected' : '' }}>Geometric Humanist</option>
+              <option value="editorial" {{ $config->fontStack === 'editorial' ? 'selected' : '' }}>Editorial Serif</option>
+              <option value="mono" {{ $config->fontStack === 'mono' ? 'selected' : '' }}>Technical Monospace</option>
+            </x-ui.select>
+
+            <div class="z-row z-stack-gap-top">
+              <x-ui.button id="st-save-btn" type="submit" variant="primary">Save to zokeibi.json &amp; Rebuild CSS</x-ui.button>
+            </div>
+            <div class="z-between">
+              <x-ui.switch id="st-live-sync" name="live_sync" label="Live Hot-Swap Sync (auto-rebuild CSS on drag)" />
+              <span class="z-soft z-mono" id="st-live-sync-status">Manual save</span>
+            </div>
+          </form>
+
+          <form method="POST" action="/studio/reset" class="st-inline-form">
+            <input type="hidden" name="_csrf" value="{{ $csrf }}">
+            <x-ui.button id="st-reset-btn" type="submit" variant="ghost" size="sm">Reset to Default Sumi</x-ui.button>
+          </form>
+        </div>
+      </x-ui.card>
+
+      {{-- 2. Custom Named Brand Themes --}}
+      <x-ui.card kicker="2. Multi-Brand Presets" title="Saved Custom Themes" :badge="count($config->customThemes) . ' saved'" badge-variant="emerald">
+        <div class="z-stack-sm">
+          <form method="POST" action="/studio/themes/add" class="z-stack-sm">
+            <input type="hidden" name="_csrf" value="{{ $csrf }}">
+            <input type="hidden" id="st-theme-hue" name="hue" value="{{ $config->hue }}">
+            <input type="hidden" id="st-theme-chroma" name="chroma" value="{{ $config->chroma }}">
+            <input type="hidden" id="st-theme-lightness" name="accent_lightness" value="{{ $config->accentLightness }}">
+            <input type="hidden" id="st-theme-mode" name="mode" value="{{ $config->mode }}">
+            <input type="hidden" id="st-theme-radius" name="radius_px" value="{{ $config->radiusPx }}">
+            <div class="z-row">
+              <x-ui.input id="st-new-theme-name" name="theme_name" label="Snapshot Current Knobs as Named Theme" placeholder="e.g. acme-ocean" />
+            </div>
+            <div>
+              <x-ui.button id="st-add-theme-btn" type="submit" variant="emerald" size="sm">Save Named Theme</x-ui.button>
+            </div>
+          </form>
+
+@if (count($config->customThemes) > 0)
+          <div class="z-stack-sm">
+@foreach ($config->customThemes as $themeName => $def)
+            <div class="st-token-row">
+              <button
+                type="button"
+                class="z-btn z-btn-ghost z-btn-sm"
+                data-studio-preset="{{ $themeName }}"
+                data-hue="{{ $def['hue'] }}"
+                data-chroma="{{ $def['chroma'] }}"
+                data-lightness="{{ $def['accent_lightness'] }}"
+                data-mode="{{ $def['mode'] }}"
+                data-radius="{{ $def['radius_px'] }}"
+              >{{ $themeName }} ({{ (int) round($def['hue']) }}° · {{ $def['mode'] }})</button>
+              <form method="POST" action="/studio/themes/delete" class="st-inline-form">
+                <input type="hidden" name="_csrf" value="{{ $csrf }}">
+                <input type="hidden" name="theme_name" value="{{ $themeName }}">
+                <button type="submit" class="z-btn z-btn-danger z-btn-sm" aria-label="Delete theme {{ $themeName }}">✕</button>
+              </form>
+            </div>
+@endforeach
+          </div>
+@else
+          <div class="z-soft z-mono">No custom themes saved yet. Snapshot your sliders above to emit [data-zokeibi-theme="..."].</div>
+@endif
+        </div>
+      </x-ui.card>
+
+      {{-- 3. Custom Named Brand Color Tokens --}}
+      <x-ui.card kicker="3. Custom CSS Variables" title="Custom Brand Color Tokens" :badge="count($config->customColors) . ' tokens'" badge-variant="blue">
+        <div class="z-stack-sm">
+          <form method="POST" action="/studio/colors/add" class="z-stack-sm">
+            <input type="hidden" name="_csrf" value="{{ $csrf }}">
+            <x-ui.input id="st-color-name" name="color_name" label="Token Name (emits --z-color-name)" placeholder="e.g. brand-teal" />
+            <div class="z-field">
+              <label class="z-label" for="st-color-value">Color Value (#hex or oklch(...))</label>
+              <div class="st-picker-wrap">
+                <input class="st-color-input" id="st-color-picker" type="color" value="#14b8a6" aria-label="Pick hex color">
+                <input class="z-input" id="st-color-value" name="color_value" type="text" value="oklch(0.72 0.14 185)" placeholder="oklch(0.72 0.14 185) or #14b8a6">
+              </div>
+            </div>
+            <div>
+              <x-ui.button id="st-add-color-btn" type="submit" variant="outline" size="sm">Add Color Token &amp; Rebuild</x-ui.button>
+            </div>
+          </form>
+
+@if (count($config->customColors) > 0)
+          <div class="z-stack-sm">
+@foreach ($config->customColors as $tokName => $tokVal)
+            <div class="st-token-row">
+              <span class="z-row">
+                <span class="st-chip" data-swatch-color="{{ $tokVal }}" aria-hidden="true"></span>
+                <span>--z-color-{{ $tokName }}</span>
+                <span class="z-soft">{{ $tokVal }}</span>
+              </span>
+              <form method="POST" action="/studio/colors/delete" class="st-inline-form">
+                <input type="hidden" name="_csrf" value="{{ $csrf }}">
+                <input type="hidden" name="color_name" value="{{ $tokName }}">
+                <button type="submit" class="z-btn z-btn-danger z-btn-sm" aria-label="Delete color {{ $tokName }}">✕</button>
+              </form>
+            </div>
+@endforeach
+          </div>
+@else
+          <div class="z-soft z-mono">Add project-specific tokens like --z-color-brand-teal or --z-color-promo-gold.</div>
+@endif
+        </div>
+      </x-ui.card>
+    </div>
+
+    {{-- RIGHT WORKSPACE: Live WCAG Contrast Guardrails + Real Component Preview + Export Tabs --}}
+    <div class="z-stack">
+      {{-- Live WCAG 2.1 Contrast Guardrail Panel + Zokeibi UI Proof Certificate --}}
+      <x-ui.card kicker="Automatic Accessibility & Budget Guardrails" title="Real-Time WCAG 2.1 Contrast + zokeibi prove" :badge="'Grade ' . $proof['grade'] . ' · ' . $proof['score'] . '/100'" :badge-variant="$proof['passed'] ? 'emerald' : 'crimson'">
+        <div class="z-stack-sm">
+          <div class="st-wcag-grid">
+@foreach ($contrastChecks as $check)
+            <div class="st-wcag-item">
+              <span>{{ $check['label'] }}</span>
+              <span
+                id="wcag-{{ $check['id'] }}"
+                class="z-badge {{ $check['passes_aa'] ? 'z-badge-emerald' : 'z-badge-crimson' }}"
+              >{{ sprintf('%.2f:1 %s', $check['ratio'], $check['grade']) }}</span>
+            </div>
+@endforeach
+          </div>
+          <div class="z-between">
+            <span class="z-soft z-mono" id="st-proof-summary">
+              Themes: {{ $proof['pillars']['contrast']['themes_checked'] }} · Audit: {{ $proof['pillars']['audit']['score'] }}/100 · Gzip: {{ sprintf('%.2f', $proof['pillars']['budget']['gzip_kb']) }} / {{ sprintf('%.1f', $proof['pillars']['budget']['max_gzip_kb']) }} KB
+            </span>
+            <x-ui.button size="sm" variant="outline" href="/studio/prove">Proof JSON</x-ui.button>
+          </div>
+        </div>
+      </x-ui.card>
+
+      {{-- Live Interactive Component Preview Canvas --}}
+      <x-ui.card kicker="Instant 60fps Preview (Zero Rebuild Needed)" title="Live Component Sandbox" badge="Live Primitives" badge-variant="primary">
+        <div class="st-preview-canvas" id="studio-preview">
+          <div class="z-between">
+            <div class="z-row">
+              <x-ui.avatar initials="KT" name="Zokeibi Studio" status="online" />
+              <div>
+                <strong>Acme Billing Console</strong>
+                <div class="z-muted">Previewing your live OKLCH brand &amp; surface tokens</div>
+              </div>
+            </div>
+            <div class="z-row">
+              <x-ui.badge variant="primary" dot="true">Active Brand</x-ui.badge>
+              <x-ui.badge variant="emerald" dot="true">WCAG Safe</x-ui.badge>
+            </div>
+          </div>
+
+          <div class="z-grid-2">
+            <x-ui.kpi label="Monthly Recurring" value="$48,290" delta="+21.4%" trend="up" variant="accent" hint="Recalculates live on hue drag" />
+            <x-ui.kpi label="Strict CSP Score" value="100/100" delta="0 inline" trend="up" variant="emerald" hint="Pure PHP compiled CSS" />
+          </div>
+
+          <div class="z-row">
+            <x-ui.button variant="primary">Primary CTA</x-ui.button>
+            <x-ui.button variant="emerald">Approve</x-ui.button>
+            <x-ui.button variant="outline">Secondary</x-ui.button>
+            <x-ui.button variant="danger">Revoke</x-ui.button>
+            <x-ui.popover id="studio-preview-pop" trigger="Test Popover" trigger-variant="outline" trigger-size="sm" title="Styled Top-Layer Popover">
+              Inherits your exact border radius, surface, and OKLCH brand tokens automatically.
+            </x-ui.popover>
+          </div>
+
+          <div class="z-grid-2">
+            <x-ui.input name="preview_email" type="email" label="Focus to inspect accent ring" value="founder@acme.dev" hint="Derived via color-mix(in oklch)." />
+            <div class="z-stack-sm">
+              <x-ui.progress label="Usage Quota" value="74" max="100" />
+              <x-ui.switch id="preview-sw" name="preview_sw" label="Auto-compile zokeibi.min.css" checked="true" />
+            </div>
+          </div>
+
+          <x-ui.alert variant="info" title="Semantic Status Harmony">
+            Brand accent shifts independently while semantic status colors stay readable in both Dark and Light surfaces.
+          </x-ui.alert>
+        </div>
+      </x-ui.card>
+
+      {{-- Generated Git-Tracked Config & Compiled CSS Output --}}
+      <x-ui.card kicker="Git-Tracked Output · Zero Lock-In" title="Inspect & Export Design Tokens" badge="CSS · W3C · Tailwind">
+        <div class="z-stack-sm">
+          <div class="z-between">
+            <span class="z-muted">Export your OKLCH tokens for Kongono, React/Figma (W3C DTCG), or Tailwind CSS v4.</span>
+            <x-ui.button id="st-copy-css" size="sm" variant="outline">Copy CSS</x-ui.button>
+          </div>
+          <x-ui.tabs tabs="css:Compiled @layer CSS|json:zokeibi.json (Git)|w3c:W3C Tokens JSON|tailwind:Tailwind v4 @theme" default="css">
+            <div class="z-tabpanel" role="tabpanel" k-show="tab === 'css'">
+              <pre class="z-code" id="studio-css-preview">{{ $generatedCss }}</pre>
+            </div>
+            <div class="z-tabpanel" role="tabpanel" k-show="tab === 'json'" hidden>
+              <pre class="z-code" id="studio-json-preview">{{ $rawJson }}</pre>
+            </div>
+            <div class="z-tabpanel" role="tabpanel" k-show="tab === 'w3c'" hidden>
+              <pre class="z-code" id="studio-w3c-preview">{{ $w3cTokensJson }}</pre>
+            </div>
+            <div class="z-tabpanel" role="tabpanel" k-show="tab === 'tailwind'" hidden>
+              <pre class="z-code" id="studio-tailwind-preview">{{ $tailwindThemeCss }}</pre>
+            </div>
+          </x-ui.tabs>
+        </div>
+      </x-ui.card>
+    </div>
+  </div>
+@endsection

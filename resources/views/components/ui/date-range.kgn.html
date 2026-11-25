@@ -1,0 +1,77 @@
+@php
+$name = isset($name) && is_string($name) && $name !== '' ? $name : 'date_range';
+$startName = isset($startName) && is_string($startName) && $startName !== '' ? $startName : $name . '_start';
+$endName = isset($endName) && is_string($endName) && $endName !== '' ? $endName : $name . '_end';
+$label = isset($label) && is_string($label) && $label !== '' ? $label : null;
+$start = isset($start) && is_string($start) && preg_match('/^\d{4}-\d{2}-\d{2}$/', $start) === 1 ? $start : date('Y-m-01');
+$end = isset($end) && is_string($end) && preg_match('/^\d{4}-\d{2}-\d{2}$/', $end) === 1 ? $end : date('Y-m-d');
+if ($end < $start) {
+    $tmp = $start;
+    $start = $end;
+    $end = $tmp;
+}
+$presets = !isset($presets) || ($presets !== false && $presets !== 'false' && $presets !== '0');
+$viewYear = (int) substr($start, 0, 4);
+$viewMonth = (int) substr($start, 5, 2);
+$firstTs = mktime(0, 0, 0, $viewMonth, 1, $viewYear) ?: time();
+$monthLabel = date('F Y', $firstTs);
+$daysInMonth = (int) date('t', $firstTs);
+$startDow = (int) date('w', $firstTs);
+$todayIso = date('Y-m-d');
+$cells = [];
+for ($i = 0; $i < $startDow; $i++) {
+    $cells[] = null;
+}
+for ($d = 1; $d <= $daysInMonth; $d++) {
+    $iso = sprintf('%04d-%02d-%02d', $viewYear, $viewMonth, $d);
+    $cls = 'z-dr-day';
+    if ($iso === $todayIso) {
+        $cls .= ' is-today';
+    }
+    if ($iso === $start || $iso === $end) {
+        $cls .= ' is-edge';
+    } elseif ($iso > $start && $iso < $end) {
+        $cls .= ' is-in-range';
+    }
+    $cells[] = ['day' => $d, 'iso' => $iso, 'cls' => $cls];
+}
+$class = isset($class) && is_string($class) ? trim($class) : '';
+$wrapClass = $class !== '' ? 'z-dr ' . $class : 'z-dr';
+@endphp
+<div class="{{ $wrapClass }}" data-z-daterange="true" data-dr-year="{{ $viewYear }}" data-dr-month="{{ $viewMonth }}">
+@if ($label !== null)
+  <span class="z-label">{{ $label }}</span>
+@endif
+  <input type="hidden" name="{{ $startName }}" value="{{ $start }}" data-z-dr-start>
+  <input type="hidden" name="{{ $endName }}" value="{{ $end }}" data-z-dr-end>
+  <div class="z-dr-bar">
+    <span class="z-dr-summary" data-z-dr-summary aria-live="polite">{{ $start }} → {{ $end }}</span>
+@if ($presets)
+    <div class="z-dr-presets" role="group" aria-label="Quick date ranges">
+      <button type="button" class="z-dr-preset" data-z-dr-preset="7">Last 7d</button>
+      <button type="button" class="z-dr-preset" data-z-dr-preset="30">Last 30d</button>
+      <button type="button" class="z-dr-preset" data-z-dr-preset="month">This Month</button>
+      <button type="button" class="z-dr-preset" data-z-dr-preset="90">Quarter</button>
+    </div>
+@endif
+  </div>
+  <div class="z-dr-cal" role="group" aria-label="Date range calendar">
+    <div class="z-dr-head">
+      <button type="button" class="z-dr-nav" data-z-dr-nav="-1" aria-label="Previous month">‹</button>
+      <span class="z-dr-month" data-z-dr-month>{{ $monthLabel }}</span>
+      <button type="button" class="z-dr-nav" data-z-dr-nav="1" aria-label="Next month">›</button>
+    </div>
+    <div class="z-dr-dow" aria-hidden="true">
+      <span>Su</span><span>Mo</span><span>Tu</span><span>We</span><span>Th</span><span>Fr</span><span>Sa</span>
+    </div>
+    <div class="z-dr-grid" data-z-dr-grid>
+@foreach ($cells as $cell)
+@if ($cell === null)
+      <span aria-hidden="true"></span>
+@else
+      <button type="button" class="{{ $cell['cls'] }}" data-z-dr-day="{{ $cell['iso'] }}">{{ $cell['day'] }}</button>
+@endif
+@endforeach
+    </div>
+  </div>
+</div>

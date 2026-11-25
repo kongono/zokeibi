@@ -1,0 +1,43 @@
+@layer zokeibi.components {
+  /* Pure-CSS Accessible Hover/Focus Tooltip (0 bytes JavaScript!) */
+  .z-tooltip {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+
+    &:hover .z-tooltip-bubble,
+    &:focus-within .z-tooltip-bubble {
+      opacity: 1;
+      visibility: visible;
+      transform: translateX(-50%) translateY(0);
+    }
+  }
+
+  .z-tooltip-bubble {
+    position: absolute;
+    left: 50%;
+    bottom: calc(100% + 8px);
+    transform: translateX(-50%) translateY(4px);
+    padding: 0.34rem 0.62rem;
+    border-radius: var(--z-radius-sm);
+    background: var(--z-code-bg);
+    border: 1px solid var(--z-border-strong);
+    color: oklch(0.96 0.005 264);
+    font-family: var(--z-mono);
+    font-size: 0.7rem;
+    font-weight: 600;
+    white-space: nowrap;
+    pointer-events: none;
+    opacity: 0;
+    visibility: hidden;
+    box-shadow: var(--z-shadow);
+    z-index: 40;
+    transition: opacity 130ms ease, transform 130ms ease, visibility 130ms ease;
+
+    &.is-bottom {
+      bottom: auto;
+      top: calc(100% + 8px);
+      transform: translateX(-50%) translateY(-4px);
+    }
+  }
+}

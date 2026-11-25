@@ -1,0 +1,83 @@
+@php
+$name = isset($name) && is_string($name) && $name !== '' ? $name : 'tags';
+$id = isset($id) && is_string($id) && $id !== '' ? $id : 'z-ms-' . preg_replace('/[^a-zA-Z0-9_-]/', '', $name);
+$label = isset($label) && is_string($label) && $label !== '' ? $label : null;
+$placeholder = isset($placeholder) && is_string($placeholder) && $placeholder !== '' ? $placeholder : 'Filter & select tags...';
+$rawSelected = isset($selected) ? $selected : '';
+$selectedList = [];
+if (is_array($rawSelected)) {
+    foreach ($rawSelected as $sv) {
+        if (is_string($sv) && trim($sv) !== '') {
+            $selectedList[] = trim($sv);
+        }
+    }
+} elseif (is_string($rawSelected) && trim($rawSelected) !== '') {
+    foreach (explode(',', $rawSelected) as $sv) {
+        if (trim($sv) !== '') {
+            $selectedList[] = trim($sv);
+        }
+    }
+}
+$items = [];
+if (isset($options) && is_array($options)) {
+    foreach ($options as $k => $v) {
+        $items[(string) $k] = (string) $v;
+    }
+} elseif (isset($options) && is_string($options) && trim($options) !== '') {
+    foreach (explode('|', $options) as $seg) {
+        $parts = explode(':', $seg, 2);
+        $k = trim($parts[0]);
+        $v = trim($parts[1] ?? $parts[0]);
+        if ($k !== '') {
+            $items[$k] = $v;
+        }
+    }
+}
+$class = isset($class) && is_string($class) ? trim($class) : '';
+$wrapClass = $class !== '' ? 'z-ms ' . $class : 'z-ms';
+@endphp
+<div class="{{ $wrapClass }}" data-z-multiselect="true" data-ms-name="{{ $name }}">
+@if ($label !== null)
+  <label class="z-label" for="{{ $id }}-input">{{ $label }}</label>
+@endif
+  <div data-z-ms-hidden>
+@foreach ($selectedList as $selVal)
+@if (isset($items[$selVal]))
+    <input type="hidden" name="{{ $name }}[]" value="{{ $selVal }}">
+@endif
+@endforeach
+  </div>
+  <div class="z-ms-box" data-z-ms-box>
+    <div class="z-ms-chips" data-z-ms-chips>
+@foreach ($selectedList as $selVal)
+@if (isset($items[$selVal]))
+      <span class="z-ms-chip" data-ms-chip="{{ $selVal }}">
+        <span>{{ $items[$selVal] }}</span>
+        <button type="button" class="z-ms-chip-rm" data-z-ms-remove="{{ $selVal }}" aria-label="Remove {{ $items[$selVal] }}">×</button>
+      </span>
+@endif
+@endforeach
+    </div>
+    <input
+      id="{{ $id }}-input"
+      type="text"
+      class="z-ms-input"
+      placeholder="{{ $placeholder }}"
+      autocomplete="off"
+      role="combobox"
+      aria-expanded="false"
+      aria-autocomplete="list"
+      aria-controls="{{ $id }}-list"
+      data-z-ms-input
+    >
+  </div>
+  <ul id="{{ $id }}-list" class="z-ms-list" role="listbox" aria-multiselectable="true" data-z-ms-list hidden>
+@foreach ($items as $optVal => $optLabel)
+@php $isSel = in_array($optVal, $selectedList, true); @endphp
+    <li class="z-ms-option" role="option" data-z-ms-option data-value="{{ $optVal }}" data-label="{{ $optLabel }}" aria-selected="{{ $isSel ? 'true' : 'false' }}">
+      <span>{{ $optLabel }}</span>
+      <span class="z-ms-check" aria-hidden="true">{{ $isSel ? '✓' : '' }}</span>
+    </li>
+@endforeach
+  </ul>
+</div>

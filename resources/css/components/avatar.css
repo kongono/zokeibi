@@ -1,0 +1,36 @@
+@layer zokeibi.components {
+  .z-avatar {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 999px;
+    background: var(--z-accent-soft);
+    border: 1px solid var(--z-accent-border);
+    color: var(--z-accent);
+    font-family: var(--z-mono);
+    font-size: 0.76rem;
+    font-weight: 800;
+    flex-shrink: 0;
+
+    &.z-avatar-sm { width: 28px; height: 28px; font-size: 0.68rem; }
+    &.z-avatar-lg { width: 46px; height: 46px; font-size: 0.94rem; }
+  }
+
+  .z-avatar-dot {
+    position: absolute;
+    right: -1px;
+    bottom: -1px;
+    width: 10px;
+    height: 10px;
+    border-radius: 999px;
+    border: 2px solid var(--z-surface);
+    background: var(--z-ink-soft);
+
+    &.is-online { background: var(--z-emerald); }
+    &.is-busy { background: var(--z-danger); }
+    &.is-away { background: var(--z-amber); }
+  }
+}

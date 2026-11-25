@@ -1,0 +1,5 @@
+@layer zokeibi.tokens, zokeibi.base, zokeibi.themes, zokeibi.components, zokeibi.utilities;
+
+@view-transition {
+  navigation: auto;
+}

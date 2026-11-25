@@ -1,0 +1,61 @@
+@layer zokeibi.components {
+  /* Native HTML Top-Layer Popover API + @starting-style (0 bytes JS, no z-index bugs!) */
+  .z-popover-wrap {
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .z-popover {
+    margin: auto;
+    padding: 0.9rem 1rem;
+    min-width: 240px;
+    max-width: min(360px, 92vw);
+    border-radius: var(--z-radius);
+    border: 1px solid var(--z-border-strong);
+    background: var(--z-surface);
+    color: var(--z-ink);
+    box-shadow: var(--z-shadow);
+    opacity: 0;
+    transform: translateY(6px) scale(0.98);
+    transition: opacity 160ms ease, transform 160ms ease, display 160ms allow-discrete, overlay 160ms allow-discrete;
+
+    &:popover-open {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+
+    @starting-style {
+      &:popover-open {
+        opacity: 0;
+        transform: translateY(8px) scale(0.97);
+      }
+    }
+
+    &::backdrop {
+      background: oklch(0 0 0 / 0.35);
+      backdrop-filter: blur(2px);
+    }
+  }
+
+  .z-popover-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    padding-bottom: 0.55rem;
+    margin-bottom: 0.6rem;
+    border-bottom: 1px solid var(--z-border);
+  }
+
+  .z-popover-title {
+    margin: 0;
+    font-size: 0.84rem;
+    font-weight: 760;
+  }
+
+  .z-popover-body {
+    font-size: 0.79rem;
+    color: var(--z-ink-muted);
+    line-height: 1.5;
+  }
+}

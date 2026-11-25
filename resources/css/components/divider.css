@@ -1,0 +1,32 @@
+@layer zokeibi.components {
+  .z-divider {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    width: 100%;
+    margin: 0.35rem 0;
+    color: var(--z-ink-soft);
+    font-family: var(--z-mono);
+    font-size: 0.69rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+
+    &::before,
+    &::after {
+      content: "";
+      flex: 1 1 auto;
+      height: 1px;
+      background: var(--z-border);
+    }
+
+    &.is-plain::after { display: none; }
+  }
+
+  .z-divider-vertical {
+    display: inline-block;
+    width: 1px;
+    align-self: stretch;
+    min-height: 1.25rem;
+    background: var(--z-border);
+  }
+}

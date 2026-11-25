@@ -1,0 +1,52 @@
+@layer zokeibi.components {
+  .z-progress {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    min-width: 0;
+  }
+
+  .z-progress-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.78rem;
+  }
+
+  .z-progress-native {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 100%;
+    height: 9px;
+    border-radius: 999px;
+    border: 1px solid var(--z-border);
+    background: var(--z-bg);
+    overflow: hidden;
+    display: block;
+
+    &::-webkit-progress-bar {
+      background: var(--z-bg);
+      border-radius: 999px;
+    }
+
+    &::-webkit-progress-value {
+      background: var(--z-accent);
+      border-radius: 999px;
+      transition: width 200ms ease;
+    }
+
+    &::-moz-progress-bar {
+      background: var(--z-accent);
+      border-radius: 999px;
+    }
+
+    &.is-emerald::-webkit-progress-value { background: var(--z-emerald); }
+    &.is-emerald::-moz-progress-bar { background: var(--z-emerald); }
+
+    &.is-amber::-webkit-progress-value { background: var(--z-amber); }
+    &.is-amber::-moz-progress-bar { background: var(--z-amber); }
+
+    &.is-danger::-webkit-progress-value { background: var(--z-danger); }
+    &.is-danger::-moz-progress-bar { background: var(--z-danger); }
+  }
+}

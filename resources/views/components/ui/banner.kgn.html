@@ -1,0 +1,26 @@
+@php
+$variant = isset($variant) && is_string($variant) && in_array($variant, ['info', 'accent', 'emerald', 'amber', 'danger'], true) ? $variant : 'accent';
+$title = isset($title) && is_string($title) && $title !== '' ? $title : null;
+$actionLabel = isset($actionLabel) && is_string($actionLabel) && $actionLabel !== '' ? $actionLabel : null;
+$actionHref = isset($actionHref) && is_string($actionHref) && $actionHref !== '' ? $actionHref : '#';
+$dismissible = isset($dismissible) && ($dismissible === true || $dismissible === 'true' || $dismissible === '1');
+$slot = isset($slot) && is_string($slot) ? $slot : '';
+$class = isset($class) && is_string($class) ? trim($class) : '';
+$wrapClass = trim('z-banner' . ($variant !== 'info' ? ' z-banner-' . $variant : '') . ' ' . $class);
+@endphp
+<div class="{{ $wrapClass }}" role="status">
+  <div class="z-banner-body">
+@if ($title !== null)
+    <strong>{{ $title }}</strong>
+@endif
+    <span>{!! $slot !!}</span>
+  </div>
+  <div class="z-banner-actions">
+@if ($actionLabel !== null)
+    <a class="z-btn z-btn-outline z-btn-sm" href="{{ $actionHref }}">{{ $actionLabel }}</a>
+@endif
+@if ($dismissible)
+    <button type="button" class="z-btn z-btn-ghost z-btn-sm" data-z-close aria-label="Dismiss banner">✕</button>
+@endif
+  </div>
+</div>

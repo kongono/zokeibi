@@ -1,0 +1,64 @@
+@php
+$id = isset($id) && is_string($id) && $id !== '' ? $id : 'z-cmdk';
+$placeholder = isset($placeholder) && is_string($placeholder) && $placeholder !== '' ? $placeholder : 'Search commands or jump to...';
+$triggerLabel = isset($triggerLabel) && is_string($triggerLabel) && $triggerLabel !== '' ? $triggerLabel : 'Quick Command';
+$itemsRaw = isset($items) ? $items : 'studio:Open Token Studio:/studio|docs:View Documentation:/|health:Check API Health:/api/v1/health';
+$parsedItems = [];
+if (is_array($itemsRaw)) {
+    foreach ($itemsRaw as $entry) {
+        if (is_array($entry) && isset($entry['label'])) {
+            $parsedItems[] = [
+                'id' => (string) ($entry['id'] ?? 'item'),
+                'label' => (string) $entry['label'],
+                'href' => (string) ($entry['href'] ?? '#'),
+                'shortcut' => (string) ($entry['shortcut'] ?? ''),
+            ];
+        }
+    }
+} elseif (is_string($itemsRaw) && trim($itemsRaw) !== '') {
+    foreach (explode('|', $itemsRaw) as $chunk) {
+        $parts = explode(':', trim($chunk));
+        if (count($parts) >= 2) {
+            $parsedItems[] = [
+                'id' => trim($parts[0]),
+                'label' => trim($parts[1]),
+                'href' => isset($parts[2]) ? trim($parts[2]) : '#',
+                'shortcut' => isset($parts[3]) ? trim($parts[3]) : '',
+            ];
+        }
+    }
+}
+$slot = isset($slot) && is_string($slot) ? $slot : '';
+@endphp
+<div class="z-cmdk-wrap" data-z-cmdk-root="{{ $id }}">
+  <button type="button" class="z-btn z-btn-outline z-btn-sm" data-z-open="#{{ $id }}" aria-haspopup="dialog" aria-controls="{{ $id }}">
+    <span>{{ $triggerLabel }}</span>
+    <kbd class="z-kbd">⌘K</kbd>
+  </button>
+  <div class="z-cmdk-backdrop" id="{{ $id }}" data-z-cmdk="true" hidden>
+    <div class="z-cmdk" role="dialog" aria-modal="true" aria-label="{{ $triggerLabel }}">
+      <div class="z-cmdk-head">
+        <input type="search" class="z-cmdk-input" data-z-cmdk-input placeholder="{{ $placeholder }}" aria-label="{{ $placeholder }}" autocomplete="off">
+        <button type="button" class="z-btn z-btn-ghost z-btn-sm" data-z-close="#{{ $id }}" aria-label="Close command palette">Esc</button>
+      </div>
+      <ul class="z-cmdk-list" role="listbox" data-z-cmdk-list>
+        @foreach ($parsedItems as $idx => $item)
+          <li role="option" aria-selected="{{ $idx === 0 ? 'true' : 'false' }}" data-z-cmdk-item="{{ strtolower($item['label'] . ' ' . $item['id']) }}">
+            <a class="z-cmdk-item{{ $idx === 0 ? ' is-active' : '' }}" href="{{ $item['href'] }}">
+              <span>{{ $item['label'] }}</span>
+              @if ($item['shortcut'] !== '')
+                <kbd class="z-kbd">{{ $item['shortcut'] }}</kbd>
+              @endif
+            </a>
+          </li>
+        @endforeach
+        {!! $slot !!}
+      </ul>
+      <div class="z-cmdk-empty" data-z-cmdk-empty hidden>No matching commands.</div>
+      <div class="z-cmdk-foot">
+        <span>↑↓ Navigate · ↵ Open</span>
+        <span>Esc Close</span>
+      </div>
+    </div>
+  </div>
+</div>

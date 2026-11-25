@@ -1,0 +1,28 @@
+@php
+$columns = isset($columns) && is_numeric($columns) && in_array((int) $columns, [1, 2, 3], true) ? (int) $columns : 2;
+$rows = [];
+if (isset($items) && is_array($items)) {
+    foreach ($items as $k => $v) {
+        $rows[] = ['term' => (string) $k, 'detail' => (string) $v];
+    }
+} elseif (isset($items) && is_string($items) && trim($items) !== '') {
+    foreach (explode('|', $items) as $seg) {
+        $parts = explode(':', $seg, 2);
+        $term = trim($parts[0]);
+        if ($term !== '') {
+            $rows[] = ['term' => $term, 'detail' => trim($parts[1] ?? '')];
+        }
+    }
+}
+$colClass = $columns === 1 ? ' z-dl-1' : ($columns === 3 ? ' z-dl-3' : '');
+$class = isset($class) && is_string($class) ? trim($class) : '';
+$dlClass = trim('z-dl' . $colClass . ' ' . $class);
+@endphp
+<dl class="{{ $dlClass }}">
+@foreach ($rows as $row)
+  <div class="z-dl-item">
+    <dt>{{ $row['term'] }}</dt>
+    <dd>{{ $row['detail'] }}</dd>
+  </div>
+@endforeach
+</dl>

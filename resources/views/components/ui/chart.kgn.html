@@ -1,0 +1,161 @@
+@php
+$type = isset($type) && is_string($type) && in_array($type, ['sparkline', 'bar', 'donut'], true) ? $type : 'bar';
+$title = isset($title) && is_string($title) && $title !== '' ? $title : 'Metrics';
+$meta = isset($meta) && is_string($meta) && $meta !== '' ? $meta : null;
+$points = [];
+if (isset($data) && is_array($data)) {
+    foreach ($data as $k => $v) {
+        if (is_numeric($v)) {
+            $points[] = ['label' => (string) $k, 'value' => (float) $v];
+        }
+    }
+} elseif (isset($data) && is_string($data) && trim($data) !== '') {
+    foreach (explode('|', $data) as $idx => $seg) {
+        $parts = explode(':', $seg, 2);
+        if (count($parts) === 2 && is_numeric(trim($parts[1]))) {
+            $points[] = ['label' => trim($parts[0]), 'value' => (float) trim($parts[1])];
+        } elseif (is_numeric(trim($parts[0]))) {
+            $points[] = ['label' => (string) ($idx + 1), 'value' => (float) trim($parts[0])];
+        }
+    }
+}
+if ($points === []) {
+    $points = [
+        ['label' => 'Mon', 'value' => 24.0],
+        ['label' => 'Tue', 'value' => 42.0],
+        ['label' => 'Wed', 'value' => 36.0],
+        ['label' => 'Thu', 'value' => 61.0],
+        ['label' => 'Fri', 'value' => 54.0],
+    ];
+}
+$maxVal = 1.0;
+$sumVal = 0.0;
+foreach ($points as $pt) {
+    if ($pt['value'] > $maxVal) {
+        $maxVal = $pt['value'];
+    }
+    $sumVal += max(0.0, $pt['value']);
+}
+$count = count($points);
+$class = isset($class) && is_string($class) ? trim($class) : '';
+$wrapClass = $class !== '' ? 'z-chart ' . $class : 'z-chart';
+@endphp
+<figure class="{{ $wrapClass }}">
+  <figcaption class="z-chart-head">
+    <span class="z-chart-title">{{ $title }}</span>
+@if ($meta !== null)
+    <span class="z-chart-meta">{{ $meta }}</span>
+@endif
+  </figcaption>
+
+@if ($type === 'sparkline')
+@php
+$w = 340.0;
+$h = 96.0;
+$padX = 10.0;
+$padY = 12.0;
+$plotW = $w - ($padX * 2);
+$plotH = $h - ($padY * 2);
+$polyCoords = [];
+$dots = [];
+foreach ($points as $i => $pt) {
+    $x = $count > 1 ? $padX + (($i / ($count - 1)) * $plotW) : ($w / 2);
+    $y = $padY + $plotH - (($pt['value'] / $maxVal) * $plotH);
+    $polyCoords[] = sprintf('%.1f,%.1f', $x, $y);
+    $dots[] = ['x' => sprintf('%.1f', $x), 'y' => sprintf('%.1f', $y), 'label' => $pt['label'], 'val' => $pt['value']];
+}
+$linePoints = implode(' ', $polyCoords);
+$areaPoints = sprintf('%.1f,%.1f %s %.1f,%.1f', $padX, $h - $padY, $linePoints, $w - $padX, $h - $padY);
+@endphp
+  <svg class="z-chart-svg" viewBox="0 0 340 96" role="img" aria-label="{{ $title }} sparkline chart">
+    <line class="z-chart-grid" x1="10" y1="84" x2="330" y2="84" />
+    <polygon class="z-chart-area" points="{{ $areaPoints }}" />
+    <polyline class="z-chart-line" points="{{ $linePoints }}" />
+@foreach ($dots as $dot)
+    <circle class="z-chart-dot" cx="{{ $dot['x'] }}" cy="{{ $dot['y'] }}" r="3">
+      <title>{{ $dot['label'] }}: {{ $dot['val'] }}</title>
+    </circle>
+@endforeach
+  </svg>
+@elseif ($type === 'bar')
+@php
+$w = 360.0;
+$h = 152.0;
+$padX = 16.0;
+$padTop = 20.0;
+$padBot = 24.0;
+$plotW = $w - ($padX * 2);
+$plotH = $h - $padTop - $padBot;
+$slotW = $plotW / max(1, $count);
+$barW = min(38.0, max(12.0, $slotW * 0.58));
+$bars = [];
+foreach ($points as $i => $pt) {
+    $bh = max(4.0, ($pt['value'] / $maxVal) * $plotH);
+    $bx = $padX + ($i * $slotW) + (($slotW - $barW) / 2);
+    $by = $padTop + ($plotH - $bh);
+    $bars[] = [
+        'x' => sprintf('%.1f', $bx),
+        'y' => sprintf('%.1f', $by),
+        'w' => sprintf('%.1f', $barW),
+        'h' => sprintf('%.1f', $bh),
+        'cx' => sprintf('%.1f', $bx + ($barW / 2)),
+        'valY' => sprintf('%.1f', max(12.0, $by - 5.0)),
+        'label' => $pt['label'],
+        'val' => rtrim(rtrim(sprintf('%.1f', $pt['value']), '0'), '.'),
+    ];
+}
+@endphp
+  <svg class="z-chart-svg" viewBox="0 0 360 152" role="img" aria-label="{{ $title }} bar chart">
+    <line class="z-chart-grid" x1="16" y1="74" x2="344" y2="74" />
+    <line class="z-chart-grid" x1="16" y1="128" x2="344" y2="128" />
+@foreach ($bars as $b)
+    <rect class="z-chart-bar" x="{{ $b['x'] }}" y="{{ $b['y'] }}" width="{{ $b['w'] }}" height="{{ $b['h'] }}">
+      <title>{{ $b['label'] }}: {{ $b['val'] }}</title>
+    </rect>
+    <text class="z-chart-val" x="{{ $b['cx'] }}" y="{{ $b['valY'] }}" text-anchor="middle">{{ $b['val'] }}</text>
+    <text class="z-chart-label" x="{{ $b['cx'] }}" y="144" text-anchor="middle">{{ $b['label'] }}</text>
+@endforeach
+  </svg>
+@else
+@php
+$r = 46.0;
+$circ = 2 * M_PI * $r;
+$safeSum = $sumVal > 0 ? $sumVal : 1.0;
+$offset = 0.0;
+$segs = [];
+foreach ($points as $i => $pt) {
+    $pct = max(0.0, $pt['value']) / $safeSum;
+    $len = $pct * $circ;
+    $segs[] = [
+        'tone' => 'z-chart-tone-' . ($i % 5),
+        'dash' => sprintf('%.2f %.2f', $len, $circ),
+        'offset' => sprintf('%.2f', -$offset),
+        'label' => $pt['label'],
+        'pct' => (int) round($pct * 100),
+        'val' => rtrim(rtrim(sprintf('%.1f', $pt['value']), '0'), '.'),
+    ];
+    $offset += $len;
+}
+$totalDisp = rtrim(rtrim(sprintf('%.1f', $sumVal), '0'), '.');
+@endphp
+  <div class="z-chart-donut-wrap">
+    <svg class="z-chart-donut" viewBox="0 0 120 120" role="img" aria-label="{{ $title }} donut chart">
+      <circle class="z-chart-track" cx="60" cy="60" r="46" />
+@foreach ($segs as $seg)
+      <circle class="z-chart-seg {{ $seg['tone'] }}" cx="60" cy="60" r="46" stroke-dasharray="{{ $seg['dash'] }}" stroke-dashoffset="{{ $seg['offset'] }}" transform="rotate(-90 60 60)">
+        <title>{{ $seg['label'] }}: {{ $seg['val'] }} ({{ $seg['pct'] }}%)</title>
+      </circle>
+@endforeach
+      <text class="z-chart-center" x="60" y="65" text-anchor="middle">{{ $totalDisp }}</text>
+    </svg>
+    <ul class="z-chart-legend">
+@foreach ($segs as $seg)
+      <li>
+        <span><span class="z-chart-swatch {{ $seg['tone'] }}" aria-hidden="true"></span>{{ $seg['label'] }}</span>
+        <span class="z-mono">{{ $seg['pct'] }}%</span>
+      </li>
+@endforeach
+    </ul>
+  </div>
+@endif
+</figure>

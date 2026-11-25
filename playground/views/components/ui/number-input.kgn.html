@@ -1,0 +1,31 @@
+@php
+$name = isset($name) && is_string($name) && $name !== '' ? $name : 'quantity';
+$id = isset($id) && is_string($id) && $id !== '' ? $id : 'z-num-' . preg_replace('/[^a-zA-Z0-9_-]/', '', $name);
+$label = isset($label) && is_string($label) && $label !== '' ? $label : null;
+$min = isset($min) && is_numeric($min) ? (string) $min : '0';
+$max = isset($max) && is_numeric($max) ? (string) $max : '999';
+$step = isset($step) && is_numeric($step) ? (string) $step : '1';
+$value = isset($value) && is_numeric($value) ? (string) $value : '1';
+$class = isset($class) && is_string($class) ? trim($class) : '';
+$wrapClass = $class !== '' ? 'z-num ' . $class : 'z-num';
+@endphp
+<div class="{{ $wrapClass }}" data-z-number="true">
+@if ($label !== null)
+  <label class="z-label" for="{{ $id }}">{{ $label }}</label>
+@endif
+  <div class="z-num-row">
+    <button type="button" class="z-num-btn" data-z-num-dec aria-label="Decrease value">−</button>
+    <input
+      id="{{ $id }}"
+      name="{{ $name }}"
+      type="number"
+      class="z-num-input"
+      min="{{ $min }}"
+      max="{{ $max }}"
+      step="{{ $step }}"
+      value="{{ $value }}"
+      data-z-num-input
+    >
+    <button type="button" class="z-num-btn" data-z-num-inc aria-label="Increase value">+</button>
+  </div>
+</div>

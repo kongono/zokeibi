@@ -1,0 +1,48 @@
+@php
+$name = isset($name) && is_string($name) && $name !== '' ? $name : 'choice';
+$label = isset($label) && is_string($label) && $label !== '' ? $label : null;
+$layout = isset($layout) && is_string($layout) && in_array($layout, ['list', 'cards'], true) ? $layout : 'list';
+$selected = isset($value) && is_string($value) ? $value : '';
+$opts = [];
+if (isset($options) && is_array($options)) {
+    foreach ($options as $k => $v) {
+        if (is_array($v)) {
+            $opts[] = ['value' => (string) ($v['value'] ?? $k), 'label' => (string) ($v['label'] ?? $k), 'desc' => (string) ($v['desc'] ?? '')];
+        } else {
+            $opts[] = ['value' => (string) $k, 'label' => (string) $v, 'desc' => ''];
+        }
+    }
+} elseif (isset($options) && is_string($options) && trim($options) !== '') {
+    foreach (explode('|', $options) as $seg) {
+        $parts = explode(':', $seg, 3);
+        $v = trim($parts[0]);
+        if ($v !== '') {
+            $opts[] = ['value' => $v, 'label' => trim($parts[1] ?? $v), 'desc' => trim($parts[2] ?? '')];
+        }
+    }
+}
+if ($selected === '' && $opts !== []) {
+    $selected = $opts[0]['value'];
+}
+$listClass = $layout === 'cards' ? 'z-radio-list is-cards' : 'z-radio-list';
+$class = isset($class) && is_string($class) ? trim($class) : '';
+$wrapClass = $class !== '' ? 'z-radio-group ' . $class : 'z-radio-group';
+@endphp
+<fieldset class="{{ $wrapClass }}">
+@if ($label !== null)
+  <legend class="z-label">{{ $label }}</legend>
+@endif
+  <div class="{{ $listClass }}">
+@foreach ($opts as $opt)
+    <label class="z-radio-opt">
+      <input type="radio" name="{{ $name }}" value="{{ $opt['value'] }}" @if ($opt['value'] === $selected) checked @endif>
+      <span class="z-radio-body">
+        <span class="z-radio-title">{{ $opt['label'] }}</span>
+@if ($opt['desc'] !== '')
+        <span class="z-radio-desc">{{ $opt['desc'] }}</span>
+@endif
+      </span>
+    </label>
+@endforeach
+  </div>
+</fieldset>

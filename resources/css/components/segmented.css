@@ -1,0 +1,49 @@
+@layer zokeibi.components {
+  .z-segmented {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.18rem;
+    padding: 0.2rem;
+    border-radius: var(--z-radius-sm);
+    background: var(--z-surface-2);
+    border: 1px solid var(--z-border);
+    flex-wrap: wrap;
+  }
+
+  .z-seg-item {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    padding: 0.3rem 0.7rem;
+    border-radius: calc(var(--z-radius-sm) - 2px);
+    border: 1px solid transparent;
+    font-size: 0.77rem;
+    font-weight: 660;
+    color: var(--z-ink-muted);
+    cursor: pointer;
+    user-select: none;
+    transition: background-color 120ms ease, color 120ms ease, border-color 120ms ease;
+
+    & input[type="radio"] {
+      position: absolute;
+      opacity: 0;
+      width: 1px;
+      height: 1px;
+      margin: 0;
+    }
+
+    &:hover { color: var(--z-ink); }
+
+    &:has(input:checked) {
+      background: var(--z-surface);
+      border-color: var(--z-border-strong);
+      color: var(--z-ink);
+      box-shadow: 0 1px 2px oklch(0 0 0 / 0.14);
+    }
+
+    &:has(input:focus-visible) {
+      outline: 2px solid var(--z-accent);
+      outline-offset: 1px;
+    }
+  }
+}

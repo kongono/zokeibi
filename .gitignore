@@ -1,0 +1,7 @@
+/vendor/
+/.cache/
+/.phpunit.cache/
+/playground/var/
+/.phpunit.result.cache
+*.log
+*.lock

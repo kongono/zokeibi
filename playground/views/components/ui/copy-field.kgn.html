@@ -1,0 +1,21 @@
+@php
+$label = isset($label) && is_string($label) && $label !== '' ? $label : null;
+$value = isset($value) && is_string($value) ? $value : '';
+$masked = isset($masked) && ($masked === true || $masked === 'true' || $masked === '1');
+$display = $masked && $value !== '' ? str_repeat('•', min(24, max(8, strlen($value)))) : $value;
+$class = isset($class) && is_string($class) ? trim($class) : '';
+$wrapClass = $class !== '' ? 'z-copy ' . $class : 'z-copy';
+@endphp
+<div class="{{ $wrapClass }}" data-z-copy="true" data-copy-value="{{ $value }}" data-copy-masked="{{ $masked ? 'true' : 'false' }}">
+@if ($label !== null)
+  <span class="z-label">{{ $label }}</span>
+@endif
+  <div class="z-copy-row">
+    <code class="z-copy-val" data-z-copy-display>{{ $display }}</code>
+@if ($masked)
+    <button type="button" class="z-btn z-btn-ghost z-btn-sm" data-z-copy-reveal aria-label="Reveal secret value">Show</button>
+@endif
+    <button type="button" class="z-btn z-btn-outline z-btn-sm" data-z-copy-btn>Copy</button>
+  </div>
+  <span class="z-copy-status" data-z-copy-status aria-live="polite"></span>
+</div>

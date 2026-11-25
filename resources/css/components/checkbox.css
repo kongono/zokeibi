@@ -1,0 +1,64 @@
+@layer zokeibi.components {
+  .z-checkbox {
+    display: inline-flex;
+    align-items: flex-start;
+    gap: 0.58rem;
+    cursor: pointer;
+    user-select: none;
+
+    & input[type="checkbox"] {
+      appearance: none;
+      width: 18px;
+      height: 18px;
+      margin-top: 0.1rem;
+      flex-shrink: 0;
+      border-radius: 5px;
+      border: 1.5px solid var(--z-border-strong);
+      background: var(--z-surface-2);
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+      transition: background-color 120ms ease, border-color 120ms ease;
+
+      &::after {
+        content: "";
+        width: 9px;
+        height: 5px;
+        border-left: 2px solid var(--z-accent-ink);
+        border-bottom: 2px solid var(--z-accent-ink);
+        transform: rotate(-45deg) scale(0);
+        margin-top: -2px;
+        transition: transform 110ms ease;
+      }
+
+      &:checked {
+        background: var(--z-accent);
+        border-color: var(--z-accent);
+        &::after { transform: rotate(-45deg) scale(1); }
+      }
+
+      &:focus-visible {
+        outline: 2px solid var(--z-accent);
+        outline-offset: 2px;
+      }
+
+      &:disabled { opacity: 0.5; cursor: not-allowed; }
+    }
+  }
+
+  .z-checkbox-text {
+    display: grid;
+    gap: 0.14rem;
+  }
+
+  .z-checkbox-label {
+    font-size: 0.83rem;
+    font-weight: 620;
+    color: var(--z-ink);
+  }
+
+  .z-checkbox-desc {
+    font-size: 0.74rem;
+    color: var(--z-ink-muted);
+  }
+}

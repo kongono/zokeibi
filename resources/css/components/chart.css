@@ -1,0 +1,140 @@
+@layer zokeibi.components {
+  .z-chart {
+    display: grid;
+    gap: 0.65rem;
+    padding: 0.85rem;
+    border-radius: var(--z-radius);
+    border: 1px solid var(--z-border);
+    background: var(--z-surface);
+  }
+
+  .z-chart-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.5rem;
+  }
+
+  .z-chart-title {
+    font-size: 0.82rem;
+    font-weight: 760;
+    color: var(--z-ink);
+  }
+
+  .z-chart-meta {
+    font-family: var(--z-mono);
+    font-size: 0.7rem;
+    color: var(--z-ink-soft);
+  }
+
+  .z-chart-svg {
+    width: 100%;
+    height: auto;
+    display: block;
+    overflow: visible;
+  }
+
+  .z-chart-grid {
+    stroke: var(--z-border);
+    stroke-width: 1;
+    stroke-dasharray: 3 3;
+  }
+
+  .z-chart-line {
+    fill: none;
+    stroke: var(--z-accent);
+    stroke-width: 2.25;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .z-chart-area {
+    fill: color-mix(in oklch, var(--z-accent) 18%, transparent);
+  }
+
+  .z-chart-dot {
+    fill: var(--z-accent);
+    stroke: var(--z-surface);
+    stroke-width: 1.5;
+  }
+
+  .z-chart-bar {
+    fill: var(--z-accent);
+    rx: 4;
+    transition: opacity 120ms ease;
+
+    &:hover { opacity: 0.82; }
+  }
+
+  .z-chart-label {
+    fill: var(--z-ink-soft);
+    font-family: var(--z-mono);
+    font-size: 10px;
+  }
+
+  .z-chart-val {
+    fill: var(--z-ink);
+    font-family: var(--z-mono);
+    font-size: 10px;
+    font-weight: 700;
+  }
+
+  .z-chart-donut-wrap {
+    display: flex;
+    align-items: center;
+    gap: 1.1rem;
+    flex-wrap: wrap;
+  }
+
+  .z-chart-donut {
+    width: 132px;
+    height: 132px;
+    flex-shrink: 0;
+  }
+
+  .z-chart-track {
+    fill: none;
+    stroke: var(--z-surface-2);
+    stroke-width: 14;
+  }
+
+  .z-chart-seg { fill: none; stroke-width: 14; }
+  .z-chart-tone-0 { stroke: var(--z-accent); background: var(--z-accent); }
+  .z-chart-tone-1 { stroke: var(--z-emerald); background: var(--z-emerald); }
+  .z-chart-tone-2 { stroke: var(--z-blue); background: var(--z-blue); }
+  .z-chart-tone-3 { stroke: var(--z-amber); background: var(--z-amber); }
+  .z-chart-tone-4 { stroke: var(--z-danger); background: var(--z-danger); }
+
+  .z-chart-center {
+    fill: var(--z-ink);
+    font-family: var(--z-mono);
+    font-size: 15px;
+    font-weight: 800;
+  }
+
+  .z-chart-legend {
+    display: grid;
+    gap: 0.35rem;
+    flex: 1 1 140px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .z-chart-legend li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.6rem;
+    font-size: 0.76rem;
+    color: var(--z-ink-muted);
+  }
+
+  .z-chart-swatch {
+    width: 9px;
+    height: 9px;
+    border-radius: 999px;
+    display: inline-block;
+    margin-right: 0.4rem;
+  }
+}

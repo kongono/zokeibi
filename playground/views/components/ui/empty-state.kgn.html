@@ -1,0 +1,18 @@
+@php
+$icon = isset($icon) && is_string($icon) && $icon !== '' ? $icon : '造形美';
+$title = isset($title) && is_string($title) && $title !== '' ? $title : 'Nothing here yet';
+$description = isset($description) && is_string($description) && $description !== '' ? $description : null;
+$class = isset($class) && is_string($class) ? trim($class) : '';
+$wrapClass = $class !== '' ? 'z-empty ' . $class : 'z-empty';
+$slot = isset($slot) && is_string($slot) ? trim($slot) : '';
+@endphp
+<div class="{{ $wrapClass }}">
+  <div class="z-empty-icon" aria-hidden="true">{{ $icon }}</div>
+  <h3 class="z-empty-title">{{ $title }}</h3>
+@if ($description !== null)
+  <p class="z-empty-desc">{{ $description }}</p>
+@endif
+@if ($slot !== '')
+  <div class="z-empty-actions">{!! $slot !!}</div>
+@endif
+</div>

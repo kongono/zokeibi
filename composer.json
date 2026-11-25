@@ -1,0 +1,66 @@
+{
+  "name": "kongono/zokeibi",
+  "description": "Zokeibi (造形美 — Beauty of Form) — Modern, Zero-npm, Strict-CSP, AI-Native UI Component Framework & Pure PHP 8.5 OKLCH CSS Compiler for Kongono.",
+  "type": "library",
+  "license": "MIT",
+  "homepage": "https://zokeibi.com",
+  "support": {
+    "source": "https://github.com/anthonyiovanna/zokeibi",
+    "issues": "https://github.com/anthonyiovanna/zokeibi/issues"
+  },
+  "keywords": [
+    "php",
+    "kongono",
+    "zokeibi",
+    "ui",
+    "components",
+    "oklch",
+    "zero-npm",
+    "design-system",
+    "live-ui"
+  ],
+  "require": {
+    "php": ">=8.5.13"
+  },
+  "require-dev": {
+    "kongono/framework": "^1.19",
+    "phpstan/phpstan": "^2.2",
+    "phpstan/phpstan-strict-rules": "^2.0",
+    "phpunit/phpunit": "^13.2"
+  },
+  "suggest": {
+    "kongono/framework": "Recommended Golden Path for <x-ui.*> templates, Kongono Live 2.5 signals, and running `zokeibi studio`."
+  },
+  "bin": [
+    "bin/zokeibi"
+  ],
+  "autoload": {
+    "psr-4": {
+      "Zokeibi\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Zokeibi\\Tests\\": "tests/",
+      "Zokeibi\\Playground\\": "playground/src/"
+    }
+  },
+  "minimum-stability": "stable",
+  "prefer-stable": true,
+  "config": {
+    "sort-packages": true,
+    "allow-plugins": {}
+  },
+  "scripts": {
+    "playground": "@php vendor/bin/kongo serve --app=playground --port=8101",
+    "build-playground-css": "@php bin/zokeibi build --views=playground/views --out=playground/public/assets/zokeibi.min.css",
+    "audit-playground": "@php bin/zokeibi audit --views=playground/views",
+    "test": "@php -d memory_limit=512M vendor/bin/phpunit --configuration phpunit.xml.dist --fail-on-deprecation --fail-on-warning --fail-on-notice",
+    "analyse": "@php -d memory_limit=512M vendor/bin/phpstan analyse --configuration=phpstan.neon.dist --no-progress",
+    "quality": [
+      "@analyse",
+      "@test",
+      "@audit-playground"
+    ]
+  }
+}

@@ -1,0 +1,33 @@
+@php
+$label = isset($label) && is_string($label) ? $label : 'Metric';
+$value = isset($value) && is_scalar($value) ? (string) $value : '0';
+$delta = isset($delta) && is_string($delta) && $delta !== '' ? $delta : null;
+$trend = isset($trend) && is_string($trend) ? $trend : 'neutral';
+$hint = isset($hint) && is_string($hint) && $hint !== '' ? $hint : null;
+$variant = isset($variant) && is_string($variant) ? $variant : 'default';
+$class = isset($class) && is_string($class) ? trim($class) : '';
+$classes = ['z-kpi'];
+if (in_array($variant, ['accent', 'emerald'], true)) {
+    $classes[] = 'z-kpi-' . $variant;
+}
+if ($class !== '') {
+    $classes[] = $class;
+}
+$wrapClass = implode(' ', $classes);
+$deltaClass = 'z-kpi-delta';
+if (in_array($trend, ['up', 'down'], true)) {
+    $deltaClass .= ' is-' . $trend;
+}
+@endphp
+<div class="{{ $wrapClass }}">
+  <div class="z-kpi-top">
+    <span class="z-kpi-label">{{ $label }}</span>
+@if ($delta !== null)
+    <span class="{{ $deltaClass }}">{{ $delta }}</span>
+@endif
+  </div>
+  <div class="z-kpi-value">{{ $value }}</div>
+@if ($hint !== null)
+  <div class="z-kpi-hint">{{ $hint }}</div>
+@endif
+</div>

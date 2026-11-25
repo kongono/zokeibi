@@ -1,0 +1,59 @@
+@php
+$id = isset($id) && is_string($id) && $id !== '' ? $id : 'k-dd-' . substr(md5((string) ($trigger ?? 'menu')), 0, 6);
+$trigger = isset($trigger) && is_string($trigger) && $trigger !== '' ? $trigger : 'Actions ▾';
+$triggerVariant = isset($triggerVariant) && is_string($triggerVariant) && in_array($triggerVariant, ['default', 'primary', 'emerald', 'danger', 'ghost', 'outline'], true) ? $triggerVariant : 'outline';
+$triggerSize = isset($triggerSize) && is_string($triggerSize) && in_array($triggerSize, ['sm', 'md', 'lg'], true) ? $triggerSize : 'sm';
+$btnClass = 'z-btn z-btn-' . $triggerVariant . ($triggerSize !== 'md' ? ' z-btn-' . $triggerSize : '');
+$rows = [];
+if (isset($items) && is_string($items) && trim($items) !== '') {
+    foreach (explode('|', $items) as $seg) {
+        $seg = trim($seg);
+        if ($seg === '---') {
+            $rows[] = ['sep' => true];
+            continue;
+        }
+        $danger = str_starts_with($seg, 'danger:');
+        if ($danger) {
+            $seg = substr($seg, 7);
+        }
+        $parts = explode(':', $seg, 3);
+        $lbl = trim($parts[0]);
+        if ($lbl !== '') {
+            $rows[] = [
+                'sep' => false,
+                'danger' => $danger,
+                'label' => $lbl,
+                'href' => isset($parts[1]) && trim($parts[1]) !== '' ? trim($parts[1]) : '#',
+                'shortcut' => isset($parts[2]) ? trim($parts[2]) : '',
+            ];
+        }
+    }
+}
+$slot = isset($slot) && is_string($slot) ? trim($slot) : '';
+@endphp
+<span class="z-dropdown">
+  <button type="button" class="{{ $btnClass }}" popovertarget="{{ $id }}" aria-haspopup="menu">{{ $trigger }}</button>
+  <div id="{{ $id }}" class="z-dropdown-panel" popover="auto" role="menu">
+@if ($rows !== [])
+    <ul class="z-dropdown-list">
+@foreach ($rows as $row)
+@if ($row['sep'])
+      <li class="z-dropdown-sep" role="separator"></li>
+@else
+      <li role="none">
+        <a class="z-dropdown-item {{ $row['danger'] ? 'is-danger' : '' }}" role="menuitem" href="{{ $row['href'] }}">
+          <span>{{ $row['label'] }}</span>
+@if ($row['shortcut'] !== '')
+          <kbd class="z-kbd">{{ $row['shortcut'] }}</kbd>
+@endif
+        </a>
+      </li>
+@endif
+@endforeach
+    </ul>
+@endif
+@if ($slot !== '')
+    {!! $slot !!}
+@endif
+  </div>
+</span>

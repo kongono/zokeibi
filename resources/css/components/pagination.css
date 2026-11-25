@@ -1,0 +1,56 @@
+@layer zokeibi.components {
+  .z-pagination {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    font-size: 0.82rem;
+  }
+
+  .z-pagination-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.32rem;
+  }
+
+  .z-pagination-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 2rem;
+    height: 2rem;
+    padding: 0 0.6rem;
+    border-radius: var(--z-radius-sm);
+    border: 1px solid var(--z-border);
+    background: var(--z-surface);
+    color: var(--z-ink);
+    text-decoration: none;
+    font-weight: 560;
+
+    &:hover {
+      background: var(--z-surface-hover);
+      border-color: var(--z-border-strong);
+    }
+
+    &[aria-current="page"] {
+      background: var(--z-accent);
+      border-color: var(--z-accent);
+      color: var(--z-accent-ink);
+      font-weight: 720;
+    }
+
+    &[aria-disabled="true"] {
+      opacity: 0.45;
+      pointer-events: none;
+    }
+  }
+
+  .z-pagination-meta {
+    color: var(--z-ink-muted);
+    font-size: 0.78rem;
+  }
+}

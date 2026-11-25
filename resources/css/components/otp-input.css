@@ -1,0 +1,33 @@
+@layer zokeibi.components {
+  .z-otp {
+    display: grid;
+    gap: 0.42rem;
+  }
+
+  .z-otp-group {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.42rem;
+    flex-wrap: wrap;
+  }
+
+  .z-otp-digit {
+    width: 42px;
+    height: 46px;
+    text-align: center;
+    font-family: var(--z-mono);
+    font-size: 1.08rem;
+    font-weight: 800;
+    border-radius: var(--z-radius-sm);
+    border: 1px solid var(--z-border-strong);
+    background: var(--z-surface-2);
+    color: var(--z-ink);
+
+    &:focus {
+      outline: 2px solid var(--z-accent);
+      outline-offset: 1px;
+      border-color: var(--z-accent);
+      background: var(--z-surface);
+    }
+  }
+}

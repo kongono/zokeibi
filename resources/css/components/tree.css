@@ -1,0 +1,51 @@
+@layer zokeibi.components {
+  .z-tree {
+    font-family: var(--z-mono);
+    font-size: 0.78rem;
+    padding: 0.65rem 0.75rem;
+    border-radius: var(--z-radius);
+    border: 1px solid var(--z-border);
+    background: var(--z-surface);
+  }
+
+  .z-tree-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 0.16rem;
+
+    & .z-tree-list {
+      margin-left: 0.85rem;
+      padding-left: 0.65rem;
+      border-left: 1px solid var(--z-border);
+      margin-top: 0.16rem;
+    }
+  }
+
+  .z-tree-dir > summary {
+    list-style: none;
+    cursor: pointer;
+    padding: 0.24rem 0.42rem;
+    border-radius: calc(var(--z-radius-sm) - 2px);
+    color: var(--z-ink);
+    font-weight: 700;
+
+    &::-webkit-details-marker { display: none; }
+    &::before { content: "▸ "; color: var(--z-ink-soft); }
+    &:hover { background: var(--z-surface-2); }
+  }
+
+  .z-tree-dir[open] > summary::before { content: "▾ "; color: var(--z-accent); }
+
+  .z-tree-file {
+    padding: 0.22rem 0.42rem 0.22rem 1.05rem;
+    color: var(--z-ink-muted);
+    border-radius: calc(var(--z-radius-sm) - 2px);
+
+    &:hover {
+      background: var(--z-surface-2);
+      color: var(--z-ink);
+    }
+  }
+}

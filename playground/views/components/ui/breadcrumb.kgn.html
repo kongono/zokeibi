@@ -1,0 +1,35 @@
+@php
+$crumbs = [];
+if (isset($items) && is_array($items)) {
+    foreach ($items as $item) {
+        if (is_array($item) && isset($item['label'])) {
+            $crumbs[] = ['label' => (string) $item['label'], 'href' => isset($item['href']) ? (string) $item['href'] : null];
+        }
+    }
+} elseif (isset($items) && is_string($items) && trim($items) !== '') {
+    foreach (explode('|', $items) as $seg) {
+        $parts = explode(':', trim($seg), 2);
+        $lbl = trim($parts[0]);
+        $href = isset($parts[1]) && trim($parts[1]) !== '' ? trim($parts[1]) : null;
+        if ($lbl !== '') {
+            $crumbs[] = ['label' => $lbl, 'href' => $href];
+        }
+    }
+}
+$lastIdx = count($crumbs) - 1;
+$class = isset($class) && is_string($class) ? trim($class) : '';
+$navClass = $class !== '' ? 'z-breadcrumb ' . $class : 'z-breadcrumb';
+@endphp
+<nav class="{{ $navClass }}" aria-label="Breadcrumb">
+  <ol>
+@foreach ($crumbs as $idx => $crumb)
+    <li>
+@if ($idx < $lastIdx && $crumb['href'] !== null)
+      <a href="{{ $crumb['href'] }}">{{ $crumb['label'] }}</a>
+@else
+      <span aria-current="page">{{ $crumb['label'] }}</span>
+@endif
+    </li>
+@endforeach
+  </ol>
+</nav>

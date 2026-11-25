@@ -1,0 +1,1091 @@
+{
+  "name": "zokeibi",
+  "kanji": "形",
+  "meaning": "Form / Shape",
+  "package": "kongono/zokeibi",
+  "version": "1.0.0",
+  "themes": ["sumi", "washi", "indigo", "matcha", "kintsugi"],
+  "radius_presets": ["sharp", "default", "rounded"],
+  "core_css": [
+    "layers.css",
+    "tokens.css",
+    "themes.css",
+    "base.css"
+  ],
+  "utilities_css": "utilities.css",
+  "components": {
+    "button": {
+      "id": "button",
+      "tag": "x-ui.button",
+      "name": "Button",
+      "category": "primitives",
+      "js_mode": "0 B JS",
+      "description": "Polymorphic button or link primitive with OKLCH perceptual variants, sizes, Live 2.5 hooks, and native Popover targeting.",
+      "standards": ["CSS @layer", "OKLCH", "CSS Nesting", "Popover Target"],
+      "css": "button.css",
+      "css_deps": [],
+      "template": "button.kgn.html",
+      "props": {
+        "variant": { "type": "enum", "enum": ["default", "primary", "emerald", "danger", "ghost", "outline"], "default": "default", "description": "Visual style variant" },
+        "size": { "type": "enum", "enum": ["sm", "md", "lg"], "default": "md", "description": "Button density" },
+        "type": { "type": "enum", "enum": ["button", "submit", "reset"], "default": "button", "description": "HTML button type" },
+        "href": { "type": "string", "description": "Renders an anchor tag when provided" },
+        "disabled": { "type": "boolean", "default": false, "description": "Disables user interaction" },
+        "k-click": { "type": "string", "description": "Kongono Live 2.5 k-on:click action" },
+        "k-disabled": { "type": "string", "description": "Kongono Live 2.5 reactive disabled expression" },
+        "popover-target": { "type": "string", "description": "Native HTML popovertarget ID" },
+        "aria-label": { "type": "string", "description": "Accessible label for icon-only buttons" }
+      },
+      "example": "<x-ui.button variant=\"primary\" size=\"md\">Deploy Release</x-ui.button>"
+    },
+    "badge": {
+      "id": "badge",
+      "tag": "x-ui.badge",
+      "name": "Badge",
+      "category": "primitives",
+      "js_mode": "0 B JS",
+      "description": "Compact status pill with optional live status indicator dot derived via OKLCH color-mix.",
+      "standards": ["OKLCH", "color-mix()"],
+      "css": "badge.css",
+      "css_deps": [],
+      "template": "badge.kgn.html",
+      "props": {
+        "variant": { "type": "enum", "enum": ["default", "primary", "emerald", "amber", "crimson", "blue"], "default": "default", "description": "Semantic badge tone" },
+        "dot": { "type": "boolean", "default": false, "description": "Displays leading status indicator dot" }
+      },
+      "example": "<x-ui.badge variant=\"emerald\" dot=\"true\">Strict CSP 100/100</x-ui.badge>"
+    },
+    "card": {
+      "id": "card",
+      "tag": "x-ui.card",
+      "name": "Card",
+      "category": "primitives",
+      "js_mode": "0 B JS",
+      "description": "Container-query aware surface card with kicker, title, subtitle, optional badge, and footer.",
+      "standards": ["CSS @container", "CSS Nesting"],
+      "css": "card.css",
+      "css_deps": ["badge"],
+      "template": "card.kgn.html",
+      "props": {
+        "kicker": { "type": "string", "description": "Small uppercase monospace kicker" },
+        "title": { "type": "string", "description": "Card heading" },
+        "subtitle": { "type": "string", "description": "Secondary subtitle" },
+        "badge": { "type": "string", "description": "Header badge label" },
+        "badge-variant": { "type": "enum", "enum": ["default", "primary", "emerald", "amber", "crimson", "blue"], "default": "primary", "description": "Header badge tone" },
+        "footer": { "type": "string", "description": "Optional footer caption" },
+        "featured": { "type": "boolean", "default": false, "description": "Highlights card with accent ring" }
+      },
+      "example": "<x-ui.card kicker=\"Architecture\" title=\"Zero-Node CSS\" badge=\"OKLCH\">Built in pure PHP 8.5.</x-ui.card>"
+    },
+    "alert": {
+      "id": "alert",
+      "tag": "x-ui.alert",
+      "name": "Alert",
+      "category": "primitives",
+      "js_mode": "0 B JS",
+      "description": "Accessible ARIA status/alert callout banner with semantic OKLCH surfaces.",
+      "standards": ["ARIA role=status/alert", "color-mix()"],
+      "css": "alert.css",
+      "css_deps": [],
+      "template": "alert.kgn.html",
+      "props": {
+        "variant": { "type": "enum", "enum": ["default", "info", "success", "warning", "danger"], "default": "default", "description": "Semantic alert tone" },
+        "title": { "type": "string", "description": "Bold heading line" },
+        "role": { "type": "enum", "enum": ["status", "alert"], "description": "ARIA landmark role override" }
+      },
+      "example": "<x-ui.alert variant=\"success\" title=\"Verified\">0 inline scripts and 0 npm packages.</x-ui.alert>"
+    },
+    "kbd": {
+      "id": "kbd",
+      "tag": "x-ui.kbd",
+      "name": "Keyboard Shortcut",
+      "category": "primitives",
+      "js_mode": "0 B JS",
+      "description": "Tactile monospace keycap indicator for command palettes and documentation.",
+      "standards": ["Semantic <kbd>"],
+      "css": "kbd.css",
+      "css_deps": [],
+      "template": "kbd.kgn.html",
+      "props": {
+        "class": { "type": "string", "description": "Additional CSS classes" }
+      },
+      "example": "<x-ui.kbd>⌘K</x-ui.kbd>"
+    },
+    "avatar": {
+      "id": "avatar",
+      "tag": "x-ui.avatar",
+      "name": "Avatar",
+      "category": "primitives",
+      "js_mode": "0 B JS",
+      "description": "Initials monogram avatar with accessible name and optional live presence dot.",
+      "standards": ["ARIA role=img", "OKLCH"],
+      "css": "avatar.css",
+      "css_deps": [],
+      "template": "avatar.kgn.html",
+      "props": {
+        "initials": { "type": "string", "default": "KT", "description": "1-2 character monogram" },
+        "name": { "type": "string", "description": "Accessible full name" },
+        "size": { "type": "enum", "enum": ["sm", "md", "lg"], "default": "md", "description": "Avatar diameter" },
+        "status": { "type": "enum", "enum": ["none", "online", "busy", "away"], "default": "none", "description": "Presence indicator dot" }
+      },
+      "example": "<x-ui.avatar initials=\"AK\" name=\"Aiko Sato\" status=\"online\" />"
+    },
+    "input": {
+      "id": "input",
+      "tag": "x-ui.input",
+      "name": "Text Input",
+      "category": "forms",
+      "js_mode": "0 B JS",
+      "description": "Accessible form input using CSS :has() to auto-tint labels on focus and aria-invalid errors.",
+      "standards": ["CSS :has()", "ARIA aria-invalid", "aria-describedby"],
+      "css": "input.css",
+      "css_deps": [],
+      "template": "input.kgn.html",
+      "props": {
+        "name": { "type": "string", "description": "Form field name" },
+        "label": { "type": "string", "description": "Visible field label" },
+        "type": { "type": "enum", "enum": ["text", "email", "password", "search", "url", "number", "tel"], "default": "text", "description": "HTML input type" },
+        "value": { "type": "string", "description": "Initial input value" },
+        "placeholder": { "type": "string", "description": "Input placeholder text" },
+        "hint": { "type": "string", "description": "Helper caption linked via aria-describedby" },
+        "error": { "type": "string", "description": "Validation message setting aria-invalid=true" },
+        "required": { "type": "boolean", "default": false, "description": "Marks field required" },
+        "disabled": { "type": "boolean", "default": false, "description": "Disables field" },
+        "k-model": { "type": "string", "description": "Two-way Live 2.5 signal binding" }
+      },
+      "example": "<x-ui.input name=\"email\" type=\"email\" label=\"Work Email\" placeholder=\"founder@acme.dev\" hint=\"Never shared.\" />"
+    },
+    "select": {
+      "id": "select",
+      "tag": "x-ui.select",
+      "name": "Select",
+      "category": "forms",
+      "js_mode": "0 B JS",
+      "description": "Native accessible select dropdown with label binding, validation state, and Live 2.5 k-model.",
+      "standards": ["Semantic <select>", "CSS :has()"],
+      "css": "select.css",
+      "css_deps": ["input"],
+      "template": "select.kgn.html",
+      "props": {
+        "name": { "type": "string", "description": "Form field name" },
+        "label": { "type": "string", "description": "Visible field label" },
+        "hint": { "type": "string", "description": "Helper caption" },
+        "error": { "type": "string", "description": "Validation error" },
+        "required": { "type": "boolean", "default": false, "description": "Marks select required" },
+        "disabled": { "type": "boolean", "default": false, "description": "Disables select" },
+        "k-model": { "type": "string", "description": "Two-way Live 2.5 signal binding" }
+      },
+      "example": "<x-ui.select name=\"region\" label=\"Region\"><option value=\"us-east\">US East</option><option value=\"eu-west\">EU West</option></x-ui.select>"
+    },
+    "textarea": {
+      "id": "textarea",
+      "tag": "x-ui.textarea",
+      "name": "Textarea",
+      "category": "forms",
+      "js_mode": "0 B JS",
+      "description": "Multi-line text input with vertical resize, accessible label, error state, and Live 2.5 k-model.",
+      "standards": ["Semantic <textarea>", "CSS :has()"],
+      "css": "textarea.css",
+      "css_deps": ["input"],
+      "template": "textarea.kgn.html",
+      "props": {
+        "name": { "type": "string", "description": "Form field name" },
+        "label": { "type": "string", "description": "Visible field label" },
+        "value": { "type": "string", "description": "Initial text content" },
+        "placeholder": { "type": "string", "description": "Placeholder text" },
+        "rows": { "type": "integer", "default": 3, "description": "Visible row count" },
+        "hint": { "type": "string", "description": "Helper caption" },
+        "error": { "type": "string", "description": "Validation error" },
+        "k-model": { "type": "string", "description": "Two-way Live 2.5 signal binding" }
+      },
+      "example": "<x-ui.textarea name=\"notes\" label=\"Release Notes\" placeholder=\"Summarize changes...\" rows=\"3\" />"
+    },
+    "switch": {
+      "id": "switch",
+      "tag": "x-ui.switch",
+      "name": "Toggle Switch",
+      "category": "forms",
+      "js_mode": "0 B JS",
+      "description": "Zero-JavaScript accessible ARIA switch powered purely by CSS :has(input:checked).",
+      "standards": ["CSS :has(:checked)", "ARIA role=switch"],
+      "css": "switch.css",
+      "css_deps": [],
+      "template": "switch.kgn.html",
+      "props": {
+        "name": { "type": "string", "description": "Checkbox input name" },
+        "label": { "type": "string", "description": "Switch label text" },
+        "checked": { "type": "boolean", "default": false, "description": "Initial checked state" },
+        "disabled": { "type": "boolean", "default": false, "description": "Disables switch" },
+        "k-model": { "type": "string", "description": "Optional Live 2.5 boolean binding" }
+      },
+      "example": "<x-ui.switch name=\"strict_csp\" label=\"Enforce Strict CSP\" checked=\"true\" />"
+    },
+    "progress": {
+      "id": "progress",
+      "tag": "x-ui.progress",
+      "name": "Progress Meter",
+      "category": "data",
+      "js_mode": "0 B JS",
+      "description": "Zero-inline-style semantic HTML <progress> meter compatible with strict style-src 'self' CSP.",
+      "standards": ["Semantic <progress>", "Zero inline style"],
+      "css": "progress.css",
+      "css_deps": [],
+      "template": "progress.kgn.html",
+      "props": {
+        "label": { "type": "string", "description": "Meter caption" },
+        "value": { "type": "number", "default": 0, "description": "Current value" },
+        "max": { "type": "number", "default": 100, "description": "Maximum value" },
+        "variant": { "type": "enum", "enum": ["default", "emerald", "amber", "danger"], "default": "default", "description": "Fill bar semantic tone" },
+        "show-value": { "type": "boolean", "default": true, "description": "Displays computed percentage" }
+      },
+      "example": "<x-ui.progress label=\"CSS Tree-Shake Savings\" value=\"78\" max=\"100\" variant=\"emerald\" />"
+    },
+    "skeleton": {
+      "id": "skeleton",
+      "tag": "x-ui.skeleton",
+      "name": "Skeleton Loader",
+      "category": "data",
+      "js_mode": "0 B JS",
+      "description": "Reduced-motion aware shimmer placeholder for loading states.",
+      "standards": ["prefers-reduced-motion", "ARIA role=status"],
+      "css": "skeleton.css",
+      "css_deps": [],
+      "template": "skeleton.kgn.html",
+      "props": {
+        "variant": { "type": "enum", "enum": ["line", "title", "block", "circle"], "default": "line", "description": "Placeholder geometry" },
+        "lines": { "type": "integer", "default": 1, "description": "Number of stacked placeholders (1-8)" }
+      },
+      "example": "<x-ui.skeleton variant=\"line\" lines=\"3\" />"
+    },
+    "empty-state": {
+      "id": "empty-state",
+      "tag": "x-ui.empty-state",
+      "name": "Empty State",
+      "category": "data",
+      "js_mode": "0 B JS",
+      "description": "Framed empty-collection callout with kanji/symbol emblem, message, and CTA action slot.",
+      "standards": ["color-mix()", "Flexbox"],
+      "css": "empty-state.css",
+      "css_deps": [],
+      "template": "empty-state.kgn.html",
+      "props": {
+        "icon": { "type": "string", "default": "形", "description": "Emblem symbol or short monogram" },
+        "title": { "type": "string", "description": "Primary empty-state heading" },
+        "description": { "type": "string", "description": "Helpful next-step guidance" }
+      },
+      "example": "<x-ui.empty-state icon=\"形\" title=\"No deployments yet\" description=\"Ship your first release with zero npm.\"><x-ui.button variant=\"primary\" size=\"sm\">Create Deploy</x-ui.button></x-ui.empty-state>"
+    },
+    "kpi": {
+      "id": "kpi",
+      "tag": "x-ui.kpi",
+      "name": "KPI Metric Card",
+      "category": "data",
+      "js_mode": "0 B JS",
+      "description": "Container-query responsive executive metric tile with trend badge and hint text.",
+      "standards": ["CSS @container", "OKLCH"],
+      "css": "kpi.css",
+      "css_deps": [],
+      "template": "kpi.kgn.html",
+      "props": {
+        "label": { "type": "string", "description": "Metric label" },
+        "value": { "type": "string", "description": "Primary headline number" },
+        "delta": { "type": "string", "description": "Delta pill text" },
+        "trend": { "type": "enum", "enum": ["neutral", "up", "down"], "default": "neutral", "description": "Delta semantic trend" },
+        "hint": { "type": "string", "description": "Supporting detail caption" },
+        "variant": { "type": "enum", "enum": ["default", "accent", "emerald"], "default": "default", "description": "Card border highlight" }
+      },
+      "example": "<x-ui.kpi label=\"CSS Gzipped\" value=\"3.4 KB\" delta=\"-82%\" trend=\"up\" variant=\"emerald\" hint=\"Tree-shaken in PHP\" />"
+    },
+    "table": {
+      "id": "table",
+      "tag": "x-ui.table",
+      "name": "Data Table",
+      "category": "data",
+      "js_mode": "0 B JS / Runtime",
+      "description": "Container-query responsive table with optional instant search filter, clickable aria-sort column headers, and screen-reader caption.",
+      "standards": ["CSS @container", "ARIA aria-sort", "Strict CSP"],
+      "css": "table.css",
+      "css_deps": [],
+      "template": "table.kgn.html",
+      "props": {
+        "caption": { "type": "string", "description": "Accessible screen-reader caption" },
+        "searchable": { "type": "boolean", "default": false, "description": "Displays live client-side search filter toolbar and row count" },
+        "sortable": { "type": "boolean", "default": false, "description": "Makes column headers clickable and keyboard-sortable with aria-sort" },
+        "search-placeholder": { "type": "string", "default": "Filter rows...", "description": "Search filter placeholder text" }
+      },
+      "example": "<x-ui.table caption=\"Benchmarks\" searchable=\"true\" sortable=\"true\"><thead><tr><th>Engine</th><th>Gzip KB</th></tr></thead><tbody><tr><td>Zokeibi</td><td>5.7 KB</td></tr></tbody></x-ui.table>"
+    },
+    "tabs": {
+      "id": "tabs",
+      "tag": "x-ui.tabs",
+      "name": "Tabs",
+      "category": "navigation",
+      "js_mode": "Live 2.5",
+      "description": "Accessible ARIA tablist driven by Kongono Live 2.5 zero-eval signals.",
+      "standards": ["ARIA role=tablist/tab", "Kongono Live 2.5"],
+      "css": "tabs.css",
+      "css_deps": [],
+      "template": "tabs.kgn.html",
+      "props": {
+        "tabs": { "type": "string", "description": "Pipe-separated id:Label pairs or array" },
+        "default": { "type": "string", "description": "Initial active tab ID" }
+      },
+      "example": "<x-ui.tabs tabs=\"preview:Preview|code:Code\" default=\"preview\"><div class=\"k-tabpanel\" k-show=\"tab === 'preview'\">Live view</div><div class=\"k-tabpanel\" k-show=\"tab === 'code'\" hidden>Markup</div></x-ui.tabs>"
+    },
+    "accordion": {
+      "id": "accordion",
+      "tag": "x-ui.accordion",
+      "name": "Accordion",
+      "category": "navigation",
+      "js_mode": "0 B JS",
+      "description": "Native HTML <details>/<summary> disclosure supporting exclusive groups via the native name attribute.",
+      "standards": ["HTML <details name>", "CSS Nesting"],
+      "css": "accordion.css",
+      "css_deps": [],
+      "template": "accordion.kgn.html",
+      "props": {
+        "title": { "type": "string", "description": "Summary trigger title" },
+        "open": { "type": "boolean", "default": false, "description": "Starts expanded" },
+        "name": { "type": "string", "description": "Native exclusive group name" }
+      },
+      "example": "<x-ui.accordion title=\"Why zero npm?\" name=\"faq\" open=\"true\">Pure PHP 8.5 compiles and tree-shakes CSS directly.</x-ui.accordion>"
+    },
+    "popover": {
+      "id": "popover",
+      "tag": "x-ui.popover",
+      "name": "Top-Layer Popover",
+      "category": "overlays",
+      "js_mode": "0 B JS",
+      "description": "Browser-native HTML Top-Layer Popover API with @starting-style transitions and light-dismiss — zero z-index bugs and 0 bytes JS.",
+      "standards": ["HTML Popover API", "@starting-style", "Top Layer"],
+      "css": "popover.css",
+      "css_deps": ["button"],
+      "template": "popover.kgn.html",
+      "props": {
+        "id": { "type": "string", "description": "Unique popover DOM ID" },
+        "trigger": { "type": "string", "default": "Open Menu", "description": "Trigger button label" },
+        "trigger-variant": { "type": "enum", "enum": ["default", "primary", "emerald", "danger", "ghost", "outline"], "default": "outline", "description": "Trigger button variant" },
+        "trigger-size": { "type": "enum", "enum": ["sm", "md", "lg"], "default": "sm", "description": "Trigger button size" },
+        "title": { "type": "string", "description": "Optional popover header title" }
+      },
+      "example": "<x-ui.popover id=\"pop-actions\" trigger=\"Quick Actions\" title=\"Top-Layer Popover\">Click outside or press Esc to light-dismiss.</x-ui.popover>"
+    },
+    "tooltip": {
+      "id": "tooltip",
+      "tag": "x-ui.tooltip",
+      "name": "Tooltip",
+      "category": "overlays",
+      "js_mode": "0 B JS",
+      "description": "Pure CSS hover and keyboard focus-within tooltip with ARIA role=tooltip.",
+      "standards": ["CSS :focus-within", "ARIA role=tooltip"],
+      "css": "tooltip.css",
+      "css_deps": [],
+      "template": "tooltip.kgn.html",
+      "props": {
+        "text": { "type": "string", "description": "Tooltip message" },
+        "position": { "type": "enum", "enum": ["top", "bottom"], "default": "top", "description": "Placement relative to trigger" }
+      },
+      "example": "<x-ui.tooltip text=\"Zero-JS CSS tooltip\" position=\"top\"><x-ui.button size=\"sm\" variant=\"outline\">Hover or Focus</x-ui.button></x-ui.tooltip>"
+    },
+    "modal": {
+      "id": "modal",
+      "tag": "x-ui.modal",
+      "name": "Modal Dialog",
+      "category": "overlays",
+      "js_mode": "Live 2.5",
+      "description": "Accessible ARIA dialog overlay controlled by Kongono Live 2.5 reactive signals with strict CSP safety.",
+      "standards": ["ARIA role=dialog", "aria-modal=true", "Kongono Live 2.5"],
+      "css": "modal.css",
+      "css_deps": ["button"],
+      "template": "modal.kgn.html",
+      "props": {
+        "id": { "type": "string", "default": "z-modal", "description": "Dialog DOM ID" },
+        "title": { "type": "string", "description": "Dialog title" },
+        "show": { "type": "string", "default": "modalOpen", "description": "Live 2.5 boolean expression" },
+        "close-expr": { "type": "string", "description": "Live 2.5 close action" },
+        "variant": { "type": "enum", "enum": ["default", "danger"], "default": "default", "description": "Visual border emphasis" }
+      },
+      "example": "<x-ui.modal id=\"confirm-modal\" title=\"Confirm Action\" show=\"modalOpen\" variant=\"danger\">Type DELETE to proceed.</x-ui.modal>"
+    },
+    "drawer": {
+      "id": "drawer",
+      "tag": "x-ui.drawer",
+      "name": "Slide-Over Drawer",
+      "category": "overlays",
+      "js_mode": "Live 2.5",
+      "description": "Right-edge detail inspector drawer wired to Kongono Live 2.5 reactive signals.",
+      "standards": ["ARIA role=dialog", "Kongono Live 2.5"],
+      "css": "drawer.css",
+      "css_deps": ["button"],
+      "template": "drawer.kgn.html",
+      "props": {
+        "id": { "type": "string", "default": "z-drawer", "description": "Drawer DOM ID" },
+        "title": { "type": "string", "description": "Drawer title" },
+        "show": { "type": "string", "default": "drawerOpen", "description": "Live 2.5 boolean expression" },
+        "close-expr": { "type": "string", "description": "Live 2.5 close action" }
+      },
+      "example": "<x-ui.drawer id=\"inspector-drawer\" title=\"Deployment Inspector\" show=\"drawerOpen\">Inspect headers and CSP policy.</x-ui.drawer>"
+    },
+    "toast": {
+      "id": "toast",
+      "tag": "x-ui.toast",
+      "name": "Toast Notification",
+      "category": "overlays",
+      "js_mode": "Live 2.5",
+      "description": "Polite ARIA live-region notification card supporting inline preview or fixed bottom-right floating display.",
+      "standards": ["ARIA aria-live=polite", "OKLCH"],
+      "css": "toast.css",
+      "css_deps": ["button"],
+      "template": "toast.kgn.html",
+      "props": {
+        "title": { "type": "string", "description": "Notification title" },
+        "description": { "type": "string", "description": "Supporting detail" },
+        "variant": { "type": "enum", "enum": ["default", "emerald", "amber", "danger", "accent"], "default": "default", "description": "Border highlight tone" },
+        "floating": { "type": "boolean", "default": false, "description": "Fixes toast to bottom-right viewport corner" },
+        "show": { "type": "string", "description": "Optional Live 2.5 visibility expression" },
+        "close-expr": { "type": "string", "description": "Optional Live 2.5 dismiss action" }
+      },
+      "example": "<x-ui.toast title=\"Compiled zokeibi.min.css\" description=\"Tree-shaken down to 3.4 KB gzipped.\" variant=\"emerald\" />"
+    },
+    "command-palette": {
+      "id": "command-palette",
+      "tag": "x-ui.command-palette",
+      "name": "Command Palette (Cmd+K)",
+      "category": "overlays",
+      "js_mode": "Runtime",
+      "description": "Strict-CSP Cmd+K / Ctrl+K command launcher with keyboard arrow navigation, live search filter, and ARIA dialog/listbox semantics.",
+      "standards": ["ARIA role=dialog/listbox", "Cmd+K Shortcut", "Strict CSP"],
+      "css": "command-palette.css",
+      "css_deps": ["button", "kbd"],
+      "template": "command-palette.kgn.html",
+      "props": {
+        "id": { "type": "string", "default": "z-cmdk", "description": "Unique palette dialog ID" },
+        "trigger-label": { "type": "string", "default": "Quick Command", "description": "Trigger button label" },
+        "placeholder": { "type": "string", "default": "Search commands or jump to...", "description": "Search input placeholder" },
+        "items": { "type": "string", "description": "Pipe-separated id:Label:href:shortcut items or array" }
+      },
+      "example": "<x-ui.command-palette id=\"app-cmdk\" trigger-label=\"Quick Jump\" items=\"studio:Open Token Studio:/studio:S|home:Component Gallery:/:G\" />"
+    },
+    "combobox": {
+      "id": "combobox",
+      "tag": "x-ui.combobox",
+      "name": "Searchable Combobox",
+      "category": "forms",
+      "js_mode": "Runtime",
+      "description": "Accessible ARIA 1.2 searchable select combobox with live filtering and hidden form value binding.",
+      "standards": ["ARIA 1.2 role=combobox", "role=listbox", "Strict CSP"],
+      "css": "combobox.css",
+      "css_deps": ["input"],
+      "template": "combobox.kgn.html",
+      "props": {
+        "name": { "type": "string", "default": "selection", "description": "Submitted form field name" },
+        "label": { "type": "string", "description": "Visible field label" },
+        "placeholder": { "type": "string", "default": "Search options...", "description": "Search input placeholder" },
+        "value": { "type": "string", "description": "Initially selected option value" },
+        "options": { "type": "string", "description": "Pipe-separated value:Label pairs or associative array" },
+        "required": { "type": "boolean", "default": false, "description": "Marks field required" },
+        "error": { "type": "string", "description": "Validation error message" }
+      },
+      "example": "<x-ui.combobox name=\"region\" label=\"Deploy Region\" options=\"us-east:US East|eu-central:EU Central|ap-northeast:Tokyo\" value=\"ap-northeast\" />"
+    },
+    "dropzone": {
+      "id": "dropzone",
+      "tag": "x-ui.dropzone",
+      "name": "File Dropzone",
+      "category": "forms",
+      "js_mode": "Runtime",
+      "description": "Drag-and-drop accessible file upload target with selected file chips, ready for Kongono UploadedFileStore.",
+      "standards": ["HTML File Input", "ARIA aria-live=polite", "Strict CSP"],
+      "css": "dropzone.css",
+      "css_deps": ["input"],
+      "template": "dropzone.kgn.html",
+      "props": {
+        "name": { "type": "string", "default": "file", "description": "Submitted multipart field name" },
+        "label": { "type": "string", "description": "Visible field label" },
+        "title": { "type": "string", "description": "Primary drop prompt" },
+        "hint": { "type": "string", "description": "Allowed file types and max size guidance" },
+        "accept": { "type": "string", "description": "MIME or extension allowlist (e.g. image/png,application/pdf)" },
+        "multiple": { "type": "boolean", "default": false, "description": "Allow selecting multiple files" },
+        "required": { "type": "boolean", "default": false, "description": "Marks file upload required" },
+        "error": { "type": "string", "description": "Validation error message" }
+      },
+      "example": "<x-ui.dropzone name=\"attachment\" label=\"Upload Receipt\" accept=\"image/png,application/pdf\" />"
+    },
+    "datepicker": {
+      "id": "datepicker",
+      "tag": "x-ui.datepicker",
+      "name": "Date Picker",
+      "category": "forms",
+      "js_mode": "Runtime",
+      "description": "OKLCH-styled native date input paired with strict-CSP quick preset chips (Today, +7 Days, +30 Days).",
+      "standards": ["HTML input[type=date]", "Strict CSP"],
+      "css": "datepicker.css",
+      "css_deps": ["input"],
+      "template": "datepicker.kgn.html",
+      "props": {
+        "name": { "type": "string", "default": "date", "description": "Submitted ISO date field name" },
+        "label": { "type": "string", "description": "Visible field label" },
+        "value": { "type": "string", "description": "ISO YYYY-MM-DD value" },
+        "min": { "type": "string", "description": "Minimum ISO date" },
+        "max": { "type": "string", "description": "Maximum ISO date" },
+        "presets": { "type": "boolean", "default": true, "description": "Show quick offset preset buttons" },
+        "required": { "type": "boolean", "default": false, "description": "Marks field required" },
+        "error": { "type": "string", "description": "Validation error message" }
+      },
+      "example": "<x-ui.datepicker name=\"launch_date\" label=\"Launch Date\" presets=\"true\" />"
+    },
+    "stepper": {
+      "id": "stepper",
+      "tag": "x-ui.stepper",
+      "name": "Step Indicator",
+      "category": "navigation",
+      "js_mode": "0 B JS",
+      "description": "Zero-JS multi-step onboarding and checkout wizard indicator with aria-current=step semantics.",
+      "standards": ["ARIA aria-current=step", "0 B JS"],
+      "css": "stepper.css",
+      "css_deps": [],
+      "template": "stepper.kgn.html",
+      "props": {
+        "steps": { "type": "string", "default": "Account|Workspace|Launch", "description": "Pipe-separated step labels or array" },
+        "current": { "type": "integer", "default": 1, "description": "1-based active step number" }
+      },
+      "example": "<x-ui.stepper steps=\"Account|Workspace|Billing|Launch\" current=\"2\" />"
+    },
+    "pagination": {
+      "id": "pagination",
+      "tag": "x-ui.pagination",
+      "name": "Pagination",
+      "category": "navigation",
+      "js_mode": "0 B JS",
+      "description": "Accessible pagination bar pairing natively with Kongono QueryBuilder::paginate() and optional Live 2.5 morphing.",
+      "standards": ["ARIA nav[aria-label=Pagination]", "aria-current=page", "Kongono Live 2.5"],
+      "css": "pagination.css",
+      "css_deps": [],
+      "template": "pagination.kgn.html",
+      "props": {
+        "current": { "type": "integer", "default": 1, "description": "Current 1-based page number" },
+        "total": { "type": "integer", "default": 1, "description": "Total page count" },
+        "base-url": { "type": "string", "default": "?page=", "description": "URL prefix before page number" },
+        "live-target": { "type": "string", "description": "Optional Live 2.5 kgn-target selector for morphing" }
+      },
+      "example": "<x-ui.pagination current=\"2\" total=\"8\" base-url=\"/notes?page=\" live-target=\"#notes-table\" />"
+    },
+    "date-range": {
+      "id": "date-range",
+      "tag": "x-ui.date-range",
+      "name": "Date-Range Calendar",
+      "category": "forms",
+      "js_mode": "Runtime",
+      "description": "Interactive 2-click calendar range picker with month navigation, OKLCH range bands, quick SaaS presets, and dual ISO form inputs.",
+      "standards": ["Progressive Calendar", "ARIA live summary", "Strict CSP"],
+      "css": "date-range.css",
+      "css_deps": ["input"],
+      "template": "date-range.kgn.html",
+      "props": {
+        "name": { "type": "string", "default": "date_range", "description": "Prefix for submitted start/end fields" },
+        "start-name": { "type": "string", "description": "Explicit start field name" },
+        "end-name": { "type": "string", "description": "Explicit end field name" },
+        "label": { "type": "string", "description": "Visible field label" },
+        "start": { "type": "string", "description": "Initial ISO YYYY-MM-DD start date" },
+        "end": { "type": "string", "description": "Initial ISO YYYY-MM-DD end date" },
+        "presets": { "type": "boolean", "default": true, "description": "Show quick range presets (Last 7d, 30d, Month, Quarter)" }
+      },
+      "example": "<x-ui.date-range name=\"window\" label=\"Reporting Window\" start=\"2026-11-01\" end=\"2026-11-18\" presets=\"true\" />"
+    },
+    "multi-select": {
+      "id": "multi-select",
+      "tag": "x-ui.multi-select",
+      "name": "Multi-Select Tag Combobox",
+      "category": "forms",
+      "js_mode": "Runtime",
+      "description": "Searchable ARIA 1.2 multi-select tag picker with removable pill chips, Backspace deletion, and array form inputs (name[]).",
+      "standards": ["ARIA aria-multiselectable", "Keyboard Backspace", "Strict CSP"],
+      "css": "multi-select.css",
+      "css_deps": ["input"],
+      "template": "multi-select.kgn.html",
+      "props": {
+        "name": { "type": "string", "default": "tags", "description": "Array form field name (submits name[])" },
+        "label": { "type": "string", "description": "Visible field label" },
+        "placeholder": { "type": "string", "default": "Filter & select tags...", "description": "Search placeholder" },
+        "options": { "type": "string", "description": "Pipe-separated value:Label pairs or associative array" },
+        "selected": { "type": "string", "description": "Comma-separated initially selected values or array" }
+      },
+      "example": "<x-ui.multi-select name=\"roles\" label=\"Assign Scopes\" options=\"read:Read|write:Write|deploy:Deploy|billing:Billing\" selected=\"read,deploy\" />"
+    },
+    "chart": {
+      "id": "chart",
+      "tag": "x-ui.chart",
+      "name": "Pure SVG Chart & Sparkline",
+      "category": "data",
+      "js_mode": "0 B JS",
+      "description": "Zero-JavaScript server-rendered accessible SVG Sparkline, Bar, and Donut charts themed automatically via OKLCH tokens.",
+      "standards": ["Pure SVG", "0 B JS", "Zero inline style"],
+      "css": "chart.css",
+      "css_deps": [],
+      "template": "chart.kgn.html",
+      "props": {
+        "type": { "type": "enum", "enum": ["sparkline", "bar", "donut"], "default": "bar", "description": "Chart visualization type" },
+        "title": { "type": "string", "default": "Metrics", "description": "Chart heading and accessible label" },
+        "meta": { "type": "string", "description": "Optional right-aligned subtitle metric" },
+        "data": { "type": "string", "description": "Pipe-separated Label:Value pairs or associative numeric array" }
+      },
+      "example": "<x-ui.chart type=\"bar\" title=\"Requests / Day\" meta=\"+18.4%\" data=\"Mon:28|Tue:44|Wed:39|Thu:62|Fri:55\" />"
+    },
+    "editor": {
+      "id": "editor",
+      "tag": "x-ui.editor",
+      "name": "Markdown / Rich-Text Editor",
+      "category": "forms",
+      "js_mode": "Runtime",
+      "description": "Strict-CSP Markdown editor with formatting toolbar, Write/Split/Preview tabs, word counter, and XSS-safe DOM live preview.",
+      "standards": ["Zero innerHTML XSS", "ARIA toolbar", "Strict CSP"],
+      "css": "editor.css",
+      "css_deps": ["input"],
+      "template": "editor.kgn.html",
+      "props": {
+        "name": { "type": "string", "default": "content", "description": "Submitted textarea field name" },
+        "label": { "type": "string", "description": "Visible field label" },
+        "value": { "type": "string", "description": "Initial Markdown content" },
+        "placeholder": { "type": "string", "description": "Editor placeholder" },
+        "rows": { "type": "integer", "default": 6, "description": "Initial editor row height" }
+      },
+      "example": "<x-ui.editor name=\"body\" label=\"Release Notes\" value=\"### Zokeibi v1.2\\nShip **zero-npm** UI with `zokeibi prove`.\" />"
+    },
+    "otp-input": {
+      "id": "otp-input",
+      "tag": "x-ui.otp-input",
+      "name": "OTP / 2FA Code Input",
+      "category": "forms",
+      "js_mode": "Runtime",
+      "description": "Multi-box numeric 2FA / TOTP verification input with auto-advance, Backspace jump-back, and one-paste auto-fill.",
+      "standards": ["autocomplete=one-time-code", "inputmode=numeric", "Strict CSP"],
+      "css": "otp-input.css",
+      "css_deps": ["input"],
+      "template": "otp-input.kgn.html",
+      "props": {
+        "name": { "type": "string", "default": "code", "description": "Submitted combined code field name" },
+        "label": { "type": "string", "description": "Visible field label" },
+        "length": { "type": "integer", "default": 6, "description": "Number of code digits (4-8)" },
+        "value": { "type": "string", "description": "Optional prefilled numeric digits" },
+        "hint": { "type": "string", "description": "Helper text below the code boxes" }
+      },
+      "example": "<x-ui.otp-input name=\"totp_code\" label=\"Authenticator Code\" length=\"6\" hint=\"Paste or enter the 6-digit code.\" />"
+    },
+    "copy-field": {
+      "id": "copy-field",
+      "tag": "x-ui.copy-field",
+      "name": "Copy-to-Clipboard Field",
+      "category": "primitives",
+      "js_mode": "Runtime",
+      "description": "One-click copyable API key, webhook secret, or CLI snippet field with optional masked Show/Hide reveal toggle.",
+      "standards": ["Clipboard API", "ARIA aria-live=polite", "Strict CSP"],
+      "css": "copy-field.css",
+      "css_deps": ["button", "input"],
+      "template": "copy-field.kgn.html",
+      "props": {
+        "label": { "type": "string", "description": "Visible field label" },
+        "value": { "type": "string", "description": "Exact string copied to clipboard" },
+        "masked": { "type": "boolean", "default": false, "description": "Masks sensitive secrets until Show is clicked" }
+      },
+      "example": "<x-ui.copy-field label=\"Production API Key\" value=\"kgn_pat_demo_9f4a8c2e1b\" masked=\"true\" />"
+    },
+    "timeline": {
+      "id": "timeline",
+      "tag": "x-ui.timeline",
+      "name": "Activity Timeline",
+      "category": "data",
+      "js_mode": "0 B JS",
+      "description": "Zero-JS vertical chronological timeline for audit logs, deploys, order events, and incident trails.",
+      "standards": ["Semantic <ol>/<time>", "0 B JS"],
+      "css": "timeline.css",
+      "css_deps": [],
+      "template": "timeline.kgn.html",
+      "props": {
+        "items": { "type": "string", "description": "Double-semicolon separated Title|Time|Meta|Variant rows or array" }
+      },
+      "example": "<x-ui.timeline items=\"Deployed v1.2|2m ago|FrankenPHP cluster healthy|emerald;;API Key Rotated|1h ago|Performed by admin@acme.dev|blue\" />"
+    },
+    "breadcrumb": {
+      "id": "breadcrumb",
+      "tag": "x-ui.breadcrumb",
+      "name": "Breadcrumb Trail",
+      "category": "navigation",
+      "js_mode": "0 B JS",
+      "description": "Zero-JS accessible hierarchical navigation trail with aria-current=page on the active segment.",
+      "standards": ["ARIA nav[aria-label=Breadcrumb]", "aria-current=page", "0 B JS"],
+      "css": "breadcrumb.css",
+      "css_deps": [],
+      "template": "breadcrumb.kgn.html",
+      "props": {
+        "items": { "type": "string", "description": "Pipe-separated Label:/href pairs or array" }
+      },
+      "example": "<x-ui.breadcrumb items=\"Workspace:/|Settings:/settings|API Keys\" />"
+    },
+    "checkbox": {
+      "id": "checkbox",
+      "tag": "x-ui.checkbox",
+      "name": "Checkbox",
+      "category": "forms",
+      "js_mode": "0 B JS",
+      "description": "Zero-JS accessible styled checkbox with OKLCH accent check animation and optional helper description.",
+      "standards": ["Semantic <input type=checkbox>", "0 B JS"],
+      "css": "checkbox.css",
+      "css_deps": [],
+      "template": "checkbox.kgn.html",
+      "props": {
+        "name": { "type": "string", "default": "agree", "description": "Form field name" },
+        "label": { "type": "string", "description": "Checkbox label text" },
+        "description": { "type": "string", "description": "Optional helper description below label" },
+        "value": { "type": "string", "default": "1", "description": "Submitted checkbox value" },
+        "checked": { "type": "boolean", "default": false, "description": "Starts checked" },
+        "required": { "type": "boolean", "default": false, "description": "Marks checkbox required" },
+        "disabled": { "type": "boolean", "default": false, "description": "Disables checkbox" }
+      },
+      "example": "<x-ui.checkbox name=\"terms\" label=\"I accept the Terms of Service\" description=\"Required to activate your workspace.\" checked=\"true\" />"
+    },
+    "radio-group": {
+      "id": "radio-group",
+      "tag": "x-ui.radio-group",
+      "name": "Radio & Card Group",
+      "category": "forms",
+      "js_mode": "0 B JS",
+      "description": "Zero-JS accessible fieldset radio group supporting compact lists or selectable :has(:checked) SaaS plan cards.",
+      "standards": ["Semantic <fieldset>/<legend>", "CSS :has(:checked)", "0 B JS"],
+      "css": "radio-group.css",
+      "css_deps": ["input"],
+      "template": "radio-group.kgn.html",
+      "props": {
+        "name": { "type": "string", "default": "choice", "description": "Radio input group name" },
+        "label": { "type": "string", "description": "Fieldset legend label" },
+        "layout": { "type": "enum", "enum": ["list", "cards"], "default": "list", "description": "Standard stacked list or interactive selectable cards" },
+        "options": { "type": "string", "description": "Pipe-separated value:Label:Description entries or array" },
+        "value": { "type": "string", "description": "Initially selected radio value" }
+      },
+      "example": "<x-ui.radio-group name=\"plan\" label=\"Billing Tier\" layout=\"cards\" value=\"pro\" options=\"starter:Starter:Free forever|pro:Pro:$29/mo · Unlimited proofs|enterprise:Enterprise:Custom SLA\" />"
+    },
+    "dropdown": {
+      "id": "dropdown",
+      "tag": "x-ui.dropdown",
+      "name": "Dropdown Action Menu",
+      "category": "overlays",
+      "js_mode": "0 B JS",
+      "description": "Zero-JS structured action menu built on native HTML Top-Layer Popover API with dividers, danger items, and keyboard shortcut badges.",
+      "standards": ["HTML Popover API", "ARIA role=menu", "0 B JS"],
+      "css": "dropdown.css",
+      "css_deps": ["button", "kbd"],
+      "template": "dropdown.kgn.html",
+      "props": {
+        "id": { "type": "string", "description": "Unique popover menu DOM ID" },
+        "trigger": { "type": "string", "default": "Actions ▾", "description": "Trigger button label" },
+        "trigger-variant": { "type": "enum", "enum": ["default", "primary", "emerald", "danger", "ghost", "outline"], "default": "outline", "description": "Trigger button tone" },
+        "trigger-size": { "type": "enum", "enum": ["sm", "md", "lg"], "default": "sm", "description": "Trigger button density" },
+        "items": { "type": "string", "description": "Pipe-separated Label:href:shortcut items (use --- for divider, prefix danger: for destructive item)" }
+      },
+      "example": "<x-ui.dropdown id=\"row-menu\" trigger=\"Row Actions ▾\" items=\"Edit Record:/edit:E|Duplicate:/dup:D|---|danger:Delete:/delete:⌫\" />"
+    },
+    "segmented": {
+      "id": "segmented",
+      "tag": "x-ui.segmented",
+      "name": "Segmented Control",
+      "category": "navigation",
+      "js_mode": "0 B JS",
+      "description": "Zero-JS tactile segmented switch (e.g. Monthly / Annual or List / Grid) powered by native radios and CSS :has(:checked).",
+      "standards": ["CSS :has(:checked)", "ARIA role=radiogroup", "0 B JS"],
+      "css": "segmented.css",
+      "css_deps": [],
+      "template": "segmented.kgn.html",
+      "props": {
+        "name": { "type": "string", "default": "segment", "description": "Radio group name" },
+        "label": { "type": "string", "default": "Options", "description": "Accessible radiogroup label" },
+        "options": { "type": "string", "description": "Pipe-separated value:Label pairs or array" },
+        "value": { "type": "string", "description": "Selected segment value" }
+      },
+      "example": "<x-ui.segmented name=\"billing\" label=\"Billing period\" value=\"annual\" options=\"monthly:Monthly|annual:Annual (-20%)\" />"
+    },
+    "spinner": {
+      "id": "spinner",
+      "tag": "x-ui.spinner",
+      "name": "Loading Spinner",
+      "category": "primitives",
+      "js_mode": "0 B JS",
+      "description": "Zero-JS prefers-reduced-motion-safe inline loading spinner with ARIA status semantics for Live 2.5 indicators.",
+      "standards": ["ARIA role=status", "prefers-reduced-motion", "0 B JS"],
+      "css": "spinner.css",
+      "css_deps": [],
+      "template": "spinner.kgn.html",
+      "props": {
+        "size": { "type": "enum", "enum": ["sm", "md", "lg"], "default": "md", "description": "Spinner diameter" },
+        "variant": { "type": "enum", "enum": ["default", "primary", "emerald", "muted"], "default": "primary", "description": "Spinner color tone" },
+        "label": { "type": "string", "description": "Optional visible loading text" }
+      },
+      "example": "<x-ui.spinner size=\"md\" variant=\"primary\" label=\"Running zokeibi prove...\" />"
+    },
+    "slider": {
+      "id": "slider",
+      "tag": "x-ui.slider",
+      "name": "Range Slider",
+      "category": "forms",
+      "js_mode": "Runtime",
+      "description": "Accessible OKLCH range slider with live <output> unit readout for quotas, filters, and model settings.",
+      "standards": ["Semantic <input type=range>", "HTML <output>", "Strict CSP"],
+      "css": "slider.css",
+      "css_deps": ["input"],
+      "template": "slider.kgn.html",
+      "props": {
+        "name": { "type": "string", "default": "range", "description": "Submitted form field name" },
+        "label": { "type": "string", "description": "Visible slider label" },
+        "min": { "type": "number", "default": 0, "description": "Minimum value" },
+        "max": { "type": "number", "default": 100, "description": "Maximum value" },
+        "step": { "type": "number", "default": 1, "description": "Step increment" },
+        "value": { "type": "number", "default": 50, "description": "Initial slider value" },
+        "unit": { "type": "string", "description": "Optional suffix unit (e.g. %, ms, seats)" }
+      },
+      "example": "<x-ui.slider name=\"seats\" label=\"Team Seat Limit\" min=\"5\" max=\"100\" step=\"5\" value=\"25\" unit=\" seats\" />"
+    },
+    "divider": {
+      "id": "divider",
+      "tag": "x-ui.divider",
+      "name": "Divider / Separator",
+      "category": "primitives",
+      "js_mode": "0 B JS",
+      "description": "Zero-JS horizontal or vertical hairline separator with optional centered text caption.",
+      "standards": ["ARIA role=separator", "0 B JS"],
+      "css": "divider.css",
+      "css_deps": [],
+      "template": "divider.kgn.html",
+      "props": {
+        "orientation": { "type": "enum", "enum": ["horizontal", "vertical"], "default": "horizontal", "description": "Separator orientation" },
+        "label": { "type": "string", "description": "Optional centered label for horizontal dividers" }
+      },
+      "example": "<x-ui.divider label=\"Or continue with Passkey\" />"
+    },
+    "description-list": {
+      "id": "description-list",
+      "tag": "x-ui.description-list",
+      "name": "Description List",
+      "category": "data",
+      "js_mode": "0 B JS",
+      "description": "Zero-JS responsive semantic <dl>/<dt>/<dd> metadata grid for invoices, profiles, and deployment summaries.",
+      "standards": ["Semantic <dl>/<dt>/<dd>", "CSS Grid", "0 B JS"],
+      "css": "description-list.css",
+      "css_deps": [],
+      "template": "description-list.kgn.html",
+      "props": {
+        "columns": { "type": "integer", "default": 2, "description": "Grid column count (1, 2, or 3)" },
+        "items": { "type": "string", "description": "Pipe-separated Key:Value pairs or associative array" }
+      },
+      "example": "<x-ui.description-list columns=\"2\" items=\"Runtime:PHP 8.5.13|Framework:Kongono v1.19|Bundle:Zero npm|CSP:Strict self\" />"
+    },
+    "code-block": {
+      "id": "code-block",
+      "tag": "x-ui.code-block",
+      "name": "Code Block",
+      "category": "primitives",
+      "js_mode": "Runtime",
+      "description": "Multi-line code display framed with filename header, language badge, and strict-CSP 1-click Copy button.",
+      "standards": ["Clipboard API", "Semantic <pre><code>", "Strict CSP"],
+      "css": "code-block.css",
+      "css_deps": ["button", "badge", "copy-field"],
+      "template": "code-block.kgn.html",
+      "props": {
+        "filename": { "type": "string", "description": "Optional header filename" },
+        "language": { "type": "string", "default": "php", "description": "Language badge label" },
+        "code": { "type": "string", "description": "Code text (or provide inside component slot)" }
+      },
+      "example": "<x-ui.code-block filename=\"routes.php\" language=\"php\">#[Get('/health')]\npublic function health(): Response { return Response::json(['ok' => true]); }</x-ui.code-block>"
+    },
+    "tag-input": {
+      "id": "tag-input",
+      "tag": "x-ui.tag-input",
+      "name": "Free-Form Tag Input",
+      "category": "forms",
+      "js_mode": "Runtime",
+      "description": "Type any arbitrary tag and press Enter or Comma to create removable chips synced to hidden name[] inputs, with Backspace deletion.",
+      "standards": ["Keyboard Enter/Comma/Backspace", "Strict CSP"],
+      "css": "tag-input.css",
+      "css_deps": ["input"],
+      "template": "tag-input.kgn.html",
+      "props": {
+        "name": { "type": "string", "default": "tags", "description": "Submitted array field name (name[])" },
+        "label": { "type": "string", "description": "Visible field label" },
+        "placeholder": { "type": "string", "default": "Type a tag and press Enter...", "description": "Input placeholder" },
+        "value": { "type": "string", "description": "Comma-separated initial tags or array" }
+      },
+      "example": "<x-ui.tag-input name=\"topics\" label=\"Webhook Topics\" value=\"order.paid,invoice.sent\" />"
+    },
+    "banner": {
+      "id": "banner",
+      "tag": "x-ui.banner",
+      "name": "Announcement Banner",
+      "category": "primitives",
+      "js_mode": "0 B JS / Runtime",
+      "description": "Full-width top announcement, maintenance, or trial-status bar with optional CTA button and strict-CSP dismiss button.",
+      "standards": ["ARIA role=status", "Strict CSP"],
+      "css": "banner.css",
+      "css_deps": ["button"],
+      "template": "banner.kgn.html",
+      "props": {
+        "variant": { "type": "enum", "enum": ["info", "accent", "emerald", "amber", "danger"], "default": "accent", "description": "Semantic banner tone" },
+        "title": { "type": "string", "description": "Bold lead-in headline" },
+        "action-label": { "type": "string", "description": "Optional CTA link button text" },
+        "action-href": { "type": "string", "description": "Optional CTA link destination" },
+        "dismissible": { "type": "boolean", "default": false, "description": "Shows dismiss button wired to data-z-close" }
+      },
+      "example": "<x-ui.banner variant=\"emerald\" title=\"Zokeibi v1.3 Ready\" action-label=\"Open Studio\" action-href=\"/studio\" dismissible=\"true\">All 49 primitives pass strict CSP.</x-ui.banner>"
+    },
+    "rating": {
+      "id": "rating",
+      "tag": "x-ui.rating",
+      "name": "Star Rating",
+      "category": "forms",
+      "js_mode": "0 B JS",
+      "description": "Zero-JavaScript interactive 5-star review and feedback picker powered purely by CSS :has(:checked) and sibling hover.",
+      "standards": ["CSS :has(:checked)", "Semantic <fieldset>", "0 B JS"],
+      "css": "rating.css",
+      "css_deps": ["input"],
+      "template": "rating.kgn.html",
+      "props": {
+        "name": { "type": "string", "default": "rating", "description": "Submitted rating field name" },
+        "label": { "type": "string", "description": "Fieldset legend label" },
+        "max": { "type": "integer", "default": 5, "description": "Total stars (3-10)" },
+        "value": { "type": "integer", "default": 0, "description": "Initial selected star value" }
+      },
+      "example": "<x-ui.rating name=\"satisfaction\" label=\"Rate Developer Experience\" value=\"5\" />"
+    },
+    "sidebar": {
+      "id": "sidebar",
+      "tag": "x-ui.sidebar",
+      "name": "Sidebar Navigation",
+      "category": "navigation",
+      "js_mode": "0 B JS",
+      "description": "Zero-JS grouped vertical SaaS navigation rail with section headings, aria-current=page highlight, and badge counts.",
+      "standards": ["ARIA nav/aria-current", "0 B JS"],
+      "css": "sidebar.css",
+      "css_deps": [],
+      "template": "sidebar.kgn.html",
+      "props": {
+        "label": { "type": "string", "default": "Sidebar navigation", "description": "Accessible navigation landmark label" },
+        "active": { "type": "string", "description": "Href or label of the active page" },
+        "items": { "type": "string", "description": "Pipe-separated #SectionHeading or Label:href:badge entries" }
+      },
+      "example": "<x-ui.sidebar active=\"/overview\" items=\"#Workspace|Overview:/overview:New|Analytics:/analytics|Deployments:/deploys:12|#Security|API Keys:/keys|Audit Log:/audit\" />"
+    },
+    "input-group": {
+      "id": "input-group",
+      "tag": "x-ui.input-group",
+      "name": "Input Group (Addons)",
+      "category": "forms",
+      "js_mode": "0 B JS",
+      "description": "Zero-JS unified input field with attached monospace prefix and/or suffix addons (domains, currency, ports).",
+      "standards": ["CSS :focus-within", "0 B JS"],
+      "css": "input-group.css",
+      "css_deps": ["input"],
+      "template": "input-group.kgn.html",
+      "props": {
+        "name": { "type": "string", "default": "domain", "description": "Form field name" },
+        "label": { "type": "string", "description": "Visible field label" },
+        "type": { "type": "enum", "enum": ["text", "url", "number", "email", "search"], "default": "text", "description": "HTML input type" },
+        "prefix": { "type": "string", "description": "Leading attached addon text (e.g. https:// or $)" },
+        "suffix": { "type": "string", "description": "Trailing attached addon text (e.g. .kongono.dev or USD)" },
+        "value": { "type": "string", "description": "Initial input value" },
+        "placeholder": { "type": "string", "description": "Input placeholder" },
+        "hint": { "type": "string", "description": "Optional helper caption" },
+        "required": { "type": "boolean", "default": false, "description": "Marks field required" }
+      },
+      "example": "<x-ui.input-group name=\"subdomain\" label=\"Workspace URL\" prefix=\"https://\" suffix=\".kongono.dev\" value=\"acme\" />"
+    },
+    "number-input": {
+      "id": "number-input",
+      "tag": "x-ui.number-input",
+      "name": "Number Stepper",
+      "category": "forms",
+      "js_mode": "Runtime",
+      "description": "Tactile minus/plus numeric quantity stepper respecting min, max, and step bounds for carts and seat quotas.",
+      "standards": ["Semantic input[type=number]", "ARIA labels", "Strict CSP"],
+      "css": "number-input.css",
+      "css_deps": ["input"],
+      "template": "number-input.kgn.html",
+      "props": {
+        "name": { "type": "string", "default": "quantity", "description": "Form field name" },
+        "label": { "type": "string", "description": "Visible field label" },
+        "min": { "type": "number", "default": 0, "description": "Minimum value" },
+        "max": { "type": "number", "default": 999, "description": "Maximum value" },
+        "step": { "type": "number", "default": 1, "description": "Increment/decrement step" },
+        "value": { "type": "number", "default": 1, "description": "Initial numeric value" }
+      },
+      "example": "<x-ui.number-input name=\"workers\" label=\"FrankenPHP Workers\" min=\"1\" max=\"64\" step=\"1\" value=\"4\" />"
+    },
+    "avatar-group": {
+      "id": "avatar-group",
+      "tag": "x-ui.avatar-group",
+      "name": "Avatar Group",
+      "category": "primitives",
+      "js_mode": "0 B JS",
+      "description": "Zero-JS overlapping stacked team avatars with hover lift and automatic +N overflow counter badge.",
+      "standards": ["ARIA role=group/img", "0 B JS"],
+      "css": "avatar-group.css",
+      "css_deps": [],
+      "template": "avatar-group.kgn.html",
+      "props": {
+        "items": { "type": "string", "description": "Pipe-separated Initials:FullName pairs or associative array" },
+        "max": { "type": "integer", "default": 4, "description": "Max visible avatars before +N overflow pill" },
+        "size": { "type": "enum", "enum": ["sm", "md", "lg"], "default": "md", "description": "Avatar diameter" }
+      },
+      "example": "<x-ui.avatar-group max=\"4\" items=\"OS:Oshie|CH:Chie|HT:Hantei|KT:Zokeibi|AK:Aiko|RY:Ryu\" />"
+    },
+    "carousel": {
+      "id": "carousel",
+      "tag": "x-ui.carousel",
+      "name": "Scroll-Snap Carousel",
+      "category": "data",
+      "js_mode": "0 B JS",
+      "description": "Zero-JavaScript horizontal snap-scrolling card/testimonial carousel built on native CSS scroll-snap-type.",
+      "standards": ["CSS scroll-snap", "ARIA roledescription=carousel", "0 B JS"],
+      "css": "carousel.css",
+      "css_deps": [],
+      "template": "carousel.kgn.html",
+      "props": {
+        "label": { "type": "string", "default": "Highlights", "description": "Accessible carousel region label" },
+        "items": { "type": "string", "description": "Double-semicolon separated Title|Body slide entries (or pass custom slides in slot)" }
+      },
+      "example": "<x-ui.carousel label=\"Platform Highlights\" items=\"Zero npm|Pure PHP 8.5 CSS compiler;;Strict CSP|0 inline scripts or styles;;WCAG AA|Verified across every theme\" />"
+    },
+    "tree": {
+      "id": "tree",
+      "tag": "x-ui.tree",
+      "name": "Tree View",
+      "category": "navigation",
+      "js_mode": "0 B JS",
+      "description": "Zero-JavaScript nested expandable file, folder, and permission hierarchy powered by recursive native HTML <details>.",
+      "standards": ["HTML <details>/<summary>", "ARIA role=tree/treeitem", "0 B JS"],
+      "css": "tree.css",
+      "css_deps": [],
+      "template": "tree.kgn.html",
+      "props": {
+        "label": { "type": "string", "default": "File tree", "description": "Accessible tree label" },
+        "items": { "type": "string", "description": "Pipe-separated slash paths (e.g. app/bootstrap.php|src/Http/HomeController.php) or array" }
+      },
+      "example": "<x-ui.tree label=\"Project Files\" items=\"app/bootstrap.php|app/invariants.php|src/Http/HomeController.php|views/pages/home.kgn.html\" />"
+    },
+    "password-input": {
+      "id": "password-input",
+      "tag": "x-ui.password-input",
+      "name": "Password Input & Strength",
+      "category": "forms",
+      "js_mode": "Runtime",
+      "description": "Strict-CSP password input with Show/Hide reveal button and live 4-segment OKLCH strength indicator (zero inline style).",
+      "standards": ["autocomplete=new-password", "Zero inline style", "Strict CSP"],
+      "css": "password-input.css",
+      "css_deps": ["button", "input"],
+      "template": "password-input.kgn.html",
+      "props": {
+        "name": { "type": "string", "default": "password", "description": "Form field name" },
+        "label": { "type": "string", "default": "Password", "description": "Visible field label" },
+        "placeholder": { "type": "string", "default": "Create a strong password...", "description": "Input placeholder" },
+        "strength": { "type": "boolean", "default": true, "description": "Display live 4-segment strength meter" },
+        "required": { "type": "boolean", "default": false, "description": "Marks password required" }
+      },
+      "example": "<x-ui.password-input name=\"password\" label=\"New Password\" strength=\"true\" required=\"true\" />"
+    }
+  }
+}

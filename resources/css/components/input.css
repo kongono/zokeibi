@@ -1,0 +1,43 @@
+@layer zokeibi.components {
+  .z-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.32rem;
+    min-width: 0;
+
+    &:has([aria-invalid="true"]) .z-label { color: var(--z-danger); }
+    &:has([aria-invalid="true"]) .z-input { border-color: var(--z-danger); }
+    &:has(.z-input:focus-visible) .z-label { color: var(--z-accent); }
+  }
+
+  .z-label {
+    font-family: var(--z-mono);
+    font-size: 0.69rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--z-ink-muted);
+    transition: color 120ms ease;
+  }
+
+  .z-input {
+    width: 100%;
+    padding: 0.5rem 0.74rem;
+    border-radius: var(--z-radius-sm);
+    border: 1px solid var(--z-border-strong);
+    background: var(--z-bg);
+    color: var(--z-ink);
+    font-family: var(--z-sans);
+    font-size: 0.83rem;
+    transition: border-color 120ms ease, box-shadow 120ms ease;
+
+    &:focus {
+      outline: none;
+      border-color: var(--z-accent);
+      box-shadow: 0 0 0 3px var(--z-accent-soft);
+    }
+  }
+
+  .z-hint { font-size: 0.73rem; color: var(--z-ink-soft); }
+  .z-field-err { font-size: 0.74rem; color: var(--z-danger); font-weight: 600; }
+}

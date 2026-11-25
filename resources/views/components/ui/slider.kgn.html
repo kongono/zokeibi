@@ -1,0 +1,31 @@
+@php
+$name = isset($name) && is_string($name) && $name !== '' ? $name : 'range';
+$id = isset($id) && is_string($id) && $id !== '' ? $id : 'k-sl-' . preg_replace('/[^a-zA-Z0-9_-]/', '', $name);
+$label = isset($label) && is_string($label) && $label !== '' ? $label : null;
+$min = isset($min) && is_numeric($min) ? (string) $min : '0';
+$max = isset($max) && is_numeric($max) ? (string) $max : '100';
+$step = isset($step) && is_numeric($step) ? (string) $step : '1';
+$value = isset($value) && is_numeric($value) ? (string) $value : '50';
+$unit = isset($unit) && is_string($unit) ? $unit : '';
+$class = isset($class) && is_string($class) ? trim($class) : '';
+$wrapClass = $class !== '' ? 'z-slider ' . $class : 'z-slider';
+@endphp
+<div class="{{ $wrapClass }}" data-z-slider="true" data-slider-unit="{{ $unit }}">
+  <div class="z-slider-head">
+@if ($label !== null)
+    <label class="z-label" for="{{ $id }}">{{ $label }}</label>
+@endif
+    <output class="z-slider-val" for="{{ $id }}" data-z-slider-out>{{ $value }}{{ $unit }}</output>
+  </div>
+  <input
+    id="{{ $id }}"
+    name="{{ $name }}"
+    type="range"
+    class="z-slider-input"
+    min="{{ $min }}"
+    max="{{ $max }}"
+    step="{{ $step }}"
+    value="{{ $value }}"
+    data-z-slider-input
+  >
+</div>

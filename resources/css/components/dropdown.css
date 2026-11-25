@@ -1,0 +1,70 @@
+@layer zokeibi.components {
+  .z-dropdown-panel {
+    margin: 0.45rem auto;
+    padding: 0.34rem;
+    min-width: 210px;
+    border-radius: var(--z-radius);
+    border: 1px solid var(--z-border-strong);
+    background: var(--z-surface);
+    color: var(--z-ink);
+    box-shadow: var(--z-shadow);
+    opacity: 0;
+    transform: translateY(-4px) scale(0.98);
+    transition: opacity 130ms ease, transform 130ms ease, display 130ms allow-discrete, overlay 130ms allow-discrete;
+
+    &:popover-open {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+
+  @starting-style {
+    .z-dropdown-panel:popover-open {
+      opacity: 0;
+      transform: translateY(-4px) scale(0.98);
+    }
+  }
+
+  .z-dropdown-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 0.12rem;
+  }
+
+  .z-dropdown-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    width: 100%;
+    padding: 0.46rem 0.65rem;
+    border: 0;
+    border-radius: calc(var(--z-radius-sm) - 2px);
+    background: transparent;
+    color: var(--z-ink);
+    text-decoration: none;
+    font: inherit;
+    font-size: 0.81rem;
+    text-align: left;
+    cursor: pointer;
+
+    &:hover,
+    &:focus-visible {
+      background: var(--z-surface-hover);
+      outline: none;
+    }
+
+    &.is-danger {
+      color: var(--z-danger);
+      &:hover { background: color-mix(in oklch, var(--z-danger) 14%, transparent); }
+    }
+  }
+
+  .z-dropdown-sep {
+    height: 1px;
+    margin: 0.28rem 0.3rem;
+    background: var(--z-border);
+  }
+}

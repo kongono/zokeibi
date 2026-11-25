@@ -1,0 +1,15 @@
+@php
+$variant = isset($variant) && is_string($variant) ? $variant : 'default';
+$dot = isset($dot) && ($dot === true || $dot === 'true' || $dot === '1');
+$class = isset($class) && is_string($class) ? trim($class) : '';
+$classes = ['z-badge'];
+if (in_array($variant, ['primary', 'emerald', 'amber', 'crimson', 'blue'], true)) {
+    $classes[] = 'z-badge-' . $variant;
+}
+if ($class !== '') {
+    $classes[] = $class;
+}
+$classAttr = implode(' ', $classes);
+$slot = isset($slot) && is_string($slot) ? $slot : '';
+@endphp
+<span class="{{ $classAttr }}">@if ($dot)<span class="z-badge-dot" aria-hidden="true"></span>@endif{!! $slot !!}</span>

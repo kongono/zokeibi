@@ -1,0 +1,29 @@
+@php
+$name = isset($name) && is_string($name) && $name !== '' ? $name : 'agree';
+$id = isset($id) && is_string($id) && $id !== '' ? $id : 'k-cb-' . preg_replace('/[^a-zA-Z0-9_-]/', '', $name);
+$label = isset($label) && is_string($label) ? $label : 'Check option';
+$description = isset($description) && is_string($description) && $description !== '' ? $description : null;
+$value = isset($value) && is_string($value) && $value !== '' ? $value : '1';
+$checked = isset($checked) && ($checked === true || $checked === 'true' || $checked === '1');
+$required = isset($required) && ($required === true || $required === 'true' || $required === '1');
+$disabled = isset($disabled) && ($disabled === true || $disabled === 'true' || $disabled === '1');
+$class = isset($class) && is_string($class) ? trim($class) : '';
+$wrapClass = $class !== '' ? 'z-checkbox ' . $class : 'z-checkbox';
+@endphp
+<label class="{{ $wrapClass }}" for="{{ $id }}">
+  <input
+    id="{{ $id }}"
+    type="checkbox"
+    name="{{ $name }}"
+    value="{{ $value }}"
+    @if ($checked) checked @endif
+    @if ($required) required @endif
+    @if ($disabled) disabled @endif
+  >
+  <span class="z-checkbox-text">
+    <span class="z-checkbox-label">{{ $label }}</span>
+@if ($description !== null)
+    <span class="z-checkbox-desc">{{ $description }}</span>
+@endif
+  </span>
+</label>

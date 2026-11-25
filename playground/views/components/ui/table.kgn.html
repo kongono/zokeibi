@@ -1,0 +1,23 @@
+@php
+$caption = isset($caption) && is_string($caption) && $caption !== '' ? $caption : null;
+$class = isset($class) && is_string($class) ? trim($class) : '';
+$wrapClass = $class !== '' ? 'z-table-wrap ' . $class : 'z-table-wrap';
+$searchable = isset($searchable) && ($searchable === true || $searchable === 'true' || $searchable === '1');
+$sortable = isset($sortable) && ($sortable === true || $sortable === 'true' || $sortable === '1');
+$searchPlaceholder = isset($searchPlaceholder) && is_string($searchPlaceholder) && $searchPlaceholder !== '' ? $searchPlaceholder : 'Filter rows...';
+$slot = isset($slot) && is_string($slot) ? $slot : '';
+@endphp
+<div class="{{ $wrapClass }}" data-z-table="true" @if ($sortable) data-z-table-sortable="true" @endif>
+@if ($searchable)
+  <div class="z-table-toolbar">
+    <input type="search" class="z-table-search" data-z-table-search placeholder="{{ $searchPlaceholder }}" aria-label="{{ $searchPlaceholder }}">
+    <span class="z-table-count" data-z-table-count aria-live="polite"></span>
+  </div>
+@endif
+  <table class="z-table">
+@if ($caption !== null)
+    <caption class="z-sr-only">{{ $caption }}</caption>
+@endif
+    {!! $slot !!}
+  </table>
+</div>

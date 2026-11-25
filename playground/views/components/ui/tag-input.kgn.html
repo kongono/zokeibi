@@ -1,0 +1,44 @@
+@php
+$name = isset($name) && is_string($name) && $name !== '' ? $name : 'tags';
+$id = isset($id) && is_string($id) && $id !== '' ? $id : 'k-ti-' . preg_replace('/[^a-zA-Z0-9_-]/', '', $name);
+$label = isset($label) && is_string($label) && $label !== '' ? $label : null;
+$placeholder = isset($placeholder) && is_string($placeholder) && $placeholder !== '' ? $placeholder : 'Type a tag and press Enter...';
+$tags = [];
+if (isset($value) && is_array($value)) {
+    foreach ($value as $tv) {
+        if (is_string($tv) && trim($tv) !== '') {
+            $tags[] = trim($tv);
+        }
+    }
+} elseif (isset($value) && is_string($value) && trim($value) !== '') {
+    foreach (explode(',', $value) as $tv) {
+        if (trim($tv) !== '') {
+            $tags[] = trim($tv);
+        }
+    }
+}
+$tags = array_values(array_unique($tags));
+$class = isset($class) && is_string($class) ? trim($class) : '';
+$wrapClass = $class !== '' ? 'z-taginput ' . $class : 'z-taginput';
+@endphp
+<div class="{{ $wrapClass }}" data-z-taginput="true" data-ti-name="{{ $name }}">
+@if ($label !== null)
+  <label class="z-label" for="{{ $id }}">{{ $label }}</label>
+@endif
+  <div data-z-ti-hidden>
+@foreach ($tags as $tag)
+    <input type="hidden" name="{{ $name }}[]" value="{{ $tag }}">
+@endforeach
+  </div>
+  <div class="z-taginput-box">
+    <div class="z-taginput-chips" data-z-ti-chips>
+@foreach ($tags as $tag)
+      <span class="z-taginput-chip" data-ti-chip="{{ $tag }}">
+        <span>{{ $tag }}</span>
+        <button type="button" class="z-taginput-rm" data-z-ti-remove="{{ $tag }}" aria-label="Remove {{ $tag }}">×</button>
+      </span>
+@endforeach
+    </div>
+    <input id="{{ $id }}" type="text" class="z-taginput-field" placeholder="{{ $placeholder }}" autocomplete="off" data-z-ti-field>
+  </div>
+</div>

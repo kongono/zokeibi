@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>@yield('title', 'Zokeibi 形 — Modern Pure-PHP UI Framework for Kongono')</title>
+  <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+  <link rel="stylesheet" href="/assets/zokeibi.min.css?v={{ $assetVer['zokeibi'] ?? '1' }}">
+  <link rel="stylesheet" href="/assets/playground.css?v={{ $assetVer['playground'] ?? '1' }}">
+  @liveScript
+  <script src="/assets/zokeibi-runtime.js?v={{ $assetVer['runtime'] ?? '1' }}" defer></script>
+@if (($activeNav ?? '') === 'studio')
+  <script src="/assets/studio.js?v={{ $assetVer['studio'] ?? '1' }}" defer></script>
+@endif
+</head>
+<body
+  data-zokeibi-theme="sumi"
+  data-zokeibi-radius="default"
+  @state(['theme' => 'sumi', 'radius' => 'default', 'cat' => 'all'])
+  k-persist="local"
+  k-persist-key="zokeibi-studio-v1"
+  k-attr:data-zokeibi-theme="theme"
+  k-attr:data-zokeibi-radius="radius"
+>
+  <header class="pg-nav">
+    <div class="pg-nav-inner">
+      <a class="pg-brand" href="/">
+        <span class="pg-mark" aria-hidden="true">形</span>
+        <span class="pg-brand-name">Zokeibi</span>
+        <span class="pg-brand-sub">kongono/zokeibi</span>
+      </a>
+      <nav class="pg-links" aria-label="Primary navigation">
+        <a class="pg-link {{ ($activeNav ?? 'home') === 'home' ? 'is-active' : '' }}" href="/">55 Components</a>
+        <a class="pg-link {{ ($activeNav ?? '') === 'studio' ? 'is-active' : '' }}" href="/studio">Token Studio</a>
+        <a class="pg-link" href="/#tree-shaker">Tree-Shaker</a>
+        <a class="pg-link" href="/studio/prove">UI Proof JSON</a>
+        <a class="pg-link" href="/api/registry.json">Registry JSON</a>
+      </nav>
+      <div class="z-row">
+        <x-ui.badge variant="emerald" dot="true">Zero Node · Strict CSP</x-ui.badge>
+        <x-ui.badge variant="primary">v{{ $version ?? '1.0.0' }}</x-ui.badge>
+      </div>
+    </div>
+  </header>
+
+  <main class="z-shell">
+    @yield('content')
+
+    <footer class="pg-footer">
+      <div>
+        <strong>Zokeibi (造形美 — "Beauty of Form")</strong> · Pure PHP 8.5 CSS compiler &amp; accessible <code>&lt;x-ui.*&gt;</code> component system for Kongono.
+      </div>
+      <div class="z-row">
+        <a class="pg-link" href="/studio">/studio</a>
+        <a class="pg-link" href="/api/registry.json">/api/registry.json</a>
+        <a class="pg-link" href="/api/v1/health">/api/v1/health</a>
+      </div>
+    </footer>
+  </main>
+</body>
+</html>

@@ -1,0 +1,47 @@
+@layer zokeibi.components {
+  .z-input-group {
+    display: grid;
+    gap: 0.36rem;
+  }
+
+  .z-input-group-row {
+    display: flex;
+    align-items: stretch;
+    border-radius: var(--z-radius-sm);
+    border: 1px solid var(--z-border-strong);
+    background: var(--z-surface-2);
+    overflow: hidden;
+
+    &:focus-within {
+      border-color: var(--z-accent);
+      outline: 2px solid color-mix(in oklch, var(--z-accent) 45%, transparent);
+    }
+  }
+
+  .z-input-addon {
+    display: inline-flex;
+    align-items: center;
+    padding: 0 0.68rem;
+    background: var(--z-surface);
+    color: var(--z-ink-soft);
+    font-family: var(--z-mono);
+    font-size: 0.74rem;
+    white-space: nowrap;
+
+    &.is-prefix { border-right: 1px solid var(--z-border); }
+    &.is-suffix { border-left: 1px solid var(--z-border); }
+  }
+
+  .z-input-group-field {
+    flex: 1 1 auto;
+    min-width: 0;
+    border: 0;
+    background: transparent;
+    color: var(--z-ink);
+    font: inherit;
+    font-size: 0.84rem;
+    padding: 0.5rem 0.72rem;
+
+    &:focus { outline: none; }
+  }
+}

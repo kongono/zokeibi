@@ -1,0 +1,67 @@
+@layer zokeibi.components {
+  .z-dropzone {
+    display: grid;
+    gap: 0.45rem;
+  }
+
+  .z-dropzone-area {
+    position: relative;
+    display: grid;
+    place-items: center;
+    gap: 0.35rem;
+    padding: 1.45rem 1.1rem;
+    border-radius: var(--z-radius);
+    border: 1.5px dashed var(--z-border-strong);
+    background: var(--z-surface-2);
+    text-align: center;
+    cursor: pointer;
+    transition: border-color 140ms ease, background-color 140ms ease;
+
+    &:hover,
+    &.is-dragover {
+      border-color: var(--z-accent);
+      background: var(--z-surface-hover);
+    }
+  }
+
+  .z-dropzone-input {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    cursor: pointer;
+    width: 100%;
+    height: 100%;
+  }
+
+  .z-dropzone-title {
+    font-size: 0.86rem;
+    font-weight: 680;
+    color: var(--z-ink);
+  }
+
+  .z-dropzone-hint {
+    font-size: 0.76rem;
+    color: var(--z-ink-muted);
+  }
+
+  .z-dropzone-files {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+  }
+
+  .z-dropzone-file {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.2rem 0.55rem;
+    border-radius: 999px;
+    background: var(--z-surface);
+    border: 1px solid var(--z-border);
+    font-size: 0.74rem;
+    color: var(--z-ink);
+  }
+}

@@ -1,0 +1,20 @@
+@php
+$title = isset($title) && is_string($title) && $title !== '' ? $title : 'Details';
+$open = isset($open) && ($open === true || $open === 'true' || $open === '1');
+$name = isset($name) && is_string($name) && $name !== '' ? $name : null;
+$class = isset($class) && is_string($class) ? trim($class) : '';
+$wrapClass = $class !== '' ? 'z-accordion ' . $class : 'z-accordion';
+$slot = isset($slot) && is_string($slot) ? $slot : '';
+@endphp
+<details
+  class="{{ $wrapClass }}"
+@if ($name !== null)
+  name="{{ $name }}"
+@endif
+@if ($open)
+  open
+@endif
+>
+  <summary>{{ $title }}</summary>
+  <div class="z-accordion-body">{!! $slot !!}</div>
+</details>

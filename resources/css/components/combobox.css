@@ -1,0 +1,75 @@
+@layer zokeibi.components {
+  .z-combobox {
+    position: relative;
+    display: grid;
+    gap: 0.36rem;
+  }
+
+  .z-combobox-control {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+
+  .z-combobox-input {
+    width: 100%;
+    padding: 0.52rem 2.1rem 0.52rem 0.74rem;
+    border-radius: var(--z-radius-sm);
+    border: 1px solid var(--z-border-strong);
+    background: var(--z-surface-2);
+    color: var(--z-ink);
+    font: inherit;
+    font-size: 0.84rem;
+
+    &:focus {
+      outline: 2px solid var(--z-accent);
+      outline-offset: 1px;
+      border-color: var(--z-accent);
+    }
+  }
+
+  .z-combobox-toggle {
+    position: absolute;
+    right: 0.35rem;
+    border: 0;
+    background: transparent;
+    color: var(--z-ink-muted);
+    cursor: pointer;
+    padding: 0.2rem 0.4rem;
+    font-size: 0.72rem;
+  }
+
+  .z-combobox-list {
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0;
+    right: 0;
+    z-index: 40;
+    list-style: none;
+    margin: 0;
+    padding: 0.32rem;
+    max-height: 220px;
+    overflow-y: auto;
+    background: var(--z-surface);
+    border: 1px solid var(--z-border-strong);
+    border-radius: var(--z-radius-sm);
+    box-shadow: var(--z-shadow);
+    display: grid;
+    gap: 0.15rem;
+  }
+
+  .z-combobox-option {
+    padding: 0.45rem 0.65rem;
+    border-radius: calc(var(--z-radius-sm) - 2px);
+    font-size: 0.82rem;
+    color: var(--z-ink);
+    cursor: pointer;
+
+    &:hover,
+    &.is-active,
+    &[aria-selected="true"] {
+      background: var(--z-surface-hover);
+      color: var(--z-ink);
+    }
+  }
+}

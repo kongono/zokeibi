@@ -1,0 +1,34 @@
+@layer zokeibi.components {
+  .z-copy {
+    display: grid;
+    gap: 0.36rem;
+  }
+
+  .z-copy-row {
+    display: flex;
+    align-items: center;
+    gap: 0.38rem;
+    padding: 0.34rem 0.42rem 0.34rem 0.72rem;
+    border-radius: var(--z-radius-sm);
+    border: 1px solid var(--z-border-strong);
+    background: var(--z-surface-2);
+  }
+
+  .z-copy-val {
+    flex: 1 1 auto;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-family: var(--z-mono);
+    font-size: 0.78rem;
+    color: var(--z-ink);
+  }
+
+  .z-copy-status {
+    font-family: var(--z-mono);
+    font-size: 0.69rem;
+    color: var(--z-emerald);
+    min-height: 1em;
+  }
+}

@@ -1,0 +1,49 @@
+@php
+$title = isset($title) && is_string($title) && $title !== '' ? $title : null;
+$subtitle = isset($subtitle) && is_string($subtitle) && $subtitle !== '' ? $subtitle : null;
+$kicker = isset($kicker) && is_string($kicker) && $kicker !== '' ? $kicker : null;
+$badge = isset($badge) && is_string($badge) && $badge !== '' ? $badge : null;
+$badgeVariant = isset($badgeVariant) && is_string($badgeVariant) ? $badgeVariant : 'primary';
+$footer = isset($footer) && is_string($footer) && $footer !== '' ? $footer : null;
+$featured = isset($featured) && ($featured === true || $featured === 'true' || $featured === '1');
+$id = isset($id) && is_string($id) && $id !== '' ? $id : null;
+$class = isset($class) && is_string($class) ? trim($class) : '';
+$classes = ['z-card'];
+if ($featured) {
+    $classes[] = 'z-card-featured';
+}
+if ($class !== '') {
+    $classes[] = $class;
+}
+$classAttr = implode(' ', $classes);
+$badgeClass = 'z-badge';
+if (in_array($badgeVariant, ['primary', 'emerald', 'amber', 'crimson', 'blue'], true)) {
+    $badgeClass .= ' z-badge-' . $badgeVariant;
+}
+$hasHead = $kicker !== null || $title !== null || $subtitle !== null || $badge !== null;
+$slot = isset($slot) && is_string($slot) ? $slot : '';
+@endphp
+<article class="{{ $classAttr }}"@if ($id !== null) id="{{ $id }}"@endif>
+@if ($hasHead)
+  <header class="z-card-head">
+    <div>
+@if ($kicker !== null)
+      <div class="z-card-kicker">{{ $kicker }}</div>
+@endif
+@if ($title !== null)
+      <h3 class="z-card-title">{{ $title }}</h3>
+@endif
+@if ($subtitle !== null)
+      <p class="z-card-sub">{{ $subtitle }}</p>
+@endif
+    </div>
+@if ($badge !== null)
+    <span class="{{ $badgeClass }}">{{ $badge }}</span>
+@endif
+  </header>
+@endif
+  <div class="z-card-body">{!! $slot !!}</div>
+@if ($footer !== null)
+  <footer class="z-card-foot">{{ $footer }}</footer>
+@endif
+</article>

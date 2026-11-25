@@ -1,0 +1,48 @@
+@layer zokeibi.components {
+  .z-banner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    padding: 0.62rem 0.95rem;
+    border-radius: var(--z-radius-sm);
+    border: 1px solid var(--z-border-strong);
+    background: var(--z-surface-2);
+    color: var(--z-ink);
+    font-size: 0.81rem;
+
+    &.z-banner-accent {
+      background: var(--z-accent-soft);
+      border-color: var(--z-accent-border);
+    }
+
+    &.z-banner-emerald {
+      background: color-mix(in oklch, var(--z-emerald) 14%, var(--z-surface));
+      border-color: color-mix(in oklch, var(--z-emerald) 45%, transparent);
+    }
+
+    &.z-banner-amber {
+      background: color-mix(in oklch, var(--z-amber) 14%, var(--z-surface));
+      border-color: color-mix(in oklch, var(--z-amber) 45%, transparent);
+    }
+
+    &.z-banner-danger {
+      background: color-mix(in oklch, var(--z-danger) 14%, var(--z-surface));
+      border-color: color-mix(in oklch, var(--z-danger) 45%, transparent);
+    }
+  }
+
+  .z-banner-body {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    flex-wrap: wrap;
+  }
+
+  .z-banner-actions {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+  }
+}

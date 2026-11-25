@@ -1,0 +1,124 @@
+@layer zokeibi.components {
+  .z-dr {
+    display: grid;
+    gap: 0.45rem;
+  }
+
+  .z-dr-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    padding: 0.48rem 0.7rem;
+    border-radius: var(--z-radius-sm);
+    border: 1px solid var(--z-border-strong);
+    background: var(--z-surface-2);
+    font-family: var(--z-mono);
+    font-size: 0.76rem;
+  }
+
+  .z-dr-summary {
+    color: var(--z-ink);
+    font-weight: 650;
+  }
+
+  .z-dr-presets {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.3rem;
+  }
+
+  .z-dr-preset {
+    padding: 0.2rem 0.5rem;
+    border-radius: var(--z-radius-sm);
+    border: 1px solid var(--z-border);
+    background: var(--z-surface);
+    color: var(--z-ink-muted);
+    font: inherit;
+    font-size: 0.7rem;
+    cursor: pointer;
+
+    &:hover {
+      border-color: var(--z-accent);
+      color: var(--z-ink);
+    }
+  }
+
+  .z-dr-cal {
+    padding: 0.72rem;
+    border-radius: var(--z-radius-sm);
+    border: 1px solid var(--z-border);
+    background: var(--z-surface);
+    display: grid;
+    gap: 0.5rem;
+  }
+
+  .z-dr-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+  }
+
+  .z-dr-month {
+    font-size: 0.82rem;
+    font-weight: 760;
+    color: var(--z-ink);
+  }
+
+  .z-dr-nav {
+    border: 1px solid var(--z-border);
+    background: var(--z-surface-2);
+    color: var(--z-ink);
+    border-radius: var(--z-radius-sm);
+    padding: 0.2rem 0.52rem;
+    cursor: pointer;
+    font: inherit;
+    font-size: 0.76rem;
+
+    &:hover { border-color: var(--z-accent); }
+  }
+
+  .z-dr-dow,
+  .z-dr-grid {
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    gap: 0.16rem;
+    text-align: center;
+  }
+
+  .z-dr-dow span {
+    font-family: var(--z-mono);
+    font-size: 0.64rem;
+    font-weight: 700;
+    color: var(--z-ink-soft);
+    padding: 0.2rem 0;
+  }
+
+  .z-dr-day {
+    border: 1px solid transparent;
+    background: transparent;
+    color: var(--z-ink);
+    border-radius: calc(var(--z-radius-sm) - 2px);
+    padding: 0.34rem 0;
+    font-family: var(--z-mono);
+    font-size: 0.73rem;
+    cursor: pointer;
+
+    &:hover { background: var(--z-surface-hover); }
+    &.is-muted { color: var(--z-ink-soft); opacity: 0.45; }
+    &.is-today { border-color: var(--z-border-strong); font-weight: 750; }
+    &.is-in-range {
+      background: var(--z-accent-soft);
+      color: var(--z-ink);
+      border-radius: 0;
+    }
+    &.is-edge {
+      background: var(--z-accent);
+      color: var(--z-accent-ink);
+      font-weight: 780;
+      border-radius: calc(var(--z-radius-sm) - 2px);
+    }
+  }
+}
