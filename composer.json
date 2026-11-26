@@ -4,6 +4,12 @@
   "type": "library",
   "license": "MIT",
   "homepage": "https://zokeibi.com",
+  "authors": [
+    {
+      "name": "Anthony Iovanna",
+      "email": "ant@kongono.com"
+    }
+  ],
   "support": {
     "source": "https://github.com/kongono/zokeibi",
     "issues": "https://github.com/kongono/zokeibi/issues"
