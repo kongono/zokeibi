@@ -3,7 +3,7 @@
 > Standalone, zero-npm, strict-CSP, AI-native UI component framework, pure PHP 8.5 OKLCH CSS compiler, pure-SVG charting engine, DTO-to-UI generator, executable UI proof gate, and local Design Token & Theme Studio GUI for Kongono (and any HTML/HTMX/Twig/Blade/React/Vue/Svelte stack).
 
 - Website: https://zokeibi.com/
-- GitHub: https://github.com/anthonyiovanna/zokeibi
+- GitHub: https://github.com/kongono/zokeibi
 - Companion Framework: https://kongono.com/
 - Composer Package: `kongono/zokeibi` (zero runtime Composer dependencies; `php >= 8.5.13` only; MIT license)
 - Full-Catalog Bundle Size: `9.50 KB` gzipped for all 55 components combined (`~2.4 KB` tree-shaken for a landing page)
