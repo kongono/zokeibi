@@ -42,6 +42,8 @@ $kgnSwap = isset($kgnSwap) && is_string($kgnSwap) && trim($kgnSwap) !== '' ? tri
 $dataZOpen = isset($dataZOpen) && is_string($dataZOpen) && trim($dataZOpen) !== '' ? trim($dataZOpen) : null;
 $dataZClose = isset($dataZClose) && is_string($dataZClose) && trim($dataZClose) !== '' ? trim($dataZClose) : null;
 $dataZToggle = isset($dataZToggle) && is_string($dataZToggle) && trim($dataZToggle) !== '' ? trim($dataZToggle) : null;
+$dataZSetTheme = isset($dataZSetTheme) && is_string($dataZSetTheme) && trim($dataZSetTheme) !== '' ? trim($dataZSetTheme) : null;
+$dataZCycleTheme = isset($dataZCycleTheme) && is_string($dataZCycleTheme) && trim($dataZCycleTheme) !== '' ? trim($dataZCycleTheme) : null;
 $popoverTarget = isset($popoverTarget) && is_string($popoverTarget) && $popoverTarget !== '' ? $popoverTarget : null;
 $popoverTargetAction = isset($popoverTargetAction) && is_string($popoverTargetAction) && $popoverTargetAction !== '' ? $popoverTargetAction : null;
 $classes = ['z-btn'];
@@ -115,6 +117,12 @@ $slot = isset($slot) && is_string($slot) ? $slot : '';
 @endif
 @if ($dataZToggle !== null)
   data-z-toggle="{{ $dataZToggle }}"
+@endif
+@if ($dataZSetTheme !== null)
+  data-z-set-theme="{{ $dataZSetTheme }}"
+@endif
+@if ($dataZCycleTheme !== null)
+  data-z-cycle-theme="{{ $dataZCycleTheme }}"
 @endif
 @if ($popoverTarget !== null)
   popovertarget="{{ $popoverTarget }}"

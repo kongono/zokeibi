@@ -119,11 +119,11 @@ final readonly class BlockCatalog
             'saas-shell' => [
                 'name' => 'Responsive SaaS App Shell',
                 'category' => 'layouts',
-                'description' => 'Sidebar workspace layout with mobile slide-over drawer, Cmd+K command palette, user avatar, and Live 2.5 slot.',
-                'components' => ['button', 'badge', 'avatar', 'drawer', 'command-palette', 'kbd'],
+                'description' => 'Persistent desktop sidebar + mobile slide-over drawer, Cmd+K command palette, OKLCH theme switcher, user avatar, and Live 2.5 slot.',
+                'components' => ['button', 'badge', 'avatar', 'drawer', 'sidebar', 'command-palette', 'kbd'],
                 'template' => <<<'HTML'
 <div class="z-stack" @state(['navOpen' => false])>
-  <header class="z-between">
+  <header class="z-between z-no-print">
     <div class="z-row">
       <x-ui.button variant="outline" size="sm" k-click="set(navOpen, true)" data-z-open="#mobile-nav">Menu</x-ui.button>
       <strong>{{ $appName ?? 'Workspace' }}</strong>
@@ -131,26 +131,32 @@ final readonly class BlockCatalog
     </div>
     <div class="z-row">
       <x-ui.command-palette id="shell-cmdk" trigger-label="Search Workspace" items="dashboard:Dashboard:/|settings:Settings:/settings|billing:Billing:/billing" />
+      <x-ui.button variant="ghost" size="sm" data-z-cycle-theme="washi,sumi,matcha" aria-label="Switch theme">Theme</x-ui.button>
       <x-ui.avatar :initials="$userInitials ?? 'ZK'" :name="$userName ?? 'Account'" status="online" />
     </div>
   </header>
   <x-ui.drawer id="mobile-nav" title="Navigation" show="navOpen">
-    <nav aria-label="Workspace navigation" class="z-stack-sm">
+    <nav aria-label="Mobile workspace navigation" class="z-stack-sm">
       <a class="z-btn z-btn-ghost" href="/">Dashboard</a>
       <a class="z-btn z-btn-ghost" href="/settings">Settings</a>
       <a class="z-btn z-btn-ghost" href="/billing">Billing</a>
     </nav>
   </x-ui.drawer>
-  <main id="workspace-main">
-    @yield('content')
-  </main>
+  <div class="z-app-layout">
+    <aside class="z-app-aside z-no-print">
+      <x-ui.sidebar label="Workspace navigation" items="Workspace::Dashboard:/:current|Settings:/settings|Billing:/billing" />
+    </aside>
+    <main id="workspace-main">
+      @yield('content')
+    </main>
+  </div>
 </div>
 HTML,
             ],
             'auth-login' => [
                 'name' => 'Auth Sign-In & Passkey Screen',
                 'category' => 'auth',
-                'description' => 'Accessible sign-in card with CSRF hidden field, PRG old-input feedback, remember-me switch, and Passkey CTA.',
+                'description' => 'Accessible sign-in card with CSRF hidden field, PRG old-input feedback, remember-me switch, and Kongono v1.22+ Passkey CTA.',
                 'components' => ['card', 'input', 'switch', 'button', 'alert'],
                 'template' => <<<'HTML'
 <main class="z-stack">
@@ -165,7 +171,7 @@ HTML,
       <x-ui.switch name="remember" label="Keep me signed in on this device" />
       <div class="z-row">
         <x-ui.button type="submit" variant="primary">Sign In</x-ui.button>
-        <x-ui.button type="button" variant="outline" kgn-post="/auth/passkey/options" kgn-target="#passkey-status">Sign in with Passkey</x-ui.button>
+        <x-ui.button type="button" variant="outline" kgn-post="/auth/passkeys/login/options" kgn-target="#passkey-status">Sign in with Passkey</x-ui.button>
       </div>
       <div id="passkey-status" aria-live="polite"></div>
     </form>

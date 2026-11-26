@@ -1,4 +1,4 @@
-# Zokeibi (造形美 — Architectural Beauty of Form) v1.0.1
+# Zokeibi (造形美 — Architectural Beauty of Form) v1.1.0
 
 > Standalone, zero-npm, strict-CSP, AI-native UI component framework, pure PHP 8.5 OKLCH CSS compiler, pure-SVG charting engine, DTO-to-UI generator, executable UI proof gate, and local Design Token & Theme Studio GUI for Kongono (and any HTML/HTMX/Twig/Blade/React/Vue/Svelte stack).
 
@@ -6,7 +6,7 @@
 - GitHub: https://github.com/kongono/zokeibi
 - Companion Framework: https://kongono.com/
 - Composer Package: `kongono/zokeibi` (zero runtime Composer dependencies; `php >= 8.5.13` only; MIT license)
-- Full-Catalog Bundle Size: `9.50 KB` gzipped for all 55 components combined (`~2.4 KB` tree-shaken for a landing page)
+- Full-Catalog Bundle Size: `<= 10.0 KB` gzipped for all 56 components combined (`~2.4 KB` tree-shaken for a landing page)
 - CSS/JS Prefixes: `.z-*` classes, `--z-*` OKLCH tokens, `data-z-*` runtime hooks, `data-zokeibi-theme` / `data-zokeibi-radius`
 
 ## Quick Start
@@ -22,7 +22,7 @@ php vendor/bin/zokeibi prove --dir=. --views=views --strict
 php vendor/bin/zokeibi studio --dir=. --port=8101
 ```
 
-## Complete Catalog (55 Components + 8 SaaS Blocks)
+## Complete Catalog (56 Components + 8 SaaS Blocks)
 
 - **Primitives (12):** `button`, `badge`, `card`, `alert`, `kbd`, `avatar`, `copy-field`, `spinner`, `divider`, `code-block`, `banner`, `avatar-group`
 - **Forms (19):** `input`, `select`, `textarea`, `switch`, `checkbox`, `radio-group`, `combobox`, `multi-select`, `tag-input`, `dropzone`, `datepicker`, `date-range`, `slider`, `otp-input`, `editor`, `rating`, `input-group`, `number-input`, `password-input`

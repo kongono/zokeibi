@@ -1700,6 +1700,31 @@ public function index(): Response
         </section>
       </div>
 
+      {{-- 56. ESIGN Signature Pad --}}
+      <div k-show="cat === 'all' || cat === 'forms'">
+        <section class="pg-demo-card" @state(['view' => 'preview'])>
+          <div class="pg-demo-head">
+            <div>
+              <h3 class="pg-demo-title">{{ $schemas['signature-pad']['name'] }} <x-ui.badge variant="blue">{{ $schemas['signature-pad']['js_mode'] }}</x-ui.badge></h3>
+              <p class="pg-demo-desc">{{ $schemas['signature-pad']['description'] }}</p>
+            </div>
+            <div class="pg-seg">
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'preview'" k-on:click="set(view, 'preview')">Preview</button>
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'code'" k-on:click="set(view, 'code')">Markup</button>
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'cli'" k-on:click="set(view, 'cli')">CLI</button>
+            </div>
+          </div>
+          <div class="pg-demo-body">
+            <div class="pg-stage" k-show="view === 'preview'">
+              <x-ui.signature-pad name="demo_lease_sig" label="Lease Agreement Signature (Draw or Type)" mode="both" />
+            </div>
+            <pre class="z-code" k-show="view === 'code'" hidden>{{ $schemas['signature-pad']['example'] }}</pre>
+            <pre class="z-code" k-show="view === 'cli'" hidden>{{ $schemas['signature-pad']['cli'] }}</pre>
+          </div>
+          <div class="pg-demo-foot"><span>&lt;{{ $schemas['signature-pad']['tag'] }}&gt;</span><span>{{ $schemas['signature-pad']['standards'] }}</span></div>
+        </section>
+      </div>
+
     </div>
   </section>
 @endsection

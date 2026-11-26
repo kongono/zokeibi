@@ -353,7 +353,7 @@ HTML;
             $authHtml = $engine->render('blocks/auth-login', ['old' => ['email' => 'ada@example.com'], 'csrf' => 'tok']);
             self::assertStringContainsString('value="ada@example.com"', $authHtml);
             self::assertStringNotContainsString('@old(', $authHtml);
-            self::assertStringContainsString('kgn-post="/auth/passkey/options"', $authHtml);
+            self::assertStringContainsString('kgn-post="/auth/passkeys/login/options"', $authHtml);
 
             $billingHtml = $engine->render('blocks/settings-billing', ['planName' => 'Enterprise', 'workspaceName' => 'Acme', 'csrf' => 'tok']);
             self::assertStringContainsString('Enterprise', $billingHtml);

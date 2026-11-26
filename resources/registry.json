@@ -3,7 +3,7 @@
   "kanji": "造形美",
   "meaning": "Beauty of Form",
   "package": "kongono/zokeibi",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "themes": ["sumi", "washi", "indigo", "matcha", "kintsugi"],
   "radius_presets": ["sharp", "default", "rounded"],
   "core_css": [
@@ -40,6 +40,8 @@
         "data-z-open": { "type": "string", "description": "Standalone runtime selector to open an overlay" },
         "data-z-close": { "type": "string", "description": "Standalone runtime selector to close an overlay" },
         "data-z-toggle": { "type": "string", "description": "Standalone runtime selector to toggle an overlay" },
+        "data-z-set-theme": { "type": "string", "description": "OKLCH theme slug to activate and persist (e.g. washi, sumi, matcha)" },
+        "data-z-cycle-theme": { "type": "string", "description": "Comma-separated OKLCH theme slugs to cycle through on click (e.g. washi,sumi,matcha)" },
         "popover-target": { "type": "string", "description": "Native HTML popovertarget ID" },
         "aria-label": { "type": "string", "description": "Accessible label for icon-only buttons" }
       },
@@ -1093,6 +1095,27 @@
         "required": { "type": "boolean", "default": false, "description": "Marks password required" }
       },
       "example": "<x-ui.password-input name=\"password\" label=\"New Password\" strength=\"true\" required=\"true\" />"
+    },
+    "signature-pad": {
+      "id": "signature-pad",
+      "tag": "x-ui.signature-pad",
+      "name": "ESIGN Signature Pad",
+      "category": "forms",
+      "js_mode": "Runtime",
+      "description": "Strict-CSP ESIGN/UETA signature capture supporting pointer/touch canvas drawing and typed-name fallback with hidden PNG/text + signature_type fields.",
+      "standards": ["Pointer Events", "HTML Canvas", "Strict CSP", "ESIGN/UETA"],
+      "css": "signature-pad.css",
+      "css_deps": ["button", "input"],
+      "template": "signature-pad.kgn.html",
+      "props": {
+        "name": { "type": "string", "default": "signature", "description": "Hidden form field name (also emits <name>_type as drawn|typed)" },
+        "label": { "type": "string", "default": "Signature", "description": "Visible signature label" },
+        "mode": { "type": "enum", "enum": ["both", "draw", "type"], "default": "both", "description": "Allowed signature capture modes" },
+        "signer-name": { "type": "string", "description": "Optional prefilled legal name for typed mode" },
+        "hint": { "type": "string", "description": "Helper or ESIGN consent caption" },
+        "required": { "type": "boolean", "default": false, "description": "Marks hidden signature value required" }
+      },
+      "example": "<x-ui.signature-pad name=\"tenant_signature\" label=\"Tenant Signature\" mode=\"both\" required=\"true\" />"
     }
   }
 }

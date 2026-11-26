@@ -1,0 +1,40 @@
+@php
+$name = isset($name) && is_string($name) && $name !== '' ? $name : 'signature';
+$id = isset($id) && is_string($id) && $id !== '' ? $id : 'z-sig-' . preg_replace('/[^a-zA-Z0-9_-]/', '', $name) . '-' . bin2hex(random_bytes(3));
+$label = isset($label) && is_string($label) && $label !== '' ? $label : 'Signature';
+$mode = isset($mode) && is_string($mode) && in_array($mode, ['both', 'draw', 'type'], true) ? $mode : 'both';
+$initialType = $mode === 'type' ? 'typed' : 'drawn';
+$signerName = isset($signerName) && is_string($signerName) ? $signerName : '';
+$hint = isset($hint) && is_string($hint) && $hint !== '' ? $hint : 'Draw with mouse/touch or type your full legal name.';
+$required = isset($required) && ($required === true || $required === 'true' || $required === '1');
+$class = isset($class) && is_string($class) ? trim($class) : '';
+$wrapClass = $class !== '' ? 'z-sig ' . $class : 'z-sig';
+@endphp
+<div class="{{ $wrapClass }}" data-z-signature="true" data-sig-mode="{{ $initialType }}">
+  <div class="z-sig-head">
+    <label class="z-label" for="{{ $id }}-text">{{ $label }}</label>
+    @if ($mode === 'both')
+      <div class="z-sig-modes" role="tablist" aria-label="Signature input mode">
+        <button type="button" class="z-sig-mode is-active" role="tab" aria-selected="true" data-z-sig-mode="drawn">Draw</button>
+        <button type="button" class="z-sig-mode" role="tab" aria-selected="false" data-z-sig-mode="typed">Type</button>
+      </div>
+    @endif
+  </div>
+  <input type="hidden" name="{{ $name }}" value="{{ $initialType === 'typed' ? $signerName : '' }}" data-z-sig-value @if ($required) required @endif>
+  <input type="hidden" name="{{ $name }}_type" value="{{ $initialType }}" data-z-sig-type>
+  @if ($mode !== 'type')
+    <div class="z-sig-pad" data-z-sig-panel="drawn" @if ($initialType !== 'drawn') hidden @endif>
+      <canvas id="{{ $id }}-canvas" class="z-sig-canvas" width="520" height="150" role="img" aria-label="{{ $label }} drawing canvas" data-z-sig-canvas></canvas>
+    </div>
+  @endif
+  @if ($mode !== 'draw')
+    <div class="z-stack-sm" data-z-sig-panel="typed" @if ($initialType !== 'typed') hidden @endif>
+      <input id="{{ $id }}-text" type="text" class="z-input" value="{{ $signerName }}" placeholder="Type full legal name..." autocomplete="name" data-z-sig-text>
+      <div class="z-sig-preview" data-z-sig-preview aria-live="polite">{{ $signerName !== '' ? $signerName : 'Your signature preview' }}</div>
+    </div>
+  @endif
+  <div class="z-sig-foot">
+    <span data-z-sig-status aria-live="polite">{{ $hint }}</span>
+    <button type="button" class="z-btn z-btn-ghost z-btn-sm" data-z-sig-clear>Clear</button>
+  </div>
+</div>

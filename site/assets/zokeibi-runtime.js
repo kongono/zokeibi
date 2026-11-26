@@ -1,4 +1,4 @@
-/* Zokeibi Vanilla Runtime v1.0.1 — Zero dependencies, Strict-CSP safe, Zero innerHTML XSS sinks */
+/* Zokeibi Vanilla Runtime v1.1.0 — Zero dependencies, Strict-CSP safe, Zero innerHTML XSS sinks */
 (() => {
   "use strict";
 
@@ -14,9 +14,120 @@
     "a[href], button:not(:disabled), input:not([type='hidden']):not(:disabled), select:not(:disabled), textarea:not(:disabled), [tabindex]:not([tabindex='-1'])";
 
   const OVERLAY_SEL = ".z-modal-backdrop, .z-drawer-backdrop, .z-cmdk-backdrop";
+  const THEME_STORAGE_KEY = "zokeibi-theme";
+  const VALID_THEME_RE = /^[a-z0-9][a-z0-9_-]{0,31}$/i;
   const openerMap = new WeakMap();
   const copyTimers = new WeakMap();
+  const sigInitSet = new WeakSet();
+  const sigDrawnSet = new WeakSet();
   let pointerDownTarget = null;
+
+  /* ---- OKLCH Theme Switcher & Persistence ---- */
+  function syncThemeButtons(activeTheme) {
+    document.querySelectorAll("[data-z-set-theme]").forEach((btn) => {
+      const slug = (btn.getAttribute("data-z-set-theme") || "").trim().toLowerCase();
+      btn.setAttribute("aria-pressed", slug === activeTheme ? "true" : "false");
+    });
+  }
+
+  function setTheme(rawTheme, persist) {
+    const clean = (rawTheme || "").trim().toLowerCase();
+    if (!VALID_THEME_RE.test(clean)) return false;
+    document.documentElement.setAttribute("data-zokeibi-theme", clean);
+    syncThemeButtons(clean);
+    if (persist !== false) {
+      try {
+        window.localStorage.setItem(THEME_STORAGE_KEY, clean);
+      } catch (_e) {
+        // Ignore private-mode storage errors
+      }
+    }
+    document.dispatchEvent(new CustomEvent("zokeibi:theme-change", { detail: { theme: clean } }));
+    return true;
+  }
+
+  function restorePersistedTheme() {
+    if (!document.documentElement.hasAttribute("data-zokeibi-theme") && !document.documentElement.hasAttribute("data-z-persist-theme")) {
+      return;
+    }
+    let saved = "";
+    try {
+      saved = (window.localStorage.getItem(THEME_STORAGE_KEY) || "").trim().toLowerCase();
+    } catch (_e) {
+      saved = "";
+    }
+    if (saved && VALID_THEME_RE.test(saved)) {
+      setTheme(saved, false);
+    } else {
+      syncThemeButtons((document.documentElement.getAttribute("data-zokeibi-theme") || "").trim().toLowerCase());
+    }
+  }
+
+  /* ---- ESIGN Signature Pad (Pointer/Touch Canvas + Typed Fallback) ---- */
+  function canvasPoint(canvas, event) {
+    const rect = canvas.getBoundingClientRect();
+    const scaleX = rect.width > 0 ? canvas.width / rect.width : 1;
+    const scaleY = rect.height > 0 ? canvas.height / rect.height : 1;
+    return {
+      x: (event.clientX - rect.left) * scaleX,
+      y: (event.clientY - rect.top) * scaleY,
+    };
+  }
+
+  function initSignaturePads(scope) {
+    (scope || document).querySelectorAll("[data-z-signature]").forEach((root) => {
+      const canvas = root.querySelector("[data-z-sig-canvas]");
+      if (!(canvas instanceof HTMLCanvasElement) || sigInitSet.has(canvas)) return;
+      sigInitSet.add(canvas);
+      let drawing = false;
+
+      canvas.addEventListener("pointerdown", (event) => {
+        if (event.button !== 0 && event.pointerType === "mouse") return;
+        const ctx = canvas.getContext("2d");
+        if (!ctx) return;
+        drawing = true;
+        if (typeof canvas.setPointerCapture === "function") {
+          try { canvas.setPointerCapture(event.pointerId); } catch (_e) {}
+        }
+        const pt = canvasPoint(canvas, event);
+        ctx.strokeStyle = getComputedStyle(canvas).color || "#111";
+        ctx.lineWidth = 2.25;
+        ctx.lineCap = "round";
+        ctx.lineJoin = "round";
+        ctx.beginPath();
+        ctx.moveTo(pt.x, pt.y);
+        ctx.lineTo(pt.x + 0.1, pt.y + 0.1);
+        ctx.stroke();
+        sigDrawnSet.add(canvas);
+      });
+
+      canvas.addEventListener("pointermove", (event) => {
+        if (!drawing) return;
+        const ctx = canvas.getContext("2d");
+        if (!ctx) return;
+        const pt = canvasPoint(canvas, event);
+        ctx.lineTo(pt.x, pt.y);
+        ctx.stroke();
+      });
+
+      const finishStroke = () => {
+        if (!drawing) return;
+        drawing = false;
+        const valueInput = root.querySelector("[data-z-sig-value]");
+        const typeInput = root.querySelector("[data-z-sig-type]");
+        if (typeInput instanceof HTMLInputElement) typeInput.value = "drawn";
+        if (valueInput instanceof HTMLInputElement && sigDrawnSet.has(canvas)) {
+          try {
+            valueInput.value = canvas.toDataURL("image/png");
+            valueInput.dispatchEvent(new Event("change", { bubbles: true }));
+          } catch (_e) {}
+        }
+      };
+
+      canvas.addEventListener("pointerup", finishStroke);
+      canvas.addEventListener("pointercancel", finishStroke);
+    });
+  }
 
   function findTarget(selector) {
     if (!selector) return null;
@@ -647,6 +758,81 @@
       return;
     }
 
+    const setThemeBtn = target.closest("[data-z-set-theme]");
+    if (setThemeBtn) {
+      setTheme(setThemeBtn.getAttribute("data-z-set-theme") || "", true);
+      return;
+    }
+
+    const cycleThemeBtn = target.closest("[data-z-cycle-theme]");
+    if (cycleThemeBtn) {
+      const list = (cycleThemeBtn.getAttribute("data-z-cycle-theme") || "washi,sumi,matcha")
+        .split(",")
+        .map((s) => s.trim().toLowerCase())
+        .filter((s) => VALID_THEME_RE.test(s));
+      if (list.length > 0) {
+        const cur = (document.documentElement.getAttribute("data-zokeibi-theme") || "").trim().toLowerCase();
+        const idx = list.indexOf(cur);
+        const next = list[(idx + 1) % list.length];
+        setTheme(next, true);
+      }
+      return;
+    }
+
+    const sigModeBtn = target.closest("[data-z-sig-mode]");
+    if (sigModeBtn) {
+      const root = sigModeBtn.closest("[data-z-signature]");
+      const mode = sigModeBtn.getAttribute("data-z-sig-mode");
+      if (root && (mode === "drawn" || mode === "typed")) {
+        root.setAttribute("data-sig-mode", mode);
+        root.querySelectorAll("[data-z-sig-mode]").forEach((btn) => {
+          const active = btn.getAttribute("data-z-sig-mode") === mode;
+          btn.classList.toggle("is-active", active);
+          btn.setAttribute("aria-selected", active ? "true" : "false");
+        });
+        root.querySelectorAll("[data-z-sig-panel]").forEach((panel) => {
+          panel.hidden = panel.getAttribute("data-z-sig-panel") !== mode;
+        });
+        const typeInput = root.querySelector("[data-z-sig-type]");
+        const valueInput = root.querySelector("[data-z-sig-value]");
+        if (typeInput instanceof HTMLInputElement) typeInput.value = mode;
+        if (valueInput instanceof HTMLInputElement) {
+          if (mode === "typed") {
+            const textInp = root.querySelector("[data-z-sig-text]");
+            valueInput.value = textInp instanceof HTMLInputElement ? textInp.value.trim() : "";
+          } else {
+            const canvas = root.querySelector("[data-z-sig-canvas]");
+            valueInput.value = canvas instanceof HTMLCanvasElement && sigDrawnSet.has(canvas) ? canvas.toDataURL("image/png") : "";
+          }
+          valueInput.dispatchEvent(new Event("change", { bubbles: true }));
+        }
+      }
+      return;
+    }
+
+    const sigClearBtn = target.closest("[data-z-sig-clear]");
+    if (sigClearBtn) {
+      const root = sigClearBtn.closest("[data-z-signature]");
+      if (root) {
+        const canvas = root.querySelector("[data-z-sig-canvas]");
+        if (canvas instanceof HTMLCanvasElement) {
+          const ctx = canvas.getContext("2d");
+          if (ctx) ctx.clearRect(0, 0, canvas.width, canvas.height);
+          sigDrawnSet.delete(canvas);
+        }
+        const textInp = root.querySelector("[data-z-sig-text]");
+        if (textInp instanceof HTMLInputElement) textInp.value = "";
+        const preview = root.querySelector("[data-z-sig-preview]");
+        if (preview) preview.textContent = "Your signature preview";
+        const valueInput = root.querySelector("[data-z-sig-value]");
+        if (valueInput instanceof HTMLInputElement) {
+          valueInput.value = "";
+          valueInput.dispatchEvent(new Event("change", { bubbles: true }));
+        }
+      }
+      return;
+    }
+
     const tabBtn = target.closest("[data-z-tab]");
     if (tabBtn) {
       const group = tabBtn.closest("[data-z-tabs]");
@@ -1054,6 +1240,23 @@
       return;
     }
 
+    if (target.hasAttribute("data-z-sig-text")) {
+      const root = target.closest("[data-z-signature]");
+      if (root) {
+        const text = (target.value || "").trim();
+        const preview = root.querySelector("[data-z-sig-preview]");
+        if (preview) preview.textContent = text !== "" ? text : "Your signature preview";
+        const typeInput = root.querySelector("[data-z-sig-type]");
+        const valueInput = root.querySelector("[data-z-sig-value]");
+        if (typeInput instanceof HTMLInputElement) typeInput.value = "typed";
+        if (valueInput instanceof HTMLInputElement) {
+          valueInput.value = text;
+          valueInput.dispatchEvent(new Event("change", { bubbles: true }));
+        }
+      }
+      return;
+    }
+
     if (target.hasAttribute("data-z-pw-input")) {
       const root = target.closest("[data-z-password]");
       if (root) {
@@ -1408,10 +1611,12 @@
   function initScope(scope) {
     const root = scope || document;
     initSortableTables(root);
+    initSignaturePads(root);
     root.querySelectorAll("[data-z-editor]").forEach(renderEditorPreview);
+    syncThemeButtons((document.documentElement.getAttribute("data-zokeibi-theme") || "").trim().toLowerCase());
   }
 
-  window.Zokeibi = { init: initScope };
+  window.Zokeibi = { init: initScope, setTheme };
 
   document.addEventListener("kongono:morphed", (event) => {
     const target = event.target instanceof Element ? event.target : document;
@@ -1419,8 +1624,12 @@
   });
 
   if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", () => initScope(document));
+    document.addEventListener("DOMContentLoaded", () => {
+      restorePersistedTheme();
+      initScope(document);
+    });
   } else {
+    restorePersistedTheme();
     initScope(document);
   }
 })();

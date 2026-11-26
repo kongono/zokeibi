@@ -113,6 +113,7 @@ final readonly class CssTreeShaker
         'z-carousel' => 'carousel',
         'z-tree' => 'tree',
         'z-pw' => 'password-input',
+        'z-sig' => 'signature-pad',
     ];
 
     public function __construct(
@@ -293,6 +294,7 @@ final readonly class CssTreeShaker
         $out = preg_replace('/\s*([{};,])\s*/', '$1', $out) ?? $out;
         $out = preg_replace('/;\}/', '}', $out) ?? $out;
         $out = preg_replace('/([a-z0-9-])\s*:\s+/i', '$1:', $out) ?? $out;
+        $out = str_replace('}@layer zokeibi.components{', '', $out);
 
         return trim($out);
     }

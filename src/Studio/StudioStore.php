@@ -128,7 +128,7 @@ final readonly class StudioStore
             throw new RuntimeException('Refusing to overwrite symlinked zokeibi.json.');
         }
         $existing = [
-            'zokeibi' => '1.0.1',
+            'zokeibi' => '1.1.0',
             'theme' => $config->activeTheme,
             'radius' => $config->radiusPreset,
             'views_dir' => 'views',

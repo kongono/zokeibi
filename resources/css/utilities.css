@@ -1,5 +1,7 @@
 @layer zokeibi.utilities {
   .z-shell { max-width: 1420px; margin: 0 auto; padding: 1.35rem 1.25rem 3rem; }
+  .z-app-layout { display: grid; grid-template-columns: 240px minmax(0, 1fr); gap: 1.15rem; align-items: start; }
+  .z-app-layout > * { min-width: 0; }
   .z-stack { display: flex; flex-direction: column; gap: 0.9rem; min-width: 0; }
   .z-stack-sm { display: flex; flex-direction: column; gap: 0.5rem; min-width: 0; }
   .z-row { display: flex; align-items: center; gap: 0.55rem; flex-wrap: wrap; }
@@ -12,6 +14,8 @@
   .z-muted { color: var(--z-ink-muted); }
   .z-soft { color: var(--z-ink-soft); }
   .z-mono { font-family: var(--z-mono); }
+  .z-tabular { font-variant-numeric: tabular-nums; }
+  .z-num-cell { font-family: var(--z-mono); font-variant-numeric: tabular-nums; text-align: right; white-space: nowrap; }
 
   .z-code {
     margin: 0;
@@ -29,6 +33,8 @@
 
   @media (max-width: 960px) {
     .z-grid-4, .z-grid-3 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .z-app-layout { grid-template-columns: 1fr; }
+    .z-app-layout > .z-app-aside { display: none; }
   }
 
   @media (max-width: 780px) {
@@ -37,5 +43,11 @@
 
   @media (max-width: 560px) {
     .z-grid-4 { grid-template-columns: 1fr; }
+  }
+
+  @media print {
+    .z-no-print { display: none !important; }
+    body { background: #fff !important; color: #111 !important; }
+    .z-print-avoid { box-shadow: none !important; break-inside: avoid; }
   }
 }

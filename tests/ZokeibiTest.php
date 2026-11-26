@@ -26,11 +26,11 @@ final class ZokeibiTest extends TestCase
         $this->packageDir = dirname(__DIR__);
     }
 
-    public function testRegistryLoadsAll55ComponentsAndAssetsExist(): void
+    public function testRegistryLoadsAll56ComponentsAndAssetsExist(): void
     {
         $zokeibi = new Zokeibi();
 
-        self::assertSame(55, $zokeibi->registry->count());
+        self::assertSame(56, $zokeibi->registry->count());
         self::assertSame(['sumi', 'washi', 'indigo', 'matcha', 'kintsugi'], $zokeibi->registry->themes());
         self::assertSame(['sharp', 'default', 'rounded'], $zokeibi->registry->radiusPresets());
 
@@ -46,7 +46,7 @@ final class ZokeibiTest extends TestCase
         self::assertIsArray($decoded);
         self::assertSame('zokeibi', $decoded['name']);
         self::assertSame('造形美', $decoded['kanji']);
-        self::assertSame(55, $decoded['component_count']);
+        self::assertSame(56, $decoded['component_count']);
     }
 
     public function testCssTreeShakerReducesBundleAndResolvesDependencies(): void
@@ -67,7 +67,7 @@ final class ZokeibiTest extends TestCase
 
             // popover declares css_deps: ["button"], so button MUST be pulled in automatically
             self::assertSame(['button', 'badge', 'popover'], $report->usedComponents);
-            self::assertCount(52, $report->skippedComponents);
+            self::assertCount(53, $report->skippedComponents);
             self::assertSame(1, $report->scannedFiles);
             self::assertFileExists($outCss);
             self::assertGreaterThan(35.0, $report->treeShakeSavingsPercent);
@@ -160,7 +160,7 @@ HTML;
         }
     }
 
-    public function testAll55ComponentsCompileAndRenderCleanlyWithXssEscaping(): void
+    public function testAll56ComponentsCompileAndRenderCleanlyWithXssEscaping(): void
     {
         $zokeibi = new Zokeibi();
         $tmpDir = $this->makeTempDir('zokeibi-render-');
@@ -230,19 +230,20 @@ HTML;
   <x-ui.carousel label="Slides" items="One|Body;;Two|More" />
   <x-ui.tree label="Files" items="app/bootstrap.php|src/App.php" />
   <x-ui.password-input name="pw" label="Password" strength="true" />
+  <x-ui.signature-pad name="lease_sig" label="Tenant Signature" mode="both" required="true" />
 </section>
 HTML;
-            file_put_contents($viewsDir . DIRECTORY_SEPARATOR . 'all55.kgn.html', $page);
+            file_put_contents($viewsDir . DIRECTORY_SEPARATOR . 'all56.kgn.html', $page);
 
             $engine = new ViewEngine($viewsDir, $cacheDir);
-            $html = $engine->render('all55', ['xssTitle' => '<script>alert(1)</script>']);
+            $html = $engine->render('all56', ['xssTitle' => '<script>alert(1)</script>']);
 
             // Zero uncompiled <x-ui.*> tags
             self::assertStringNotContainsString('<x-ui.', $html);
             // XSS auto-escaped
             self::assertStringNotContainsString('<script>alert(1)</script>', $html);
             self::assertStringContainsString('&lt;script&gt;alert(1)&lt;/script&gt;', $html);
-            // Zero inline style or inline onclick across all 55 rendered primitives
+            // Zero inline style or inline onclick across all 56 rendered primitives
             self::assertStringNotContainsString('style="', $html);
             self::assertStringNotContainsString('onclick=', $html);
             // Modern semantic HTML & ARIA attributes present
@@ -316,7 +317,7 @@ HTML;
         self::assertSame(200, $reg->getStatusCode());
         $regJson = json_decode((string) $reg->getBody(), true, 512, JSON_THROW_ON_ERROR);
         self::assertIsArray($regJson);
-        self::assertSame(55, $regJson['component_count']);
+        self::assertSame(56, $regJson['component_count']);
         self::assertIsArray($regJson['blocks']);
         self::assertCount(8, $regJson['blocks']);
 
@@ -341,7 +342,7 @@ HTML;
         self::assertSame(0, $listCode);
         $listDecoded = json_decode(implode("\n", $listOut), true, 512, JSON_THROW_ON_ERROR);
         self::assertIsArray($listDecoded);
-        self::assertCount(55, $listDecoded);
+        self::assertCount(56, $listDecoded);
 
         $schemaOut = [];
         $schemaCode = 0;
@@ -741,7 +742,7 @@ HTML;
         self::assertTrue($playgroundProof['passed']);
         self::assertSame('A+', $playgroundProof['grade']);
         self::assertSame(100, $playgroundProof['score']);
-        self::assertSame(55, $playgroundProof['pillars']['budget']['components_used']);
+        self::assertSame(56, $playgroundProof['pillars']['budget']['components_used']);
 
         // Failing contrast custom theme (WCAG mid-luminance dead zone L=0.56, C=0.0) & tight budget must FAIL
         $tmpDir = $this->makeTempDir('zokeibi-prove-fail-');
@@ -800,6 +801,48 @@ HTML;
             self::assertFileExists($outCss);
             self::assertContains('stepper', $report->usedComponents);
             self::assertNotEmpty($logs);
+        } finally {
+            $this->removeDir($tmpDir);
+        }
+    }
+
+    public function testV110SignaturePadThemeSwitcherTabularAndBlocks(): void
+    {
+        $zokeibi = new Zokeibi();
+        $tmpDir = $this->makeTempDir('zokeibi-v110-');
+
+        try {
+            $zokeibi->blocks->install($tmpDir, ['saas-shell', 'auth-login'], $zokeibi->installer, true);
+            $zokeibi->installer->add($tmpDir, ['signature-pad'], true);
+
+            $shell = (string) file_get_contents($tmpDir . '/views/blocks/saas-shell.kgn.html');
+            self::assertStringContainsString('<x-ui.sidebar', $shell);
+            self::assertStringContainsString('data-z-cycle-theme="washi,sumi,matcha"', $shell);
+            self::assertStringContainsString('z-app-layout', $shell);
+
+            $authLogin = (string) file_get_contents($tmpDir . '/views/blocks/auth-login.kgn.html');
+            self::assertStringContainsString('/auth/passkeys/login/options', $authLogin);
+
+            file_put_contents(
+                $tmpDir . '/views/lease.kgn.html',
+                '<main><x-ui.signature-pad name="tenant_sig" label="Tenant Signature" mode="both" required="true" /><x-ui.button variant="ghost" data-z-set-theme="washi">Light</x-ui.button></main>',
+            );
+
+            $audit = $zokeibi->auditor->auditDirectory($tmpDir . '/views');
+            self::assertTrue($audit->passed, 'Expected strict audit pass: ' . json_encode($audit->findings));
+            self::assertSame(100, $audit->score);
+
+            $build = $zokeibi->compiler->buildFromDirectory($tmpDir . '/views');
+            self::assertContains('signature-pad', $build->usedComponents);
+            self::assertStringContainsString('font-variant-numeric:tabular-nums', $build->css);
+            self::assertStringContainsString('@media print', $build->css);
+            self::assertStringContainsString('.z-sig-canvas', $build->css);
+
+            $runtime = (string) file_get_contents($this->packageDir . '/resources/js/zokeibi-runtime.js');
+            self::assertStringContainsString('data-z-cycle-theme', $runtime);
+            self::assertStringContainsString('data-z-sig-canvas', $runtime);
+            self::assertStringContainsString('zokeibi:theme-change', $runtime);
+            self::assertStringNotContainsString('.innerHTML', $runtime);
         } finally {
             $this->removeDir($tmpDir);
         }

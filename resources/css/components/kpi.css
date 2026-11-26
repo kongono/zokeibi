@@ -32,6 +32,7 @@
 
   .z-kpi-delta {
     font-family: var(--z-mono);
+    font-variant-numeric: tabular-nums;
     font-size: 0.68rem;
     font-weight: 700;
     padding: 0.1rem 0.38rem;
@@ -45,6 +46,7 @@
 
   .z-kpi-value {
     font-family: var(--z-mono);
+    font-variant-numeric: tabular-nums;
     font-size: 1.55rem;
     font-weight: 820;
     letter-spacing: -0.03em;
