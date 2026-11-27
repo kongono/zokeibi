@@ -1,0 +1,137 @@
+@php
+$safeUrl = static function (string $raw, string $fallback = '#'): string {
+    $clean = trim((string) preg_replace('/[\x00-\x1F\x7F]+/', '', $raw));
+    if ($clean === '') {
+        return $fallback;
+    }
+    $lower = strtolower($clean);
+    if (str_starts_with($lower, '//') || str_starts_with($lower, '/\\')) {
+        return $fallback;
+    }
+    if (
+        str_starts_with($lower, '/')
+        || str_starts_with($lower, './')
+        || str_starts_with($lower, '../')
+        || str_starts_with($lower, '#')
+        || str_starts_with($lower, '?')
+        || str_starts_with($lower, 'https://')
+        || str_starts_with($lower, 'http://')
+    ) {
+        return $clean;
+    }
+
+    return $fallback;
+};
+$id = isset($id) && is_string($id) && $id !== '' ? $id : 'z-appr-' . bin2hex(random_bytes(3));
+$title = isset($title) && is_string($title) && $title !== '' ? $title : 'Approval Required';
+$agent = isset($agent) && is_string($agent) && $agent !== '' ? $agent : 'Automation';
+$risk = isset($risk) && is_string($risk) && in_array($risk, ['low', 'medium', 'high', 'critical'], true) ? $risk : 'medium';
+$summary = isset($summary) && is_string($summary) && $summary !== '' ? $summary : null;
+$action = isset($action) && is_string($action) && trim($action) !== '' ? $safeUrl($action) : '#';
+$method = isset($method) && is_string($method) && strtoupper(trim($method)) === 'GET' ? 'GET' : 'POST';
+$csrf = isset($csrf) && is_string($csrf) ? $csrf : null;
+$approvalId = isset($approvalId) && is_string($approvalId) && $approvalId !== '' ? $approvalId : null;
+$kgnPost = isset($kgnPost) && is_string($kgnPost) && trim($kgnPost) !== '' ? $safeUrl($kgnPost) : null;
+$kgnTarget = isset($kgnTarget) && is_string($kgnTarget) && trim($kgnTarget) !== '' ? trim($kgnTarget) : null;
+$noteField = isset($noteField) && ($noteField === true || $noteField === 'true' || $noteField === '1');
+$approveLabel = isset($approveLabel) && is_string($approveLabel) && $approveLabel !== '' ? $approveLabel : 'Approve Action';
+$rejectLabel = isset($rejectLabel) && is_string($rejectLabel) && $rejectLabel !== '' ? $rejectLabel : 'Reject';
+$class = isset($class) && is_string($class) ? trim($class) : '';
+$slot = isset($slot) && is_string($slot) ? trim($slot) : '';
+
+$riskBadges = [
+    'low' => ['variant' => 'emerald', 'label' => 'Low Risk'],
+    'medium' => ['variant' => 'amber', 'label' => 'Medium Risk'],
+    'high' => ['variant' => 'crimson', 'label' => 'High Risk'],
+    'critical' => ['variant' => 'crimson', 'label' => 'Critical Risk'],
+];
+$badgeInfo = $riskBadges[$risk];
+
+$parsedChanges = [];
+if (isset($changes) && is_array($changes)) {
+    foreach ($changes as $entry) {
+        if (!is_array($entry)) {
+            continue;
+        }
+        $field = isset($entry['field']) && is_scalar($entry['field']) ? trim((string) $entry['field']) : '';
+        $before = isset($entry['before']) && is_scalar($entry['before']) ? trim((string) $entry['before']) : null;
+        $after = isset($entry['after']) && is_scalar($entry['after']) ? trim((string) $entry['after']) : '';
+        if ($field !== '') {
+            $parsedChanges[] = ['field' => $field, 'before' => $before, 'after' => $after];
+        }
+    }
+} elseif (isset($changes) && is_string($changes) && trim($changes) !== '') {
+    foreach (explode(';;', $changes) as $row) {
+        $parts = array_map('trim', explode('|', $row));
+        $field = $parts[0] ?? '';
+        if ($field === '') {
+            continue;
+        }
+        if (count($parts) >= 3) {
+            $parsedChanges[] = ['field' => $field, 'before' => $parts[1], 'after' => $parts[2]];
+        } else {
+            $parsedChanges[] = ['field' => $field, 'before' => null, 'after' => $parts[1] ?? ''];
+        }
+    }
+}
+@endphp
+<article class="z-card z-approval z-approval-{{ $risk }}{{ $class !== '' ? ' ' . $class : '' }}" role="region" aria-labelledby="{{ $id }}-title">
+  <div class="z-card-head">
+    <div>
+      <div class="z-card-kicker">{{ $agent }} · Approval Gate</div>
+      <h3 class="z-card-title" id="{{ $id }}-title">{{ $title }}</h3>
+    </div>
+    <span class="z-badge z-badge-{{ $badgeInfo['variant'] }}">{{ $badgeInfo['label'] }}</span>
+  </div>
+  <form
+    method="{{ $method }}"
+    action="{{ $action }}"
+@if ($kgnPost !== null)
+    kgn-post="{{ $kgnPost }}"
+@endif
+@if ($kgnTarget !== null)
+    kgn-target="{{ $kgnTarget }}"
+@endif
+  >
+@if ($csrf !== null)
+    <input type="hidden" name="_csrf" value="{{ $csrf }}">
+@endif
+@if ($approvalId !== null)
+    <input type="hidden" name="approval_id" value="{{ $approvalId }}">
+@endif
+    <div class="z-card-body z-stack-sm">
+@if ($summary !== null)
+      <p class="z-approval-summary">{{ $summary }}</p>
+@endif
+@if ($slot !== '')
+      <div>{!! $slot !!}</div>
+@endif
+@if (count($parsedChanges) > 0)
+      <dl class="z-approval-diff">
+@foreach ($parsedChanges as $chg)
+        <div class="z-approval-row">
+          <dt class="z-approval-key">{{ $chg['field'] }}</dt>
+          <dd class="z-approval-val">
+@if ($chg['before'] !== null && $chg['before'] !== '')
+            <del class="z-approval-old">{{ $chg['before'] }}</del>
+            <span aria-hidden="true">→</span>
+@endif
+            <ins class="z-approval-new">{{ $chg['after'] }}</ins>
+          </dd>
+        </div>
+@endforeach
+      </dl>
+@endif
+@if ($noteField)
+      <div class="z-field">
+        <label class="z-label" for="{{ $id }}-note">Reviewer Note (optional)</label>
+        <input id="{{ $id }}-note" name="reviewer_note" type="text" class="z-input" placeholder="Add audit rationale...">
+      </div>
+@endif
+    </div>
+    <div class="z-card-foot z-between">
+      <button type="submit" name="decision" value="reject" class="z-btn z-btn-outline z-btn-sm">{{ $rejectLabel }}</button>
+      <button type="submit" name="decision" value="approve" class="z-btn {{ $risk === 'critical' ? 'z-btn-danger' : 'z-btn-emerald' }} z-btn-sm">{{ $approveLabel }}</button>
+    </div>
+  </form>
+</article>

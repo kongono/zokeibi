@@ -1,0 +1,12 @@
+@layer zokeibi.components {
+  .z-money {
+    &:has([aria-invalid="true"]) .z-label { color: var(--z-danger); }
+    &:has([aria-invalid="true"]) .z-input-group-row { border-color: var(--z-danger); }
+  }
+
+  .z-money-field {
+    text-align: right;
+    font-family: var(--z-mono);
+    font-variant-numeric: tabular-nums;
+  }
+}

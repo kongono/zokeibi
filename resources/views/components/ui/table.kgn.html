@@ -4,14 +4,71 @@ $class = isset($class) && is_string($class) ? trim($class) : '';
 $wrapClass = $class !== '' ? 'z-table-wrap ' . $class : 'z-table-wrap';
 $searchable = isset($searchable) && ($searchable === true || $searchable === 'true' || $searchable === '1');
 $sortable = isset($sortable) && ($sortable === true || $sortable === 'true' || $sortable === '1');
+$selectable = isset($selectable) && ($selectable === true || $selectable === 'true' || $selectable === '1');
+$columnToggle = isset($columnToggle) && ($columnToggle === true || $columnToggle === 'true' || $columnToggle === '1');
+$exportable = isset($exportable) && ($exportable === true || $exportable === 'true' || $exportable === '1');
+$exportFilename = isset($exportFilename) && is_string($exportFilename) && trim($exportFilename) !== '' ? trim($exportFilename) : 'table-export.csv';
 $searchPlaceholder = isset($searchPlaceholder) && is_string($searchPlaceholder) && $searchPlaceholder !== '' ? $searchPlaceholder : 'Filter rows...';
+$bulkItems = [];
+if (isset($bulkActions) && is_string($bulkActions) && trim($bulkActions) !== '') {
+    foreach (explode('|', $bulkActions) as $rawItem) {
+        $parts = array_map('trim', explode(':', $rawItem));
+        $actId = $parts[0] ?? '';
+        $actLabel = $parts[1] ?? $actId;
+        $actVariant = isset($parts[2]) && in_array($parts[2], ['primary', 'danger', 'emerald', 'outline', 'ghost'], true) ? $parts[2] : 'outline';
+        if ($actId !== '' && $actLabel !== '') {
+            $bulkItems[] = ['id' => $actId, 'label' => $actLabel, 'variant' => $actVariant];
+        }
+    }
+}
+$colPopoverId = 'z-tbl-cols-' . bin2hex(random_bytes(3));
+$showToolbar = $searchable || $columnToggle || $exportable;
 $slot = isset($slot) && is_string($slot) ? $slot : '';
 @endphp
-<div class="{{ $wrapClass }}" data-z-table="true" @if ($sortable) data-z-table-sortable="true" @endif>
-@if ($searchable)
+<div
+  class="{{ $wrapClass }}"
+  data-z-table="true"
+@if ($sortable)
+  data-z-table-sortable="true"
+@endif
+@if ($selectable)
+  data-z-table-selectable="true"
+@endif
+@if ($columnToggle)
+  data-z-table-col-toggle="true"
+@endif
+@if ($exportable)
+  data-z-table-export-file="{{ $exportFilename }}"
+@endif
+>
+@if ($showToolbar)
   <div class="z-table-toolbar">
+@if ($searchable)
     <input type="search" class="z-table-search" data-z-table-search placeholder="{{ $searchPlaceholder }}" aria-label="{{ $searchPlaceholder }}">
-    <span class="z-table-count" data-z-table-count aria-live="polite"></span>
+@endif
+    <div class="z-table-tools">
+      <span class="z-table-count" data-z-table-count aria-live="polite"></span>
+@if ($columnToggle)
+      <div class="z-table-col-wrap">
+        <button type="button" class="z-table-tool-btn" popovertarget="{{ $colPopoverId }}" aria-haspopup="menu">Columns ▾</button>
+        <div id="{{ $colPopoverId }}" class="z-table-col-menu" popover="auto" role="group" aria-label="Toggle table columns" data-z-table-col-list></div>
+      </div>
+@endif
+@if ($exportable)
+      <button type="button" class="z-table-tool-btn" data-z-table-export>Export CSV</button>
+@endif
+    </div>
+  </div>
+@endif
+@if ($selectable)
+  <div class="z-table-bulk" data-z-table-bulk hidden role="region" aria-label="Selected rows actions">
+    <span class="z-table-bulk-count" data-z-table-selected-count aria-live="polite">0 selected</span>
+    <div class="z-table-bulk-actions">
+@foreach ($bulkItems as $act)
+      <button type="button" class="z-table-tool-btn z-table-bulk-{{ $act['variant'] }}" data-z-table-bulk-action="{{ $act['id'] }}">{{ $act['label'] }}</button>
+@endforeach
+      <button type="button" class="z-table-tool-btn" data-z-table-clear-selection>Clear</button>
+    </div>
   </div>
 @endif
   <table class="z-table">

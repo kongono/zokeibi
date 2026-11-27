@@ -1,4 +1,4 @@
-# Zokeibi (造形美 — Architectural Beauty of Form) v1.1.0
+# Zokeibi (造形美 — Architectural Beauty of Form) v1.2.0
 
 > Standalone, zero-npm, strict-CSP, AI-native UI component framework, pure PHP 8.5 OKLCH CSS compiler, pure-SVG charting engine, DTO-to-UI generator, executable UI proof gate, and local Design Token & Theme Studio GUI for Kongono (and any HTML/HTMX/Twig/Blade/React/Vue/Svelte stack).
 
@@ -6,15 +6,15 @@
 - GitHub: https://github.com/kongono/zokeibi
 - Companion Framework: https://kongono.com/
 - Composer Package: `kongono/zokeibi` (zero runtime Composer dependencies; `php >= 8.5.13` only; MIT license)
-- Full-Catalog Bundle Size: `<= 10.0 KB` gzipped for all 56 components combined (`~2.4 KB` tree-shaken for a landing page)
-- CSS/JS Prefixes: `.z-*` classes, `--z-*` OKLCH tokens, `data-z-*` runtime hooks, `data-zokeibi-theme` / `data-zokeibi-radius`
+- Full-Catalog Bundle Size: `~11.0 KB` gzipped for all 60 components combined (`~2.5 KB` tree-shaken for a landing page)
+- CSS/JS Prefixes: `.z-*` classes, `--z-*` OKLCH tokens, `data-z-*` runtime hooks, `data-zokeibi-theme` / `data-zokeibi-radius` / `data-z-density`
 
 ## Quick Start
 
 ```bash
 composer require kongono/zokeibi
 php vendor/bin/zokeibi init --theme=sumi
-php vendor/bin/zokeibi add button card dropdown checkbox input-group password-input chart editor tree
+php vendor/bin/zokeibi add button card money-input alert-dialog ai-review approval-card table chart
 php vendor/bin/zokeibi block add saas-shell analytics-dashboard api-keys-audit
 php vendor/bin/zokeibi build --views=views --out=public/assets/zokeibi.min.css
 php vendor/bin/zokeibi runtime --out=public/assets/zokeibi-runtime.js
@@ -22,19 +22,28 @@ php vendor/bin/zokeibi prove --dir=. --views=views --strict
 php vendor/bin/zokeibi studio --dir=. --port=8101
 ```
 
-## Complete Catalog (56 Components + 8 SaaS Blocks)
+## Complete Catalog (60 Components + 8 SaaS Blocks)
 
 - **Primitives (12):** `button`, `badge`, `card`, `alert`, `kbd`, `avatar`, `copy-field`, `spinner`, `divider`, `code-block`, `banner`, `avatar-group`
-- **Forms (19):** `input`, `select`, `textarea`, `switch`, `checkbox`, `radio-group`, `combobox`, `multi-select`, `tag-input`, `dropzone`, `datepicker`, `date-range`, `slider`, `otp-input`, `editor`, `rating`, `input-group`, `number-input`, `password-input`
-- **Data (9):** `progress`, `skeleton`, `empty-state`, `kpi`, `table`, `chart`, `timeline`, `description-list`, `carousel`
+- **Forms (21):** `input`, `select`, `textarea`, `switch`, `checkbox`, `radio-group`, `combobox`, `multi-select`, `tag-input`, `dropzone`, `datepicker`, `date-range`, `slider`, `otp-input`, `editor`, `rating`, `input-group`, `number-input`, `password-input`, `signature-pad`, `money-input`
+- **Data (11):** `progress`, `skeleton`, `empty-state`, `kpi`, `table`, `chart`, `timeline`, `description-list`, `carousel`, `ai-review`, `approval-card`
 - **Navigation (8):** `tabs`, `accordion`, `stepper`, `pagination`, `breadcrumb`, `segmented`, `sidebar`, `tree`
-- **Overlays (7):** `popover`, `tooltip`, `modal`, `drawer`, `toast`, `command-palette`, `dropdown`
+- **Overlays (8):** `popover`, `tooltip`, `modal`, `drawer`, `toast`, `command-palette`, `dropdown`, `alert-dialog`
 - **Full-Page SaaS Blocks (8):** `saas-shell`, `auth-login`, `settings-billing`, `pricing-grid`, `empty-onboarding`, `error-page`, `analytics-dashboard`, `api-keys-audit`
 
-## Themes & Radius Presets
+## Themes, Radius & Two-Gear Density Presets
 
-- Themes (`data-zokeibi-theme`): `sumi` (default dark), `washi` (warm light), `indigo`, `matcha`, `kintsugi`
+- Themes (`data-zokeibi-theme` / `data-z-set-theme` / `data-z-cycle-theme`): `sumi` (default dark), `washi` (warm light), `indigo`, `matcha`, `kintsugi`
 - Radius presets (`data-zokeibi-radius`): `sharp` (`4px`), `default` (`12px`), `rounded` (`18px`)
+- Two-Gear Density (`data-z-density` / `data-z-set-density` / `data-z-cycle-density`): `calm` (airy editorial), `default`, `compact` (high-density power tables)
+
+## Standout v1.2.0 Capabilities
+
+- **Integer-Cents `<x-ui.money-input>`:** Formats `1,850.00` with `tabular-nums` while submitting exact integer minor units (`185000`) via string-safe math.
+- **Hardened `<x-ui.alert-dialog>`:** Static backdrop (`data-z-static-backdrop="true"`), focuses Cancel on open, and supports typed confirmation gates (`confirm-text="DELETE"`).
+- **Stacked & Undoable Toasts:** Programmatic `Zokeibi.toast(...)` queue plus declarative `data-z-undo="Lease archived"` grace-window countdown with Undo cancellation.
+- **DataTable Power Suite:** `selectable="true"` (Shift+Click range select + bulk action bar), `column-toggle="true"` (native Top-Layer Popover), and `exportable="true"` (RFC 4180 formula-safe CSV export).
+- **Composite Skeletons + Human-in-the-Loop AI Cards:** `<x-ui.skeleton variant="card|table|kpi" live-only="true" />`, `<x-ui.ai-review>` (OCR/extraction verification with confidence pills), and `<x-ui.approval-card>` (before/after diff gate for Kongono `#[RequiresApproval]`).
 
 ## Kongono MCP & Proof Gate
 

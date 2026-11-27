@@ -17,7 +17,7 @@ use Zokeibi\Studio\ThemeTokenConfig;
  * Proves three mathematical UI guarantees in one command:
  *   1. WCAG 2.1 AA contrast across active theme + EVERY saved custom brand theme in `zokeibi.json`
  *   2. Static UI schema, ARIA & strict-CSP audit (`UiAuditor`)
- *   3. Tree-shaken gzipped CSS bundle budget (`--max-gzip-kb=10.0`)
+ *   3. Tree-shaken gzipped CSS bundle budget (`--max-gzip-kb=12.0`)
  */
 final readonly class UiProver
 {
@@ -43,7 +43,7 @@ final readonly class UiProver
     public function prove(
         string $projectDir,
         ?string $viewsDir = null,
-        float $maxGzipKb = 10.0,
+        float $maxGzipKb = 12.0,
         bool $strict = false,
     ): array {
         if (!is_finite($maxGzipKb) || $maxGzipKb <= 0.0) {

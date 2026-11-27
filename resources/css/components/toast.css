@@ -1,5 +1,19 @@
 @layer zokeibi.components {
+  .z-toast-stack {
+    position: fixed;
+    right: 1.15rem;
+    bottom: 1.15rem;
+    z-index: 98;
+    display: flex;
+    flex-direction: column-reverse;
+    gap: 0.55rem;
+    max-width: min(390px, calc(100vw - 2rem));
+    pointer-events: none;
+  }
+
   .z-toast {
+    position: relative;
+    overflow: hidden;
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
@@ -13,6 +27,7 @@
     font-size: 0.8rem;
     min-width: 260px;
     max-width: 390px;
+    pointer-events: auto;
 
     &.z-toast-emerald { border-color: var(--z-emerald-border); }
     &.z-toast-amber { border-color: var(--z-amber-border); }
@@ -29,4 +44,19 @@
 
   .z-toast-title { font-weight: 760; font-size: 0.82rem; color: var(--z-ink); }
   .z-toast-desc { font-size: 0.76rem; color: var(--z-ink-muted); margin-top: 0.14rem; }
+  .z-toast-actions { display: flex; align-items: center; gap: 0.35rem; flex-shrink: 0; }
+
+  .z-toast-bar {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 2px;
+    background: var(--z-accent);
+    transform-origin: left center;
+  }
+
+  .z-toast-emerald .z-toast-bar { background: var(--z-emerald); }
+  .z-toast-amber .z-toast-bar { background: var(--z-amber); }
+  .z-toast-danger .z-toast-bar { background: var(--z-danger); }
 }

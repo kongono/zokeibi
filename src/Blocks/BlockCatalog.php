@@ -131,6 +131,7 @@ final readonly class BlockCatalog
     </div>
     <div class="z-row">
       <x-ui.command-palette id="shell-cmdk" trigger-label="Search Workspace" items="dashboard:Dashboard:/|settings:Settings:/settings|billing:Billing:/billing" />
+      <x-ui.button variant="ghost" size="sm" data-z-cycle-density="calm,default,compact" aria-label="Switch density">Density</x-ui.button>
       <x-ui.button variant="ghost" size="sm" data-z-cycle-theme="washi,sumi,matcha" aria-label="Switch theme">Theme</x-ui.button>
       <x-ui.avatar :initials="$userInitials ?? 'ZK'" :name="$userName ?? 'Account'" status="online" />
     </div>

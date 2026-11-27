@@ -1,4 +1,4 @@
-/* Zokeibi Vanilla Runtime v1.1.0 — Zero dependencies, Strict-CSP safe, Zero innerHTML XSS sinks */
+/* Zokeibi Vanilla Runtime v1.2.0 — Zero dependencies, Strict-CSP safe, Zero innerHTML XSS sinks */
 (() => {
   "use strict";
 
@@ -15,14 +15,17 @@
 
   const OVERLAY_SEL = ".z-modal-backdrop, .z-drawer-backdrop, .z-cmdk-backdrop";
   const THEME_STORAGE_KEY = "zokeibi-theme";
+  const DENSITY_STORAGE_KEY = "zokeibi-density";
   const VALID_THEME_RE = /^[a-z0-9][a-z0-9_-]{0,31}$/i;
+  const VALID_DENSITIES = new Set(["calm", "default", "compact"]);
   const openerMap = new WeakMap();
   const copyTimers = new WeakMap();
   const sigInitSet = new WeakSet();
   const sigDrawnSet = new WeakSet();
+  const lastTableCheckMap = new WeakMap();
   let pointerDownTarget = null;
 
-  /* ---- OKLCH Theme Switcher & Persistence ---- */
+  /* ---- OKLCH Theme & Two-Gear Density Switcher + Persistence ---- */
   function syncThemeButtons(activeTheme) {
     document.querySelectorAll("[data-z-set-theme]").forEach((btn) => {
       const slug = (btn.getAttribute("data-z-set-theme") || "").trim().toLowerCase();
@@ -61,6 +64,201 @@
     } else {
       syncThemeButtons((document.documentElement.getAttribute("data-zokeibi-theme") || "").trim().toLowerCase());
     }
+  }
+
+  function syncDensityButtons(activeDensity) {
+    document.querySelectorAll("[data-z-set-density]").forEach((btn) => {
+      const slug = (btn.getAttribute("data-z-set-density") || "").trim().toLowerCase();
+      btn.setAttribute("aria-pressed", slug === activeDensity ? "true" : "false");
+    });
+  }
+
+  function setDensity(rawDensity, persist) {
+    const clean = (rawDensity || "").trim().toLowerCase();
+    if (!VALID_DENSITIES.has(clean)) return false;
+    document.documentElement.setAttribute("data-z-density", clean);
+    syncDensityButtons(clean);
+    if (persist !== false) {
+      try {
+        window.localStorage.setItem(DENSITY_STORAGE_KEY, clean);
+      } catch (_e) {
+        // Ignore private-mode storage errors
+      }
+    }
+    document.dispatchEvent(new CustomEvent("zokeibi:density-change", { detail: { density: clean } }));
+    return true;
+  }
+
+  function restorePersistedDensity() {
+    if (!document.documentElement.hasAttribute("data-z-density") && !document.documentElement.hasAttribute("data-z-persist-density")) {
+      return;
+    }
+    let saved = "";
+    try {
+      saved = (window.localStorage.getItem(DENSITY_STORAGE_KEY) || "").trim().toLowerCase();
+    } catch (_e) {
+      saved = "";
+    }
+    if (saved && VALID_DENSITIES.has(saved)) {
+      setDensity(saved, false);
+    } else {
+      syncDensityButtons((document.documentElement.getAttribute("data-z-density") || "default").trim().toLowerCase());
+    }
+  }
+
+  /* ---- Stacked Programmatic & Undoable Toast Queue ---- */
+  function ensureToastStack() {
+    let stack = document.querySelector(".z-toast-stack[data-z-toast-stack]");
+    if (!stack) {
+      stack = document.createElement("div");
+      stack.className = "z-toast-stack";
+      stack.setAttribute("data-z-toast-stack", "true");
+      stack.setAttribute("aria-live", "polite");
+      stack.setAttribute("aria-relevant", "additions");
+      document.body.appendChild(stack);
+    }
+    return stack;
+  }
+
+  function showToast(opts) {
+    const cfg = opts && typeof opts === "object" ? opts : {};
+    const title = String(cfg.title || "Notification");
+    const description = cfg.description ? String(cfg.description) : "";
+    const variant = ["emerald", "amber", "danger", "accent"].includes(cfg.variant) ? cfg.variant : "default";
+    const duration = typeof cfg.duration === "number" && Number.isFinite(cfg.duration) ? Math.max(0, cfg.duration) : 4500;
+    const actionLabel = cfg.actionLabel ? String(cfg.actionLabel) : "";
+    const stack = ensureToastStack();
+
+    while (stack.children.length >= 5 && stack.firstElementChild) {
+      stack.firstElementChild.remove();
+    }
+
+    const toast = document.createElement("div");
+    toast.className = variant === "default" ? "z-toast" : `z-toast z-toast-${variant}`;
+    toast.setAttribute("role", variant === "danger" ? "alert" : "status");
+
+    const content = document.createElement("div");
+    const titleEl = document.createElement("div");
+    titleEl.className = "z-toast-title";
+    titleEl.textContent = title;
+    content.appendChild(titleEl);
+    if (description) {
+      const descEl = document.createElement("div");
+      descEl.className = "z-toast-desc";
+      descEl.textContent = description;
+      content.appendChild(descEl);
+    }
+    toast.appendChild(content);
+
+    const actions = document.createElement("div");
+    actions.className = "z-toast-actions";
+    let settled = false;
+    let timer = null;
+
+    const closeToast = (commit) => {
+      if (settled) return;
+      settled = true;
+      if (timer) window.clearTimeout(timer);
+      toast.remove();
+      if (commit && typeof cfg.onCommit === "function") {
+        cfg.onCommit();
+      }
+    };
+
+    if (actionLabel) {
+      const actBtn = document.createElement("button");
+      actBtn.type = "button";
+      actBtn.className = "z-btn z-btn-outline z-btn-sm";
+      actBtn.textContent = actionLabel;
+      actBtn.addEventListener("click", () => {
+        if (settled) return;
+        settled = true;
+        if (timer) window.clearTimeout(timer);
+        toast.remove();
+        if (typeof cfg.onAction === "function") cfg.onAction();
+      });
+      actions.appendChild(actBtn);
+    }
+
+    const closeBtn = document.createElement("button");
+    closeBtn.type = "button";
+    closeBtn.className = "z-btn z-btn-ghost z-btn-sm";
+    closeBtn.setAttribute("aria-label", "Dismiss notification");
+    closeBtn.textContent = "✕";
+    closeBtn.addEventListener("click", () => closeToast(true));
+    actions.appendChild(closeBtn);
+    toast.appendChild(actions);
+
+    if (duration > 0) {
+      const bar = document.createElement("span");
+      bar.className = "z-toast-bar";
+      bar.setAttribute("aria-hidden", "true");
+      toast.appendChild(bar);
+      if (typeof bar.animate === "function" && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        bar.animate([{ transform: "scaleX(1)" }, { transform: "scaleX(0)" }], { duration, fill: "forwards" });
+      }
+      timer = window.setTimeout(() => closeToast(true), duration);
+    }
+
+    stack.appendChild(toast);
+    return { dismiss: () => closeToast(false) };
+  }
+
+  /* ---- Exact Integer-Cents Money Input Parser & Formatter (Zero Float Rounding) ---- */
+  function parseMoneyToCents(raw, decimals, allowNegative) {
+    const s = String(raw || "").trim();
+    if (s === "") return null;
+    const isNeg = allowNegative && s.startsWith("-");
+    const stripped = s.replace(/[^0-9.]/g, "");
+    if (stripped === "" || stripped === ".") return null;
+    const parts = stripped.split(".");
+    const wholeStr = (parts[0] || "0").replace(/^0+(?=\d)/, "") || "0";
+    const fracRaw = parts.slice(1).join("");
+    let centsBig = 0;
+    if (decimals === 0) {
+      centsBig = parseInt(wholeStr, 10);
+    } else {
+      const fracPadded = (fracRaw + "0".repeat(decimals)).slice(0, decimals);
+      const nextDigit = fracRaw.length > decimals ? parseInt(fracRaw[decimals], 10) : 0;
+      const mult = Math.pow(10, decimals);
+      centsBig = parseInt(wholeStr, 10) * mult + parseInt(fracPadded, 10) + (nextDigit >= 5 ? 1 : 0);
+    }
+    if (!Number.isSafeInteger(centsBig)) return null;
+    return isNeg ? -centsBig : centsBig;
+  }
+
+  function formatCentsDisplay(cents, decimals) {
+    const neg = cents < 0 ? "-" : "";
+    const absStr = String(Math.abs(cents));
+    if (decimals === 0) {
+      return neg + absStr.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+    const padded = absStr.padStart(decimals + 1, "0");
+    const whole = padded.slice(0, -decimals).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    const frac = padded.slice(-decimals);
+    return `${neg}${whole}.${frac}`;
+  }
+
+  function syncMoneyField(root, reformatDisplay) {
+    const display = root.querySelector("[data-z-money-display]");
+    const hidden = root.querySelector("[data-z-money-cents]");
+    if (!(display instanceof HTMLInputElement) || !(hidden instanceof HTMLInputElement)) return;
+    const decimals = Math.max(0, Math.min(4, parseInt(root.getAttribute("data-money-decimals") || "2", 10) || 0));
+    const allowNeg = root.getAttribute("data-money-negative") === "true";
+    const minAttr = root.getAttribute("data-money-min");
+    const maxAttr = root.getAttribute("data-money-max");
+    let cents = parseMoneyToCents(display.value, decimals, allowNeg);
+    if (cents !== null) {
+      if (minAttr !== null && minAttr !== "" && !Number.isNaN(Number(minAttr))) cents = Math.max(Number(minAttr), cents);
+      if (maxAttr !== null && maxAttr !== "" && !Number.isNaN(Number(maxAttr))) cents = Math.min(Number(maxAttr), cents);
+      hidden.value = String(cents);
+      if (reformatDisplay) display.value = formatCentsDisplay(cents, decimals);
+    } else {
+      hidden.value = "";
+      if (reformatDisplay && display.value.trim() !== "") display.value = "";
+    }
+    hidden.dispatchEvent(new Event("input", { bubbles: true }));
+    hidden.dispatchEvent(new Event("change", { bubbles: true }));
   }
 
   /* ---- ESIGN Signature Pad (Pointer/Touch Canvas + Typed Fallback) ---- */
@@ -174,6 +372,19 @@
         cmdInput.value = "";
       }
       filterCmdk(el, "");
+    }
+    const confirmInput = el.querySelector("[data-z-confirm-input]");
+    if (confirmInput instanceof HTMLInputElement) {
+      confirmInput.value = "";
+      const confirmBtn = el.querySelector("[data-z-confirm-btn]");
+      if (confirmBtn instanceof HTMLButtonElement) confirmBtn.disabled = true;
+      confirmInput.focus();
+      return;
+    }
+    const initFocus = el.querySelector("[data-z-initial-focus]");
+    if (initFocus instanceof HTMLElement && !initFocus.hidden) {
+      initFocus.focus();
+      return;
     }
     const focusables = visibleFocusables(el);
     if (focusables.length > 0) focusables[0].focus();
@@ -437,20 +648,157 @@
     countEl.textContent = `Showing ${visible} of ${rows.length} rows`;
   }
 
+  function syncTableSelection(wrap) {
+    const table = wrap.querySelector("table");
+    if (!table) return [];
+    const rows = directTableRows(table);
+    const visibleChecks = [];
+    const selectedIds = [];
+    rows.forEach((tr, idx) => {
+      const chk = tr.querySelector("[data-z-table-select-row]");
+      if (!(chk instanceof HTMLInputElement)) return;
+      tr.classList.toggle("is-selected", chk.checked);
+      if (!tr.hidden) visibleChecks.push(chk);
+      if (chk.checked) {
+        selectedIds.push(tr.getAttribute("data-row-id") || chk.value || String(idx + 1));
+      }
+    });
+
+    const selectAll = wrap.querySelector("[data-z-table-select-all]");
+    if (selectAll instanceof HTMLInputElement) {
+      const checkedVisible = visibleChecks.filter((c) => c.checked).length;
+      selectAll.checked = visibleChecks.length > 0 && checkedVisible === visibleChecks.length;
+      selectAll.indeterminate = checkedVisible > 0 && checkedVisible < visibleChecks.length;
+    }
+
+    const bulk = wrap.querySelector("[data-z-table-bulk]");
+    if (bulk instanceof HTMLElement) {
+      bulk.hidden = selectedIds.length === 0;
+    }
+    const countEl = wrap.querySelector("[data-z-table-selected-count]");
+    if (countEl) {
+      countEl.textContent = `${selectedIds.length} selected`;
+    }
+    wrap.querySelectorAll("[data-z-table-selected-ids]").forEach((inp) => {
+      if (inp instanceof HTMLInputElement) inp.value = selectedIds.join(",");
+    });
+    return selectedIds;
+  }
+
+  function escapeCsvCell(raw) {
+    let s = String(raw || "").replace(/\r?\n/g, " ").trim();
+    if (/^[=+@\t\r]/.test(s) || (/^-/.test(s) && !/^-\d/.test(s))) {
+      s = "'" + s;
+    }
+    if (/[",\n]/.test(s)) {
+      return `"${s.replace(/"/g, '""')}"`;
+    }
+    return s;
+  }
+
+  function exportTableCsv(wrap) {
+    const table = wrap.querySelector("table");
+    if (!table) return;
+    const headerRow = table.tHead && table.tHead.rows[0];
+    const headerCells = headerRow ? Array.from(headerRow.cells) : [];
+    const keepCols = [];
+    headerCells.forEach((th, idx) => {
+      if (!th.classList.contains("z-col-hidden") && !th.hasAttribute("data-z-no-export")) {
+        keepCols.push(idx);
+      }
+    });
+    if (keepCols.length === 0) return;
+
+    const lines = [keepCols.map((idx) => escapeCsvCell(headerCells[idx].textContent || "")).join(",")];
+    const allRows = directTableRows(table);
+    const selectedRows = allRows.filter((tr) => {
+      const chk = tr.querySelector("[data-z-table-select-row]");
+      return chk instanceof HTMLInputElement && chk.checked;
+    });
+    const exportRows = selectedRows.length > 0 ? selectedRows : allRows.filter((tr) => !tr.hidden);
+    exportRows.forEach((tr) => {
+      lines.push(keepCols.map((idx) => escapeCsvCell(tr.cells[idx] ? tr.cells[idx].textContent || "" : "")).join(","));
+    });
+
+    const filename = (wrap.getAttribute("data-z-table-export-file") || "table-export.csv").replace(/[^a-zA-Z0-9._-]/g, "_");
+    const blob = new Blob([lines.join("\r\n") + "\r\n"], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = filename.endsWith(".csv") ? filename : `${filename}.csv`;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+  }
+
   function initSortableTables(scope) {
     (scope || document).querySelectorAll("[data-z-table]").forEach((wrap) => {
-      if (wrap.getAttribute("data-z-table-sortable") === "true") {
-        const table = wrap.querySelector("table");
-        const thead = table && table.tHead;
-        if (thead) {
-          thead.querySelectorAll("th").forEach((th) => {
-            if (!th.hasAttribute("data-z-sort")) th.setAttribute("data-z-sort", "auto");
-            if (!th.hasAttribute("tabindex")) th.setAttribute("tabindex", "0");
-            if (!th.hasAttribute("aria-sort")) th.setAttribute("aria-sort", "none");
+      const table = wrap.querySelector("table");
+      const thead = table && table.tHead;
+      const headRow = thead && thead.rows[0];
+
+      if (wrap.getAttribute("data-z-table-selectable") === "true" && table && headRow && !table.querySelector("[data-z-table-select-all]")) {
+        const th = document.createElement("th");
+        th.scope = "col";
+        th.className = "z-table-check-col";
+        th.setAttribute("data-z-no-sort", "true");
+        th.setAttribute("data-z-no-export", "true");
+        th.setAttribute("data-z-no-col-toggle", "true");
+        const allChk = document.createElement("input");
+        allChk.type = "checkbox";
+        allChk.setAttribute("data-z-table-select-all", "true");
+        allChk.setAttribute("aria-label", "Select all visible rows");
+        th.appendChild(allChk);
+        headRow.insertBefore(th, headRow.firstChild);
+
+        directTableRows(table).forEach((tr, idx) => {
+          const td = document.createElement("td");
+          td.className = "z-table-check-col";
+          td.setAttribute("data-z-no-export", "true");
+          const rowChk = document.createElement("input");
+          rowChk.type = "checkbox";
+          rowChk.value = tr.getAttribute("data-row-id") || String(idx + 1);
+          rowChk.setAttribute("data-z-table-select-row", "true");
+          rowChk.setAttribute("aria-label", `Select row ${idx + 1}`);
+          td.appendChild(rowChk);
+          tr.insertBefore(td, tr.firstChild);
+        });
+      }
+
+      if (wrap.getAttribute("data-z-table-sortable") === "true" && thead) {
+        thead.querySelectorAll("th").forEach((th) => {
+          if (th.hasAttribute("data-z-no-sort") || th.classList.contains("z-table-check-col")) return;
+          if (!th.hasAttribute("data-z-sort")) th.setAttribute("data-z-sort", "auto");
+          if (!th.hasAttribute("tabindex")) th.setAttribute("tabindex", "0");
+          if (!th.hasAttribute("aria-sort")) th.setAttribute("aria-sort", "none");
+        });
+      }
+
+      if (wrap.getAttribute("data-z-table-col-toggle") === "true" && headRow) {
+        const list = wrap.querySelector("[data-z-table-col-list]");
+        if (list && list.childElementCount === 0) {
+          Array.from(headRow.cells).forEach((th, colIdx) => {
+            if (th.hasAttribute("data-z-no-col-toggle") || th.classList.contains("z-table-check-col")) return;
+            const label = document.createElement("label");
+            label.className = "z-table-col-opt";
+            const chk = document.createElement("input");
+            chk.type = "checkbox";
+            chk.checked = !th.classList.contains("z-col-hidden");
+            chk.setAttribute("data-z-table-col-idx", String(colIdx));
+            const span = document.createElement("span");
+            span.textContent = (th.textContent || `Column ${colIdx + 1}`).trim();
+            label.appendChild(chk);
+            label.appendChild(span);
+            list.appendChild(label);
           });
         }
       }
+
       updateTableCount(wrap);
+      if (wrap.getAttribute("data-z-table-selectable") === "true") {
+        syncTableSelection(wrap);
+      }
     });
   }
 
@@ -779,6 +1127,137 @@
       return;
     }
 
+    const setDensityBtn = target.closest("[data-z-set-density]");
+    if (setDensityBtn) {
+      setDensity(setDensityBtn.getAttribute("data-z-set-density") || "default", true);
+      return;
+    }
+
+    const cycleDensityBtn = target.closest("[data-z-cycle-density]");
+    if (cycleDensityBtn) {
+      const list = (cycleDensityBtn.getAttribute("data-z-cycle-density") || "calm,default,compact")
+        .split(",")
+        .map((s) => s.trim().toLowerCase())
+        .filter((s) => VALID_DENSITIES.has(s));
+      if (list.length > 0) {
+        const cur = (document.documentElement.getAttribute("data-z-density") || "default").trim().toLowerCase();
+        const idx = list.indexOf(cur);
+        const next = list[(idx + 1) % list.length];
+        setDensity(next, true);
+      }
+      return;
+    }
+
+    const undoTrigger = target.closest("[data-z-undo]");
+    if (undoTrigger instanceof HTMLElement) {
+      if (undoTrigger.dataset.zUndoBypass === "1") {
+        delete undoTrigger.dataset.zUndoBypass;
+      } else {
+        event.preventDefault();
+        const title = undoTrigger.getAttribute("data-z-undo") || "Action scheduled";
+        const delay = Math.max(1000, parseInt(undoTrigger.getAttribute("data-z-undo-delay") || "5000", 10) || 5000);
+        const desc = undoTrigger.getAttribute("data-z-toast-desc") || `Committing in ${Math.round(delay / 1000)}s...`;
+        const variant = undoTrigger.getAttribute("data-z-toast-variant") || "amber";
+        showToast({
+          title,
+          description: desc,
+          variant,
+          duration: delay,
+          actionLabel: "Undo",
+          onAction: () => {
+            undoTrigger.dispatchEvent(new CustomEvent("zokeibi:undo-cancelled", { bubbles: true, detail: { title } }));
+            showToast({ title: "Action undone", description: title, variant: "emerald", duration: 2500 });
+          },
+          onCommit: () => {
+            undoTrigger.dispatchEvent(new CustomEvent("zokeibi:undo-committed", { bubbles: true, detail: { title } }));
+            if (undoTrigger instanceof HTMLButtonElement && undoTrigger.type === "submit" && undoTrigger.form) {
+              undoTrigger.dataset.zUndoBypass = "1";
+              if (typeof undoTrigger.form.requestSubmit === "function") undoTrigger.form.requestSubmit(undoTrigger);
+              else undoTrigger.form.submit();
+            }
+          },
+        });
+        return;
+      }
+    }
+
+    const toastTrigger = target.closest("[data-z-toast]");
+    if (toastTrigger) {
+      showToast({
+        title: toastTrigger.getAttribute("data-z-toast") || "Notification",
+        description: toastTrigger.getAttribute("data-z-toast-desc") || "",
+        variant: toastTrigger.getAttribute("data-z-toast-variant") || "default",
+      });
+      return;
+    }
+
+    const tblExportBtn = target.closest("[data-z-table-export]");
+    if (tblExportBtn) {
+      const wrap = tblExportBtn.closest("[data-z-table]");
+      if (wrap) exportTableCsv(wrap);
+      return;
+    }
+
+    const tblClearSelBtn = target.closest("[data-z-table-clear-selection]");
+    if (tblClearSelBtn) {
+      const wrap = tblClearSelBtn.closest("[data-z-table]");
+      if (wrap) {
+        wrap.querySelectorAll("[data-z-table-select-row], [data-z-table-select-all]").forEach((chk) => {
+          if (chk instanceof HTMLInputElement) {
+            chk.checked = false;
+            chk.indeterminate = false;
+          }
+        });
+        syncTableSelection(wrap);
+      }
+      return;
+    }
+
+    const tblBulkActBtn = target.closest("[data-z-table-bulk-action]");
+    if (tblBulkActBtn) {
+      const wrap = tblBulkActBtn.closest("[data-z-table]");
+      if (wrap) {
+        const selectedIds = syncTableSelection(wrap);
+        const action = tblBulkActBtn.getAttribute("data-z-table-bulk-action") || "";
+        const ev = new CustomEvent("zokeibi:table-bulk", {
+          bubbles: true,
+          cancelable: true,
+          detail: { action, selectedIds, count: selectedIds.length },
+        });
+        const proceed = wrap.dispatchEvent(ev);
+        if (proceed && selectedIds.length > 0) {
+          showToast({
+            title: `${(tblBulkActBtn.textContent || action).trim()} (${selectedIds.length})`,
+            description: `Selected IDs: ${selectedIds.slice(0, 6).join(", ")}${selectedIds.length > 6 ? "…" : ""}`,
+            variant: action === "delete" ? "danger" : "accent",
+          });
+        }
+      }
+      return;
+    }
+
+    const rowChkClick = target.closest("[data-z-table-select-row]");
+    if (rowChkClick instanceof HTMLInputElement) {
+      const wrap = rowChkClick.closest("[data-z-table]");
+      const table = wrap && wrap.querySelector("table");
+      if (wrap && table) {
+        const checks = directTableRows(table)
+          .filter((tr) => !tr.hidden)
+          .map((tr) => tr.querySelector("[data-z-table-select-row]"))
+          .filter((c) => c instanceof HTMLInputElement);
+        const prev = lastTableCheckMap.get(wrap);
+        if (event.shiftKey && prev && checks.includes(prev) && checks.includes(rowChkClick)) {
+          const a = checks.indexOf(prev);
+          const b = checks.indexOf(rowChkClick);
+          const [lo, hi] = a < b ? [a, b] : [b, a];
+          for (let i = lo; i <= hi; i++) checks[i].checked = rowChkClick.checked;
+        }
+        lastTableCheckMap.set(wrap, rowChkClick);
+        syncTableSelection(wrap);
+      }
+      return;
+    }
+
     const sigModeBtn = target.closest("[data-z-sig-mode]");
     if (sigModeBtn) {
       const root = sigModeBtn.closest("[data-z-signature]");
@@ -1103,6 +1582,7 @@
 
     if (
       target === pointerDownTarget &&
+      target.getAttribute("data-z-static-backdrop") !== "true" &&
       (target.classList.contains("z-modal-backdrop") ||
         target.classList.contains("z-drawer-backdrop") ||
         target.classList.contains("z-cmdk-backdrop"))
@@ -1152,6 +1632,10 @@
         addTagValue(root, target.value);
         target.value = "";
       }
+    }
+    if (target instanceof HTMLInputElement && target.hasAttribute("data-z-money-display")) {
+      const root = target.closest("[data-z-money]");
+      if (root) syncMoneyField(root, true);
     }
   });
 
@@ -1228,6 +1712,23 @@
           tr.hidden = q !== "" && !(tr.textContent || "").toLowerCase().includes(q);
         });
         updateTableCount(wrap);
+        if (wrap.getAttribute("data-z-table-selectable") === "true") syncTableSelection(wrap);
+      }
+      return;
+    }
+
+    if (target.hasAttribute("data-z-money-display")) {
+      const root = target.closest("[data-z-money]");
+      if (root) syncMoneyField(root, false);
+      return;
+    }
+
+    if (target.hasAttribute("data-z-confirm-input")) {
+      const dialog = target.closest("[data-z-alertdialog]");
+      const expected = target.getAttribute("data-z-confirm-match") || "";
+      const confirmBtn = dialog && dialog.querySelector("[data-z-confirm-btn]");
+      if (confirmBtn instanceof HTMLButtonElement) {
+        confirmBtn.disabled = target.value.trim() !== expected;
       }
       return;
     }
@@ -1336,9 +1837,37 @@
 
   document.addEventListener("change", (event) => {
     const target = event.target;
-    if (!(target instanceof HTMLInputElement) || !target.hasAttribute("data-z-dropzone-input")) return;
-    const root = target.closest("[data-z-dropzone]");
-    if (root) updateDropzoneFiles(root, target.files);
+    if (!(target instanceof HTMLInputElement)) return;
+    if (target.hasAttribute("data-z-dropzone-input")) {
+      const root = target.closest("[data-z-dropzone]");
+      if (root) updateDropzoneFiles(root, target.files);
+      return;
+    }
+    if (target.hasAttribute("data-z-table-select-all")) {
+      const wrap = target.closest("[data-z-table]");
+      const table = wrap && wrap.querySelector("table");
+      if (wrap && table) {
+        directTableRows(table).forEach((tr) => {
+          if (tr.hidden) return;
+          const chk = tr.querySelector("[data-z-table-select-row]");
+          if (chk instanceof HTMLInputElement) chk.checked = target.checked;
+        });
+        syncTableSelection(wrap);
+      }
+      return;
+    }
+    if (target.hasAttribute("data-z-table-col-idx")) {
+      const wrap = target.closest("[data-z-table]");
+      const table = wrap && wrap.querySelector("table");
+      const colIdx = parseInt(target.getAttribute("data-z-table-col-idx") || "-1", 10);
+      if (table && colIdx >= 0) {
+        const hide = !target.checked;
+        Array.from(table.rows).forEach((tr) => {
+          const cell = tr.cells[colIdx];
+          if (cell) cell.classList.toggle("z-col-hidden", hide);
+        });
+      }
+    }
   });
 
   document.addEventListener("dragover", (event) => {
@@ -1614,9 +2143,14 @@
     initSignaturePads(root);
     root.querySelectorAll("[data-z-editor]").forEach(renderEditorPreview);
     syncThemeButtons((document.documentElement.getAttribute("data-zokeibi-theme") || "").trim().toLowerCase());
+    syncDensityButtons((document.documentElement.getAttribute("data-z-density") || "default").trim().toLowerCase());
   }
 
-  window.Zokeibi = { init: initScope, setTheme };
+  window.Zokeibi = { init: initScope, setTheme, setDensity, toast: showToast };
+
+  document.addEventListener("zokeibi:toast", (event) => {
+    if (event instanceof CustomEvent && event.detail) showToast(event.detail);
+  });
 
   document.addEventListener("kongono:morphed", (event) => {
     const target = event.target instanceof Element ? event.target : document;
@@ -1626,10 +2160,12 @@
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", () => {
       restorePersistedTheme();
+      restorePersistedDensity();
       initScope(document);
     });
   } else {
     restorePersistedTheme();
+    restorePersistedDensity();
     initScope(document);
   }
 })();

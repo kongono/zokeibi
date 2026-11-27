@@ -6,7 +6,10 @@
     "css_out": "public/assets/zokeibi.min.css",
     "installed": [
         "accordion",
+        "ai-review",
         "alert",
+        "alert-dialog",
+        "approval-card",
         "avatar",
         "avatar-group",
         "badge",
@@ -35,6 +38,7 @@
         "kbd",
         "kpi",
         "modal",
+        "money-input",
         "multi-select",
         "number-input",
         "otp-input",

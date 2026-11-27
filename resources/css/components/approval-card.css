@@ -1,0 +1,29 @@
+@layer zokeibi.components {
+  .z-approval-high,
+  .z-approval-critical { border-color: var(--z-danger-border); }
+  .z-approval-summary { margin: 0; font-size: 0.82rem; color: var(--z-ink-muted); line-height: 1.5; }
+
+  .z-approval-diff {
+    margin: 0;
+    border: 1px solid var(--z-border);
+    border-radius: var(--z-radius-sm);
+    background: var(--z-surface-2);
+    overflow: hidden;
+  }
+
+  .z-approval-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    padding: 0.45rem 0.72rem;
+    border-bottom: 1px solid var(--z-border);
+    &:last-child { border-bottom: none; }
+  }
+
+  .z-approval-key { font-family: var(--z-mono); font-size: 0.72rem; color: var(--z-ink-soft); }
+  .z-approval-val { margin: 0; display: inline-flex; align-items: center; gap: 0.4rem; font-family: var(--z-mono); font-size: 0.76rem; font-variant-numeric: tabular-nums; }
+  .z-approval-old { color: var(--z-danger); background: var(--z-danger-soft); padding: 0.08rem 0.32rem; border-radius: 4px; }
+  .z-approval-new { text-decoration: none; color: var(--z-emerald); background: var(--z-emerald-soft); padding: 0.08rem 0.32rem; border-radius: 4px; font-weight: 700; }
+}

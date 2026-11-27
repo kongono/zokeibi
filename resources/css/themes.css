@@ -108,4 +108,25 @@
     --z-radius: 18px;
     --z-radius-sm: 12px;
   }
+
+  /* Two-Gear Density Presets (zero rebuild, global or scoped) */
+  [data-z-density="calm"],
+  [data-zokeibi-density="calm"] {
+    --z-pad-y: 0.62rem;
+    --z-pad-x: 1.08rem;
+    --z-cell-y: 0.84rem;
+    --z-cell-x: 1rem;
+    --z-card-pad: 1.25rem;
+    --z-gap: 1.15rem;
+  }
+
+  [data-z-density="compact"],
+  [data-zokeibi-density="compact"] {
+    --z-pad-y: 0.3rem;
+    --z-pad-x: 0.66rem;
+    --z-cell-y: 0.38rem;
+    --z-cell-x: 0.62rem;
+    --z-card-pad: 0.72rem;
+    --z-gap: 0.58rem;
+  }
 }

@@ -26,11 +26,11 @@ final class ZokeibiTest extends TestCase
         $this->packageDir = dirname(__DIR__);
     }
 
-    public function testRegistryLoadsAll56ComponentsAndAssetsExist(): void
+    public function testRegistryLoadsAll60ComponentsAndAssetsExist(): void
     {
         $zokeibi = new Zokeibi();
 
-        self::assertSame(56, $zokeibi->registry->count());
+        self::assertSame(60, $zokeibi->registry->count());
         self::assertSame(['sumi', 'washi', 'indigo', 'matcha', 'kintsugi'], $zokeibi->registry->themes());
         self::assertSame(['sharp', 'default', 'rounded'], $zokeibi->registry->radiusPresets());
 
@@ -46,7 +46,7 @@ final class ZokeibiTest extends TestCase
         self::assertIsArray($decoded);
         self::assertSame('zokeibi', $decoded['name']);
         self::assertSame('造形美', $decoded['kanji']);
-        self::assertSame(56, $decoded['component_count']);
+        self::assertSame(60, $decoded['component_count']);
     }
 
     public function testCssTreeShakerReducesBundleAndResolvesDependencies(): void
@@ -67,7 +67,7 @@ final class ZokeibiTest extends TestCase
 
             // popover declares css_deps: ["button"], so button MUST be pulled in automatically
             self::assertSame(['button', 'badge', 'popover'], $report->usedComponents);
-            self::assertCount(53, $report->skippedComponents);
+            self::assertCount(57, $report->skippedComponents);
             self::assertSame(1, $report->scannedFiles);
             self::assertFileExists($outCss);
             self::assertGreaterThan(35.0, $report->treeShakeSavingsPercent);
@@ -160,7 +160,7 @@ HTML;
         }
     }
 
-    public function testAll56ComponentsCompileAndRenderCleanlyWithXssEscaping(): void
+    public function testAll60ComponentsCompileAndRenderCleanlyWithXssEscaping(): void
     {
         $zokeibi = new Zokeibi();
         $tmpDir = $this->makeTempDir('zokeibi-render-');
@@ -231,12 +231,16 @@ HTML;
   <x-ui.tree label="Files" items="app/bootstrap.php|src/App.php" />
   <x-ui.password-input name="pw" label="Password" strength="true" />
   <x-ui.signature-pad name="lease_sig" label="Tenant Signature" mode="both" required="true" />
+  <x-ui.money-input name="rent_cents" label="Monthly Rent" value="185000" currency="USD" symbol="$" />
+  <x-ui.alert-dialog id="ad1" title="Terminate Lease" description="Cancels drafts" confirm-text="DELETE" confirm-label="Delete" />
+  <x-ui.ai-review title="Receipt OCR" model="Gemini" source-excerpt="TOTAL $184.50" fields="vendor|Vendor|Home Depot|98%;;category|Category|Plumbing|62%" />
+  <x-ui.approval-card title="Rent Increase" agent="Chie AI" risk="high" summary="Update ledger" changes="Rent|$1,800|$1,850" note-field="true" />
 </section>
 HTML;
-            file_put_contents($viewsDir . DIRECTORY_SEPARATOR . 'all56.kgn.html', $page);
+            file_put_contents($viewsDir . DIRECTORY_SEPARATOR . 'all60.kgn.html', $page);
 
             $engine = new ViewEngine($viewsDir, $cacheDir);
-            $html = $engine->render('all56', ['xssTitle' => '<script>alert(1)</script>']);
+            $html = $engine->render('all60', ['xssTitle' => '<script>alert(1)</script>']);
 
             // Zero uncompiled <x-ui.*> tags
             self::assertStringNotContainsString('<x-ui.', $html);
@@ -292,6 +296,14 @@ HTML;
             self::assertStringContainsString('aria-roledescription="carousel"', $html);
             self::assertStringContainsString('role="tree"', $html);
             self::assertStringContainsString('data-z-password', $html);
+            self::assertStringContainsString('data-z-signature', $html);
+            self::assertStringContainsString('data-z-money="true"', $html);
+            self::assertStringContainsString('value="1,850.00"', $html);
+            self::assertStringContainsString('value="185000"', $html);
+            self::assertStringContainsString('role="alertdialog"', $html);
+            self::assertStringContainsString('data-z-static-backdrop="true"', $html);
+            self::assertStringContainsString('z-ai-review', $html);
+            self::assertStringContainsString('z-approval-high', $html);
         } finally {
             $this->removeDir($tmpDir);
         }
@@ -317,7 +329,7 @@ HTML;
         self::assertSame(200, $reg->getStatusCode());
         $regJson = json_decode((string) $reg->getBody(), true, 512, JSON_THROW_ON_ERROR);
         self::assertIsArray($regJson);
-        self::assertSame(56, $regJson['component_count']);
+        self::assertSame(60, $regJson['component_count']);
         self::assertIsArray($regJson['blocks']);
         self::assertCount(8, $regJson['blocks']);
 
@@ -342,7 +354,7 @@ HTML;
         self::assertSame(0, $listCode);
         $listDecoded = json_decode(implode("\n", $listOut), true, 512, JSON_THROW_ON_ERROR);
         self::assertIsArray($listDecoded);
-        self::assertCount(56, $listDecoded);
+        self::assertCount(60, $listDecoded);
 
         $schemaOut = [];
         $schemaCode = 0;
@@ -736,13 +748,13 @@ HTML;
         $playgroundProof = $zokeibi->prover->prove(
             $this->packageDir . DIRECTORY_SEPARATOR . 'playground',
             $this->packageDir . DIRECTORY_SEPARATOR . 'playground' . DIRECTORY_SEPARATOR . 'views',
-            10.0,
+            12.0,
             true,
         );
         self::assertTrue($playgroundProof['passed']);
         self::assertSame('A+', $playgroundProof['grade']);
         self::assertSame(100, $playgroundProof['score']);
-        self::assertSame(56, $playgroundProof['pillars']['budget']['components_used']);
+        self::assertSame(60, $playgroundProof['pillars']['budget']['components_used']);
 
         // Failing contrast custom theme (WCAG mid-luminance dead zone L=0.56, C=0.0) & tight budget must FAIL
         $tmpDir = $this->makeTempDir('zokeibi-prove-fail-');
@@ -843,6 +855,132 @@ HTML;
             self::assertStringContainsString('data-z-sig-canvas', $runtime);
             self::assertStringContainsString('zokeibi:theme-change', $runtime);
             self::assertStringNotContainsString('.innerHTML', $runtime);
+        } finally {
+            $this->removeDir($tmpDir);
+        }
+    }
+
+    public function testV120DensityMoneyAlertDialogUndoToastsTablePowerSkeletonAndAiCards(): void
+    {
+        $zokeibi = new Zokeibi();
+        $tmpDir = $this->makeTempDir('zokeibi-v120-');
+
+        try {
+            $zokeibi->blocks->install($tmpDir, ['saas-shell'], $zokeibi->installer, true);
+            $zokeibi->installer->add(
+                $tmpDir,
+                ['button', 'money-input', 'alert-dialog', 'toast', 'table', 'skeleton', 'ai-review', 'approval-card'],
+                true,
+            );
+            $viewsDir = $tmpDir . DIRECTORY_SEPARATOR . 'views';
+            $cacheDir = $tmpDir . DIRECTORY_SEPARATOR . 'cache';
+            mkdir($cacheDir, 0o775, true);
+
+            $shell = (string) file_get_contents($viewsDir . '/blocks/saas-shell.kgn.html');
+            self::assertStringContainsString('data-z-cycle-density="calm,default,compact"', $shell);
+
+            $tpl = <<<'HTML'
+<main>
+  <x-ui.button variant="ghost" data-z-set-density="compact">Power Mode</x-ui.button>
+  <x-ui.button variant="danger" data-z-undo="Lease archived" data-z-undo-delay="5000">Archive</x-ui.button>
+  <x-ui.button variant="emerald" data-z-toast="Saved" data-z-toast-desc="Ledger synced" data-z-toast-variant="emerald">Toast</x-ui.button>
+  <x-ui.money-input name="rent_cents" label="Rent" value="185000" currency="USD" symbol="$" />
+  <x-ui.money-input name="credit_cents" label="Credit" value="-12505" allow-negative="true" />
+  <x-ui.money-input name="yen" label="JPY" value="5000" currency="JPY" symbol="¥" decimals="0" />
+  <x-ui.alert-dialog id="ad-del" title="Delete Unit" description="Permanent action" confirm-text="DELETE" action="javascript:alert(1)" />
+  <x-ui.toast title="Done" action-label="Undo" dismissible="true" />
+  <x-ui.table caption="Units" searchable="true" sortable="true" selectable="true" column-toggle="true" exportable="true" export-filename="units.csv" bulk-actions="archive:Archive:outline|delete:Delete:danger">
+    <thead><tr><th>Unit</th><th data-numeric="true">Rent</th></tr></thead>
+    <tbody><tr data-row-id="u-1"><td>4B</td><td data-numeric="true">$1,850.00</td></tr></tbody>
+  </x-ui.table>
+  <x-ui.skeleton variant="card" />
+  <x-ui.skeleton variant="kpi" live-only="true" />
+  <x-ui.skeleton variant="table" rows="3" cols="4" />
+  <x-ui.ai-review title="Receipt OCR" model="Gemini" source-image="javascript:alert(1)" source-excerpt="TOTAL $184.50" fields="vendor|Vendor|Home Depot|98%;;category|Category|Plumbing|62%" action="javascript:alert(1)" />
+  <x-ui.approval-card title="Rent Renewal" agent="Chie AI" risk="critical" summary="Raises rent" changes="Rent|$1,800|$1,850" action="javascript:alert(1)" approval-id="apr-99" note-field="true" />
+</main>
+HTML;
+            file_put_contents($viewsDir . DIRECTORY_SEPARATOR . 'v120.kgn.html', $tpl);
+
+            $engine = new ViewEngine($viewsDir, $cacheDir);
+            $html = $engine->render('v120', []);
+
+            // Zero inline style, zero javascript: URLs
+            self::assertStringNotContainsString('style="', $html);
+            self::assertStringNotContainsString('javascript:', strtolower($html));
+
+            // Density + Undo + Toast hooks
+            self::assertStringContainsString('data-z-set-density="compact"', $html);
+            self::assertStringContainsString('data-z-undo="Lease archived"', $html);
+            self::assertStringContainsString('data-z-toast="Saved"', $html);
+
+            // Money input exact integer cents + formatted display
+            self::assertStringContainsString('name="rent_cents"', $html);
+            self::assertStringContainsString('value="185000"', $html);
+            self::assertStringContainsString('value="1,850.00"', $html);
+            self::assertStringContainsString('value="-125.05"', $html);
+            self::assertStringContainsString('value="5,000"', $html);
+
+            // Alert dialog safety invariants
+            self::assertStringContainsString('role="alertdialog"', $html);
+            self::assertStringContainsString('data-z-static-backdrop="true"', $html);
+            self::assertStringContainsString('data-z-initial-focus="true"', $html);
+            self::assertStringContainsString('data-z-confirm-match="DELETE"', $html);
+
+            // Table power suite
+            self::assertStringContainsString('data-z-table-selectable="true"', $html);
+            self::assertStringContainsString('data-z-table-col-toggle="true"', $html);
+            self::assertStringContainsString('data-z-table-export-file="units.csv"', $html);
+            self::assertStringContainsString('data-z-table-bulk-action="delete"', $html);
+            self::assertStringContainsString('data-z-table-col-list', $html);
+
+            // Skeleton composite presets + live-only visibility
+            self::assertStringContainsString('z-skeleton-card', $html);
+            self::assertStringContainsString('z-skeleton-kpi z-skeleton-live', $html);
+            self::assertStringContainsString('z-skeleton-table', $html);
+
+            // AI extraction review + approval gate
+            self::assertStringContainsString('z-ai-field is-low', $html);
+            self::assertStringContainsString('62% · Low', $html);
+            self::assertStringContainsString('z-approval-critical', $html);
+            self::assertStringContainsString('<del class="z-approval-old">$1,800</del>', $html);
+            self::assertStringContainsString('<ins class="z-approval-new">$1,850</ins>', $html);
+            self::assertStringContainsString('name="approval_id" value="apr-99"', $html);
+            self::assertStringContainsString('name="reviewer_note"', $html);
+
+            // CSS tree-shaker detects framework-agnostic classes for all 4 new components + compiles density tokens
+            $detected = $zokeibi->compiler->detectComponentsInSource(
+                '<div class="z-money"><div class="z-alertdialog"><div class="z-ai-review"><div class="z-approval"></div></div></div></div>',
+            );
+            self::assertContains('money-input', $detected);
+            self::assertContains('alert-dialog', $detected);
+            self::assertContains('ai-review', $detected);
+            self::assertContains('approval-card', $detected);
+
+            $build = $zokeibi->compiler->buildFromDirectory($viewsDir);
+            self::assertStringContainsString('[data-z-density="compact"]', $build->css);
+            self::assertStringContainsString('.z-toast-stack', $build->css);
+            self::assertStringContainsString('.z-table-bulk', $build->css);
+            self::assertStringContainsString('.z-skeleton-table', $build->css);
+            self::assertStringContainsString('.z-ai-review-grid', $build->css);
+            self::assertStringContainsString('.z-approval-diff', $build->css);
+
+            // Strict audit on clean template passes 100/100 (replace javascript: test URLs first)
+            $cleanTpl = str_replace('javascript:alert(1)', '/safe-endpoint', $tpl);
+            $audit = $zokeibi->auditor->auditSource($cleanTpl, 'v120-clean.kgn.html');
+            self::assertTrue($audit->passed, 'Expected v1.2.0 audit pass: ' . json_encode($audit->findings));
+            self::assertSame(100, $audit->score);
+            self::assertSame(0, $audit->warningCount);
+
+            // Runtime safety & v1.2.0 hooks
+            $runtime = (string) file_get_contents($this->packageDir . '/resources/js/zokeibi-runtime.js');
+            self::assertStringContainsString('data-z-set-density', $runtime);
+            self::assertStringContainsString('parseMoneyToCents', $runtime);
+            self::assertStringContainsString('data-z-static-backdrop', $runtime);
+            self::assertStringContainsString('zokeibi:undo-cancelled', $runtime);
+            self::assertStringContainsString('exportTableCsv', $runtime);
+            self::assertStringNotContainsString('.innerHTML', $runtime);
+            self::assertStringNotContainsString('eval(', $runtime);
         } finally {
             $this->removeDir($tmpDir);
         }

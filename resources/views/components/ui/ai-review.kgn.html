@@ -1,0 +1,135 @@
+@php
+$safeUrl = static function (string $raw, string $fallback = '#'): string {
+    $clean = trim((string) preg_replace('/[\x00-\x1F\x7F]+/', '', $raw));
+    if ($clean === '') {
+        return $fallback;
+    }
+    $lower = strtolower($clean);
+    if (str_starts_with($lower, '//') || str_starts_with($lower, '/\\')) {
+        return $fallback;
+    }
+    if (
+        str_starts_with($lower, '/')
+        || str_starts_with($lower, './')
+        || str_starts_with($lower, '../')
+        || str_starts_with($lower, '#')
+        || str_starts_with($lower, '?')
+        || str_starts_with($lower, 'https://')
+        || str_starts_with($lower, 'http://')
+    ) {
+        return $clean;
+    }
+
+    return $fallback;
+};
+$id = isset($id) && is_string($id) && $id !== '' ? $id : 'z-airev-' . bin2hex(random_bytes(3));
+$title = isset($title) && is_string($title) && $title !== '' ? $title : 'AI Extraction Review';
+$model = isset($model) && is_string($model) && $model !== '' ? $model : 'AI Extracted';
+$sourceLabel = isset($sourceLabel) && is_string($sourceLabel) && $sourceLabel !== '' ? $sourceLabel : null;
+$sourceImage = isset($sourceImage) && is_string($sourceImage) && trim($sourceImage) !== '' ? $safeUrl($sourceImage, '') : '';
+$sourceExcerpt = isset($sourceExcerpt) && is_string($sourceExcerpt) && trim($sourceExcerpt) !== '' ? trim($sourceExcerpt) : null;
+$action = isset($action) && is_string($action) && trim($action) !== '' ? $safeUrl($action) : '#';
+$method = isset($method) && is_string($method) && strtoupper(trim($method)) === 'GET' ? 'GET' : 'POST';
+$csrf = isset($csrf) && is_string($csrf) ? $csrf : null;
+$kgnPost = isset($kgnPost) && is_string($kgnPost) && trim($kgnPost) !== '' ? $safeUrl($kgnPost) : null;
+$kgnTarget = isset($kgnTarget) && is_string($kgnTarget) && trim($kgnTarget) !== '' ? trim($kgnTarget) : null;
+$acceptLabel = isset($acceptLabel) && is_string($acceptLabel) && $acceptLabel !== '' ? $acceptLabel : 'Accept & Save';
+$rejectLabel = isset($rejectLabel) && is_string($rejectLabel) && $rejectLabel !== '' ? $rejectLabel : 'Flag for Review';
+$class = isset($class) && is_string($class) ? trim($class) : '';
+$slot = isset($slot) && is_string($slot) ? trim($slot) : '';
+
+$parsedFields = [];
+if (isset($fields) && is_array($fields)) {
+    foreach ($fields as $entry) {
+        if (!is_array($entry)) {
+            continue;
+        }
+        $fName = isset($entry['name']) && is_scalar($entry['name']) ? trim((string) $entry['name']) : '';
+        $fLabel = isset($entry['label']) && is_scalar($entry['label']) ? trim((string) $entry['label']) : $fName;
+        $fVal = isset($entry['value']) && is_scalar($entry['value']) ? (string) $entry['value'] : '';
+        $fConf = isset($entry['confidence']) && is_scalar($entry['confidence']) ? strtolower(trim((string) $entry['confidence'])) : 'high';
+        if ($fName !== '') {
+            $parsedFields[] = ['name' => $fName, 'label' => $fLabel, 'value' => $fVal, 'confidence' => $fConf];
+        }
+    }
+} elseif (isset($fields) && is_string($fields) && trim($fields) !== '') {
+    foreach (explode(';;', $fields) as $row) {
+        $parts = array_map('trim', explode('|', $row));
+        $fName = $parts[0] ?? '';
+        $fLabel = $parts[1] ?? $fName;
+        $fVal = $parts[2] ?? '';
+        $fConf = strtolower($parts[3] ?? 'high');
+        if ($fName !== '') {
+            $parsedFields[] = ['name' => $fName, 'label' => $fLabel, 'value' => $fVal, 'confidence' => $fConf];
+        }
+    }
+}
+
+$confMeta = static function (string $conf): array {
+    if ($conf === 'low' || (str_ends_with($conf, '%') && (int) $conf < 70)) {
+        return ['variant' => 'crimson', 'label' => str_ends_with($conf, '%') ? $conf . ' · Low' : 'Low confidence', 'isLow' => true];
+    }
+    if ($conf === 'medium' || (str_ends_with($conf, '%') && (int) $conf < 90)) {
+        return ['variant' => 'amber', 'label' => str_ends_with($conf, '%') ? $conf . ' · Verify' : 'Verify', 'isLow' => false];
+    }
+    return ['variant' => 'emerald', 'label' => str_ends_with($conf, '%') ? $conf . ' · High' : 'High confidence', 'isLow' => false];
+};
+$hasSource = $sourceImage !== '' || $sourceExcerpt !== null || $slot !== '';
+@endphp
+<article class="z-card z-ai-review{{ $class !== '' ? ' ' . $class : '' }}">
+  <div class="z-card-head">
+    <div>
+      <div class="z-card-kicker">{{ $sourceLabel ?? 'Human-in-the-Loop Verification' }}</div>
+      <h3 class="z-card-title">{{ $title }}</h3>
+    </div>
+    <span class="z-badge z-badge-primary">{{ $model }}</span>
+  </div>
+  <form
+    method="{{ $method }}"
+    action="{{ $action }}"
+@if ($kgnPost !== null)
+    kgn-post="{{ $kgnPost }}"
+@endif
+@if ($kgnTarget !== null)
+    kgn-target="{{ $kgnTarget }}"
+@endif
+  >
+@if ($csrf !== null)
+    <input type="hidden" name="_csrf" value="{{ $csrf }}">
+@endif
+    <div class="z-card-body {{ $hasSource ? 'z-ai-review-grid' : 'z-stack-sm' }}">
+@if ($hasSource)
+      <div class="z-ai-source">
+@if ($sourceImage !== '')
+        <img class="z-ai-img" src="{{ $sourceImage }}" alt="{{ $sourceLabel ?? 'Source document preview' }}" loading="lazy">
+@endif
+@if ($sourceExcerpt !== null)
+        <pre class="z-ai-excerpt">{{ $sourceExcerpt }}</pre>
+@endif
+@if ($slot !== '')
+        <div>{!! $slot !!}</div>
+@endif
+      </div>
+@endif
+      <div class="z-stack-sm">
+@foreach ($parsedFields as $idx => $field)
+@php
+$meta = $confMeta($field['confidence']);
+$fieldId = $id . '-f-' . $idx;
+@endphp
+        <div class="z-field z-ai-field{{ $meta['isLow'] ? ' is-low' : '' }}">
+          <div class="z-between">
+            <label class="z-label" for="{{ $fieldId }}">{{ $field['label'] }}</label>
+            <span class="z-badge z-badge-{{ $meta['variant'] }}">{{ $meta['label'] }}</span>
+          </div>
+          <input id="{{ $fieldId }}" name="{{ $field['name'] }}" type="text" class="z-input" value="{{ $field['value'] }}">
+        </div>
+@endforeach
+      </div>
+    </div>
+    <div class="z-card-foot z-between">
+      <button type="submit" name="ai_decision" value="flag" class="z-btn z-btn-outline z-btn-sm">{{ $rejectLabel }}</button>
+      <button type="submit" name="ai_decision" value="accept" class="z-btn z-btn-primary z-btn-sm">{{ $acceptLabel }}</button>
+    </div>
+  </form>
+</article>

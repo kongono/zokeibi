@@ -51,6 +51,19 @@
   applyTheme(savedTheme || "sumi");
   applyRadius(savedRadius || "default");
 
+  const syncDensityPills = (density) => {
+    document.querySelectorAll("[data-z-set-density]").forEach((btn) => {
+      const active = (btn.getAttribute("data-z-set-density") || "") === density;
+      btn.classList.toggle("is-active", active);
+    });
+  };
+  syncDensityPills(safeGet("zokeibi-density") || root.getAttribute("data-z-density") || "default");
+  document.addEventListener("zokeibi:density-change", (event) => {
+    if (event instanceof CustomEvent && event.detail && event.detail.density) {
+      syncDensityPills(event.detail.density);
+    }
+  });
+
   document.addEventListener("click", (event) => {
     const target = event.target;
     if (!(target instanceof Element)) return;

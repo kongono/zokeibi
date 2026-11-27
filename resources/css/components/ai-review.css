@@ -1,0 +1,45 @@
+@layer zokeibi.components {
+  .z-ai-review-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    gap: var(--z-gap);
+    align-items: start;
+  }
+
+  .z-ai-source {
+    padding: 0.7rem;
+    border-radius: var(--z-radius-sm);
+    border: 1px solid var(--z-border);
+    background: var(--z-surface-2);
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+  }
+
+  .z-ai-img {
+    width: 100%;
+    max-height: 280px;
+    object-fit: contain;
+    border-radius: calc(var(--z-radius-sm) - 2px);
+    background: var(--z-bg);
+  }
+
+  .z-ai-excerpt {
+    margin: 0;
+    font-family: var(--z-mono);
+    font-size: 0.74rem;
+    line-height: 1.5;
+    color: var(--z-ink-muted);
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+
+  .z-ai-field.is-low {
+    padding-left: 0.62rem;
+    border-left: 2px solid var(--z-danger);
+  }
+
+  @container (max-width: 580px) {
+    .z-ai-review-grid { grid-template-columns: 1fr; }
+  }
+}

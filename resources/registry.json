@@ -3,9 +3,10 @@
   "kanji": "造形美",
   "meaning": "Beauty of Form",
   "package": "kongono/zokeibi",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "themes": ["sumi", "washi", "indigo", "matcha", "kintsugi"],
   "radius_presets": ["sharp", "default", "rounded"],
+  "density_presets": ["calm", "default", "compact"],
   "core_css": [
     "layers.css",
     "tokens.css",
@@ -42,6 +43,13 @@
         "data-z-toggle": { "type": "string", "description": "Standalone runtime selector to toggle an overlay" },
         "data-z-set-theme": { "type": "string", "description": "OKLCH theme slug to activate and persist (e.g. washi, sumi, matcha)" },
         "data-z-cycle-theme": { "type": "string", "description": "Comma-separated OKLCH theme slugs to cycle through on click (e.g. washi,sumi,matcha)" },
+        "data-z-set-density": { "type": "enum", "enum": ["calm", "default", "compact"], "description": "Two-Gear UI density preset to activate and persist" },
+        "data-z-cycle-density": { "type": "string", "description": "Comma-separated density presets to cycle through on click (e.g. calm,default,compact)" },
+        "data-z-toast": { "type": "string", "description": "Title of a stacked programmatic toast to fire on click" },
+        "data-z-toast-desc": { "type": "string", "description": "Optional description for declarative toast or undo notification" },
+        "data-z-toast-variant": { "type": "enum", "enum": ["default", "emerald", "amber", "danger", "accent"], "description": "Semantic tone for declarative toast" },
+        "data-z-undo": { "type": "string", "description": "Grace-window undoable action label; holds commit until countdown finishes or Undo is clicked" },
+        "data-z-undo-delay": { "type": "integer", "default": 5000, "description": "Undo grace window duration in milliseconds (1000-30000)" },
         "popover-target": { "type": "string", "description": "Native HTML popovertarget ID" },
         "aria-label": { "type": "string", "description": "Accessible label for icon-only buttons" }
       },
@@ -255,16 +263,19 @@
       "name": "Skeleton Loader",
       "category": "data",
       "js_mode": "0 B JS",
-      "description": "Reduced-motion aware shimmer placeholder for loading states.",
-      "standards": ["prefers-reduced-motion", "ARIA role=status"],
+      "description": "Reduced-motion aware shimmer placeholders including composite card, KPI, and table presets plus automatic Live 2.5 loading visibility.",
+      "standards": ["prefers-reduced-motion", "ARIA role=status", "Kongono Live 2.5"],
       "css": "skeleton.css",
       "css_deps": [],
       "template": "skeleton.kgn.html",
       "props": {
-        "variant": { "type": "enum", "enum": ["line", "title", "block", "circle"], "default": "line", "description": "Placeholder geometry" },
-        "lines": { "type": "integer", "default": 1, "description": "Number of stacked placeholders (1-8)" }
+        "variant": { "type": "enum", "enum": ["line", "title", "block", "circle", "card", "table", "kpi"], "default": "line", "description": "Placeholder geometry or composite preset" },
+        "lines": { "type": "integer", "default": 1, "description": "Number of stacked placeholders for line/title/block/circle (1-8)" },
+        "rows": { "type": "integer", "default": 4, "description": "Body rows when variant=table (1-10)" },
+        "cols": { "type": "integer", "default": 4, "description": "Columns when variant=table (2-6)" },
+        "live-only": { "type": "boolean", "default": false, "description": "Shows automatically only while a parent Live 2.5 request or aria-busy=true is active" }
       },
-      "example": "<x-ui.skeleton variant=\"line\" lines=\"3\" />"
+      "example": "<x-ui.skeleton variant=\"table\" rows=\"4\" cols=\"4\" />"
     },
     "empty-state": {
       "id": "empty-state",
@@ -311,8 +322,8 @@
       "name": "Data Table",
       "category": "data",
       "js_mode": "0 B JS / Runtime",
-      "description": "Container-query responsive table with optional instant search filter, clickable aria-sort column headers, and screen-reader caption.",
-      "standards": ["CSS @container", "ARIA aria-sort", "Strict CSP"],
+      "description": "Density-aware responsive data table with instant search filtering, clickable aria-sort headers, row selection + bulk action bar, Popover column toggles, and strict-CSP CSV export.",
+      "standards": ["CSS @container", "ARIA aria-sort", "HTML Popover API", "Strict CSP"],
       "css": "table.css",
       "css_deps": [],
       "template": "table.kgn.html",
@@ -320,9 +331,14 @@
         "caption": { "type": "string", "description": "Accessible screen-reader caption" },
         "searchable": { "type": "boolean", "default": false, "description": "Displays live client-side search filter toolbar and row count" },
         "sortable": { "type": "boolean", "default": false, "description": "Makes column headers clickable and keyboard-sortable with aria-sort" },
+        "selectable": { "type": "boolean", "default": false, "description": "Adds Select-All/row checkboxes (with Shift+Click range select) and bulk action bar" },
+        "bulk-actions": { "type": "string", "description": "Pipe-separated id:Label:variant bulk buttons (e.g. archive:Archive:outline|delete:Delete:danger)" },
+        "column-toggle": { "type": "boolean", "default": false, "description": "Adds native Top-Layer Popover Columns visibility picker" },
+        "exportable": { "type": "boolean", "default": false, "description": "Adds strict-CSP RFC 4180 CSV export of selected or visible rows" },
+        "export-filename": { "type": "string", "default": "table-export.csv", "description": "Filename for downloaded CSV export" },
         "search-placeholder": { "type": "string", "default": "Filter rows...", "description": "Search filter placeholder text" }
       },
-      "example": "<x-ui.table caption=\"Benchmarks\" searchable=\"true\" sortable=\"true\"><thead><tr><th>Engine</th><th>Gzip KB</th></tr></thead><tbody><tr><td>Zokeibi</td><td>5.7 KB</td></tr></tbody></x-ui.table>"
+      "example": "<x-ui.table caption=\"Benchmarks\" searchable=\"true\" sortable=\"true\" selectable=\"true\" column-toggle=\"true\" exportable=\"true\" bulk-actions=\"archive:Archive:outline|delete:Delete:danger\"><thead><tr><th>Engine</th><th>Gzip KB</th></tr></thead><tbody><tr data-row-id=\"zokeibi\"><td>Zokeibi</td><td>9.9 KB</td></tr></tbody></x-ui.table>"
     },
     "tabs": {
       "id": "tabs",
@@ -438,11 +454,11 @@
     "toast": {
       "id": "toast",
       "tag": "x-ui.toast",
-      "name": "Toast Notification",
+      "name": "Toast & Undo Queue",
       "category": "overlays",
-      "js_mode": "Live 2.5",
-      "description": "Polite ARIA live-region notification card supporting inline preview or fixed bottom-right floating display.",
-      "standards": ["ARIA aria-live=polite", "OKLCH"],
+      "js_mode": "Live 2.5 / Runtime",
+      "description": "Polite ARIA live-region notification supporting inline, floating, stacked programmatic queue (Zokeibi.toast), and declarative grace-window Undo actions.",
+      "standards": ["ARIA aria-live=polite", "Web Animations API", "OKLCH"],
       "css": "toast.css",
       "css_deps": ["button"],
       "template": "toast.kgn.html",
@@ -451,10 +467,12 @@
         "description": { "type": "string", "description": "Supporting detail" },
         "variant": { "type": "enum", "enum": ["default", "emerald", "amber", "danger", "accent"], "default": "default", "description": "Border highlight tone" },
         "floating": { "type": "boolean", "default": false, "description": "Fixes toast to bottom-right viewport corner" },
+        "dismissible": { "type": "boolean", "default": false, "description": "Displays strict-CSP dismiss button" },
+        "action-label": { "type": "string", "description": "Optional inline action button label (e.g. Undo)" },
         "show": { "type": "string", "description": "Optional Live 2.5 visibility expression" },
         "close-expr": { "type": "string", "description": "Optional Live 2.5 dismiss action" }
       },
-      "example": "<x-ui.toast title=\"Compiled zokeibi.min.css\" description=\"Tree-shaken down to 3.4 KB gzipped.\" variant=\"emerald\" />"
+      "example": "<x-ui.toast title=\"Lease Archived\" description=\"Click Undo within 5 seconds to restore.\" variant=\"amber\" action-label=\"Undo\" dismissible=\"true\" />"
     },
     "command-palette": {
       "id": "command-palette",
@@ -1116,6 +1134,107 @@
         "required": { "type": "boolean", "default": false, "description": "Marks hidden signature value required" }
       },
       "example": "<x-ui.signature-pad name=\"tenant_signature\" label=\"Tenant Signature\" mode=\"both\" required=\"true\" />"
+    },
+    "money-input": {
+      "id": "money-input",
+      "tag": "x-ui.money-input",
+      "name": "Currency / Money Input",
+      "category": "forms",
+      "js_mode": "Runtime",
+      "description": "Locale-formatted financial input with tabular numerals that submits exact integer cents (minor units) via string-safe math with zero floating-point rounding.",
+      "standards": ["tabular-nums", "Integer Cents", "Strict CSP"],
+      "css": "money-input.css",
+      "css_deps": ["input", "input-group"],
+      "template": "money-input.kgn.html",
+      "props": {
+        "name": { "type": "string", "default": "amount_cents", "description": "Hidden integer-cents form field name" },
+        "label": { "type": "string", "description": "Visible field label" },
+        "value": { "type": "integer", "description": "Initial integer amount in minor units (e.g. 185000 for 1,850.00)" },
+        "currency": { "type": "string", "default": "USD", "description": "ISO currency code suffix badge" },
+        "symbol": { "type": "string", "default": "$", "description": "Leading currency symbol prefix" },
+        "decimals": { "type": "integer", "default": 2, "description": "Decimal places (0-4)" },
+        "allow-negative": { "type": "boolean", "default": false, "description": "Allow negative credit/adjustment amounts" },
+        "min-cents": { "type": "integer", "description": "Optional minimum value in minor units" },
+        "max-cents": { "type": "integer", "description": "Optional maximum value in minor units" },
+        "hint": { "type": "string", "description": "Helper caption" },
+        "error": { "type": "string", "description": "Validation error message" },
+        "required": { "type": "boolean", "default": false, "description": "Marks field required" }
+      },
+      "example": "<x-ui.money-input name=\"monthly_rent_cents\" label=\"Monthly Rent\" value=\"185000\" currency=\"USD\" symbol=\"$\" hint=\"Submits exact integer 185000.\" />"
+    },
+    "alert-dialog": {
+      "id": "alert-dialog",
+      "tag": "x-ui.alert-dialog",
+      "name": "Destructive Alert Dialog",
+      "category": "overlays",
+      "js_mode": "Runtime",
+      "description": "Hardened ARIA role=alertdialog confirmation overlay that refuses backdrop dismissal, safely focuses Cancel on open, and supports typed phrase gates (e.g. type DELETE).",
+      "standards": ["ARIA role=alertdialog", "Static Backdrop", "Strict CSP"],
+      "css": "alert-dialog.css",
+      "css_deps": ["modal", "button", "input"],
+      "template": "alert-dialog.kgn.html",
+      "props": {
+        "id": { "type": "string", "default": "z-alertdialog", "description": "Dialog backdrop DOM ID" },
+        "title": { "type": "string", "default": "Confirm Action", "description": "Dialog heading" },
+        "description": { "type": "string", "description": "Plain-English consequence summary" },
+        "variant": { "type": "enum", "enum": ["danger", "warning", "default"], "default": "danger", "description": "Risk emphasis tone" },
+        "confirm-label": { "type": "string", "default": "Confirm", "description": "Destructive confirm button label" },
+        "cancel-label": { "type": "string", "default": "Cancel", "description": "Safe cancel button label (focused on open)" },
+        "confirm-text": { "type": "string", "description": "Optional verbatim phrase required before enabling confirm button" },
+        "action": { "type": "string", "description": "Optional form POST action URL" },
+        "method": { "type": "enum", "enum": ["POST", "GET"], "default": "POST", "description": "Form submission method" },
+        "csrf": { "type": "string", "description": "Optional CSRF token for form submission" }
+      },
+      "example": "<x-ui.alert-dialog id=\"del-lease\" title=\"Terminate Lease\" description=\"This voids active auto-pay schedules.\" confirm-text=\"TERMINATE\" confirm-label=\"Terminate Lease\" />"
+    },
+    "ai-review": {
+      "id": "ai-review",
+      "tag": "x-ui.ai-review",
+      "name": "AI Extraction Review Card",
+      "category": "data",
+      "js_mode": "0 B JS",
+      "description": "Human-in-the-loop split review card pairing source documents/excerpts with editable AI-extracted fields, color-coded confidence pills, and low-confidence highlights.",
+      "standards": ["CSS @container", "0 B JS", "Human-in-the-Loop AI"],
+      "css": "ai-review.css",
+      "css_deps": ["card", "badge", "button", "input"],
+      "template": "ai-review.kgn.html",
+      "props": {
+        "title": { "type": "string", "default": "AI Extraction Review", "description": "Review card title" },
+        "model": { "type": "string", "default": "AI Extracted", "description": "Model or pipeline badge text" },
+        "source-label": { "type": "string", "description": "Source document filename or caption" },
+        "source-image": { "type": "string", "description": "Optional sanitized preview image URL" },
+        "source-excerpt": { "type": "string", "description": "Optional document text excerpt" },
+        "fields": { "type": "string", "description": "Double-semicolon separated name|Label|Value|confidence rows or array" },
+        "action": { "type": "string", "default": "#", "description": "Form submission endpoint" },
+        "accept-label": { "type": "string", "default": "Accept & Save", "description": "Primary verification button text" },
+        "reject-label": { "type": "string", "default": "Flag for Review", "description": "Secondary flag button text" }
+      },
+      "example": "<x-ui.ai-review title=\"Receipt OCR Verification\" model=\"Gemini Vision\" source-label=\"home-depot-4012.jpg\" source-excerpt=\"HOME DEPOT #4012\nTOTAL: $184.50\" fields=\"vendor|Vendor|Home Depot #4012|98%;;amount|Amount|$184.50|96%;;category|Category|Plumbing Repair|64%\" />"
+    },
+    "approval-card": {
+      "id": "approval-card",
+      "tag": "x-ui.approval-card",
+      "name": "AI / Workflow Approval Gate",
+      "category": "data",
+      "js_mode": "0 B JS",
+      "description": "Human-in-the-loop approval gate card displaying actor, risk badge, before/after diff table, optional audit rationale note, and Approve/Reject actions for Kongono #[RequiresApproval].",
+      "standards": ["Semantic <dl>/<del>/<ins>", "0 B JS", "Kongono #[RequiresApproval]"],
+      "css": "approval-card.css",
+      "css_deps": ["card", "badge", "button", "input"],
+      "template": "approval-card.kgn.html",
+      "props": {
+        "title": { "type": "string", "default": "Approval Required", "description": "Proposed action title" },
+        "agent": { "type": "string", "default": "Automation", "description": "Originating AI agent or workflow name" },
+        "risk": { "type": "enum", "enum": ["low", "medium", "high", "critical"], "default": "medium", "description": "Action risk severity" },
+        "summary": { "type": "string", "description": "Plain-English impact explanation" },
+        "changes": { "type": "string", "description": "Double-semicolon separated Field|Before|After rows or array" },
+        "action": { "type": "string", "default": "#", "description": "Decision POST endpoint" },
+        "approval-id": { "type": "string", "description": "Hidden approval_id value" },
+        "note-field": { "type": "boolean", "default": false, "description": "Include optional reviewer audit note input" },
+        "approve-label": { "type": "string", "default": "Approve Action", "description": "Approve button text" },
+        "reject-label": { "type": "string", "default": "Reject", "description": "Reject button text" }
+      },
+      "example": "<x-ui.approval-card title=\"Apply Monthly Rent Increase\" agent=\"Lease Workflow\" risk=\"high\" summary=\"Updates active lease ledger for Unit 4B starting Jan 1.\" changes=\"Monthly Rent|$1,800.00|$1,850.00;;Auto-Pay|Pending|Enabled\" note-field=\"true\" />"
     }
   }
 }

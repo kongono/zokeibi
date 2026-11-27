@@ -44,6 +44,13 @@ $dataZClose = isset($dataZClose) && is_string($dataZClose) && trim($dataZClose) 
 $dataZToggle = isset($dataZToggle) && is_string($dataZToggle) && trim($dataZToggle) !== '' ? trim($dataZToggle) : null;
 $dataZSetTheme = isset($dataZSetTheme) && is_string($dataZSetTheme) && trim($dataZSetTheme) !== '' ? trim($dataZSetTheme) : null;
 $dataZCycleTheme = isset($dataZCycleTheme) && is_string($dataZCycleTheme) && trim($dataZCycleTheme) !== '' ? trim($dataZCycleTheme) : null;
+$dataZSetDensity = isset($dataZSetDensity) && is_string($dataZSetDensity) && trim($dataZSetDensity) !== '' ? trim($dataZSetDensity) : null;
+$dataZCycleDensity = isset($dataZCycleDensity) && is_string($dataZCycleDensity) && trim($dataZCycleDensity) !== '' ? trim($dataZCycleDensity) : null;
+$dataZToast = isset($dataZToast) && is_string($dataZToast) && trim($dataZToast) !== '' ? trim($dataZToast) : null;
+$dataZToastDesc = isset($dataZToastDesc) && is_string($dataZToastDesc) && trim($dataZToastDesc) !== '' ? trim($dataZToastDesc) : null;
+$dataZToastVariant = isset($dataZToastVariant) && is_string($dataZToastVariant) && in_array($dataZToastVariant, ['default', 'emerald', 'amber', 'danger', 'accent'], true) ? $dataZToastVariant : null;
+$dataZUndo = isset($dataZUndo) && is_string($dataZUndo) && trim($dataZUndo) !== '' ? trim($dataZUndo) : null;
+$dataZUndoDelay = isset($dataZUndoDelay) && is_numeric($dataZUndoDelay) ? (string) max(1000, min(30000, (int) $dataZUndoDelay)) : null;
 $popoverTarget = isset($popoverTarget) && is_string($popoverTarget) && $popoverTarget !== '' ? $popoverTarget : null;
 $popoverTargetAction = isset($popoverTargetAction) && is_string($popoverTargetAction) && $popoverTargetAction !== '' ? $popoverTargetAction : null;
 $classes = ['z-btn'];
@@ -123,6 +130,27 @@ $slot = isset($slot) && is_string($slot) ? $slot : '';
 @endif
 @if ($dataZCycleTheme !== null)
   data-z-cycle-theme="{{ $dataZCycleTheme }}"
+@endif
+@if ($dataZSetDensity !== null)
+  data-z-set-density="{{ $dataZSetDensity }}"
+@endif
+@if ($dataZCycleDensity !== null)
+  data-z-cycle-density="{{ $dataZCycleDensity }}"
+@endif
+@if ($dataZToast !== null)
+  data-z-toast="{{ $dataZToast }}"
+@endif
+@if ($dataZToastDesc !== null)
+  data-z-toast-desc="{{ $dataZToastDesc }}"
+@endif
+@if ($dataZToastVariant !== null)
+  data-z-toast-variant="{{ $dataZToastVariant }}"
+@endif
+@if ($dataZUndo !== null)
+  data-z-undo="{{ $dataZUndo }}"
+@endif
+@if ($dataZUndoDelay !== null)
+  data-z-undo-delay="{{ $dataZUndoDelay }}"
 @endif
 @if ($popoverTarget !== null)
   popovertarget="{{ $popoverTarget }}"

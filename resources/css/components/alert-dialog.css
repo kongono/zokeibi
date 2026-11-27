@@ -1,0 +1,15 @@
+@layer zokeibi.components {
+  .z-alertdialog-warning { border-color: var(--z-amber-border); }
+  .z-alertdialog-desc { margin: 0; }
+
+  .z-alertdialog-code {
+    padding: 0.1rem 0.38rem;
+    border-radius: 4px;
+    background: var(--z-surface-2);
+    border: 1px solid var(--z-border-strong);
+    color: var(--z-ink);
+    font-family: var(--z-mono);
+    font-size: 0.78em;
+    text-transform: none;
+  }
+}

@@ -6,6 +6,14 @@
     --z-radius: 12px;
     --z-radius-sm: 8px;
 
+    /* Semantic Two-Gear Density Tokens (default / calm / compact) */
+    --z-pad-y: 0.48rem;
+    --z-pad-x: 0.9rem;
+    --z-cell-y: 0.64rem;
+    --z-cell-x: 0.85rem;
+    --z-card-pad: 1rem;
+    --z-gap: 0.9rem;
+
     color-scheme: dark;
 
     /* Sumi Dark Atelier Surfaces (Default) */

@@ -2,8 +2,8 @@
   .z-shell { max-width: 1420px; margin: 0 auto; padding: 1.35rem 1.25rem 3rem; }
   .z-app-layout { display: grid; grid-template-columns: 240px minmax(0, 1fr); gap: 1.15rem; align-items: start; }
   .z-app-layout > * { min-width: 0; }
-  .z-stack { display: flex; flex-direction: column; gap: 0.9rem; min-width: 0; }
-  .z-stack-sm { display: flex; flex-direction: column; gap: 0.5rem; min-width: 0; }
+  .z-stack { display: flex; flex-direction: column; gap: var(--z-gap); min-width: 0; }
+  .z-stack-sm { display: flex; flex-direction: column; gap: calc(var(--z-gap) * 0.56); min-width: 0; }
   .z-row { display: flex; align-items: center; gap: 0.55rem; flex-wrap: wrap; }
   .z-between { display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; flex-wrap: wrap; }
   .z-grid-2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }

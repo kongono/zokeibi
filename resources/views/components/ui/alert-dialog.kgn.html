@@ -1,0 +1,156 @@
+@php
+$safeUrl = static function (string $raw, string $fallback = '#'): string {
+    $clean = trim((string) preg_replace('/[\x00-\x1F\x7F]+/', '', $raw));
+    if ($clean === '') {
+        return $fallback;
+    }
+    $lower = strtolower($clean);
+    if (str_starts_with($lower, '//') || str_starts_with($lower, '/\\')) {
+        return $fallback;
+    }
+    if (
+        str_starts_with($lower, '/')
+        || str_starts_with($lower, './')
+        || str_starts_with($lower, '../')
+        || str_starts_with($lower, '#')
+        || str_starts_with($lower, '?')
+        || str_starts_with($lower, 'https://')
+        || str_starts_with($lower, 'http://')
+    ) {
+        return $clean;
+    }
+
+    return $fallback;
+};
+$id = isset($id) && is_string($id) && $id !== '' ? $id : 'z-alertdialog-' . bin2hex(random_bytes(3));
+$title = isset($title) && is_string($title) && $title !== '' ? $title : 'Confirm Action';
+$description = isset($description) && is_string($description) && $description !== '' ? $description : null;
+$variant = isset($variant) && is_string($variant) && in_array($variant, ['danger', 'warning', 'default'], true) ? $variant : 'danger';
+$confirmLabel = isset($confirmLabel) && is_string($confirmLabel) && $confirmLabel !== '' ? $confirmLabel : 'Confirm';
+$cancelLabel = isset($cancelLabel) && is_string($cancelLabel) && $cancelLabel !== '' ? $cancelLabel : 'Cancel';
+$confirmText = isset($confirmText) && is_string($confirmText) && trim($confirmText) !== '' ? trim($confirmText) : null;
+$action = isset($action) && is_string($action) && trim($action) !== '' ? $safeUrl($action) : null;
+$method = isset($method) && is_string($method) && strtoupper(trim($method)) === 'GET' ? 'GET' : 'POST';
+$csrf = isset($csrf) && is_string($csrf) ? $csrf : null;
+$show = isset($show) && is_string($show) && $show !== '' ? $show : null;
+$closeExpr = isset($closeExpr) && is_string($closeExpr) && $closeExpr !== '' ? $closeExpr : ($show !== null ? 'set(' . $show . ', false)' : null);
+$kgnPost = isset($kgnPost) && is_string($kgnPost) && trim($kgnPost) !== '' ? $safeUrl($kgnPost) : null;
+$kgnTarget = isset($kgnTarget) && is_string($kgnTarget) && trim($kgnTarget) !== '' ? trim($kgnTarget) : null;
+$kgnSwap = isset($kgnSwap) && is_string($kgnSwap) && trim($kgnSwap) !== '' ? trim($kgnSwap) : null;
+$class = isset($class) && is_string($class) ? trim($class) : '';
+$slot = isset($slot) && is_string($slot) ? trim($slot) : '';
+
+$dialogClasses = ['z-modal', 'z-alertdialog'];
+if ($variant === 'danger') {
+    $dialogClasses[] = 'z-modal-danger';
+} elseif ($variant === 'warning') {
+    $dialogClasses[] = 'z-alertdialog-warning';
+}
+if ($class !== '') {
+    $dialogClasses[] = $class;
+}
+$confirmBtnClass = $variant === 'danger' ? 'z-btn z-btn-danger' : 'z-btn z-btn-primary';
+@endphp
+<div
+  class="z-modal-backdrop z-alertdialog-backdrop"
+  id="{{ $id }}"
+  data-z-static-backdrop="true"
+  data-z-alertdialog="true"
+@if ($show !== null)
+  k-show="{{ $show }}"
+@endif
+  hidden
+>
+  <div
+    class="{{ implode(' ', $dialogClasses) }}"
+    role="alertdialog"
+    aria-modal="true"
+    aria-labelledby="{{ $id }}-title"
+@if ($description !== null || $slot !== '')
+    aria-describedby="{{ $id }}-desc"
+@endif
+  >
+    <div class="z-modal-head">
+      <h3 class="z-modal-title" id="{{ $id }}-title">{{ $title }}</h3>
+    </div>
+    <div class="z-modal-body z-stack-sm" id="{{ $id }}-desc">
+@if ($description !== null)
+      <p class="z-alertdialog-desc">{{ $description }}</p>
+@endif
+@if ($slot !== '')
+      <div>{!! $slot !!}</div>
+@endif
+@if ($confirmText !== null)
+      <div class="z-field z-alertdialog-confirm">
+        <label class="z-label" for="{{ $id }}-confirm-input">Type <code class="z-alertdialog-code">{{ $confirmText }}</code> to confirm</label>
+        <input
+          id="{{ $id }}-confirm-input"
+          type="text"
+          class="z-input"
+          autocomplete="off"
+          placeholder="{{ $confirmText }}"
+          data-z-confirm-input
+          data-z-confirm-match="{{ $confirmText }}"
+        >
+      </div>
+@endif
+    </div>
+    <div class="z-modal-foot">
+      <button
+        type="button"
+        class="z-btn z-btn-outline"
+        data-z-close="#{{ $id }}"
+        data-z-initial-focus="true"
+@if ($closeExpr !== null)
+        k-on:click="{{ $closeExpr }}"
+@endif
+      >{{ $cancelLabel }}</button>
+@if ($action !== null)
+      <form
+        method="{{ $method }}"
+        action="{{ $action }}"
+@if ($kgnPost !== null)
+        kgn-post="{{ $kgnPost }}"
+@endif
+@if ($kgnTarget !== null)
+        kgn-target="{{ $kgnTarget }}"
+@endif
+@if ($kgnSwap !== null)
+        kgn-swap="{{ $kgnSwap }}"
+@endif
+      >
+@if ($csrf !== null)
+        <input type="hidden" name="_csrf" value="{{ $csrf }}">
+@endif
+        <button
+          type="submit"
+          class="{{ $confirmBtnClass }}"
+          data-z-confirm-btn
+@if ($confirmText !== null)
+          disabled
+@endif
+        >{{ $confirmLabel }}</button>
+      </form>
+@else
+      <button
+        type="button"
+        class="{{ $confirmBtnClass }}"
+        data-z-confirm-btn
+        data-z-close="#{{ $id }}"
+@if ($kgnPost !== null)
+        kgn-post="{{ $kgnPost }}"
+@endif
+@if ($kgnTarget !== null)
+        kgn-target="{{ $kgnTarget }}"
+@endif
+@if ($kgnSwap !== null)
+        kgn-swap="{{ $kgnSwap }}"
+@endif
+@if ($confirmText !== null)
+        disabled
+@endif
+      >{{ $confirmLabel }}</button>
+@endif
+    </div>
+  </div>
+</div>

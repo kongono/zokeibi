@@ -1,12 +1,58 @@
 @php
 $variant = isset($variant) && is_string($variant) ? $variant : 'line';
 $lines = isset($lines) && is_numeric($lines) ? max(1, min(8, (int) $lines)) : 1;
+$rows = isset($rows) && is_numeric($rows) ? max(1, min(10, (int) $rows)) : 4;
+$cols = isset($cols) && is_numeric($cols) ? max(2, min(6, (int) $cols)) : 4;
+$liveOnly = isset($liveOnly) && ($liveOnly === true || $liveOnly === 'true' || $liveOnly === '1');
 $class = isset($class) && is_string($class) ? trim($class) : '';
-$safeVariant = in_array($variant, ['line', 'title', 'block', 'circle'], true) ? $variant : 'line';
+$allowed = ['line', 'title', 'block', 'circle', 'card', 'table', 'kpi'];
+$safeVariant = in_array($variant, $allowed, true) ? $variant : 'line';
+$wrapClasses = [$liveOnly ? 'z-skeleton-live' : ''];
+if ($class !== '') {
+    $wrapClasses[] = $class;
+}
+$extraWrap = trim(implode(' ', array_filter($wrapClasses)));
+@endphp
+@if ($safeVariant === 'card')
+<div class="z-skeleton-card{{ $extraWrap !== '' ? ' ' . $extraWrap : '' }}" role="status" aria-label="Loading card">
+  <div class="z-skeleton-row">
+    <span class="z-skeleton z-skeleton-circle" aria-hidden="true"></span>
+    <div class="z-skeleton-col">
+      <span class="z-skeleton z-skeleton-title" aria-hidden="true"></span>
+      <span class="z-skeleton z-skeleton-line" aria-hidden="true"></span>
+    </div>
+  </div>
+  <span class="z-skeleton z-skeleton-line" aria-hidden="true"></span>
+  <span class="z-skeleton z-skeleton-line" aria-hidden="true"></span>
+</div>
+@elseif ($safeVariant === 'kpi')
+<div class="z-skeleton-kpi{{ $extraWrap !== '' ? ' ' . $extraWrap : '' }}" role="status" aria-label="Loading metric">
+  <span class="z-skeleton z-skeleton-title" aria-hidden="true"></span>
+  <span class="z-skeleton z-skeleton-kpi-val" aria-hidden="true"></span>
+  <span class="z-skeleton z-skeleton-line" aria-hidden="true"></span>
+</div>
+@elseif ($safeVariant === 'table')
+<div class="z-skeleton-table{{ $extraWrap !== '' ? ' ' . $extraWrap : '' }}" role="status" aria-label="Loading table">
+  <div class="z-skeleton-trow is-head">
+@foreach (range(1, $cols) as $_c)
+    <span class="z-skeleton z-skeleton-line" aria-hidden="true"></span>
+@endforeach
+  </div>
+@foreach (range(1, $rows) as $_r)
+  <div class="z-skeleton-trow">
+@foreach (range(1, $cols) as $_c)
+    <span class="z-skeleton z-skeleton-line" aria-hidden="true"></span>
+@endforeach
+  </div>
+@endforeach
+</div>
+@else
+@php
 $itemClass = 'z-skeleton z-skeleton-' . $safeVariant . ($class !== '' ? ' ' . $class : '');
 @endphp
-<div class="z-stack" role="status" aria-label="Loading content">
+<div class="z-stack{{ $liveOnly ? ' z-skeleton-live' : '' }}" role="status" aria-label="Loading content">
 @foreach (range(1, $lines) as $_)
   <span class="{{ $itemClass }}" aria-hidden="true"></span>
 @endforeach
 </div>
+@endif

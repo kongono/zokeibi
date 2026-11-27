@@ -59,7 +59,7 @@ $signer = new TokenSigner($appKey);
 $zokeibi = new Zokeibi($packageDir . DIRECTORY_SEPARATOR . 'resources');
 
 $health = (new HealthCheck())
-    ->check('registry', static fn (): bool => 56 === $zokeibi->registry->count())
+    ->check('registry', static fn (): bool => 60 === $zokeibi->registry->count())
     ->check(
         'compiled_css',
         static fn (): bool => is_file($playgroundDir . DIRECTORY_SEPARATOR . 'public' . DIRECTORY_SEPARATOR . 'assets' . DIRECTORY_SEPARATOR . 'zokeibi.min.css'),

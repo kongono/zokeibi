@@ -114,6 +114,10 @@ final readonly class CssTreeShaker
         'z-tree' => 'tree',
         'z-pw' => 'password-input',
         'z-sig' => 'signature-pad',
+        'z-money' => 'money-input',
+        'z-alertdialog' => 'alert-dialog',
+        'z-ai-review' => 'ai-review',
+        'z-approval' => 'approval-card',
     ];
 
     public function __construct(

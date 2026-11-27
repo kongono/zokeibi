@@ -13,7 +13,7 @@
   }
 
   .z-card-head {
-    padding: 0.88rem 1.05rem;
+    padding: calc(var(--z-card-pad) * 0.88) var(--z-card-pad);
     border-bottom: 1px solid var(--z-border);
     border-radius: calc(var(--z-radius) - 1px) calc(var(--z-radius) - 1px) 0 0;
     display: flex;
@@ -35,8 +35,8 @@
 
   .z-card-title { margin: 0; font-size: 0.94rem; font-weight: 760; letter-spacing: -0.015em; }
   .z-card-sub { margin: 0.2rem 0 0; font-size: 0.76rem; color: var(--z-ink-muted); }
-  .z-card-body { padding: 1rem 1.05rem; }
-  .z-card-foot { padding: 0.72rem 1.05rem; border-top: 1px solid var(--z-border); border-radius: 0 0 calc(var(--z-radius) - 1px) calc(var(--z-radius) - 1px); background: var(--z-surface-2); font-size: 0.77rem; color: var(--z-ink-muted); }
+  .z-card-body { padding: var(--z-card-pad); }
+  .z-card-foot { padding: calc(var(--z-card-pad) * 0.72) var(--z-card-pad); border-top: 1px solid var(--z-border); border-radius: 0 0 calc(var(--z-radius) - 1px) calc(var(--z-radius) - 1px); background: var(--z-surface-2); font-size: 0.77rem; color: var(--z-ink-muted); }
 
   @container (max-width: 320px) {
     .z-card-head, .z-card-body { padding: 0.75rem 0.8rem; }

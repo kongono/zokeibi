@@ -5,6 +5,8 @@ $variant = isset($variant) && is_string($variant) ? $variant : 'default';
 $floating = isset($floating) && ($floating === true || $floating === 'true' || $floating === '1');
 $show = isset($show) && is_string($show) && $show !== '' ? $show : null;
 $closeExpr = isset($closeExpr) && is_string($closeExpr) && $closeExpr !== '' ? $closeExpr : null;
+$dismissible = isset($dismissible) && ($dismissible === true || $dismissible === 'true' || $dismissible === '1');
+$actionLabel = isset($actionLabel) && is_string($actionLabel) && $actionLabel !== '' ? $actionLabel : null;
 $class = isset($class) && is_string($class) ? trim($class) : '';
 $classes = ['z-toast'];
 if (in_array($variant, ['emerald', 'amber', 'danger', 'accent'], true)) {
@@ -37,7 +39,16 @@ $slot = isset($slot) && is_string($slot) ? trim($slot) : '';
     <div class="z-toast-desc">{!! $slot !!}</div>
 @endif
   </div>
+@if ($actionLabel !== null || $closeExpr !== null || $dismissible)
+  <div class="z-toast-actions">
+@if ($actionLabel !== null)
+    <button type="button" class="z-btn z-btn-outline z-btn-sm" data-z-toast-action>{{ $actionLabel }}</button>
+@endif
 @if ($closeExpr !== null)
-  <button type="button" class="z-btn z-btn-ghost z-btn-sm" k-on:click="{{ $closeExpr }}" aria-label="Dismiss notification">✕</button>
+    <button type="button" class="z-btn z-btn-ghost z-btn-sm" k-on:click="{{ $closeExpr }}" data-z-close aria-label="Dismiss notification">✕</button>
+@elseif ($dismissible)
+    <button type="button" class="z-btn z-btn-ghost z-btn-sm" data-z-close aria-label="Dismiss notification">✕</button>
+@endif
+  </div>
 @endif
 </div>

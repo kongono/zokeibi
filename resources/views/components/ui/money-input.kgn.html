@@ -1,0 +1,110 @@
+@php
+$name = isset($name) && is_string($name) && $name !== '' ? $name : 'amount_cents';
+$id = isset($id) && is_string($id) && $id !== '' ? $id : 'z-money-' . preg_replace('/[^a-zA-Z0-9_-]/', '', $name) . '-' . bin2hex(random_bytes(3));
+$label = isset($label) && is_string($label) && $label !== '' ? $label : null;
+$currency = isset($currency) && is_string($currency) && trim($currency) !== '' ? strtoupper(trim($currency)) : 'USD';
+$symbol = isset($symbol) && is_string($symbol) && $symbol !== '' ? $symbol : '$';
+$decimals = isset($decimals) && is_numeric($decimals) ? max(0, min(4, (int) $decimals)) : 2;
+$allowNegative = isset($allowNegative) && ($allowNegative === true || $allowNegative === 'true' || $allowNegative === '1');
+$minCents = isset($minCents) && is_numeric($minCents) ? (string) (int) $minCents : null;
+$maxCents = isset($maxCents) && is_numeric($maxCents) ? (string) (int) $maxCents : null;
+$placeholder = isset($placeholder) && is_string($placeholder) && $placeholder !== ''
+    ? $placeholder
+    : ($decimals > 0 ? '0.' . str_repeat('0', $decimals) : '0');
+$hint = isset($hint) && is_string($hint) && $hint !== '' ? $hint : null;
+$error = isset($error) && is_string($error) && $error !== '' ? $error : null;
+$required = isset($required) && ($required === true || $required === 'true' || $required === '1');
+$disabled = isset($disabled) && ($disabled === true || $disabled === 'true' || $disabled === '1');
+$kModel = isset($kModel) && is_string($kModel) && $kModel !== '' ? $kModel : null;
+$class = isset($class) && is_string($class) ? trim($class) : '';
+
+$initialCents = '';
+$formattedDisplay = '';
+if (isset($value) && is_scalar($value) && trim((string) $value) !== '' && preg_match('/^-?\d+$/', trim((string) $value)) === 1) {
+    $intCents = (int) trim((string) $value);
+    if (!$allowNegative && $intCents < 0) {
+        $intCents = 0;
+    }
+    $initialCents = (string) $intCents;
+    $neg = $intCents < 0 ? '-' : '';
+    $absStr = (string) abs($intCents);
+    if ($decimals === 0) {
+        $formattedDisplay = $neg . number_format((float) $absStr, 0, '.', ',');
+    } else {
+        $padded = str_pad($absStr, $decimals + 1, '0', STR_PAD_LEFT);
+        $whole = substr($padded, 0, -$decimals);
+        $frac = substr($padded, -$decimals);
+        $wholeFormatted = preg_replace('/\B(?=(\d{3})+(?!\d))/', ',', $whole) ?? $whole;
+        $formattedDisplay = $neg . $wholeFormatted . '.' . $frac;
+    }
+}
+
+$describedBy = [];
+if ($hint !== null) {
+    $describedBy[] = $id . '-hint';
+}
+if ($error !== null) {
+    $describedBy[] = $id . '-error';
+}
+$wrapClass = $class !== '' ? 'z-input-group z-money ' . $class : 'z-input-group z-money';
+@endphp
+<div
+  class="{{ $wrapClass }}"
+  data-z-money="true"
+  data-money-decimals="{{ $decimals }}"
+  data-money-negative="{{ $allowNegative ? 'true' : 'false' }}"
+@if ($minCents !== null)
+  data-money-min="{{ $minCents }}"
+@endif
+@if ($maxCents !== null)
+  data-money-max="{{ $maxCents }}"
+@endif
+>
+@if ($label !== null)
+  <label class="z-label" for="{{ $id }}">{{ $label }}</label>
+@endif
+  <input
+    type="hidden"
+    name="{{ $name }}"
+    value="{{ $initialCents }}"
+    data-z-money-cents
+@if ($kModel !== null)
+    k-model="{{ $kModel }}"
+@endif
+  >
+  <div class="z-input-group-row">
+    <span class="z-input-addon is-prefix" aria-hidden="true">{{ $symbol }}</span>
+    <input
+      id="{{ $id }}"
+      type="text"
+      inputmode="decimal"
+      autocomplete="off"
+      class="z-input-group-field z-money-field"
+      value="{{ $formattedDisplay }}"
+      placeholder="{{ $placeholder }}"
+      data-z-money-display
+@if ($label === null)
+      aria-label="{{ $name }} ({{ $currency }})"
+@endif
+@if ($error !== null)
+      aria-invalid="true"
+@endif
+@if (count($describedBy) > 0)
+      aria-describedby="{{ implode(' ', $describedBy) }}"
+@endif
+@if ($required)
+      required
+@endif
+@if ($disabled)
+      disabled
+@endif
+    >
+    <span class="z-input-addon is-suffix">{{ $currency }}</span>
+  </div>
+@if ($hint !== null)
+  <span id="{{ $id }}-hint" class="z-hint">{{ $hint }}</span>
+@endif
+@if ($error !== null)
+  <span id="{{ $id }}-error" class="z-field-err" role="alert">{{ $error }}</span>
+@endif
+</div>

@@ -12,9 +12,9 @@ Modern, zero-npm, strict-CSP, AI-native UI component framework and pure PHP 8.5 
 - **Pure 2026 Web Standards First**: Native CSS `@layer`, perceptual OKLCH 1-knob theming (`--z-hue`, `--z-chroma`, `--z-radius`), `color-mix(in oklch, ...)`, CSS Nesting, `@container` queries, `:has()` form & switch states, native HTML `<details name="...">` exclusive accordions, and Top-Layer `[popover]` + `@starting-style` transitions.
 - **Zero Node, Zero npm, Zero Vite Required**: A pure PHP 8.5 CSS Tree-Shaker (`Zokeibi\Compiler\CssTreeShaker`) scans your `views/**/*.kgn.html` files for `<x-ui.*>` tags, resolves transitive CSS dependencies, and writes a tiny minified `zokeibi.min.css`.
 - **Shadcn Ownership Model**: `zokeibi add button card modal` copies clean `<x-ui.*>` templates straight into your app's `views/components/ui/` directory — you own every line of markup.
-- **Strict CSP (`script-src 'self'` & `style-src 'self'`)**: Zero inline `<script>`, zero `on*=` attributes, zero inline `style="..."` attributes across all **56** primitives (complete SaaS catalog: checkboxes, radio cards, Popover dropdown menus, segmented controls, spinners, range sliders, dividers, description lists, copyable code blocks, free-form tag inputs, dismissible banners, 0 B JS star ratings, grouped sidebars, input addon groups, number steppers, avatar stacks, CSS scroll-snap carousels, native `<details>` tree views, password strength meters, ESIGN/UETA `signature-pad` draw/type capture, pure-SVG charts, interactive date-range calendars, multi-select comboboxes, sortable/filterable tabular-numeral tables, XSS-safe Markdown editor, 6-digit OTP inputs, Cmd+K palette, zero-code `data-z-cycle-theme` OKLCH theme switching, `@media print` defaults, and more) and **8** full-page SaaS blocks.
+- **Strict CSP (`script-src 'self'` & `style-src 'self'`)**: Zero inline `<script>`, zero `on*=` attributes, zero inline `style="..."` attributes across all **60** primitives (complete SaaS + AI-workflow catalog: two-gear `data-z-density="calm|default|compact"` switching, integer-cents `<x-ui.money-input>`, hardened `<x-ui.alert-dialog>` with typed confirmation gates, stacked programmatic & grace-window undoable toasts, DataTable row selection + bulk action bar + Popover column toggle + RFC 4180 CSV export, composite `<x-ui.skeleton>` `card`/`table`/`kpi` presets, human-in-the-loop `<x-ui.ai-review>` & `<x-ui.approval-card>` gates, ESIGN/UETA `signature-pad`, pure-SVG charts, date-range calendars, multi-select comboboxes, XSS-safe Markdown editor, 6-digit OTP inputs, Cmd+K palette, zero-code `data-z-cycle-theme` OKLCH theme switching, `@media print` defaults, and more) and **8** full-page SaaS blocks.
 - **DTO-to-UI Reflection Generator**: `zokeibi form` and `zokeibi table` reflect PHP 8.5 readonly DTOs (`#[Required]`, `#[Email]`, `#[Url]`, `#[Date]`, `#[In]`, `BackedEnum`, `array`) with zero runtime Composer deps and emit accessible `.kgn.html` views (sortable & searchable tables out of the box).
-- **Executable UI Proof Gate (`zokeibi prove`)**: Proves WCAG 2.1 AA contrast across active + every saved custom theme, static ARIA/schema/CSP audit (`100/100`), and gzipped CSS KB budget (`--max-gzip-kb=10.0`) in one deterministic Readiness Certificate.
+- **Executable UI Proof Gate (`zokeibi prove`)**: Proves WCAG 2.1 AA contrast across active + every saved custom theme, static ARIA/schema/CSP audit (`100/100`), and gzipped CSS KB budget (`--max-gzip-kb=12.0`) in one deterministic Readiness Certificate.
 - **Live Studio Hot-Swap & AI-Native Registry**: Machine-readable `resources/registry.json` (`zokeibi schema`), `zokeibi watch` / `/studio/live-sync` hot-swap bridge for Kongono Dev Hot Reload, and Kongono MCP tool `kongono_zokeibi_registry`.
 
 ## Quick Start
@@ -25,8 +25,8 @@ composer require kongono/zokeibi
 # Initialize project config and directories
 php vendor/bin/zokeibi init --theme=sumi
 
-# Copy any (or --all) of the 56 <x-ui.*> components into views/components/ui/
-php vendor/bin/zokeibi add button card dropdown checkbox input-group password-input chart editor tree
+# Copy any (or --all) of the 60 <x-ui.*> components into views/components/ui/
+php vendor/bin/zokeibi add button card money-input alert-dialog ai-review approval-card table chart
 
 # Install full-page strict-CSP SaaS blocks (saas-shell, auth-login, settings-billing, pricing-grid, empty-onboarding, error-page, analytics-dashboard, api-keys-audit)
 php vendor/bin/zokeibi block list
