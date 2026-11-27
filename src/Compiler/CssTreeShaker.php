@@ -118,6 +118,8 @@ final readonly class CssTreeShaker
         'z-alertdialog' => 'alert-dialog',
         'z-ai-review' => 'ai-review',
         'z-approval' => 'approval-card',
+        'z-filter' => 'filter-bar',
+        'z-compare' => 'compare-slider',
     ];
 
     public function __construct(

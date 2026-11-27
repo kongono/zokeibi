@@ -9,11 +9,11 @@
       <div class="pg-hero-kicker">造形美 Zokeibi · Beauty of Form · Pure PHP 8.5 CSS Compiler</div>
       <h1 class="pg-hero-title">Superior UI for Kongono.<br>Zero Node. Zero npm. Pure Web Standards.</h1>
       <p class="pg-hero-sub">
-        60 accessible <code>&lt;x-ui.*&gt;</code> components + 8 turnkey SaaS page blocks built on native 2026 CSS (<code>@layer</code>, OKLCH, <code>@container</code>, <code>:has()</code>, Top-Layer Popover API, <code>@starting-style</code>), Two-Gear density switching, integer-cents money inputs, hardened alert dialogs, bulk/CSV DataTables, human-in-the-loop AI review &amp; approval cards, pure-SVG charts, DTO-to-UI reflection, and <code>zokeibi prove</code> under strict CSP (<code>script-src 'self'</code> &amp; <code>style-src 'self'</code>).
+        62 accessible <code>&lt;x-ui.*&gt;</code> components + 8 turnkey SaaS page blocks built on native 2026 CSS (<code>@layer</code>, OKLCH, <code>@container</code>, <code>:has()</code>, Top-Layer Popover API, <code>@starting-style</code>), Two-Gear density switching, integer-cents money inputs, hardened alert dialogs, bulk/CSV DataTables, filter bars, compare sliders, dirty-form guards, human-in-the-loop AI review &amp; approval cards, interactive pure-SVG charts, DTO-to-UI reflection, and <code>zokeibi prove</code> under strict CSP (<code>script-src 'self'</code> &amp; <code>style-src 'self'</code>).
       </p>
       <div class="z-row z-stack-gap-top">
         <x-ui.button variant="primary" href="/studio">Open Token Studio GUI</x-ui.button>
-        <x-ui.button variant="outline" href="#components">Explore 60 Components</x-ui.button>
+        <x-ui.button variant="outline" href="#components">Explore 62 Components</x-ui.button>
         <x-ui.button variant="ghost" href="/studio/prove">UI Proof JSON</x-ui.button>
         <x-ui.button variant="ghost" href="/api/registry.json">Registry JSON</x-ui.button>
       </div>
@@ -102,7 +102,7 @@
               <td><x-ui.badge variant="primary">-{{ $telemetry['dash_savings'] }}</x-ui.badge></td>
             </tr>
             <tr>
-              <td><strong>Full 60-Component Playground</strong></td>
+              <td><strong>Full 62-Component Playground</strong></td>
               <td class="z-mono">{{ $telemetry['full_used'] }}/{{ $componentCount }}</td>
               <td class="z-mono">{{ $telemetry['full_min_kb'] }}</td>
               <td class="z-mono"><strong>{{ $telemetry['full_gz_kb'] }}</strong></td>
@@ -128,19 +128,19 @@ php vendor/bin/zokeibi prove --views=views --strict</pre>
     </div>
   </section>
 
-  {{-- Interactive 60-Component Gallery --}}
+  {{-- Interactive 62-Component Gallery --}}
   <section id="components">
     <div class="pg-section-head">
       <div>
-        <h2 class="pg-section-title">All 60 Live Zokeibi Components</h2>
+        <h2 class="pg-section-title">All 62 Live Zokeibi Components</h2>
         <p class="pg-section-sub">Every preview below renders the real installed <code>&lt;x-ui.*&gt;</code> component template. Switch themes or density above, or toggle <strong>Preview / Markup / CLI</strong> on any card.</p>
       </div>
       <div class="pg-seg" role="tablist" aria-label="Filter components by category">
-        <button id="cat-all" type="button" role="tab" aria-selected="true" class="pg-seg-btn" k-class:is-active="cat === 'all'" k-attr:aria-selected="cat === 'all'" k-on:click="set(cat, 'all')">All (60)</button>
+        <button id="cat-all" type="button" role="tab" aria-selected="true" class="pg-seg-btn" k-class:is-active="cat === 'all'" k-attr:aria-selected="cat === 'all'" k-on:click="set(cat, 'all')">All (62)</button>
         <button id="cat-primitives" type="button" role="tab" aria-selected="false" class="pg-seg-btn" k-class:is-active="cat === 'primitives'" k-attr:aria-selected="cat === 'primitives'" k-on:click="set(cat, 'primitives')">Primitives (12)</button>
         <button id="cat-forms" type="button" role="tab" aria-selected="false" class="pg-seg-btn" k-class:is-active="cat === 'forms'" k-attr:aria-selected="cat === 'forms'" k-on:click="set(cat, 'forms')">Forms (21)</button>
-        <button id="cat-data" type="button" role="tab" aria-selected="false" class="pg-seg-btn" k-class:is-active="cat === 'data'" k-attr:aria-selected="cat === 'data'" k-on:click="set(cat, 'data')">Data (11)</button>
-        <button id="cat-navigation" type="button" role="tab" aria-selected="false" class="pg-seg-btn" k-class:is-active="cat === 'navigation'" k-attr:aria-selected="cat === 'navigation'" k-on:click="set(cat, 'navigation')">Navigation (8)</button>
+        <button id="cat-data" type="button" role="tab" aria-selected="false" class="pg-seg-btn" k-class:is-active="cat === 'data'" k-attr:aria-selected="cat === 'data'" k-on:click="set(cat, 'data')">Data (12)</button>
+        <button id="cat-navigation" type="button" role="tab" aria-selected="false" class="pg-seg-btn" k-class:is-active="cat === 'navigation'" k-attr:aria-selected="cat === 'navigation'" k-on:click="set(cat, 'navigation')">Navigation (9)</button>
         <button id="cat-overlays" type="button" role="tab" aria-selected="false" class="pg-seg-btn" k-class:is-active="cat === 'overlays'" k-attr:aria-selected="cat === 'overlays'" k-on:click="set(cat, 'overlays')">Overlays (8)</button>
       </div>
     </div>
@@ -348,8 +348,10 @@ php vendor/bin/zokeibi prove --views=views --strict</pre>
           </div>
           <div class="pg-demo-body">
             <div class="pg-stage z-stack-sm" k-show="view === 'preview'">
-              <x-ui.input name="demo_email" type="email" label="Work Email (focus to watch :has() label highlight)" placeholder="you@company.dev" hint="Live signal mirror below." k-model="email" />
-              <x-ui.input name="demo_slug" label="Invalid State (:has([aria-invalid='true']))" value="bad slug!" error="Only lowercase letters and hyphens are allowed." />
+              <form action="#" class="z-stack-sm" data-z-dirty-guard="true">
+                <x-ui.input name="demo_email" type="email" label="Work Email (edit to trigger Unsaved-Changes Dirty Guard)" value="founder@kongono.dev" placeholder="you@company.dev" hint="Live signal mirror + declarative data-z-dirty-guard bar." k-model="email" />
+                <x-ui.input name="demo_slug" label="Invalid State (:has([aria-invalid='true']))" value="bad slug!" error="Only lowercase letters and hyphens are allowed." />
+              </form>
               <div class="z-mono z-soft">Bound signal: <strong k-text="email">founder@kongono.dev</strong></div>
             </div>
             <pre class="z-code" k-show="view === 'code'" hidden>{{ $schemas['input']['example'] }}</pre>
@@ -765,7 +767,7 @@ php vendor/bin/zokeibi prove --views=views --strict</pre>
 
       {{-- 21. Slide-Over Drawer --}}
       <div k-show="cat === 'all' || cat === 'overlays'">
-        <section class="pg-demo-card" @state(['view' => 'preview', 'drawerOpen' => false])>
+        <section class="pg-demo-card" @state(['view' => 'preview', 'drawerOpen' => false, 'sheetOpen' => false])>
           <div class="pg-demo-head">
             <div>
               <h3 class="pg-demo-title">{{ $schemas['drawer']['name'] }} <x-ui.badge variant="blue">{{ $schemas['drawer']['js_mode'] }}</x-ui.badge></h3>
@@ -779,8 +781,9 @@ php vendor/bin/zokeibi prove --views=views --strict</pre>
           </div>
           <div class="pg-demo-body">
             <div class="pg-stage z-row" k-show="view === 'preview'">
-              <x-ui.button id="open-demo-drawer" variant="primary" size="sm" k-click="set(drawerOpen, true)">Open Inspector Drawer</x-ui.button>
-              <span class="z-soft">Right-edge detail inspector sheet.</span>
+              <x-ui.button id="open-demo-drawer" variant="primary" size="sm" k-click="set(drawerOpen, true)">Open Side Drawer</x-ui.button>
+              <x-ui.button id="open-demo-sheet" variant="outline" size="sm" k-click="set(sheetOpen, true)" data-z-open="#demo-bottom-sheet">Open Bottom Sheet</x-ui.button>
+              <span class="z-soft">Right, left, or mobile bottom sheet.</span>
             </div>
             <pre class="z-code" k-show="view === 'code'" hidden>{{ $schemas['drawer']['example'] }}</pre>
             <pre class="z-code" k-show="view === 'cli'" hidden>{{ $schemas['drawer']['cli'] }}</pre>
@@ -788,8 +791,14 @@ php vendor/bin/zokeibi prove --views=views --strict</pre>
           <x-ui.drawer id="demo-inspector-drawer" title="Zokeibi Build Inspector" show="drawerOpen">
             <div class="z-stack-sm">
               <x-ui.alert variant="success" title="Zero Node Build">Compiled directly inside PHP 8.5 with zero external runtimes.</x-ui.alert>
-              <x-ui.kpi label="Gzipped CSS" :value="$telemetry['full_gz_kb']" delta="All 60" trend="up" variant="emerald" />
+              <x-ui.kpi label="Gzipped CSS" :value="$telemetry['full_gz_kb']" delta="All 62" trend="up" variant="emerald" />
               <x-ui.button id="close-demo-drawer" variant="outline" size="sm" k-click="set(drawerOpen, false)">Close Drawer</x-ui.button>
+            </div>
+          </x-ui.drawer>
+          <x-ui.drawer id="demo-bottom-sheet" title="Quick Mobile Payment Sheet" position="bottom" show="sheetOpen">
+            <div class="z-stack-sm">
+              <p>Thumb-reachable bottom sheet using <code>position="bottom"</code> — zero extra JS dependencies.</p>
+              <x-ui.button id="close-demo-sheet" variant="primary" size="sm" k-click="set(sheetOpen, false)" data-z-close="#demo-bottom-sheet">Done</x-ui.button>
             </div>
           </x-ui.drawer>
           <div class="pg-demo-foot"><span>&lt;{{ $schemas['drawer']['tag'] }}&gt;</span><span>{{ $schemas['drawer']['standards'] }}</span></div>
@@ -1849,6 +1858,68 @@ public function index(): Response
             <pre class="z-code" k-show="view === 'cli'" hidden>{{ $schemas['approval-card']['cli'] }}</pre>
           </div>
           <div class="pg-demo-foot"><span>&lt;{{ $schemas['approval-card']['tag'] }}&gt;</span><span>{{ $schemas['approval-card']['standards'] }}</span></div>
+        </section>
+      </div>
+
+      {{-- 61. Filter Pill Bar & Saved Views --}}
+      <div k-show="cat === 'all' || cat === 'navigation'">
+        <section class="pg-demo-card" @state(['view' => 'preview'])>
+          <div class="pg-demo-head">
+            <div>
+              <h3 class="pg-demo-title">{{ $schemas['filter-bar']['name'] }} <x-ui.badge variant="blue">{{ $schemas['filter-bar']['js_mode'] }}</x-ui.badge></h3>
+              <p class="pg-demo-desc">{{ $schemas['filter-bar']['description'] }}</p>
+            </div>
+            <div class="pg-seg">
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'preview'" k-on:click="set(view, 'preview')">Preview</button>
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'code'" k-on:click="set(view, 'code')">Markup</button>
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'cli'" k-on:click="set(view, 'cli')">CLI</button>
+            </div>
+          </div>
+          <div class="pg-demo-body">
+            <div class="pg-stage" k-show="view === 'preview'">
+              <x-ui.filter-bar
+                views="all:All Units|overdue:Overdue|vacant:Vacant|renewals:Expiring 60d"
+                active-view="overdue"
+                filters="status:Status:Overdue|property:Property:Oak Street"
+                options="status:Status:Paid|status:Status:Overdue|property:Property:Maple Ave|lease:Term:Month-to-Month"
+              />
+            </div>
+            <pre class="z-code" k-show="view === 'code'" hidden>{{ $schemas['filter-bar']['example'] }}</pre>
+            <pre class="z-code" k-show="view === 'cli'" hidden>{{ $schemas['filter-bar']['cli'] }}</pre>
+          </div>
+          <div class="pg-demo-foot"><span>&lt;{{ $schemas['filter-bar']['tag'] }}&gt;</span><span>{{ $schemas['filter-bar']['standards'] }}</span></div>
+        </section>
+      </div>
+
+      {{-- 62. Before / After Compare Slider --}}
+      <div k-show="cat === 'all' || cat === 'data'">
+        <section class="pg-demo-card" @state(['view' => 'preview'])>
+          <div class="pg-demo-head">
+            <div>
+              <h3 class="pg-demo-title">{{ $schemas['compare-slider']['name'] }} <x-ui.badge variant="blue">{{ $schemas['compare-slider']['js_mode'] }}</x-ui.badge></h3>
+              <p class="pg-demo-desc">{{ $schemas['compare-slider']['description'] }}</p>
+            </div>
+            <div class="pg-seg">
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'preview'" k-on:click="set(view, 'preview')">Preview</button>
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'code'" k-on:click="set(view, 'code')">Markup</button>
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'cli'" k-on:click="set(view, 'cli')">CLI</button>
+            </div>
+          </div>
+          <div class="pg-demo-body">
+            <div class="pg-stage" k-show="view === 'preview'">
+              <x-ui.compare-slider
+                label="Compare legacy CSS bundle vs Zokeibi OKLCH bundle"
+                before-label="Before (Move-In · 2025)"
+                after-label="After (Turnover Ready · 2026)"
+                before-text="Unit 4B living room inspection: original matte trim, minor carpet wear near entry door."
+                after-text="Unit 4B turnover verified: fresh satin paint, refinished oak flooring, passed 100% checklist."
+                initial="48"
+              />
+            </div>
+            <pre class="z-code" k-show="view === 'code'" hidden>{{ $schemas['compare-slider']['example'] }}</pre>
+            <pre class="z-code" k-show="view === 'cli'" hidden>{{ $schemas['compare-slider']['cli'] }}</pre>
+          </div>
+          <div class="pg-demo-foot"><span>&lt;{{ $schemas['compare-slider']['tag'] }}&gt;</span><span>{{ $schemas['compare-slider']['standards'] }}</span></div>
         </section>
       </div>
 

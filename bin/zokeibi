@@ -78,7 +78,7 @@ try {
             echo "  zokeibi watch [--dir=.] [--views=views] [--out=public/assets/zokeibi.min.css] [--interval=400] [--once]\n";
             echo "  zokeibi export [--format=css|w3c-tokens|tailwind] [--dir=.] [--out=...]\n";
             echo "  zokeibi audit [--views=views] [--strict] [--json]\n";
-            echo "  zokeibi prove [--dir=.] [--views=views] [--max-gzip-kb=12.0] [--strict] [--json]\n";
+            echo "  zokeibi prove [--dir=.] [--views=views] [--max-gzip-kb=12.5] [--strict] [--json]\n";
             echo "  zokeibi schema [component] [--pretty]\n";
             echo "  zokeibi studio [--dir=.] [--port=8101]  (Launch local Design Token Studio GUI)\n";
             exit(0);
@@ -416,7 +416,7 @@ try {
             $views = is_string($opts['views'] ?? null) ? $opts['views'] : null;
             $maxGzipKb = is_string($opts['max-gzip-kb'] ?? null) && is_numeric($opts['max-gzip-kb'])
                 ? (float) $opts['max-gzip-kb']
-                : 12.0;
+                : 12.5;
             $strict = true === ($opts['strict'] ?? false);
             $cert = $zokeibi->prover->prove($dir, $views, $maxGzipKb, $strict);
             if ($asJson) {

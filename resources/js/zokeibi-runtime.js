@@ -1,4 +1,4 @@
-/* Zokeibi Vanilla Runtime v1.2.0 — Zero dependencies, Strict-CSP safe, Zero innerHTML XSS sinks */
+/* Zokeibi Vanilla Runtime v1.3.0 — Zero dependencies, Strict-CSP safe, Zero innerHTML XSS sinks */
 (() => {
   "use strict";
 
@@ -23,6 +23,7 @@
   const sigInitSet = new WeakSet();
   const sigDrawnSet = new WeakSet();
   const lastTableCheckMap = new WeakMap();
+  const dirtySnapshots = new WeakMap();
   let pointerDownTarget = null;
 
   /* ---- OKLCH Theme & Two-Gear Density Switcher + Persistence ---- */
@@ -1229,6 +1230,72 @@
       return;
     }
 
+    const filterRmBtn = target.closest("[data-z-filter-remove]");
+    if (filterRmBtn) {
+      const bar = filterRmBtn.closest("[data-z-filter-bar]");
+      const pill = filterRmBtn.closest("[data-z-filter-pill]");
+      if (pill) pill.remove();
+      if (bar) syncFilterBar(bar);
+      return;
+    }
+
+    const filterAddBtn = target.closest("[data-z-filter-add]");
+    if (filterAddBtn) {
+      const bar = filterAddBtn.closest("[data-z-filter-bar]");
+      if (bar) {
+        addFilterPill(
+          bar,
+          filterAddBtn.getAttribute("data-filter-key") || "",
+          filterAddBtn.getAttribute("data-filter-label") || "",
+          filterAddBtn.getAttribute("data-filter-value") || ""
+        );
+      }
+      return;
+    }
+
+    const filterClearBtn = target.closest("[data-z-filter-clear]");
+    if (filterClearBtn) {
+      const bar = filterClearBtn.closest("[data-z-filter-bar]");
+      if (bar) {
+        bar.querySelectorAll("[data-z-filter-pill]").forEach((p) => p.remove());
+        syncFilterBar(bar);
+      }
+      return;
+    }
+
+    const filterViewBtn = target.closest("[data-z-filter-view]");
+    if (filterViewBtn) {
+      const bar = filterViewBtn.closest("[data-z-filter-bar]");
+      if (bar) {
+        bar.querySelectorAll("[data-z-filter-view]").forEach((b) => {
+          const act = b === filterViewBtn;
+          b.classList.toggle("is-active", act);
+          b.setAttribute("aria-selected", act ? "true" : "false");
+        });
+        bar.dispatchEvent(new CustomEvent("zokeibi:filter-view", { bubbles: true, detail: { view: filterViewBtn.getAttribute("data-z-filter-view") || "" } }));
+      }
+      return;
+    }
+
+    const dirtyDiscardBtn = target.closest("[data-z-dirty-discard]");
+    if (dirtyDiscardBtn) {
+      const form = dirtyDiscardBtn.closest('form[data-z-dirty-guard="true"]');
+      const snap = form && dirtySnapshots.get(form);
+      if (form instanceof HTMLFormElement && snap) {
+        snap.forEach((initial, el) => {
+          if (!el.isConnected) return;
+          if (el instanceof HTMLInputElement && (el.type === "checkbox" || el.type === "radio")) {
+            el.checked = initial === "1";
+          } else {
+            el.value = initial;
+          }
+        });
+        evaluateDirtyForm(form);
+        form.dispatchEvent(new CustomEvent("zokeibi:dirty-discard", { bubbles: true }));
+      }
+      return;
+    }
+
     const tblBulkActBtn = target.closest("[data-z-table-bulk-action]");
     if (tblBulkActBtn) {
       const wrap = tblBulkActBtn.closest("[data-z-table]");
@@ -1790,6 +1857,12 @@
       return;
     }
 
+    if (target.hasAttribute("data-z-compare-range")) {
+      const fig = target.closest("[data-z-compare]");
+      if (fig instanceof HTMLElement) fig.style.setProperty("--z-cmp-pos", `${target.value}%`);
+      return;
+    }
+
     if (target.hasAttribute("data-z-sig-text")) {
       const root = target.closest("[data-z-signature]");
       if (root) {
@@ -2186,10 +2259,147 @@
     }
   });
 
+  /* ---- Filter Pill Bar, Compare Slider & Unsaved-Changes Dirty Guard (v1.3.0) ---- */
+  function readFilterBarState(bar) {
+    return Array.from(bar.querySelectorAll("[data-z-filter-pill]")).map((el) => ({
+      key: el.getAttribute("data-filter-key") || "",
+      label: el.getAttribute("data-filter-label") || "",
+      value: el.getAttribute("data-filter-value") || "",
+    }));
+  }
+
+  function syncFilterBar(bar) {
+    const pills = readFilterBarState(bar);
+    const clearBtn = bar.querySelector("[data-z-filter-clear]");
+    if (clearBtn instanceof HTMLElement) clearBtn.hidden = pills.length === 0;
+    if (bar.getAttribute("data-z-filter-sync-url") === "true" && typeof window.history.replaceState === "function") {
+      try {
+        const url = new URL(window.location.href);
+        bar.querySelectorAll("[data-z-filter-add]").forEach((opt) => {
+          const k = opt.getAttribute("data-filter-key");
+          if (k) url.searchParams.delete(k);
+        });
+        pills.forEach((p) => {
+          if (p.key) url.searchParams.set(p.key, p.value);
+        });
+        window.history.replaceState({}, "", url.toString());
+      } catch (_e) {}
+    }
+    bar.dispatchEvent(new CustomEvent("zokeibi:filter-change", { bubbles: true, detail: { filters: pills } }));
+  }
+
+  function addFilterPill(bar, key, label, value) {
+    const box = bar.querySelector("[data-z-filter-pills]");
+    if (!box || !key || !value) return;
+    box.querySelectorAll("[data-z-filter-pill]").forEach((existing) => {
+      if (existing.getAttribute("data-filter-key") === key) existing.remove();
+    });
+    const pill = document.createElement("span");
+    pill.className = "z-filter-pill";
+    pill.setAttribute("data-z-filter-pill", "");
+    pill.setAttribute("data-filter-key", key);
+    pill.setAttribute("data-filter-label", label);
+    pill.setAttribute("data-filter-value", value);
+    const kSpan = document.createElement("span");
+    kSpan.className = "z-filter-key";
+    kSpan.textContent = `${label}:`;
+    const vSpan = document.createElement("span");
+    vSpan.textContent = value;
+    const rm = document.createElement("button");
+    rm.type = "button";
+    rm.className = "z-filter-rm";
+    rm.setAttribute("data-z-filter-remove", "");
+    rm.setAttribute("aria-label", `Remove ${label} filter`);
+    rm.textContent = "×";
+    pill.appendChild(kSpan);
+    pill.appendChild(vSpan);
+    pill.appendChild(rm);
+    box.appendChild(pill);
+    syncFilterBar(bar);
+  }
+
+  function initCompareSliders(scope) {
+    (scope || document).querySelectorAll("[data-z-compare]").forEach((fig) => {
+      if (!(fig instanceof HTMLElement)) return;
+      const range = fig.querySelector("[data-z-compare-range]");
+      const init = range instanceof HTMLInputElement ? range.value : (fig.getAttribute("data-compare-initial") || "50");
+      fig.style.setProperty("--z-cmp-pos", `${init}%`);
+    });
+  }
+
+  function getControlState(el) {
+    if (el instanceof HTMLInputElement && (el.type === "checkbox" || el.type === "radio")) return el.checked ? "1" : "0";
+    return el.value;
+  }
+
+  function snapshotFormControls(form) {
+    const snap = new Map();
+    form.querySelectorAll("input:not([type='hidden']):not([type='submit']):not([type='button']), select, textarea").forEach((el) => {
+      snap.set(el, getControlState(el));
+    });
+    dirtySnapshots.set(form, snap);
+  }
+
+  function evaluateDirtyForm(form) {
+    const snap = dirtySnapshots.get(form);
+    if (!snap) return;
+    let dirtyCount = 0;
+    snap.forEach((initial, el) => {
+      if (!el.isConnected) return;
+      const changed = getControlState(el) !== initial;
+      if (changed) dirtyCount++;
+      const field = el.closest(".z-field, .z-input-group");
+      if (field) field.classList.toggle("is-dirty", changed);
+    });
+    form.setAttribute("data-z-dirty", dirtyCount > 0 ? "true" : "false");
+    const bar = form.querySelector("[data-z-dirty-bar]");
+    if (bar instanceof HTMLElement) {
+      bar.hidden = dirtyCount === 0;
+      const msg = bar.querySelector("[data-z-dirty-count]");
+      if (msg) msg.textContent = `${dirtyCount} unsaved change${dirtyCount === 1 ? "" : "s"}`;
+    }
+  }
+
+  function initDirtyGuards(scope) {
+    (scope || document).querySelectorAll('form[data-z-dirty-guard="true"]').forEach((form) => {
+      if (!(form instanceof HTMLFormElement) || dirtySnapshots.has(form)) return;
+      snapshotFormControls(form);
+      if (!form.querySelector("[data-z-dirty-bar]")) {
+        const bar = document.createElement("div");
+        bar.className = "z-dirty-bar";
+        bar.setAttribute("data-z-dirty-bar", "true");
+        bar.setAttribute("role", "status");
+        bar.setAttribute("aria-live", "polite");
+        bar.hidden = true;
+        const msg = document.createElement("strong");
+        msg.setAttribute("data-z-dirty-count", "true");
+        msg.textContent = "0 unsaved changes";
+        const acts = document.createElement("div");
+        acts.className = "z-row";
+        const disc = document.createElement("button");
+        disc.type = "button";
+        disc.className = "z-btn z-btn-outline z-btn-sm";
+        disc.setAttribute("data-z-dirty-discard", "true");
+        disc.textContent = "Discard";
+        const save = document.createElement("button");
+        save.type = "submit";
+        save.className = "z-btn z-btn-primary z-btn-sm";
+        save.textContent = "Save Changes";
+        acts.appendChild(disc);
+        acts.appendChild(save);
+        bar.appendChild(msg);
+        bar.appendChild(acts);
+        form.appendChild(bar);
+      }
+    });
+  }
+
   function initScope(scope) {
     const root = scope || document;
     initSortableTables(root);
     initSignaturePads(root);
+    initCompareSliders(root);
+    initDirtyGuards(root);
     root.querySelectorAll("[data-z-editor]").forEach(renderEditorPreview);
     syncThemeButtons((document.documentElement.getAttribute("data-zokeibi-theme") || "").trim().toLowerCase());
     syncDensityButtons((document.documentElement.getAttribute("data-z-density") || "default").trim().toLowerCase());
@@ -2199,6 +2409,59 @@
 
   document.addEventListener("zokeibi:toast", (event) => {
     if (event instanceof CustomEvent && event.detail) showToast(event.detail);
+  });
+
+  // Progressive SVG chart hover/focus readout tooltips
+  function setChartTip(el, active) {
+    const chart = el.closest("[data-z-chart]");
+    const readout = chart && chart.querySelector("[data-z-chart-readout]");
+    if (!readout) return;
+    if (active) {
+      readout.textContent = el.getAttribute("data-chart-tip") || "";
+      readout.classList.add("is-active");
+    } else {
+      readout.textContent = readout.getAttribute("data-default-meta") || "";
+      readout.classList.remove("is-active");
+    }
+  }
+
+  document.addEventListener("pointerover", (event) => {
+    const el = event.target instanceof Element ? event.target.closest("[data-chart-tip]") : null;
+    if (el) setChartTip(el, true);
+  });
+  document.addEventListener("pointerout", (event) => {
+    const el = event.target instanceof Element ? event.target.closest("[data-chart-tip]") : null;
+    if (el) setChartTip(el, false);
+  });
+  document.addEventListener("focusin", (event) => {
+    const el = event.target instanceof Element ? event.target.closest("[data-chart-tip]") : null;
+    if (el) setChartTip(el, true);
+  });
+  document.addEventListener("focusout", (event) => {
+    const el = event.target instanceof Element ? event.target.closest("[data-chart-tip]") : null;
+    if (el) setChartTip(el, false);
+  });
+
+  // Unsaved-changes dirty form guard evaluation, submit reset & beforeunload protection
+  const onDirtyActivity = (event) => {
+    const target = event.target instanceof Element ? event.target : null;
+    const form = target && target.closest('form[data-z-dirty-guard="true"]');
+    if (form instanceof HTMLFormElement) evaluateDirtyForm(form);
+  };
+  document.addEventListener("input", onDirtyActivity);
+  document.addEventListener("change", onDirtyActivity);
+  document.addEventListener("submit", (event) => {
+    const form = event.target;
+    if (form instanceof HTMLFormElement && form.getAttribute("data-z-dirty-guard") === "true") {
+      snapshotFormControls(form);
+      evaluateDirtyForm(form);
+    }
+  });
+  window.addEventListener("beforeunload", (event) => {
+    if (document.querySelector('form[data-z-dirty-guard="true"][data-z-dirty="true"]')) {
+      event.preventDefault();
+      event.returnValue = "";
+    }
   });
 
   document.addEventListener("kongono:morphed", (event) => {

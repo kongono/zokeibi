@@ -2,13 +2,25 @@
 $title = isset($title) && is_string($title) && $title !== '' ? $title : 'Inspector';
 $show = isset($show) && is_string($show) && $show !== '' ? $show : 'drawerOpen';
 $closeExpr = isset($closeExpr) && is_string($closeExpr) && $closeExpr !== '' ? $closeExpr : 'set(' . $show . ', false)';
+$position = isset($position) && is_string($position) && in_array($position, ['right', 'left', 'bottom'], true) ? $position : 'right';
 $id = isset($id) && is_string($id) && $id !== '' ? $id : 'z-drawer-' . bin2hex(random_bytes(3));
 $class = isset($class) && is_string($class) ? trim($class) : '';
-$drawerClass = $class !== '' ? 'z-drawer ' . $class : 'z-drawer';
+$backdropClasses = ['z-drawer-backdrop'];
+$drawerClasses = ['z-drawer'];
+if ($position !== 'right') {
+    $backdropClasses[] = 'z-drawer-backdrop-' . $position;
+    $drawerClasses[] = 'z-drawer-' . $position;
+}
+if ($class !== '') {
+    $drawerClasses[] = $class;
+}
 $slot = isset($slot) && is_string($slot) ? $slot : '';
 @endphp
-<div class="z-drawer-backdrop" id="{{ $id }}" k-show="{{ $show }}" hidden>
-  <aside class="{{ $drawerClass }}" role="dialog" aria-modal="true" aria-labelledby="{{ $id }}-title">
+<div class="{{ implode(' ', $backdropClasses) }}" id="{{ $id }}" k-show="{{ $show }}" hidden>
+  <aside class="{{ implode(' ', $drawerClasses) }}" role="dialog" aria-modal="true" aria-labelledby="{{ $id }}-title">
+@if ($position === 'bottom')
+    <div class="z-drawer-handle" aria-hidden="true"></div>
+@endif
     <div class="z-drawer-head">
       <h3 class="z-drawer-title" id="{{ $id }}-title">{{ $title }}</h3>
       <button type="button" class="z-btn z-btn-ghost z-btn-sm" k-on:click="{{ $closeExpr }}" data-z-close="#{{ $id }}" aria-label="Close drawer">✕</button>

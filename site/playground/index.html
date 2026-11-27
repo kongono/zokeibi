@@ -3,19 +3,19 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Zokeibi (造形美) — Live 60-Component Interactive Playground</title>
-    <meta name="description" content="Interactive 60-component live playground for Zokeibi (造形美) — test OKLCH themes, Two-Gear density, integer-cents money inputs, bulk/CSV DataTables, hardened alert dialogs, undoable toasts, signature pads, pure-SVG charts, and AI workflow cards under strict CSP.">
+  <title>Zokeibi (造形美) — Live 62-Component &amp; 8-Block Playground</title>
+    <meta name="description" content="Interactive 62-component &amp; 8-block live playground for Zokeibi (造形美) — test OKLCH themes, Two-Gear density, integer-cents money inputs, bulk/CSV DataTables, filter bars, compare sliders, dirty-form guards, alert dialogs, undoable toasts, signature pads, pure-SVG charts, and AI workflow cards under strict CSP.">
   <link rel="canonical" href="https://zokeibi.com/playground/">
   <meta property="og:type" content="website">
-  <meta property="og:title" content="Zokeibi (造形美) — Live 60-Component Interactive Playground">
-  <meta property="og:description" content="Try all 60 strict-CSP Zokeibi components live with instant OKLCH theme, radius, and Two-Gear density switching.">
+  <meta property="og:title" content="Zokeibi (造形美) — Live 62-Component &amp; 8-Block Playground">
+  <meta property="og:description" content="Try all 62 strict-CSP Zokeibi components and 8 full-page SaaS blocks live with instant OKLCH theme, radius, and Two-Gear density switching.">
   <meta property="og:url" content="https://zokeibi.com/playground/">
   <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
-  <link rel="stylesheet" href="/assets/zokeibi.min.css">
-  <link rel="stylesheet" href="/assets/playground.css">
-  <script src="/assets/live.js" defer></script>
-  <script src="/assets/zokeibi-runtime.js" defer></script>
-  <script src="/assets/playground-extras.js" defer></script>
+  <link rel="stylesheet" href="/assets/zokeibi.min.css?v=c4d1c800">
+  <link rel="stylesheet" href="/assets/playground.css?v=3f110f4b">
+  <script src="/assets/live.js?v=32aed364" defer></script>
+  <script src="/assets/zokeibi-runtime.js?v=b534ba44" defer></script>
+  <script src="/assets/playground-extras.js?v=788a605e" defer></script>
 </head>
 <body
   data-zokeibi-theme="sumi"
@@ -34,16 +34,17 @@
       </a>
       <nav class="pg-links" aria-label="Primary navigation">
         <a class="pg-link" href="/">Overview</a>
-        <a class="pg-link is-active" href="/playground/" aria-current="page">60-Component Playground</a>
-        <a class="pg-link" href="#tree-shaker">Tree-Shaker</a>
-        <a class="pg-link" href="/api/prove.json">UI Proof JSON</a>
+        <a class="pg-link is-active" href="/playground/" aria-current="page">62 Components</a>
+        <a class="pg-link" href="/playground/#blocks">8 SaaS Blocks</a>
+        <a class="pg-link" href="/studio/">Live OKLCH Studio</a>
+        <a class="pg-link" href="/api/prove.json">Proof JSON</a>
         <a class="pg-link" href="/api/registry.json">Registry JSON</a>
         <a class="pg-link" href="https://github.com/kongono/zokeibi" target="_blank" rel="noopener">GitHub</a>
         <a class="pg-link" href="https://kongono.com" target="_blank" rel="noopener">Kongono →</a>
       </nav>
       <div class="z-row">
         <span class="z-badge z-badge-emerald"><span class="z-badge-dot" aria-hidden="true"></span>Strict CSP · 0 npm</span>
-        <span class="z-badge z-badge-primary">v1.2.0</span>
+        <span class="z-badge z-badge-primary">v1.3.0</span>
       </div>
     </div>
   </header>
@@ -55,17 +56,17 @@
       <div class="pg-hero-kicker">造形美 Zokeibi · Beauty of Form · Pure PHP 8.5 CSS Compiler</div>
       <h1 class="pg-hero-title">Superior UI for Kongono.<br>Zero Node. Zero npm. Pure Web Standards.</h1>
       <p class="pg-hero-sub">
-        60 accessible <code>&lt;x-ui.*&gt;</code> components + 8 turnkey SaaS page blocks built on native 2026 CSS (<code>@layer</code>, OKLCH, <code>@container</code>, <code>:has()</code>, Top-Layer Popover API, <code>@starting-style</code>), Two-Gear density switching, integer-cents money inputs, hardened alert dialogs, bulk/CSV DataTables, human-in-the-loop AI review &amp; approval cards, pure-SVG charts, DTO-to-UI reflection, and <code>zokeibi prove</code> under strict CSP (<code>script-src 'self'</code> &amp; <code>style-src 'self'</code>).
+        62 accessible <code>&lt;x-ui.*&gt;</code> components + 8 turnkey SaaS page blocks built on native 2026 CSS (<code>@layer</code>, OKLCH, <code>@container</code>, <code>:has()</code>, Top-Layer Popover API, <code>@starting-style</code>), Two-Gear density switching, integer-cents money inputs, hardened alert dialogs, bulk/CSV DataTables, filter bars, compare sliders, dirty-form guards, human-in-the-loop AI review &amp; approval cards, interactive pure-SVG charts, DTO-to-UI reflection, and <code>zokeibi prove</code> under strict CSP (<code>script-src 'self'</code> &amp; <code>style-src 'self'</code>).
       </p>
       <div class="z-row z-stack-gap-top">
         <a
-  href="/#quickstart"
+  href="/studio/"
   class="z-btn z-btn-primary"
 >Open Token Studio GUI</a>
         <a
   href="#components"
   class="z-btn z-btn-outline"
->Explore 60 Components</a>
+>Explore 62 Components</a>
         <a
   href="/api/prove.json"
   class="z-btn z-btn-ghost"
@@ -121,15 +122,15 @@
     <span class="z-kpi-label">Primitives + SaaS Blocks</span>
     <span class="z-kpi-delta is-up">100% owned</span>
   </div>
-  <div class="z-kpi-value">60 + 8</div>
+  <div class="z-kpi-value">62 + 8</div>
   <div class="z-kpi-hint">zokeibi add &amp; zokeibi block add</div>
 </div>
     <div class="z-kpi z-kpi-emerald">
   <div class="z-kpi-top">
     <span class="z-kpi-label">Playground CSS (Gzip)</span>
-    <span class="z-kpi-delta is-up">66.1 KB min</span>
+    <span class="z-kpi-delta is-up">70.6 KB min</span>
   </div>
-  <div class="z-kpi-value">11.1 KB</div>
+  <div class="z-kpi-value">11.8 KB</div>
   <div class="z-kpi-hint">Compiled by PHP CssTreeShaker</div>
 </div>
     <div class="z-kpi z-kpi-emerald">
@@ -138,7 +139,7 @@
     <span class="z-kpi-delta is-up">100/100 · 0 err</span>
   </div>
   <div class="z-kpi-value">Grade A+</div>
-  <div class="z-kpi-hint">WCAG AA + CSP + KB budget (63 files)</div>
+  <div class="z-kpi-hint">WCAG AA + CSP + KB budget (65 files)</div>
 </div>
     <div class="z-kpi">
   <div class="z-kpi-top">
@@ -187,25 +188,25 @@
           <tbody>
             <tr>
               <td><strong>Landing Page</strong></td>
-              <td class="z-mono">3/60</td>
+              <td class="z-mono">3/62</td>
               <td class="z-mono">11.7 KB</td>
               <td class="z-mono"><strong>2.9 KB</strong></td>
-              <td><span class="z-badge z-badge-emerald">-81.9%</span>
+              <td><span class="z-badge z-badge-emerald">-83.1%</span>
 </td>
             </tr>
             <tr>
               <td><strong>SaaS Dashboard</strong></td>
-              <td class="z-mono">8/60</td>
-              <td class="z-mono">19.4 KB</td>
-              <td class="z-mono"><strong>4.2 KB</strong></td>
-              <td><span class="z-badge z-badge-primary">-69.9%</span>
+              <td class="z-mono">8/62</td>
+              <td class="z-mono">19.8 KB</td>
+              <td class="z-mono"><strong>4.3 KB</strong></td>
+              <td><span class="z-badge z-badge-primary">-71.2%</span>
 </td>
             </tr>
             <tr>
-              <td><strong>Full 60-Component Playground</strong></td>
-              <td class="z-mono">60/60</td>
-              <td class="z-mono">66.1 KB</td>
-              <td class="z-mono"><strong>11.1 KB</strong></td>
+              <td><strong>Full 62-Component Playground</strong></td>
+              <td class="z-mono">62/62</td>
+              <td class="z-mono">70.6 KB</td>
+              <td class="z-mono"><strong>11.8 KB</strong></td>
               <td><span class="z-badge">Full Set</span>
 </td>
             </tr>
@@ -247,15 +248,15 @@ php vendor/bin/zokeibi prove --views=views --strict</pre></div>
   <section id="components">
     <div class="pg-section-head">
       <div>
-        <h2 class="pg-section-title">All 60 Live Zokeibi Components</h2>
+        <h2 class="pg-section-title">All 62 Live Zokeibi Components</h2>
         <p class="pg-section-sub">Every preview below renders the real installed <code>&lt;x-ui.*&gt;</code> component template. Switch themes or density above, or toggle <strong>Preview / Markup / CLI</strong> on any card.</p>
       </div>
       <div class="pg-seg" role="tablist" aria-label="Filter components by category">
-        <button id="cat-all" type="button" role="tab" aria-selected="true" class="pg-seg-btn" k-class:is-active="cat === 'all'" k-attr:aria-selected="cat === 'all'" k-on:click="set(cat, 'all')">All (60)</button>
+        <button id="cat-all" type="button" role="tab" aria-selected="true" class="pg-seg-btn" k-class:is-active="cat === 'all'" k-attr:aria-selected="cat === 'all'" k-on:click="set(cat, 'all')">All (62)</button>
         <button id="cat-primitives" type="button" role="tab" aria-selected="false" class="pg-seg-btn" k-class:is-active="cat === 'primitives'" k-attr:aria-selected="cat === 'primitives'" k-on:click="set(cat, 'primitives')">Primitives (12)</button>
         <button id="cat-forms" type="button" role="tab" aria-selected="false" class="pg-seg-btn" k-class:is-active="cat === 'forms'" k-attr:aria-selected="cat === 'forms'" k-on:click="set(cat, 'forms')">Forms (21)</button>
-        <button id="cat-data" type="button" role="tab" aria-selected="false" class="pg-seg-btn" k-class:is-active="cat === 'data'" k-attr:aria-selected="cat === 'data'" k-on:click="set(cat, 'data')">Data (11)</button>
-        <button id="cat-navigation" type="button" role="tab" aria-selected="false" class="pg-seg-btn" k-class:is-active="cat === 'navigation'" k-attr:aria-selected="cat === 'navigation'" k-on:click="set(cat, 'navigation')">Navigation (8)</button>
+        <button id="cat-data" type="button" role="tab" aria-selected="false" class="pg-seg-btn" k-class:is-active="cat === 'data'" k-attr:aria-selected="cat === 'data'" k-on:click="set(cat, 'data')">Data (12)</button>
+        <button id="cat-navigation" type="button" role="tab" aria-selected="false" class="pg-seg-btn" k-class:is-active="cat === 'navigation'" k-attr:aria-selected="cat === 'navigation'" k-on:click="set(cat, 'navigation')">Navigation (9)</button>
         <button id="cat-overlays" type="button" role="tab" aria-selected="false" class="pg-seg-btn" k-class:is-active="cat === 'overlays'" k-attr:aria-selected="cat === 'overlays'" k-on:click="set(cat, 'overlays')">Overlays (8)</button>
       </div>
     </div>
@@ -265,11 +266,14 @@ php vendor/bin/zokeibi prove --views=views --strict</pre></div>
         id="pg-comp-search"
         type="search"
         class="z-input pg-search-input"
-        placeholder="Search all 60 components (e.g. money, table, alert, ai, chart, popover, signature)..."
-        aria-label="Search all 60 components"
+        placeholder="Search all 62 components (e.g. money, filter, compare, table, alert, ai, chart, sheet)..."
+        aria-label="Search all 62 components"
         data-pg-search-input
       >
-      <span class="z-mono z-soft pg-search-count" data-pg-search-count aria-live="polite">60 of 60 components</span>
+      <div class="z-row">
+        <span class="z-mono z-soft pg-search-count" data-pg-search-count aria-live="polite">62 of 62 components</span>
+        <a class="z-btn z-btn-outline z-btn-sm" href="#blocks">Jump to 8 SaaS Blocks ↓</a>
+      </div>
     </div>
 
     <div class="z-grid-2" data-pg-grid>
@@ -553,33 +557,35 @@ php vendor/bin/zokeibi prove --views=views --strict</pre></div>
           </div>
           <div class="pg-demo-body">
             <div class="pg-stage z-stack-sm" k-show="view === 'preview'">
-              <div class="z-field">
-  <label class="z-label" for="z-input-demo_email-75890d">Work Email (focus to watch :has() label highlight)</label>
+              <form action="#" class="z-stack-sm" data-z-dirty-guard="true">
+                <div class="z-field">
+  <label class="z-label" for="z-input-demo_email-d780f8">Work Email (edit to trigger Unsaved-Changes Dirty Guard)</label>
   <input
     class="z-input"
-    id="z-input-demo_email-75890d"
+    id="z-input-demo_email-d780f8"
     name="demo_email"
     type="email"
-    value=""
+    value="founder@kongono.dev"
     placeholder="you@company.dev"
     k-model="email"
-    aria-describedby="z-input-demo_email-75890d-hint"
+    aria-describedby="z-input-demo_email-d780f8-hint"
   >
-  <span class="z-hint" id="z-input-demo_email-75890d-hint">Live signal mirror below.</span>
+  <span class="z-hint" id="z-input-demo_email-d780f8-hint">Live signal mirror + declarative data-z-dirty-guard bar.</span>
 </div>
-              <div class="z-field">
-  <label class="z-label" for="z-input-demo_slug-c22b92">Invalid State (:has([aria-invalid=&#039;true&#039;]))</label>
+                <div class="z-field">
+  <label class="z-label" for="z-input-demo_slug-6fd863">Invalid State (:has([aria-invalid=&#039;true&#039;]))</label>
   <input
     class="z-input"
-    id="z-input-demo_slug-c22b92"
+    id="z-input-demo_slug-6fd863"
     name="demo_slug"
     type="text"
     value="bad slug!"
     aria-invalid="true"
-    aria-describedby="z-input-demo_slug-c22b92-err"
+    aria-describedby="z-input-demo_slug-6fd863-err"
   >
-  <span class="z-field-err" id="z-input-demo_slug-c22b92-err" role="alert">Only lowercase letters and hyphens are allowed.</span>
+  <span class="z-field-err" id="z-input-demo_slug-6fd863-err" role="alert">Only lowercase letters and hyphens are allowed.</span>
 </div>
+              </form>
               <div class="z-mono z-soft">Bound signal: <strong k-text="email">founder@kongono.dev</strong></div>
             </div>
             <div class="pg-code-wrap" data-pg-code-wrap><pre class="z-code" k-show="view === 'code'" hidden>&lt;x-ui.input name=&quot;email&quot; type=&quot;email&quot; label=&quot;Work Email&quot; placeholder=&quot;founder@acme.dev&quot; hint=&quot;Never shared.&quot; /&gt;</pre></div>
@@ -607,18 +613,18 @@ php vendor/bin/zokeibi prove --views=views --strict</pre></div>
           <div class="pg-demo-body">
             <div class="pg-stage z-stack-sm" k-show="view === 'preview'">
               <div class="z-field">
-  <label class="z-label" for="z-select-demo_region-e16217">Primary Edge Region</label>
+  <label class="z-label" for="z-select-demo_region-dd6bca">Primary Edge Region</label>
   <select
     class="z-select"
-    id="z-select-demo_region-e16217"
+    id="z-select-demo_region-dd6bca"
     name="demo_region"
     k-model="region"
-    aria-describedby="z-select-demo_region-e16217-hint"
+    aria-describedby="z-select-demo_region-dd6bca-hint"
   >                <option value="us-east">US East (Virginia)</option>
                 <option value="eu-west">EU West (Frankfurt)</option>
                 <option value="ap-northeast">AP Northeast (Tokyo)</option>
               </select>
-  <span id="z-select-demo_region-e16217-hint" class="z-hint">Bound to Live 2.5 k-model.</span>
+  <span id="z-select-demo_region-dd6bca-hint" class="z-hint">Bound to Live 2.5 k-model.</span>
 </div>
               <div class="z-mono z-soft">Selected: <strong k-text="region">us-east</strong></div>
             </div>
@@ -647,16 +653,16 @@ php vendor/bin/zokeibi prove --views=views --strict</pre></div>
           <div class="pg-demo-body">
             <div class="pg-stage" k-show="view === 'preview'">
               <div class="z-field">
-  <label class="z-label" for="z-textarea-demo_notes-90ed86">Release Changelog</label>
+  <label class="z-label" for="z-textarea-demo_notes-b79601">Release Changelog</label>
   <textarea
     class="z-textarea"
-    id="z-textarea-demo_notes-90ed86"
+    id="z-textarea-demo_notes-b79601"
     name="demo_notes"
     rows="3"
     placeholder="Describe what shipped in this Zokeibi release..."
-    aria-describedby="z-textarea-demo_notes-90ed86-hint"
+    aria-describedby="z-textarea-demo_notes-b79601-hint"
   ></textarea>
-  <span id="z-textarea-demo_notes-90ed86-hint" class="z-hint">Supports vertical resize and strict accessible labels.</span>
+  <span id="z-textarea-demo_notes-b79601-hint" class="z-hint">Supports vertical resize and strict accessible labels.</span>
 </div>
             </div>
             <div class="pg-code-wrap" data-pg-code-wrap><pre class="z-code" k-show="view === 'code'" hidden>&lt;x-ui.textarea name=&quot;notes&quot; label=&quot;Release Notes&quot; placeholder=&quot;Summarize changes...&quot; rows=&quot;3&quot; /&gt;</pre></div>
@@ -934,8 +940,8 @@ php vendor/bin/zokeibi prove --views=views --strict</pre></div>
     <div class="z-table-tools">
       <span class="z-table-count" data-z-table-count aria-live="polite"></span>
       <div class="z-table-col-wrap">
-        <button type="button" class="z-table-tool-btn" popovertarget="z-tbl-cols-e4d659" aria-haspopup="menu">Columns ▾</button>
-        <div id="z-tbl-cols-e4d659" class="z-table-col-menu" popover="auto" role="group" aria-label="Toggle table columns" data-z-table-col-list></div>
+        <button type="button" class="z-table-tool-btn" popovertarget="z-tbl-cols-79d9d0" aria-haspopup="menu">Columns ▾</button>
+        <div id="z-tbl-cols-79d9d0" class="z-table-col-menu" popover="auto" role="group" aria-label="Toggle table columns" data-z-table-col-list></div>
       </div>
       <button type="button" class="z-table-tool-btn" data-z-table-export>Export CSV</button>
     </div>
@@ -961,7 +967,7 @@ php vendor/bin/zokeibi prove --views=views --strict</pre></div>
                 <tbody>
                   <tr data-row-id="zokeibi">
                     <td><strong>Zokeibi (造形美)</strong></td>
-                    <td>11.1 KB</td>
+                    <td>11.8 KB</td>
                     <td><span class="z-badge z-badge-emerald">100%</span>
 </td>
                     <td><span class="z-badge z-badge-primary">Built-In</span>
@@ -1157,19 +1163,19 @@ php vendor/bin/zokeibi prove --views=views --strict</pre></div>
           </div>
           <div class="pg-demo-body">
             <div class="pg-stage z-row" k-show="view === 'preview'">
-              <span class="z-tooltip" aria-describedby="z-tip-5899ad">
+              <span class="z-tooltip" aria-describedby="z-tip-fdb65f">
                   <button
   type="button"
   class="z-btn z-btn-outline z-btn-sm"
 >Hover / Focus Top</button>
-                <span id="z-tip-5899ad" class="z-tooltip-bubble" role="tooltip">Zero-JS CSS tooltip (top)</span>
+                <span id="z-tip-fdb65f" class="z-tooltip-bubble" role="tooltip">Zero-JS CSS tooltip (top)</span>
 </span>
-              <span class="z-tooltip" aria-describedby="z-tip-744cab">
+              <span class="z-tooltip" aria-describedby="z-tip-8205c9">
                   <button
   type="button"
   class="z-btn z-btn-outline z-btn-sm"
 >Hover / Focus Bottom</button>
-                <span id="z-tip-744cab" class="z-tooltip-bubble is-bottom" role="tooltip">Works on keyboard focus too!</span>
+                <span id="z-tip-8205c9" class="z-tooltip-bubble is-bottom" role="tooltip">Works on keyboard focus too!</span>
 </span>
             </div>
             <div class="pg-code-wrap" data-pg-code-wrap><pre class="z-code" k-show="view === 'code'" hidden>&lt;x-ui.tooltip text=&quot;Zero-JS CSS tooltip&quot; position=&quot;top&quot;&gt;&lt;x-ui.button size=&quot;sm&quot; variant=&quot;outline&quot;&gt;Hover or Focus&lt;/x-ui.button&gt;&lt;/x-ui.tooltip&gt;</pre></div>
@@ -1251,13 +1257,13 @@ php vendor/bin/zokeibi prove --views=views --strict</pre></div>
       </div>
 
       
-      <div id="comp-drawer" data-pg-card="drawer" data-pg-cat="overlays" data-pg-haystack="drawer overlays slide-over drawer right-edge detail inspector drawer wired to kongono live 2.5 reactive signals." k-show="cat === 'all' || cat === 'overlays'">
-        <section class="pg-demo-card" k-state="{&quot;view&quot;:&quot;preview&quot;,&quot;drawerOpen&quot;:false}">
+      <div id="comp-drawer" data-pg-card="drawer" data-pg-cat="overlays" data-pg-haystack="drawer overlays slide-over drawer &amp; bottom sheet edge detail inspector drawer or thumb-reachable mobile bottom sheet (position=right|left|bottom) wired to live 2.5 or data-z-open." k-show="cat === 'all' || cat === 'overlays'">
+        <section class="pg-demo-card" k-state="{&quot;view&quot;:&quot;preview&quot;,&quot;drawerOpen&quot;:false,&quot;sheetOpen&quot;:false}">
           <div class="pg-demo-head">
             <div>
-              <h3 class="pg-demo-title">Slide-Over Drawer <span class="z-badge z-badge-blue">Live 2.5</span>
+              <h3 class="pg-demo-title">Slide-Over Drawer &amp; Bottom Sheet <span class="z-badge z-badge-blue">Live 2.5 / Runtime</span>
 </h3>
-              <p class="pg-demo-desc">Right-edge detail inspector drawer wired to Kongono Live 2.5 reactive signals.</p>
+              <p class="pg-demo-desc">Edge detail inspector drawer or thumb-reachable mobile bottom sheet (position=right|left|bottom) wired to Live 2.5 or data-z-open.</p>
             </div>
             <div class="pg-seg">
               <button type="button" class="pg-seg-btn" k-class:is-active="view === 'preview'" k-on:click="set(view, 'preview')">Preview</button>
@@ -1272,10 +1278,17 @@ php vendor/bin/zokeibi prove --views=views --strict</pre></div>
   class="z-btn z-btn-primary z-btn-sm"
   id="open-demo-drawer"
   k-on:click="set(drawerOpen, true)"
->Open Inspector Drawer</button>
-              <span class="z-soft">Right-edge detail inspector sheet.</span>
+>Open Side Drawer</button>
+              <button
+  type="button"
+  class="z-btn z-btn-outline z-btn-sm"
+  id="open-demo-sheet"
+  k-on:click="set(sheetOpen, true)"
+  data-z-open="#demo-bottom-sheet"
+>Open Bottom Sheet</button>
+              <span class="z-soft">Right, left, or mobile bottom sheet.</span>
             </div>
-            <div class="pg-code-wrap" data-pg-code-wrap><pre class="z-code" k-show="view === 'code'" hidden>&lt;x-ui.drawer id=&quot;inspector-drawer&quot; title=&quot;Deployment Inspector&quot; show=&quot;drawerOpen&quot;&gt;Inspect headers and CSP policy.&lt;/x-ui.drawer&gt;</pre></div>
+            <div class="pg-code-wrap" data-pg-code-wrap><pre class="z-code" k-show="view === 'code'" hidden>&lt;x-ui.drawer id=&quot;mobile-sheet&quot; title=&quot;Quick Payment&quot; position=&quot;bottom&quot; show=&quot;sheetOpen&quot;&gt;Thumb-reachable mobile sheet.&lt;/x-ui.drawer&gt;</pre></div>
             <div class="pg-code-wrap" data-pg-code-wrap><pre class="z-code" k-show="view === 'cli'" hidden>php bin/zokeibi add drawer</pre></div>
           </div>
           <div class="z-drawer-backdrop" id="demo-inspector-drawer" k-show="drawerOpen" hidden>
@@ -1294,9 +1307,9 @@ php vendor/bin/zokeibi prove --views=views --strict</pre></div>
               <div class="z-kpi z-kpi-emerald">
   <div class="z-kpi-top">
     <span class="z-kpi-label">Gzipped CSS</span>
-    <span class="z-kpi-delta is-up">All 60</span>
+    <span class="z-kpi-delta is-up">All 62</span>
   </div>
-  <div class="z-kpi-value">11.1 KB</div>
+  <div class="z-kpi-value">11.8 KB</div>
 </div>
               <button
   type="button"
@@ -1308,7 +1321,27 @@ php vendor/bin/zokeibi prove --views=views --strict</pre></div>
           </div>
   </aside>
 </div>
-          <div class="pg-demo-foot"><span>&lt;x-ui.drawer&gt;</span><span>ARIA role=dialog · Kongono Live 2.5</span></div>
+          <div class="z-drawer-backdrop z-drawer-backdrop-bottom" id="demo-bottom-sheet" k-show="sheetOpen" hidden>
+  <aside class="z-drawer z-drawer-bottom" role="dialog" aria-modal="true" aria-labelledby="demo-bottom-sheet-title">
+    <div class="z-drawer-handle" aria-hidden="true"></div>
+    <div class="z-drawer-head">
+      <h3 class="z-drawer-title" id="demo-bottom-sheet-title">Quick Mobile Payment Sheet</h3>
+      <button type="button" class="z-btn z-btn-ghost z-btn-sm" k-on:click="set(sheetOpen, false)" data-z-close="#demo-bottom-sheet" aria-label="Close drawer">✕</button>
+    </div>
+    <div class="z-drawer-body">            <div class="z-stack-sm">
+              <p>Thumb-reachable bottom sheet using <code>position="bottom"</code> — zero extra JS dependencies.</p>
+              <button
+  type="button"
+  class="z-btn z-btn-primary z-btn-sm"
+  id="close-demo-sheet"
+  k-on:click="set(sheetOpen, false)"
+  data-z-close="#demo-bottom-sheet"
+>Done</button>
+            </div>
+          </div>
+  </aside>
+</div>
+          <div class="pg-demo-foot"><span>&lt;x-ui.drawer&gt;</span><span>ARIA role=dialog · Mobile Bottom Sheet · Kongono Live 2.5</span></div>
         </section>
       </div>
 
@@ -1413,7 +1446,7 @@ php vendor/bin/zokeibi prove --views=views --strict</pre></div>
       </div>
       <ul id="demo-cmdk-list" class="z-cmdk-list" role="listbox" aria-label="Launch Command Palette" data-z-cmdk-list>
                   <li role="option" aria-selected="true" data-z-cmdk-item="open token studio studio">
-            <a class="z-cmdk-item is-active" href="/#quickstart" >
+            <a class="z-cmdk-item is-active" href="/studio/" >
               <span>Open Token Studio</span>
                               <kbd class="z-kbd">S</kbd>
                           </a>
@@ -1472,26 +1505,26 @@ php vendor/bin/zokeibi prove --views=views --strict</pre></div>
           <div class="pg-demo-body">
             <div class="pg-stage" k-show="view === 'preview'">
               <div class="z-combobox" data-z-combobox="true">
-      <label class="z-label" for="z-combo-demo_cluster-690057-input">Search Deploy Region (ARIA 1.2 Combobox)</label>
+      <label class="z-label" for="z-combo-demo_cluster-4ec4ea-input">Search Deploy Region (ARIA 1.2 Combobox)</label>
     <input type="hidden" name="demo_cluster" value="ap-northeast" data-z-combobox-value>
   <div class="z-combobox-control">
     <input
-      id="z-combo-demo_cluster-690057-input"
+      id="z-combo-demo_cluster-4ec4ea-input"
       type="text"
       class="z-combobox-input"
       role="combobox"
       aria-autocomplete="list"
       aria-expanded="false"
-      aria-controls="z-combo-demo_cluster-690057-list"
+      aria-controls="z-combo-demo_cluster-4ec4ea-list"
       placeholder="Type to filter regions..."
       value="AP Northeast (Tokyo)"
       data-z-combobox-input
       autocomplete="off"
                       >
     <button type="button" class="z-combobox-toggle" data-z-combobox-toggle aria-label="Toggle options">▾</button>
-    <ul id="z-combo-demo_cluster-690057-list" class="z-combobox-list" role="listbox" aria-label="Search Deploy Region (ARIA 1.2 Combobox)" data-z-combobox-list hidden>
+    <ul id="z-combo-demo_cluster-4ec4ea-list" class="z-combobox-list" role="listbox" aria-label="Search Deploy Region (ARIA 1.2 Combobox)" data-z-combobox-list hidden>
               <li
-          id="z-combo-demo_cluster-690057-opt-0"
+          id="z-combo-demo_cluster-4ec4ea-opt-0"
           class="z-combobox-option"
           role="option"
           data-z-combobox-option
@@ -1500,7 +1533,7 @@ php vendor/bin/zokeibi prove --views=views --strict</pre></div>
           aria-selected="false"
         >US East (Virginia)</li>
               <li
-          id="z-combo-demo_cluster-690057-opt-1"
+          id="z-combo-demo_cluster-4ec4ea-opt-1"
           class="z-combobox-option"
           role="option"
           data-z-combobox-option
@@ -1509,7 +1542,7 @@ php vendor/bin/zokeibi prove --views=views --strict</pre></div>
           aria-selected="false"
         >US West (Oregon)</li>
               <li
-          id="z-combo-demo_cluster-690057-opt-2"
+          id="z-combo-demo_cluster-4ec4ea-opt-2"
           class="z-combobox-option"
           role="option"
           data-z-combobox-option
@@ -1518,7 +1551,7 @@ php vendor/bin/zokeibi prove --views=views --strict</pre></div>
           aria-selected="false"
         >EU Central (Frankfurt)</li>
               <li
-          id="z-combo-demo_cluster-690057-opt-3"
+          id="z-combo-demo_cluster-4ec4ea-opt-3"
           class="z-combobox-option"
           role="option"
           data-z-combobox-option
@@ -1527,7 +1560,7 @@ php vendor/bin/zokeibi prove --views=views --strict</pre></div>
           aria-selected="true"
         >AP Northeast (Tokyo)</li>
               <li
-          id="z-combo-demo_cluster-690057-opt-4"
+          id="z-combo-demo_cluster-4ec4ea-opt-4"
           class="z-combobox-option"
           role="option"
           data-z-combobox-option
@@ -1564,17 +1597,17 @@ php vendor/bin/zokeibi prove --views=views --strict</pre></div>
           <div class="pg-demo-body">
             <div class="pg-stage" k-show="view === 'preview'">
               <div class="z-dropzone" data-z-dropzone="true">
-      <label class="z-label" for="z-drop-demo_attachment-df4667">Upload Invoice or Spec Sheet</label>
+      <label class="z-label" for="z-drop-demo_attachment-c2c3f4">Upload Invoice or Spec Sheet</label>
     <div class="z-dropzone-area" data-z-dropzone-area>
     <input
-      id="z-drop-demo_attachment-df4667"
+      id="z-drop-demo_attachment-c2c3f4"
       type="file"
       name="demo_attachment[]"
       class="z-dropzone-input"
       data-z-dropzone-input
-       accept="image/png,application/pdf,.csv"        multiple                    aria-describedby="z-drop-demo_attachment-df4667-hint"     >
+       accept="image/png,application/pdf,.csv"        multiple                    aria-describedby="z-drop-demo_attachment-c2c3f4-hint"     >
     <div class="z-dropzone-title">Drop files here or click to browse</div>
-    <div id="z-drop-demo_attachment-df4667-hint" class="z-dropzone-hint">PNG, PDF, or CSV up to 10 MB — pairs with Kongono UploadedFileStore.</div>
+    <div id="z-drop-demo_attachment-c2c3f4-hint" class="z-dropzone-hint">PNG, PDF, or CSV up to 10 MB — pairs with Kongono UploadedFileStore.</div>
   </div>
   <ul class="z-dropzone-files" data-z-dropzone-files aria-live="polite"></ul>
   </div>
@@ -1604,9 +1637,9 @@ php vendor/bin/zokeibi prove --views=views --strict</pre></div>
           <div class="pg-demo-body">
             <div class="pg-stage" k-show="view === 'preview'">
               <div class="z-datepicker" data-z-datepicker="true">
-      <label class="z-label" for="z-date-demo_launch_date-c59267">Target Release Date</label>
+      <label class="z-label" for="z-date-demo_launch_date-fc5200">Target Release Date</label>
     <input
-    id="z-date-demo_launch_date-c59267"
+    id="z-date-demo_launch_date-fc5200"
     type="date"
     name="demo_launch_date"
     value="2026-12-01"
@@ -1845,7 +1878,7 @@ php vendor/bin/zokeibi prove --views=views --strict</pre></div>
           <div class="pg-demo-body">
             <div class="pg-stage" k-show="view === 'preview'">
               <div class="z-ms" data-z-multiselect="true" data-ms-name="demo_scopes">
-  <label class="z-label" for="z-ms-demo_scopes-9fe8a4-input">API Token Scopes (Submits demo_scopes[])</label>
+  <label class="z-label" for="z-ms-demo_scopes-8aec38-input">API Token Scopes (Submits demo_scopes[])</label>
   <div data-z-ms-hidden>
     <input type="hidden" name="demo_scopes[]" value="read">
     <input type="hidden" name="demo_scopes[]" value="deploy">
@@ -1862,7 +1895,7 @@ php vendor/bin/zokeibi prove --views=views --strict</pre></div>
       </span>
     </div>
     <input
-      id="z-ms-demo_scopes-9fe8a4-input"
+      id="z-ms-demo_scopes-8aec38-input"
       type="text"
       class="z-ms-input"
       placeholder="Filter &amp; select tags..."
@@ -1870,28 +1903,28 @@ php vendor/bin/zokeibi prove --views=views --strict</pre></div>
       role="combobox"
       aria-expanded="false"
       aria-autocomplete="list"
-      aria-controls="z-ms-demo_scopes-9fe8a4-list"
+      aria-controls="z-ms-demo_scopes-8aec38-list"
       data-z-ms-input
     >
   </div>
-  <ul id="z-ms-demo_scopes-9fe8a4-list" class="z-ms-list" role="listbox" aria-multiselectable="true" aria-label="API Token Scopes (Submits demo_scopes[])" data-z-ms-list hidden>
-    <li id="z-ms-demo_scopes-9fe8a4-opt-0" class="z-ms-option" role="option" data-z-ms-option data-value="read" data-label="Read Data" aria-selected="true">
+  <ul id="z-ms-demo_scopes-8aec38-list" class="z-ms-list" role="listbox" aria-multiselectable="true" aria-label="API Token Scopes (Submits demo_scopes[])" data-z-ms-list hidden>
+    <li id="z-ms-demo_scopes-8aec38-opt-0" class="z-ms-option" role="option" data-z-ms-option data-value="read" data-label="Read Data" aria-selected="true">
       <span>Read Data</span>
       <span class="z-ms-check" aria-hidden="true">✓</span>
     </li>
-    <li id="z-ms-demo_scopes-9fe8a4-opt-1" class="z-ms-option" role="option" data-z-ms-option data-value="write" data-label="Write Records" aria-selected="false">
+    <li id="z-ms-demo_scopes-8aec38-opt-1" class="z-ms-option" role="option" data-z-ms-option data-value="write" data-label="Write Records" aria-selected="false">
       <span>Write Records</span>
       <span class="z-ms-check" aria-hidden="true"></span>
     </li>
-    <li id="z-ms-demo_scopes-9fe8a4-opt-2" class="z-ms-option" role="option" data-z-ms-option data-value="deploy" data-label="Zero-Downtime Deploy" aria-selected="true">
+    <li id="z-ms-demo_scopes-8aec38-opt-2" class="z-ms-option" role="option" data-z-ms-option data-value="deploy" data-label="Zero-Downtime Deploy" aria-selected="true">
       <span>Zero-Downtime Deploy</span>
       <span class="z-ms-check" aria-hidden="true">✓</span>
     </li>
-    <li id="z-ms-demo_scopes-9fe8a4-opt-3" class="z-ms-option" role="option" data-z-ms-option data-value="billing" data-label="Manage Billing" aria-selected="false">
+    <li id="z-ms-demo_scopes-8aec38-opt-3" class="z-ms-option" role="option" data-z-ms-option data-value="billing" data-label="Manage Billing" aria-selected="false">
       <span>Manage Billing</span>
       <span class="z-ms-check" aria-hidden="true"></span>
     </li>
-    <li id="z-ms-demo_scopes-9fe8a4-opt-4" class="z-ms-option" role="option" data-z-ms-option data-value="audit" data-label="Read Audit Logs" aria-selected="false">
+    <li id="z-ms-demo_scopes-8aec38-opt-4" class="z-ms-option" role="option" data-z-ms-option data-value="audit" data-label="Read Audit Logs" aria-selected="false">
       <span>Read Audit Logs</span>
       <span class="z-ms-check" aria-hidden="true"></span>
     </li>
@@ -1906,13 +1939,13 @@ php vendor/bin/zokeibi prove --views=views --strict</pre></div>
       </div>
 
       
-      <div id="comp-chart" data-pg-card="chart" data-pg-cat="data" data-pg-haystack="chart data pure svg chart &amp; sparkline zero-javascript server-rendered accessible svg sparkline, bar, and donut charts themed automatically via oklch tokens." k-show="cat === 'all' || cat === 'data'">
+      <div id="comp-chart" data-pg-card="chart" data-pg-cat="data" data-pg-haystack="chart data pure svg chart &amp; interactive readout server-rendered accessible svg sparkline, bar, and donut charts themed automatically via oklch tokens with progressive hover/focus readout tooltips." k-show="cat === 'all' || cat === 'data'">
         <section class="pg-demo-card" k-state="{&quot;view&quot;:&quot;preview&quot;}">
           <div class="pg-demo-head">
             <div>
-              <h3 class="pg-demo-title">Pure SVG Chart &amp; Sparkline <span class="z-badge z-badge-emerald">0 B JS</span>
+              <h3 class="pg-demo-title">Pure SVG Chart &amp; Interactive Readout <span class="z-badge z-badge-emerald">0 B JS / Runtime</span>
 </h3>
-              <p class="pg-demo-desc">Zero-JavaScript server-rendered accessible SVG Sparkline, Bar, and Donut charts themed automatically via OKLCH tokens.</p>
+              <p class="pg-demo-desc">Server-rendered accessible SVG Sparkline, Bar, and Donut charts themed automatically via OKLCH tokens with progressive hover/focus readout tooltips.</p>
             </div>
             <div class="pg-seg">
               <button type="button" class="pg-seg-btn" k-class:is-active="view === 'preview'" k-on:click="set(view, 'preview')">Preview</button>
@@ -1922,58 +1955,58 @@ php vendor/bin/zokeibi prove --views=views --strict</pre></div>
           </div>
           <div class="pg-demo-body">
             <div class="pg-stage z-stack-sm" k-show="view === 'preview'">
-              <figure class="z-chart">
+              <figure class="z-chart" data-z-chart="true">
   <figcaption class="z-chart-head">
     <span class="z-chart-title">Daily Requests (k)</span>
-    <span class="z-chart-meta">+18%</span>
+    <span class="z-chart-meta" data-z-chart-readout data-default-meta="+18%" aria-live="polite">+18%</span>
   </figcaption>
 
   <svg class="z-chart-svg" viewBox="0 0 360 152" role="img" aria-label="Daily Requests (k) bar chart">
     <line class="z-chart-grid" x1="16" y1="74" x2="344" y2="74" />
     <line class="z-chart-grid" x1="16" y1="128" x2="344" y2="128" />
-    <rect class="z-chart-bar" x="29.8" y="79.2" width="38.0" height="48.8">
+    <rect class="z-chart-bar" x="29.8" y="79.2" width="38.0" height="48.8" tabindex="0" data-chart-tip="Mon: 28">
       <title>Mon: 28</title>
     </rect>
     <text class="z-chart-val" x="48.8" y="74.2" text-anchor="middle">28</text>
     <text class="z-chart-label" x="48.8" y="144" text-anchor="middle">Mon</text>
-    <rect class="z-chart-bar" x="95.4" y="51.4" width="38.0" height="76.6">
+    <rect class="z-chart-bar" x="95.4" y="51.4" width="38.0" height="76.6" tabindex="0" data-chart-tip="Tue: 44">
       <title>Tue: 44</title>
     </rect>
     <text class="z-chart-val" x="114.4" y="46.4" text-anchor="middle">44</text>
     <text class="z-chart-label" x="114.4" y="144" text-anchor="middle">Tue</text>
-    <rect class="z-chart-bar" x="161.0" y="60.1" width="38.0" height="67.9">
+    <rect class="z-chart-bar" x="161.0" y="60.1" width="38.0" height="67.9" tabindex="0" data-chart-tip="Wed: 39">
       <title>Wed: 39</title>
     </rect>
     <text class="z-chart-val" x="180.0" y="55.1" text-anchor="middle">39</text>
     <text class="z-chart-label" x="180.0" y="144" text-anchor="middle">Wed</text>
-    <rect class="z-chart-bar" x="226.6" y="20.0" width="38.0" height="108.0">
+    <rect class="z-chart-bar" x="226.6" y="20.0" width="38.0" height="108.0" tabindex="0" data-chart-tip="Thu: 62">
       <title>Thu: 62</title>
     </rect>
     <text class="z-chart-val" x="245.6" y="15.0" text-anchor="middle">62</text>
     <text class="z-chart-label" x="245.6" y="144" text-anchor="middle">Thu</text>
-    <rect class="z-chart-bar" x="292.2" y="32.2" width="38.0" height="95.8">
+    <rect class="z-chart-bar" x="292.2" y="32.2" width="38.0" height="95.8" tabindex="0" data-chart-tip="Fri: 55">
       <title>Fri: 55</title>
     </rect>
     <text class="z-chart-val" x="311.2" y="27.2" text-anchor="middle">55</text>
     <text class="z-chart-label" x="311.2" y="144" text-anchor="middle">Fri</text>
   </svg>
 </figure>
-              <figure class="z-chart">
+              <figure class="z-chart" data-z-chart="true">
   <figcaption class="z-chart-head">
     <span class="z-chart-title">Plan Mix</span>
-    <span class="z-chart-meta">100% SVG</span>
+    <span class="z-chart-meta" data-z-chart-readout data-default-meta="100% SVG" aria-live="polite">100% SVG</span>
   </figcaption>
 
   <div class="z-chart-donut-wrap">
     <svg class="z-chart-donut" viewBox="0 0 120 120" role="img" aria-label="Plan Mix donut chart">
       <circle class="z-chart-track" cx="60" cy="60" r="46" />
-      <circle class="z-chart-seg z-chart-tone-0" cx="60" cy="60" r="46" stroke-dasharray="121.39 289.03" stroke-dashoffset="0.00" transform="rotate(-90 60 60)">
+      <circle class="z-chart-seg z-chart-tone-0" cx="60" cy="60" r="46" stroke-dasharray="121.39 289.03" stroke-dashoffset="0.00" transform="rotate(-90 60 60)" tabindex="0" data-chart-tip="Starter: 42 (42%)">
         <title>Starter: 42 (42%)</title>
       </circle>
-      <circle class="z-chart-seg z-chart-tone-1" cx="60" cy="60" r="46" stroke-dasharray="109.83 289.03" stroke-dashoffset="-121.39" transform="rotate(-90 60 60)">
+      <circle class="z-chart-seg z-chart-tone-1" cx="60" cy="60" r="46" stroke-dasharray="109.83 289.03" stroke-dashoffset="-121.39" transform="rotate(-90 60 60)" tabindex="0" data-chart-tip="Pro: 38 (38%)">
         <title>Pro: 38 (38%)</title>
       </circle>
-      <circle class="z-chart-seg z-chart-tone-2" cx="60" cy="60" r="46" stroke-dasharray="57.81 289.03" stroke-dashoffset="-231.22" transform="rotate(-90 60 60)">
+      <circle class="z-chart-seg z-chart-tone-2" cx="60" cy="60" r="46" stroke-dasharray="57.81 289.03" stroke-dashoffset="-231.22" transform="rotate(-90 60 60)" tabindex="0" data-chart-tip="Enterprise: 20 (20%)">
         <title>Enterprise: 20 (20%)</title>
       </circle>
       <text class="z-chart-center" x="60" y="65" text-anchor="middle">100</text>
@@ -1994,35 +2027,35 @@ php vendor/bin/zokeibi prove --views=views --strict</pre></div>
     </ul>
   </div>
 </figure>
-              <figure class="z-chart">
+              <figure class="z-chart" data-z-chart="true">
   <figcaption class="z-chart-head">
     <span class="z-chart-title">P95 Latency Velocity</span>
-    <span class="z-chart-meta">0 B JS</span>
+    <span class="z-chart-meta" data-z-chart-readout data-default-meta="0 B JS" aria-live="polite">0 B JS</span>
   </figcaption>
 
   <svg class="z-chart-svg" viewBox="0 0 340 96" role="img" aria-label="P95 Latency Velocity sparkline chart">
     <line class="z-chart-grid" x1="10" y1="84" x2="330" y2="84" />
     <polygon class="z-chart-area" points="10.0,84.0 10.0,18.0 63.3,27.0 116.7,12.0 170.0,36.0 223.3,42.0 276.7,48.0 330.0,51.0 330.0,84.0" />
     <polyline class="z-chart-line" points="10.0,18.0 63.3,27.0 116.7,12.0 170.0,36.0 223.3,42.0 276.7,48.0 330.0,51.0" />
-    <circle class="z-chart-dot" cx="10.0" cy="18.0" r="3">
+    <circle class="z-chart-dot" cx="10.0" cy="18.0" r="3.5" tabindex="0" data-chart-tip="D1: 22">
       <title>D1: 22</title>
     </circle>
-    <circle class="z-chart-dot" cx="63.3" cy="27.0" r="3">
+    <circle class="z-chart-dot" cx="63.3" cy="27.0" r="3.5" tabindex="0" data-chart-tip="D2: 19">
       <title>D2: 19</title>
     </circle>
-    <circle class="z-chart-dot" cx="116.7" cy="12.0" r="3">
+    <circle class="z-chart-dot" cx="116.7" cy="12.0" r="3.5" tabindex="0" data-chart-tip="D3: 24">
       <title>D3: 24</title>
     </circle>
-    <circle class="z-chart-dot" cx="170.0" cy="36.0" r="3">
+    <circle class="z-chart-dot" cx="170.0" cy="36.0" r="3.5" tabindex="0" data-chart-tip="D4: 16">
       <title>D4: 16</title>
     </circle>
-    <circle class="z-chart-dot" cx="223.3" cy="42.0" r="3">
+    <circle class="z-chart-dot" cx="223.3" cy="42.0" r="3.5" tabindex="0" data-chart-tip="D5: 14">
       <title>D5: 14</title>
     </circle>
-    <circle class="z-chart-dot" cx="276.7" cy="48.0" r="3">
+    <circle class="z-chart-dot" cx="276.7" cy="48.0" r="3.5" tabindex="0" data-chart-tip="D6: 12">
       <title>D6: 12</title>
     </circle>
-    <circle class="z-chart-dot" cx="330.0" cy="51.0" r="3">
+    <circle class="z-chart-dot" cx="330.0" cy="51.0" r="3.5" tabindex="0" data-chart-tip="D7: 11">
       <title>D7: 11</title>
     </circle>
   </svg>
@@ -2031,7 +2064,7 @@ php vendor/bin/zokeibi prove --views=views --strict</pre></div>
             <div class="pg-code-wrap" data-pg-code-wrap><pre class="z-code" k-show="view === 'code'" hidden>&lt;x-ui.chart type=&quot;bar&quot; title=&quot;Requests / Day&quot; meta=&quot;+18.4%&quot; data=&quot;Mon:28|Tue:44|Wed:39|Thu:62|Fri:55&quot; /&gt;</pre></div>
             <div class="pg-code-wrap" data-pg-code-wrap><pre class="z-code" k-show="view === 'cli'" hidden>php bin/zokeibi add chart</pre></div>
           </div>
-          <div class="pg-demo-foot"><span>&lt;x-ui.chart&gt;</span><span>Pure SVG · 0 B JS · Zero inline style</span></div>
+          <div class="pg-demo-foot"><span>&lt;x-ui.chart&gt;</span><span>Pure SVG · 0 B JS Core · Hover/Focus Readout</span></div>
         </section>
       </div>
 
@@ -2053,7 +2086,7 @@ php vendor/bin/zokeibi prove --views=views --strict</pre></div>
           <div class="pg-demo-body">
             <div class="pg-stage" k-show="view === 'preview'">
               <div class="z-editor" data-z-editor="true">
-  <label class="z-label" for="z-ed-demo_markdown-29770a">Release Notes Editor (Try Split or Preview Mode)</label>
+  <label class="z-label" for="z-ed-demo_markdown-604fa5">Release Notes Editor (Try Split or Preview Mode)</label>
   <div class="z-editor-shell">
     <div class="z-editor-bar">
       <div class="z-editor-tools" role="toolbar" aria-label="Markdown formatting">
@@ -2072,7 +2105,7 @@ php vendor/bin/zokeibi prove --views=views --strict</pre></div>
       </div>
     </div>
     <div class="z-editor-panes" data-z-ed-panes>
-      <textarea id="z-ed-demo_markdown-29770a" name="demo_markdown" rows="6" class="z-editor-input" placeholder="Write Markdown with **bold**, `code`, &gt; quotes, or - lists..."  data-z-ed-input>### Zokeibi v1.2 Shipped
+      <textarea id="z-ed-demo_markdown-604fa5" name="demo_markdown" rows="6" class="z-editor-input" placeholder="Write Markdown with **bold**, `code`, &gt; quotes, or - lists..."  data-z-ed-input>### Zokeibi v1.2 Shipped
 Build **strict-CSP** SaaS apps with `0 npm` packages.
 - Pure SVG charts (0 B JS)
 - Safe DOM preview (zero innerHTML)</textarea>
@@ -2112,7 +2145,7 @@ Build **strict-CSP** SaaS apps with `0 npm` packages.
               <div class="z-otp" data-z-otp="true" data-otp-length="6">
   <span class="z-label">Two-Factor Verification Code</span>
   <input type="hidden" name="demo_totp" value="" data-z-otp-value>
-  <div class="z-otp-group" role="group" aria-label="Two-Factor Verification Code"  aria-describedby="z-otp-demo_totp-8c8989-hint" >
+  <div class="z-otp-group" role="group" aria-label="Two-Factor Verification Code"  aria-describedby="z-otp-demo_totp-f27079-hint" >
     <input
       type="text"
       inputmode="numeric"
@@ -2174,7 +2207,7 @@ Build **strict-CSP** SaaS apps with `0 npm` packages.
       data-z-otp-digit="5"
     >
   </div>
-  <span id="z-otp-demo_totp-8c8989-hint" class="z-hint">Type digits or paste a 6-digit code like 482915 — auto-advances cleanly.</span>
+  <span id="z-otp-demo_totp-f27079-hint" class="z-hint">Type digits or paste a 6-digit code like 482915 — auto-advances cleanly.</span>
 </div>
             </div>
             <div class="pg-code-wrap" data-pg-code-wrap><pre class="z-code" k-show="view === 'code'" hidden>&lt;x-ui.otp-input name=&quot;totp_code&quot; label=&quot;Authenticator Code&quot; length=&quot;6&quot; hint=&quot;Paste or enter the 6-digit code.&quot; /&gt;</pre></div>
@@ -2300,7 +2333,7 @@ Build **strict-CSP** SaaS apps with `0 npm` packages.
       <a href="/">Zokeibi</a>
     </li>
     <li>
-      <a href="/#quickstart">Token Studio</a>
+      <a href="/studio/">Token Studio</a>
     </li>
     <li>
       <span aria-current="page">API Keys &amp; Audit</span>
@@ -2332,9 +2365,9 @@ Build **strict-CSP** SaaS apps with `0 npm` packages.
           </div>
           <div class="pg-demo-body">
             <div class="pg-stage z-stack-sm" k-show="view === 'preview'">
-              <label class="z-checkbox" for="z-cb-demo_cb_terms-23911f">
+              <label class="z-checkbox" for="z-cb-demo_cb_terms-a4d09b">
   <input
-    id="z-cb-demo_cb_terms-23911f"
+    id="z-cb-demo_cb_terms-a4d09b"
     type="checkbox"
     name="demo_cb_terms"
     value="1"
@@ -2344,9 +2377,9 @@ Build **strict-CSP** SaaS apps with `0 npm` packages.
     <span class="z-checkbox-desc">Blocks inline scripts and inline styles across every route.</span>
   </span>
 </label>
-              <label class="z-checkbox" for="z-cb-demo_cb_email-8ed13d">
+              <label class="z-checkbox" for="z-cb-demo_cb_email-bdbcb3">
   <input
-    id="z-cb-demo_cb_email-8ed13d"
+    id="z-cb-demo_cb_email-bdbcb3"
     type="checkbox"
     name="demo_cb_email"
     value="1"
@@ -2437,7 +2470,7 @@ Build **strict-CSP** SaaS apps with `0 npm` packages.
   <div id="demo-dropdown-menu" class="z-dropdown-panel" popover="auto" role="menu">
     <ul class="z-dropdown-list" role="none">
       <li role="none">
-        <a class="z-dropdown-item " role="menuitem" href="/#quickstart">
+        <a class="z-dropdown-item " role="menuitem" href="/studio/">
           <span>Open Token Studio</span>
           <kbd class="z-kbd">S</kbd>
         </a>
@@ -2582,11 +2615,11 @@ Build **strict-CSP** SaaS apps with `0 npm` packages.
             <div class="pg-stage z-stack-sm" k-show="view === 'preview'">
               <div class="z-slider" data-z-slider="true" data-slider-unit=" seats">
   <div class="z-slider-head">
-    <label class="z-label" for="z-sl-demo_seats-c70333">Team Seat Quota</label>
-    <output class="z-slider-val" for="z-sl-demo_seats-c70333" data-z-slider-out>25 seats</output>
+    <label class="z-label" for="z-sl-demo_seats-de3b2d">Team Seat Quota</label>
+    <output class="z-slider-val" for="z-sl-demo_seats-de3b2d" data-z-slider-out>25 seats</output>
   </div>
   <input
-    id="z-sl-demo_seats-c70333"
+    id="z-sl-demo_seats-de3b2d"
     name="demo_seats"
     type="range"
     class="z-slider-input"
@@ -2599,11 +2632,11 @@ Build **strict-CSP** SaaS apps with `0 npm` packages.
 </div>
               <div class="z-slider" data-z-slider="true" data-slider-unit=" KB">
   <div class="z-slider-head">
-    <label class="z-label" for="z-sl-demo_budget-3d4517">CSS Gzip Ceiling</label>
-    <output class="z-slider-val" for="z-sl-demo_budget-3d4517" data-z-slider-out>10 KB</output>
+    <label class="z-label" for="z-sl-demo_budget-0cf498">CSS Gzip Ceiling</label>
+    <output class="z-slider-val" for="z-sl-demo_budget-0cf498" data-z-slider-out>10 KB</output>
   </div>
   <input
-    id="z-sl-demo_budget-3d4517"
+    id="z-sl-demo_budget-0cf498"
     name="demo_budget"
     type="range"
     class="z-slider-input"
@@ -2769,7 +2802,7 @@ public function health(): Response { return Response::json([&#039;ok&#039; =&gt;
           <div class="pg-demo-body">
             <div class="pg-stage" k-show="view === 'preview'">
               <div class="z-taginput" data-z-taginput="true" data-ti-name="demo_topics">
-  <label class="z-label" for="z-ti-demo_topics-bc3ed4">Webhook Topics (Type + Enter or Comma)</label>
+  <label class="z-label" for="z-ti-demo_topics-964287">Webhook Topics (Type + Enter or Comma)</label>
   <div data-z-ti-hidden>
     <input type="hidden" name="demo_topics[]" value="order.paid">
     <input type="hidden" name="demo_topics[]" value="invoice.sent">
@@ -2790,7 +2823,7 @@ public function health(): Response { return Response::json([&#039;ok&#039; =&gt;
         <button type="button" class="z-taginput-rm" data-z-ti-remove="key.rotated" aria-label="Remove key.rotated">×</button>
       </span>
     </div>
-    <input id="z-ti-demo_topics-bc3ed4" type="text" class="z-taginput-field" placeholder="Type a tag and press Enter..."  autocomplete="off" data-z-ti-field>
+    <input id="z-ti-demo_topics-964287" type="text" class="z-taginput-field" placeholder="Type a tag and press Enter..."  autocomplete="off" data-z-ti-field>
   </div>
 </div>
             </div>
@@ -2824,7 +2857,7 @@ public function health(): Response { return Response::json([&#039;ok&#039; =&gt;
     <span>55 strict-CSP components under 10 KB gzipped.</span>
   </div>
   <div class="z-banner-actions">
-    <a class="z-btn z-btn-outline z-btn-sm" href="/#quickstart">Token Studio</a>
+    <a class="z-btn z-btn-outline z-btn-sm" href="/studio/">Token Studio</a>
     <button type="button" class="z-btn z-btn-ghost z-btn-sm" data-z-close aria-label="Dismiss banner">✕</button>
   </div>
 </div>
@@ -2834,7 +2867,7 @@ public function health(): Response { return Response::json([&#039;ok&#039; =&gt;
     <span>3 days remaining on your workspace trial.</span>
   </div>
   <div class="z-banner-actions">
-    <a class="z-btn z-btn-outline z-btn-sm" href="/#quickstart">Upgrade</a>
+    <a class="z-btn z-btn-outline z-btn-sm" href="/studio/">Upgrade</a>
   </div>
 </div>
             </div>
@@ -2924,7 +2957,7 @@ public function health(): Response { return Response::json([&#039;ok&#039; =&gt;
       <span>Component Gallery</span>
       <span class="z-sidebar-count">55</span>
     </a>
-    <a class="z-sidebar-link" href="/#quickstart"  aria-current="page" >
+    <a class="z-sidebar-link" href="/studio/"  aria-current="page" >
       <span>Token Studio</span>
       <span class="z-sidebar-count">Live</span>
     </a>
@@ -2970,11 +3003,11 @@ public function health(): Response { return Response::json([&#039;ok&#039; =&gt;
           <div class="pg-demo-body">
             <div class="pg-stage z-stack-sm" k-show="view === 'preview'">
               <div class="z-input-group">
-  <label class="z-label" for="z-ig-demo_domain-868afd">Workspace Subdomain</label>
+  <label class="z-label" for="z-ig-demo_domain-e1e8ab">Workspace Subdomain</label>
   <div class="z-input-group-row">
     <span class="z-input-addon is-prefix">https://</span>
     <input
-      id="z-ig-demo_domain-868afd"
+      id="z-ig-demo_domain-e1e8ab"
       name="demo_domain"
       type="text"
       class="z-input-group-field"
@@ -2985,11 +3018,11 @@ public function health(): Response { return Response::json([&#039;ok&#039; =&gt;
   </div>
 </div>
               <div class="z-input-group">
-  <label class="z-label" for="z-ig-demo_price-1f7738">Monthly Cap</label>
+  <label class="z-label" for="z-ig-demo_price-1ee077">Monthly Cap</label>
   <div class="z-input-group-row">
     <span class="z-input-addon is-prefix">$</span>
     <input
-      id="z-ig-demo_price-1f7738"
+      id="z-ig-demo_price-1ee077"
       name="demo_price"
       type="number"
       class="z-input-group-field"
@@ -3025,11 +3058,11 @@ public function health(): Response { return Response::json([&#039;ok&#039; =&gt;
           <div class="pg-demo-body">
             <div class="pg-stage z-row" k-show="view === 'preview'">
               <div class="z-num" data-z-number="true">
-  <label class="z-label" for="z-num-demo_workers-135f34">FrankenPHP Workers</label>
+  <label class="z-label" for="z-num-demo_workers-32b28e">FrankenPHP Workers</label>
   <div class="z-num-row">
     <button type="button" class="z-num-btn" data-z-num-dec aria-label="Decrease value">−</button>
     <input
-      id="z-num-demo_workers-135f34"
+      id="z-num-demo_workers-32b28e"
       name="demo_workers"
       type="number"
       class="z-num-input"
@@ -3043,11 +3076,11 @@ public function health(): Response { return Response::json([&#039;ok&#039; =&gt;
   </div>
 </div>
               <div class="z-num" data-z-number="true">
-  <label class="z-label" for="z-num-demo_replicas-aa2422">Read Replicas</label>
+  <label class="z-label" for="z-num-demo_replicas-aab34f">Read Replicas</label>
   <div class="z-num-row">
     <button type="button" class="z-num-btn" data-z-num-dec aria-label="Decrease value">−</button>
     <input
-      id="z-num-demo_replicas-aa2422"
+      id="z-num-demo_replicas-aab34f"
       name="demo_replicas"
       type="number"
       class="z-num-input"
@@ -3233,10 +3266,10 @@ public function health(): Response { return Response::json([&#039;ok&#039; =&gt;
           <div class="pg-demo-body">
             <div class="pg-stage" k-show="view === 'preview'">
               <div class="z-pw" data-z-password="true" data-strength="0">
-  <label class="z-label" for="z-pw-demo_signup_pw-7ee44d">Create Account Password (Live 4-Segment Strength)</label>
+  <label class="z-label" for="z-pw-demo_signup_pw-c9f43d">Create Account Password (Live 4-Segment Strength)</label>
   <div class="z-pw-row">
     <input
-      id="z-pw-demo_signup_pw-7ee44d"
+      id="z-pw-demo_signup_pw-c9f43d"
       name="demo_signup_pw"
       type="password"
       class="z-pw-input"
@@ -3284,7 +3317,7 @@ public function health(): Response { return Response::json([&#039;ok&#039; =&gt;
             <div class="pg-stage" k-show="view === 'preview'">
               <div class="z-sig" data-z-signature="true" data-sig-mode="drawn">
   <div class="z-sig-head">
-    <label class="z-label" for="z-sig-demo_lease_sig-1c9d74-text">Lease Agreement Signature (Draw or Type)</label>
+    <label class="z-label" for="z-sig-demo_lease_sig-3718a0-text">Lease Agreement Signature (Draw or Type)</label>
           <div class="z-sig-modes" role="tablist" aria-label="Signature input mode">
         <button type="button" class="z-sig-mode is-active" role="tab" aria-selected="true" data-z-sig-mode="drawn">Draw</button>
         <button type="button" class="z-sig-mode" role="tab" aria-selected="false" data-z-sig-mode="typed">Type</button>
@@ -3293,10 +3326,10 @@ public function health(): Response { return Response::json([&#039;ok&#039; =&gt;
   <input type="hidden" name="demo_lease_sig" value="" data-z-sig-value >
   <input type="hidden" name="demo_lease_sig_type" value="drawn" data-z-sig-type>
       <div class="z-sig-pad" data-z-sig-panel="drawn" >
-      <canvas id="z-sig-demo_lease_sig-1c9d74-canvas" class="z-sig-canvas" width="520" height="150" role="img" aria-label="Lease Agreement Signature (Draw or Type) drawing canvas" data-z-sig-canvas></canvas>
+      <canvas id="z-sig-demo_lease_sig-3718a0-canvas" class="z-sig-canvas" width="520" height="150" role="img" aria-label="Lease Agreement Signature (Draw or Type) drawing canvas" data-z-sig-canvas></canvas>
     </div>
         <div class="z-stack-sm" data-z-sig-panel="typed"  hidden >
-      <input id="z-sig-demo_lease_sig-1c9d74-text" type="text" class="z-input" value="" placeholder="Type full legal name..." autocomplete="name" data-z-sig-text>
+      <input id="z-sig-demo_lease_sig-3718a0-text" type="text" class="z-input" value="" placeholder="Type full legal name..." autocomplete="name" data-z-sig-text>
       <div class="z-sig-preview" data-z-sig-preview aria-live="polite">Your signature preview</div>
     </div>
     <div class="z-sig-foot">
@@ -3335,7 +3368,7 @@ public function health(): Response { return Response::json([&#039;ok&#039; =&gt;
   data-money-decimals="2"
   data-money-negative="false"
 >
-  <label class="z-label" for="z-money-demo_rent_cents-0af336">Monthly Rent (USD)</label>
+  <label class="z-label" for="z-money-demo_rent_cents-917ab9">Monthly Rent (USD)</label>
   <input
     type="hidden"
     name="demo_rent_cents"
@@ -3345,7 +3378,7 @@ public function health(): Response { return Response::json([&#039;ok&#039; =&gt;
   <div class="z-input-group-row">
     <span class="z-input-addon is-prefix" aria-hidden="true">$</span>
     <input
-      id="z-money-demo_rent_cents-0af336"
+      id="z-money-demo_rent_cents-917ab9"
       type="text"
       inputmode="decimal"
       autocomplete="off"
@@ -3353,11 +3386,11 @@ public function health(): Response { return Response::json([&#039;ok&#039; =&gt;
       value="1,850.00"
       placeholder="0.00"
       data-z-money-display
-      aria-describedby="z-money-demo_rent_cents-0af336-hint"
+      aria-describedby="z-money-demo_rent_cents-917ab9-hint"
     >
     <span class="z-input-addon is-suffix">USD</span>
   </div>
-  <span id="z-money-demo_rent_cents-0af336-hint" class="z-hint">Hidden input submits exact integer 185000.</span>
+  <span id="z-money-demo_rent_cents-917ab9-hint" class="z-hint">Hidden input submits exact integer 185000.</span>
 </div>
               <div
   class="z-input-group z-money"
@@ -3365,7 +3398,7 @@ public function health(): Response { return Response::json([&#039;ok&#039; =&gt;
   data-money-decimals="2"
   data-money-negative="true"
 >
-  <label class="z-label" for="z-money-demo_credit_cents-a778c6">Ledger Adjustment</label>
+  <label class="z-label" for="z-money-demo_credit_cents-34c63c">Ledger Adjustment</label>
   <input
     type="hidden"
     name="demo_credit_cents"
@@ -3375,7 +3408,7 @@ public function health(): Response { return Response::json([&#039;ok&#039; =&gt;
   <div class="z-input-group-row">
     <span class="z-input-addon is-prefix" aria-hidden="true">$</span>
     <input
-      id="z-money-demo_credit_cents-a778c6"
+      id="z-money-demo_credit_cents-34c63c"
       type="text"
       inputmode="decimal"
       autocomplete="off"
@@ -3383,11 +3416,11 @@ public function health(): Response { return Response::json([&#039;ok&#039; =&gt;
       value="-125.50"
       placeholder="0.00"
       data-z-money-display
-      aria-describedby="z-money-demo_credit_cents-a778c6-hint"
+      aria-describedby="z-money-demo_credit_cents-34c63c-hint"
     >
     <span class="z-input-addon is-suffix">USD</span>
   </div>
-  <span id="z-money-demo_credit_cents-a778c6-hint" class="z-hint">Supports negative integer credits.</span>
+  <span id="z-money-demo_credit_cents-34c63c-hint" class="z-hint">Supports negative integer credits.</span>
 </div>
             </div>
             <div class="pg-code-wrap" data-pg-code-wrap><pre class="z-code" k-show="view === 'code'" hidden>&lt;x-ui.money-input name=&quot;monthly_rent_cents&quot; label=&quot;Monthly Rent&quot; value=&quot;185000&quot; currency=&quot;USD&quot; symbol=&quot;$&quot; hint=&quot;Submits exact integer 185000.&quot; /&gt;</pre></div>
@@ -3513,24 +3546,24 @@ public function health(): Response { return Response::json([&#039;ok&#039; =&gt;
       <div class="z-stack-sm">
         <div class="z-field z-ai-field">
           <div class="z-between">
-            <label class="z-label" for="z-airev-8406b2-f-0">Vendor</label>
+            <label class="z-label" for="z-airev-59c861-f-0">Vendor</label>
             <span class="z-badge z-badge-emerald">98% · High</span>
           </div>
-          <input id="z-airev-8406b2-f-0" name="vendor" type="text" class="z-input" value="Home Depot #4012">
+          <input id="z-airev-59c861-f-0" name="vendor" type="text" class="z-input" value="Home Depot #4012">
         </div>
         <div class="z-field z-ai-field">
           <div class="z-between">
-            <label class="z-label" for="z-airev-8406b2-f-1">Total Amount</label>
+            <label class="z-label" for="z-airev-59c861-f-1">Total Amount</label>
             <span class="z-badge z-badge-emerald">96% · High</span>
           </div>
-          <input id="z-airev-8406b2-f-1" name="amount" type="text" class="z-input" value="$184.50">
+          <input id="z-airev-59c861-f-1" name="amount" type="text" class="z-input" value="$184.50">
         </div>
         <div class="z-field z-ai-field is-low">
           <div class="z-between">
-            <label class="z-label" for="z-airev-8406b2-f-2">Expense Category</label>
+            <label class="z-label" for="z-airev-59c861-f-2">Expense Category</label>
             <span class="z-badge z-badge-crimson">64% · Low</span>
           </div>
-          <input id="z-airev-8406b2-f-2" name="category" type="text" class="z-input" value="Plumbing Repair">
+          <input id="z-airev-59c861-f-2" name="category" type="text" class="z-input" value="Plumbing Repair">
         </div>
       </div>
     </div>
@@ -3566,11 +3599,11 @@ TOTAL: $184.50&quot; fields=&quot;vendor|Vendor|Home Depot #4012|98%;;amount|Amo
           </div>
           <div class="pg-demo-body">
             <div class="pg-stage" k-show="view === 'preview'">
-              <article class="z-card z-approval z-approval-high" role="region" aria-labelledby="z-appr-52f4d8-title">
+              <article class="z-card z-approval z-approval-high" role="region" aria-labelledby="z-appr-b1e293-title">
   <div class="z-card-head">
     <div>
       <div class="z-card-kicker">Chie AI · #[RequiresApproval] · Approval Gate</div>
-      <h3 class="z-card-title" id="z-appr-52f4d8-title">Apply Annual Rent Renewal</h3>
+      <h3 class="z-card-title" id="z-appr-b1e293-title">Apply Annual Rent Renewal</h3>
     </div>
     <span class="z-badge z-badge-crimson">High Risk</span>
   </div>
@@ -3607,8 +3640,8 @@ TOTAL: $184.50&quot; fields=&quot;vendor|Vendor|Home Depot #4012|98%;;amount|Amo
         </div>
       </dl>
       <div class="z-field">
-        <label class="z-label" for="z-appr-52f4d8-note">Reviewer Note (optional)</label>
-        <input id="z-appr-52f4d8-note" name="reviewer_note" type="text" class="z-input" placeholder="Add audit rationale...">
+        <label class="z-label" for="z-appr-b1e293-note">Reviewer Note (optional)</label>
+        <input id="z-appr-b1e293-note" name="reviewer_note" type="text" class="z-input" placeholder="Add audit rationale...">
       </div>
     </div>
     <div class="z-card-foot z-between">
@@ -3625,20 +3658,1299 @@ TOTAL: $184.50&quot; fields=&quot;vendor|Vendor|Home Depot #4012|98%;;amount|Amo
         </section>
       </div>
 
+      
+      <div id="comp-filter-bar" data-pg-card="filter-bar" data-pg-cat="navigation" data-pg-haystack="filter-bar navigation filter pill bar &amp; saved views composable dashboard filter pill bar with saved views tabs, native top-layer popover +filter picker, optional url query-param sync, and zokeibi:filter-change events." k-show="cat === 'all' || cat === 'navigation'">
+        <section class="pg-demo-card" k-state="{&quot;view&quot;:&quot;preview&quot;}">
+          <div class="pg-demo-head">
+            <div>
+              <h3 class="pg-demo-title">Filter Pill Bar &amp; Saved Views <span class="z-badge z-badge-blue">Runtime</span>
+</h3>
+              <p class="pg-demo-desc">Composable dashboard filter pill bar with Saved Views tabs, native Top-Layer Popover +Filter picker, optional URL query-param sync, and zokeibi:filter-change events.</p>
+            </div>
+            <div class="pg-seg">
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'preview'" k-on:click="set(view, 'preview')">Preview</button>
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'code'" k-on:click="set(view, 'code')">Markup</button>
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'cli'" k-on:click="set(view, 'cli')">CLI</button>
+            </div>
+          </div>
+          <div class="pg-demo-body">
+            <div class="pg-stage" k-show="view === 'preview'">
+              <div
+  class="z-filter-bar"
+  role="region"
+  aria-label="Active filters"
+  data-z-filter-bar="true"
+>
+  <div class="z-filter-views" role="tablist" aria-label="Saved filter views">
+    <button type="button" role="tab" class="z-filter-view" aria-selected="false" data-z-filter-view="all">All Units</button>
+    <button type="button" role="tab" class="z-filter-view is-active" aria-selected="true" data-z-filter-view="overdue">Overdue</button>
+    <button type="button" role="tab" class="z-filter-view" aria-selected="false" data-z-filter-view="vacant">Vacant</button>
+    <button type="button" role="tab" class="z-filter-view" aria-selected="false" data-z-filter-view="renewals">Expiring 60d</button>
+  </div>
+  <div class="z-filter-row">
+    <div class="z-filter-pills" data-z-filter-pills>
+      <span class="z-filter-pill" data-z-filter-pill data-filter-key="status" data-filter-label="Status" data-filter-value="Overdue">
+        <span class="z-filter-key">Status:</span>
+        <span>Overdue</span>
+        <button type="button" class="z-filter-rm" data-z-filter-remove aria-label="Remove Status filter">×</button>
+      </span>
+      <span class="z-filter-pill" data-z-filter-pill data-filter-key="property" data-filter-label="Property" data-filter-value="Oak Street">
+        <span class="z-filter-key">Property:</span>
+        <span>Oak Street</span>
+        <button type="button" class="z-filter-rm" data-z-filter-remove aria-label="Remove Property filter">×</button>
+      </span>
+    </div>
+    <div class="z-filter-controls">
+      <div class="z-filter-add-wrap">
+        <button type="button" class="z-btn z-btn-outline z-btn-sm" popovertarget="z-fbar-c210ac-add" aria-haspopup="menu">+ Filter</button>
+        <div id="z-fbar-c210ac-add" class="z-filter-menu" popover="auto" role="menu" aria-label="Add filter">
+          <button
+            type="button"
+            role="menuitem"
+            class="z-filter-opt"
+            data-z-filter-add
+            data-filter-key="status"
+            data-filter-label="Status"
+            data-filter-value="Paid"
+            popovertarget="z-fbar-c210ac-add"
+            popovertargetaction="hide"
+          >
+            <span class="z-filter-key">Status</span>
+            <span>Paid</span>
+          </button>
+          <button
+            type="button"
+            role="menuitem"
+            class="z-filter-opt"
+            data-z-filter-add
+            data-filter-key="status"
+            data-filter-label="Status"
+            data-filter-value="Overdue"
+            popovertarget="z-fbar-c210ac-add"
+            popovertargetaction="hide"
+          >
+            <span class="z-filter-key">Status</span>
+            <span>Overdue</span>
+          </button>
+          <button
+            type="button"
+            role="menuitem"
+            class="z-filter-opt"
+            data-z-filter-add
+            data-filter-key="property"
+            data-filter-label="Property"
+            data-filter-value="Maple Ave"
+            popovertarget="z-fbar-c210ac-add"
+            popovertargetaction="hide"
+          >
+            <span class="z-filter-key">Property</span>
+            <span>Maple Ave</span>
+          </button>
+          <button
+            type="button"
+            role="menuitem"
+            class="z-filter-opt"
+            data-z-filter-add
+            data-filter-key="lease"
+            data-filter-label="Term"
+            data-filter-value="Month-to-Month"
+            popovertarget="z-fbar-c210ac-add"
+            popovertargetaction="hide"
+          >
+            <span class="z-filter-key">Term</span>
+            <span>Month-to-Month</span>
+          </button>
+        </div>
+      </div>
+      <button type="button" class="z-btn z-btn-ghost z-btn-sm" data-z-filter-clear >Clear all</button>
+    </div>
+  </div>
+</div>
+            </div>
+            <div class="pg-code-wrap" data-pg-code-wrap><pre class="z-code" k-show="view === 'code'" hidden>&lt;x-ui.filter-bar views=&quot;all:All Units|overdue:Overdue|vacant:Vacant&quot; active-view=&quot;overdue&quot; filters=&quot;status:Status:Overdue|building:Property:Oak St&quot; options=&quot;status:Status:Paid|status:Status:Overdue|tier:Lease:Annual&quot; /&gt;</pre></div>
+            <div class="pg-code-wrap" data-pg-code-wrap><pre class="z-code" k-show="view === 'cli'" hidden>php bin/zokeibi add filter-bar</pre></div>
+          </div>
+          <div class="pg-demo-foot"><span>&lt;x-ui.filter-bar&gt;</span><span>HTML Popover API · URL Query Sync · Strict CSP</span></div>
+        </section>
+      </div>
+
+      
+      <div id="comp-compare-slider" data-pg-card="compare-slider" data-pg-cat="data" data-pg-haystack="compare-slider data before / after compare slider accessible pointer &amp; keyboard split comparison slider supporting before/after photos or structured comparison panels with zero inline html styles." k-show="cat === 'all' || cat === 'data'">
+        <section class="pg-demo-card" k-state="{&quot;view&quot;:&quot;preview&quot;}">
+          <div class="pg-demo-head">
+            <div>
+              <h3 class="pg-demo-title">Before / After Compare Slider <span class="z-badge z-badge-blue">Runtime</span>
+</h3>
+              <p class="pg-demo-desc">Accessible pointer &amp; keyboard split comparison slider supporting before/after photos or structured comparison panels with zero inline HTML styles.</p>
+            </div>
+            <div class="pg-seg">
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'preview'" k-on:click="set(view, 'preview')">Preview</button>
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'code'" k-on:click="set(view, 'code')">Markup</button>
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'cli'" k-on:click="set(view, 'cli')">CLI</button>
+            </div>
+          </div>
+          <div class="pg-demo-body">
+            <div class="pg-stage" k-show="view === 'preview'">
+              <figure class="z-compare" data-z-compare="true" data-compare-initial="48">
+  <div class="z-compare-stage">
+    <div class="z-compare-pane z-compare-after">
+      <span class="z-compare-tag is-after">After (Turnover Ready · 2026)</span>
+      <div class="z-compare-panel is-after">
+        <strong>After (Turnover Ready · 2026)</strong>
+        <p>Unit 4B turnover verified: fresh satin paint, refinished oak flooring, passed 100% checklist.</p>
+      </div>
+    </div>
+    <div class="z-compare-pane z-compare-before" data-z-compare-before>
+      <span class="z-compare-tag is-before">Before (Move-In · 2025)</span>
+      <div class="z-compare-panel is-before">
+        <strong>Before (Move-In · 2025)</strong>
+        <p>Unit 4B living room inspection: original matte trim, minor carpet wear near entry door.</p>
+      </div>
+    </div>
+    <div class="z-compare-divider" aria-hidden="true">
+      <span class="z-compare-knob">↔</span>
+    </div>
+    <input
+      id="z-cmp-5dd722"
+      type="range"
+      class="z-compare-range"
+      min="0"
+      max="100"
+      value="48"
+      aria-label="Compare legacy CSS bundle vs Zokeibi OKLCH bundle"
+      data-z-compare-range
+    >
+  </div>
+</figure>
+            </div>
+            <div class="pg-code-wrap" data-pg-code-wrap><pre class="z-code" k-show="view === 'code'" hidden>&lt;x-ui.compare-slider before-label=&quot;Move-In (2025)&quot; after-label=&quot;Move-Out (2026)&quot; before-text=&quot;Fresh paint, spotless hardwood.&quot; after-text=&quot;Minor scuffing on hallway trim.&quot; initial=&quot;52&quot; /&gt;</pre></div>
+            <div class="pg-code-wrap" data-pg-code-wrap><pre class="z-code" k-show="view === 'cli'" hidden>php bin/zokeibi add compare-slider</pre></div>
+          </div>
+          <div class="pg-demo-foot"><span>&lt;x-ui.compare-slider&gt;</span><span>CSS clip-path · Semantic input[type=range] · Strict CSP</span></div>
+        </section>
+      </div>
+
     </div>
   </section>
+
+<section id="blocks">
+  <div class="pg-section-head">
+    <div>
+      <h2 class="pg-section-title">All 8 Live Turnkey SaaS Blocks</h2>
+      <p class="pg-section-sub">Full-page layouts installed directly into your codebase via <code>php vendor/bin/zokeibi block add &lt;name&gt;</code> — zero vendor lock-in, 100/100 strict CSP.</p>
+    </div>
+    <span class="z-badge z-badge-primary">zokeibi block add --all</span>
+  </div>
+  <div class="z-stack">
+    <section id="block-saas-shell" class="pg-demo-card" data-pg-block="saas-shell" k-state="{&quot;view&quot;:&quot;preview&quot;}">
+      <div class="pg-demo-head">
+        <div>
+          <h3 class="pg-demo-title">Responsive SaaS App Shell <span class="z-badge z-badge-primary">Layouts</span></h3>
+          <p class="pg-demo-desc">Persistent desktop sidebar + mobile slide-over drawer, Cmd+K command palette, OKLCH theme switcher, user avatar, and Live 2.5 slot.</p>
+        </div>
+        <div class="pg-seg">
+          <button type="button" class="pg-seg-btn is-active" k-class:is-active="view === 'preview'" k-on:click="set(view, 'preview')">Live Preview</button>
+          <button type="button" class="pg-seg-btn" k-class:is-active="view === 'code'" k-on:click="set(view, 'code')">Markup</button>
+          <button type="button" class="pg-seg-btn" k-class:is-active="view === 'cli'" k-on:click="set(view, 'cli')">CLI</button>
+        </div>
+      </div>
+      <div class="pg-demo-body">
+        <div class="pg-stage" k-show="view === 'preview'">
+          <div class="z-stack" k-state="{&quot;navOpen&quot;:false}">
+  <header class="z-between z-no-print">
+    <div class="z-row">
+      <button
+  type="button"
+  class="z-btn z-btn-outline z-btn-sm"
+  k-on:click="set(navOpen, true)"
+  data-z-open="#mobile-nav"
+>Menu</button>
+      <strong>RentalGate Studio</strong>
+      <span class="z-badge z-badge-emerald"><span class="z-badge-dot" aria-hidden="true"></span>Production</span>
+    </div>
+    <div class="z-row">
+      <div class="z-cmdk-wrap" data-z-cmdk-root="shell-cmdk">
+  <button type="button" class="z-btn z-btn-outline z-btn-sm" data-z-open="#block-shell-cmdk" aria-haspopup="dialog" aria-controls="shell-cmdk">
+    <span>Search Workspace</span>
+    <kbd class="z-kbd">⌘K</kbd>
+  </button>
+  <div class="z-cmdk-backdrop" id="block-shell-cmdk" data-z-cmdk="true" hidden>
+    <div class="z-cmdk" role="dialog" aria-modal="true" aria-label="Search Workspace">
+      <div class="z-cmdk-head">
+        <input type="search" class="z-cmdk-input" data-z-cmdk-input placeholder="Search commands or jump to..." aria-label="Search commands or jump to..." aria-controls="shell-cmdk-list" autocomplete="off">
+        <button type="button" class="z-btn z-btn-ghost z-btn-sm" data-z-close="#block-shell-cmdk" aria-label="Close command palette">Esc</button>
+      </div>
+      <ul id="shell-cmdk-list" class="z-cmdk-list" role="listbox" aria-label="Search Workspace" data-z-cmdk-list>
+                  <li role="option" aria-selected="true" data-z-cmdk-item="dashboard dashboard">
+            <a class="z-cmdk-item is-active" href="/" >
+              <span>Dashboard</span>
+                          </a>
+          </li>
+                  <li role="option" aria-selected="false" data-z-cmdk-item="settings settings">
+            <a class="z-cmdk-item" href="/settings" >
+              <span>Settings</span>
+                          </a>
+          </li>
+                  <li role="option" aria-selected="false" data-z-cmdk-item="billing billing">
+            <a class="z-cmdk-item" href="/billing" >
+              <span>Billing</span>
+                          </a>
+          </li>
+                      </ul>
+      <div class="z-cmdk-empty" data-z-cmdk-empty hidden>No matching commands.</div>
+      <div class="z-cmdk-foot">
+        <span>↑↓ Navigate · ↵ Open</span>
+        <span>Esc Close</span>
+      </div>
+    </div>
+  </div>
+</div>
+      <button
+  type="button"
+  class="z-btn z-btn-ghost z-btn-sm"
+  aria-label="Switch density"
+  data-z-cycle-density="calm,default,compact"
+>Density</button>
+      <button
+  type="button"
+  class="z-btn z-btn-ghost z-btn-sm"
+  aria-label="Switch theme"
+  data-z-cycle-theme="washi,sumi,matcha"
+>Theme</button>
+      <span class="z-avatar" role="img" aria-label="Anthony Iovanna">
+  <span>AI</span>
+  <span class="z-avatar-dot is-online" aria-hidden="true"></span>
+</span>
+    </div>
+  </header>
+  <div class="z-drawer-backdrop" id="mobile-nav" k-show="navOpen" hidden>
+  <aside class="z-drawer" role="dialog" aria-modal="true" aria-labelledby="mobile-nav-title">
+    <div class="z-drawer-head">
+      <h3 class="z-drawer-title" id="mobile-nav-title">Navigation</h3>
+      <button type="button" class="z-btn z-btn-ghost z-btn-sm" k-on:click="set(navOpen, false)" data-z-close="#mobile-nav" aria-label="Close drawer">✕</button>
+    </div>
+    <div class="z-drawer-body">    <nav aria-label="Mobile workspace navigation" class="z-stack-sm">
+      <a class="z-btn z-btn-ghost" href="/">Dashboard</a>
+      <a class="z-btn z-btn-ghost" href="/settings">Settings</a>
+      <a class="z-btn z-btn-ghost" href="/billing">Billing</a>
+    </nav>
+  </div>
+  </aside>
+</div>
+  <div class="z-app-layout">
+    <aside class="z-app-aside z-no-print">
+      <nav class="z-sidebar" aria-label="Workspace navigation">
+  <div class="z-sidebar-group">
+    <div class="z-sidebar-heading">Navigation</div>
+    <a class="z-sidebar-link" href="#" >
+      <span>Workspace</span>
+      <span class="z-sidebar-count">Dashboard:/:current</span>
+    </a>
+    <a class="z-sidebar-link" href="/settings" >
+      <span>Settings</span>
+    </a>
+    <a class="z-sidebar-link" href="/billing" >
+      <span>Billing</span>
+    </a>
+  </div>
+</nav>
+    </aside>
+    <main id="workspace-main">
+          </main>
+  </div>
+</div>
+        </div>
+        <div class="pg-code-wrap" data-pg-code-wrap><pre class="z-code" k-show="view === 'code'" hidden>&lt;div class=&quot;z-stack&quot; @state([&apos;navOpen&apos; =&gt; false])&gt;
+  &lt;header class=&quot;z-between z-no-print&quot;&gt;
+    &lt;div class=&quot;z-row&quot;&gt;
+      &lt;x-ui.button variant=&quot;outline&quot; size=&quot;sm&quot; k-click=&quot;set(navOpen, true)&quot; data-z-open=&quot;#mobile-nav&quot;&gt;Menu&lt;/x-ui.button&gt;
+      &lt;strong&gt;{{ $appName ?? &apos;Workspace&apos; }}&lt;/strong&gt;
+      &lt;x-ui.badge variant=&quot;emerald&quot; dot=&quot;true&quot;&gt;Production&lt;/x-ui.badge&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;z-row&quot;&gt;
+      &lt;x-ui.command-palette id=&quot;shell-cmdk&quot; trigger-label=&quot;Search Workspace&quot; items=&quot;dashboard:Dashboard:/|settings:Settings:/settings|billing:Billing:/billing&quot; /&gt;
+      &lt;x-ui.button variant=&quot;ghost&quot; size=&quot;sm&quot; data-z-cycle-density=&quot;calm,default,compact&quot; aria-label=&quot;Switch density&quot;&gt;Density&lt;/x-ui.button&gt;
+      &lt;x-ui.button variant=&quot;ghost&quot; size=&quot;sm&quot; data-z-cycle-theme=&quot;washi,sumi,matcha&quot; aria-label=&quot;Switch theme&quot;&gt;Theme&lt;/x-ui.button&gt;
+      &lt;x-ui.avatar :initials=&quot;$userInitials ?? &apos;ZK&apos;&quot; :name=&quot;$userName ?? &apos;Account&apos;&quot; status=&quot;online&quot; /&gt;
+    &lt;/div&gt;
+  &lt;/header&gt;
+  &lt;x-ui.drawer id=&quot;mobile-nav&quot; title=&quot;Navigation&quot; show=&quot;navOpen&quot;&gt;
+    &lt;nav aria-label=&quot;Mobile workspace navigation&quot; class=&quot;z-stack-sm&quot;&gt;
+      &lt;a class=&quot;z-btn z-btn-ghost&quot; href=&quot;/&quot;&gt;Dashboard&lt;/a&gt;
+      &lt;a class=&quot;z-btn z-btn-ghost&quot; href=&quot;/settings&quot;&gt;Settings&lt;/a&gt;
+      &lt;a class=&quot;z-btn z-btn-ghost&quot; href=&quot;/billing&quot;&gt;Billing&lt;/a&gt;
+    &lt;/nav&gt;
+  &lt;/x-ui.drawer&gt;
+  &lt;div class=&quot;z-app-layout&quot;&gt;
+    &lt;aside class=&quot;z-app-aside z-no-print&quot;&gt;
+      &lt;x-ui.sidebar label=&quot;Workspace navigation&quot; items=&quot;Workspace::Dashboard:/:current|Settings:/settings|Billing:/billing&quot; /&gt;
+    &lt;/aside&gt;
+    &lt;main id=&quot;workspace-main&quot;&gt;
+      @yield(&apos;content&apos;)
+    &lt;/main&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</pre></div>
+        <div class="pg-code-wrap" data-pg-code-wrap><pre class="z-code" k-show="view === 'cli'" hidden>php vendor/bin/zokeibi block add saas-shell</pre></div>
+      </div>
+      <div class="pg-demo-foot"><span>views/blocks/saas-shell.kgn.html</span><span>Uses: button · badge · avatar · drawer · sidebar · command-palette · kbd</span></div>
+    </section>
+    <section id="block-auth-login" class="pg-demo-card" data-pg-block="auth-login" k-state="{&quot;view&quot;:&quot;preview&quot;}">
+      <div class="pg-demo-head">
+        <div>
+          <h3 class="pg-demo-title">Auth Sign-In &amp; Passkey Screen <span class="z-badge z-badge-primary">Auth</span></h3>
+          <p class="pg-demo-desc">Accessible sign-in card with CSRF hidden field, PRG old-input feedback, remember-me switch, and Kongono v1.22+ Passkey CTA.</p>
+        </div>
+        <div class="pg-seg">
+          <button type="button" class="pg-seg-btn is-active" k-class:is-active="view === 'preview'" k-on:click="set(view, 'preview')">Live Preview</button>
+          <button type="button" class="pg-seg-btn" k-class:is-active="view === 'code'" k-on:click="set(view, 'code')">Markup</button>
+          <button type="button" class="pg-seg-btn" k-class:is-active="view === 'cli'" k-on:click="set(view, 'cli')">CLI</button>
+        </div>
+      </div>
+      <div class="pg-demo-body">
+        <div class="pg-stage" k-show="view === 'preview'">
+          <main class="z-stack">
+  <article class="z-card">
+  <header class="z-card-head">
+    <div>
+      <h3 class="z-card-title">Sign in to your workspace</h3>
+    </div>
+    <span class="z-badge z-badge-primary">Secure</span>
+  </header>
+  <div class="z-card-body">        <form method="POST" action="#" class="z-stack">
+      <input type="hidden" name="_csrf" value="demo-csrf-token">
+      <div class="z-field">
+  <label class="z-label" for="z-input-email-07ba99">Work Email</label>
+  <input
+    class="z-input"
+    id="z-input-email-07ba99"
+    name="email"
+    type="email"
+    value="founder@acme.dev"
+    required
+  >
+</div>
+      <div class="z-field">
+  <label class="z-label" for="z-input-password-b2b038">Password</label>
+  <input
+    class="z-input"
+    id="z-input-password-b2b038"
+    name="password"
+    type="password"
+    value=""
+    required
+  >
+</div>
+      <label class="z-switch" for="z-switch-remember-5ae8c1">
+  <input
+    type="checkbox"
+    role="switch"
+    id="z-switch-remember-5ae8c1"
+    name="remember"
+    value="1"
+  >
+  <span class="z-switch-track" aria-hidden="true"><span class="z-switch-thumb"></span></span>
+  <span>
+    Keep me signed in on this device  </span>
+</label>
+      <div class="z-row">
+        <button
+  type="submit"
+  class="z-btn z-btn-primary"
+>Sign In</button>
+        <button
+  type="button"
+  class="z-btn z-btn-outline"
+  
+  kgn-target="#passkey-status"
+>Sign in with Passkey</button>
+      </div>
+      <div id="passkey-status" aria-live="polite"></div>
+    </form>
+  </div>
+</article>
+</main>
+        </div>
+        <div class="pg-code-wrap" data-pg-code-wrap><pre class="z-code" k-show="view === 'code'" hidden>&lt;main class=&quot;z-stack&quot;&gt;
+  &lt;x-ui.card title=&quot;Sign in to your workspace&quot; badge=&quot;Secure&quot;&gt;
+    @if (isset($errorBanner) &amp;&amp; $errorBanner !== &apos;&apos;)
+      &lt;x-ui.alert variant=&quot;danger&quot; title=&quot;Sign-in failed&quot;&gt;{{ $errorBanner }}&lt;/x-ui.alert&gt;
+    @endif
+    &lt;form method=&quot;POST&quot; action=&quot;/login&quot; class=&quot;z-stack&quot;&gt;
+      &lt;input type=&quot;hidden&quot; name=&quot;_csrf&quot; value=&quot;{{ $csrf ?? &apos;&apos; }}&quot;&gt;
+      &lt;x-ui.input name=&quot;email&quot; type=&quot;email&quot; label=&quot;Work Email&quot; :value=&quot;$old[&apos;email&apos;] ?? &apos;&apos;&quot; required=&quot;true&quot; /&gt;
+      &lt;x-ui.input name=&quot;password&quot; type=&quot;password&quot; label=&quot;Password&quot; required=&quot;true&quot; /&gt;
+      &lt;x-ui.switch name=&quot;remember&quot; label=&quot;Keep me signed in on this device&quot; /&gt;
+      &lt;div class=&quot;z-row&quot;&gt;
+        &lt;x-ui.button type=&quot;submit&quot; variant=&quot;primary&quot;&gt;Sign In&lt;/x-ui.button&gt;
+        &lt;x-ui.button type=&quot;button&quot; variant=&quot;outline&quot; kgn-post=&quot;/auth/passkeys/login/options&quot; kgn-target=&quot;#passkey-status&quot;&gt;Sign in with Passkey&lt;/x-ui.button&gt;
+      &lt;/div&gt;
+      &lt;div id=&quot;passkey-status&quot; aria-live=&quot;polite&quot;&gt;&lt;/div&gt;
+    &lt;/form&gt;
+  &lt;/x-ui.card&gt;
+&lt;/main&gt;</pre></div>
+        <div class="pg-code-wrap" data-pg-code-wrap><pre class="z-code" k-show="view === 'cli'" hidden>php vendor/bin/zokeibi block add auth-login</pre></div>
+      </div>
+      <div class="pg-demo-foot"><span>views/blocks/auth-login.kgn.html</span><span>Uses: card · input · switch · button · alert</span></div>
+    </section>
+    <section id="block-settings-billing" class="pg-demo-card" data-pg-block="settings-billing" k-state="{&quot;view&quot;:&quot;preview&quot;}">
+      <div class="pg-demo-head">
+        <div>
+          <h3 class="pg-demo-title">Account &amp; Billing Settings <span class="z-badge z-badge-primary">Saas</span></h3>
+          <p class="pg-demo-desc">Workspace profile form, live subscription KPIs, region combobox, and danger-zone confirmation modal.</p>
+        </div>
+        <div class="pg-seg">
+          <button type="button" class="pg-seg-btn is-active" k-class:is-active="view === 'preview'" k-on:click="set(view, 'preview')">Live Preview</button>
+          <button type="button" class="pg-seg-btn" k-class:is-active="view === 'code'" k-on:click="set(view, 'code')">Markup</button>
+          <button type="button" class="pg-seg-btn" k-class:is-active="view === 'cli'" k-on:click="set(view, 'cli')">CLI</button>
+        </div>
+      </div>
+      <div class="pg-demo-body">
+        <div class="pg-stage" k-show="view === 'preview'">
+          <section class="z-stack" k-state="{&quot;deleteOpen&quot;:false}">
+  <div class="z-grid-3">
+    <div class="z-kpi z-kpi-emerald">
+  <div class="z-kpi-top">
+    <span class="z-kpi-label">Current Plan</span>
+    <span class="z-kpi-delta is-up">Active</span>
+  </div>
+  <div class="z-kpi-value">Pro Scale</div>
+</div>
+    <div class="z-kpi">
+  <div class="z-kpi-top">
+    <span class="z-kpi-label">Seats Used</span>
+    <span class="z-kpi-delta">53%</span>
+  </div>
+  <div class="z-kpi-value">11 / 15</div>
+</div>
+    <div class="z-kpi">
+  <div class="z-kpi-top">
+    <span class="z-kpi-label">Next Invoice</span>
+    <span class="z-kpi-delta">Monthly</span>
+  </div>
+  <div class="z-kpi-value">$49.00</div>
+</div>
+  </div>
+  <article class="z-card">
+  <header class="z-card-head">
+    <div>
+      <h3 class="z-card-title">Workspace Profile</h3>
+    </div>
+    <span class="z-badge z-badge-primary">Settings</span>
+  </header>
+  <div class="z-card-body">    <form method="POST" action="#" class="z-stack"  kgn-target="#settings-notice" kgn-swap="morph">
+      <input type="hidden" name="_csrf" value="demo-csrf-token">
+      <div class="z-field">
+  <label class="z-label" for="z-input-workspace_name-c0b727">Workspace Name</label>
+  <input
+    class="z-input"
+    id="z-input-workspace_name-c0b727"
+    name="workspace_name"
+    type="text"
+    value="Acme Properties LLC"
+    required
+  >
+</div>
+      <div class="z-combobox" data-z-combobox="true">
+      <label class="z-label" for="z-combo-region-dfa88f-input">Primary Data Region</label>
+    <input type="hidden" name="region" value="us-east" data-z-combobox-value>
+  <div class="z-combobox-control">
+    <input
+      id="z-combo-region-dfa88f-input"
+      type="text"
+      class="z-combobox-input"
+      role="combobox"
+      aria-autocomplete="list"
+      aria-expanded="false"
+      aria-controls="z-combo-region-dfa88f-list"
+      placeholder="Search options..."
+      value="US East"
+      data-z-combobox-input
+      autocomplete="off"
+                      >
+    <button type="button" class="z-combobox-toggle" data-z-combobox-toggle aria-label="Toggle options">▾</button>
+    <ul id="z-combo-region-dfa88f-list" class="z-combobox-list" role="listbox" aria-label="Primary Data Region" data-z-combobox-list hidden>
+              <li
+          id="z-combo-region-dfa88f-opt-0"
+          class="z-combobox-option"
+          role="option"
+          data-z-combobox-option
+          data-value="us-east"
+          data-label="US East"
+          aria-selected="true"
+        >US East</li>
+              <li
+          id="z-combo-region-dfa88f-opt-1"
+          class="z-combobox-option"
+          role="option"
+          data-z-combobox-option
+          data-value="eu-central"
+          data-label="EU Central"
+          aria-selected="false"
+        >EU Central</li>
+              <li
+          id="z-combo-region-dfa88f-opt-2"
+          class="z-combobox-option"
+          role="option"
+          data-z-combobox-option
+          data-value="ap-northeast"
+          data-label="Tokyo"
+          aria-selected="false"
+        >Tokyo</li>
+          </ul>
+  </div>
+  </div>
+      <div class="z-between">
+        <button
+  type="submit"
+  class="z-btn z-btn-primary"
+>Save Changes</button>
+        <button
+  type="button"
+  class="z-btn z-btn-danger"
+  k-on:click="set(deleteOpen, true)"
+  data-z-open="#delete-workspace-modal"
+>Delete Workspace</button>
+      </div>
+    </form>
+    <div id="settings-notice" aria-live="polite"></div>
+  </div>
+</article>
+  <div class="z-modal-backdrop" id="delete-workspace-modal" k-show="deleteOpen" hidden>
+  <div class="z-modal z-modal-danger" role="dialog" aria-modal="true" aria-labelledby="delete-workspace-modal-title">
+    <div class="z-modal-head">
+      <h3 class="z-modal-title" id="delete-workspace-modal-title">Delete Workspace</h3>
+      <button type="button" class="z-btn z-btn-ghost z-btn-sm" k-on:click="set(deleteOpen, false)" data-z-close="#delete-workspace-modal" aria-label="Close dialog">✕</button>
+    </div>
+    <div class="z-modal-body">    <p>This action permanently removes workspace data and revokes API tokens.</p>
+    <form method="POST" action="#" class="z-row">
+      <input type="hidden" name="_csrf" value="demo-csrf-token">
+      <button
+  type="submit"
+  class="z-btn z-btn-danger"
+>Confirm Delete</button>
+      <button
+  type="button"
+  class="z-btn z-btn-outline"
+  k-on:click="set(deleteOpen, false)"
+  data-z-close="#delete-workspace-modal"
+>Cancel</button>
+    </form>
+  </div>
+  </div>
+</div>
+</section>
+        </div>
+        <div class="pg-code-wrap" data-pg-code-wrap><pre class="z-code" k-show="view === 'code'" hidden>&lt;section class=&quot;z-stack&quot; @state([&apos;deleteOpen&apos; =&gt; false])&gt;
+  &lt;div class=&quot;z-grid-3&quot;&gt;
+    &lt;x-ui.kpi label=&quot;Current Plan&quot; :value=&quot;$planName ?? &apos;Pro&apos;&quot; delta=&quot;Active&quot; trend=&quot;up&quot; variant=&quot;emerald&quot; /&gt;
+    &lt;x-ui.kpi label=&quot;Seats Used&quot; :value=&quot;$seatsUsed ?? &apos;8 / 15&apos;&quot; delta=&quot;53%&quot; /&gt;
+    &lt;x-ui.kpi label=&quot;Next Invoice&quot; :value=&quot;$nextAmount ?? &apos;$49.00&apos;&quot; delta=&quot;Monthly&quot; /&gt;
+  &lt;/div&gt;
+  &lt;x-ui.card title=&quot;Workspace Profile&quot; badge=&quot;Settings&quot;&gt;
+    &lt;form method=&quot;POST&quot; action=&quot;/settings/profile&quot; class=&quot;z-stack&quot; kgn-post=&quot;/settings/profile&quot; kgn-target=&quot;#settings-notice&quot; kgn-swap=&quot;morph&quot;&gt;
+      &lt;input type=&quot;hidden&quot; name=&quot;_csrf&quot; value=&quot;{{ $csrf ?? &apos;&apos; }}&quot;&gt;
+      &lt;x-ui.input name=&quot;workspace_name&quot; label=&quot;Workspace Name&quot; :value=&quot;$workspaceName ?? &apos;&apos;&quot; required=&quot;true&quot; /&gt;
+      &lt;x-ui.combobox name=&quot;region&quot; label=&quot;Primary Data Region&quot; options=&quot;us-east:US East|eu-central:EU Central|ap-northeast:Tokyo&quot; :value=&quot;$region ?? &apos;us-east&apos;&quot; /&gt;
+      &lt;div class=&quot;z-between&quot;&gt;
+        &lt;x-ui.button type=&quot;submit&quot; variant=&quot;primary&quot;&gt;Save Changes&lt;/x-ui.button&gt;
+        &lt;x-ui.button type=&quot;button&quot; variant=&quot;danger&quot; k-click=&quot;set(deleteOpen, true)&quot; data-z-open=&quot;#delete-workspace-modal&quot;&gt;Delete Workspace&lt;/x-ui.button&gt;
+      &lt;/div&gt;
+    &lt;/form&gt;
+    &lt;div id=&quot;settings-notice&quot; aria-live=&quot;polite&quot;&gt;&lt;/div&gt;
+  &lt;/x-ui.card&gt;
+  &lt;x-ui.modal id=&quot;delete-workspace-modal&quot; title=&quot;Delete Workspace&quot; show=&quot;deleteOpen&quot; variant=&quot;danger&quot;&gt;
+    &lt;p&gt;This action permanently removes workspace data and revokes API tokens.&lt;/p&gt;
+    &lt;form method=&quot;POST&quot; action=&quot;/settings/delete&quot; class=&quot;z-row&quot;&gt;
+      &lt;input type=&quot;hidden&quot; name=&quot;_csrf&quot; value=&quot;{{ $csrf ?? &apos;&apos; }}&quot;&gt;
+      &lt;x-ui.button type=&quot;submit&quot; variant=&quot;danger&quot;&gt;Confirm Delete&lt;/x-ui.button&gt;
+      &lt;x-ui.button type=&quot;button&quot; variant=&quot;outline&quot; k-click=&quot;set(deleteOpen, false)&quot; data-z-close=&quot;#delete-workspace-modal&quot;&gt;Cancel&lt;/x-ui.button&gt;
+    &lt;/form&gt;
+  &lt;/x-ui.modal&gt;
+&lt;/section&gt;</pre></div>
+        <div class="pg-code-wrap" data-pg-code-wrap><pre class="z-code" k-show="view === 'cli'" hidden>php vendor/bin/zokeibi block add settings-billing</pre></div>
+      </div>
+      <div class="pg-demo-foot"><span>views/blocks/settings-billing.kgn.html</span><span>Uses: card · kpi · input · combobox · button · modal · badge</span></div>
+    </section>
+    <section id="block-pricing-grid" class="pg-demo-card" data-pg-block="pricing-grid" k-state="{&quot;view&quot;:&quot;preview&quot;}">
+      <div class="pg-demo-head">
+        <div>
+          <h3 class="pg-demo-title">3-Tier SaaS Pricing Grid <span class="z-badge z-badge-primary">Marketing</span></h3>
+          <p class="pg-demo-desc">Accessible 3-column Starter / Pro / Enterprise pricing layout themed automatically via OKLCH tokens.</p>
+        </div>
+        <div class="pg-seg">
+          <button type="button" class="pg-seg-btn is-active" k-class:is-active="view === 'preview'" k-on:click="set(view, 'preview')">Live Preview</button>
+          <button type="button" class="pg-seg-btn" k-class:is-active="view === 'code'" k-on:click="set(view, 'code')">Markup</button>
+          <button type="button" class="pg-seg-btn" k-class:is-active="view === 'cli'" k-on:click="set(view, 'cli')">CLI</button>
+        </div>
+      </div>
+      <div class="pg-demo-body">
+        <div class="pg-stage" k-show="view === 'preview'">
+          <section class="z-grid-3" aria-label="Pricing plans">
+  <article class="z-card">
+  <header class="z-card-head">
+    <div>
+      <h3 class="z-card-title">Starter</h3>
+    </div>
+    <span class="z-badge z-badge-primary">Free</span>
+  </header>
+  <div class="z-card-body">    <p><strong>$0 / month</strong> — Everything needed to ship your first Kongono app.</p>
+    <button
+  type="button"
+  class="z-btn z-btn-outline"
+  
+>Get Started</button>
+  </div>
+</article>
+  <article class="z-card">
+  <header class="z-card-head">
+    <div>
+      <h3 class="z-card-title">Pro</h3>
+    </div>
+    <span class="z-badge z-badge-primary">Popular</span>
+  </header>
+  <div class="z-card-body">    <p><strong>$29 / month</strong> — Multi-tenant isolation, priority queues, and team seats.</p>
+    <button
+  type="button"
+  class="z-btn z-btn-primary"
+  
+>Start 14-Day Trial</button>
+  </div>
+</article>
+  <article class="z-card">
+  <header class="z-card-head">
+    <div>
+      <h3 class="z-card-title">Enterprise</h3>
+    </div>
+    <span class="z-badge z-badge-primary">Custom</span>
+  </header>
+  <div class="z-card-body">    <p><strong>Custom</strong> — Dedicated FrankenPHP clusters, SSO/SAML, and SLA support.</p>
+    <button
+  type="button"
+  class="z-btn z-btn-outline"
+  
+>Contact Sales</button>
+  </div>
+</article>
+</section>
+        </div>
+        <div class="pg-code-wrap" data-pg-code-wrap><pre class="z-code" k-show="view === 'code'" hidden>&lt;section class=&quot;z-grid-3&quot; aria-label=&quot;Pricing plans&quot;&gt;
+  &lt;x-ui.card title=&quot;Starter&quot; badge=&quot;Free&quot;&gt;
+    &lt;p&gt;&lt;strong&gt;$0 / month&lt;/strong&gt; — Everything needed to ship your first Kongono app.&lt;/p&gt;
+    &lt;x-ui.button variant=&quot;outline&quot; kgn-get=&quot;/signup?plan=starter&quot;&gt;Get Started&lt;/x-ui.button&gt;
+  &lt;/x-ui.card&gt;
+  &lt;x-ui.card title=&quot;Pro&quot; badge=&quot;Popular&quot;&gt;
+    &lt;p&gt;&lt;strong&gt;$29 / month&lt;/strong&gt; — Multi-tenant isolation, priority queues, and team seats.&lt;/p&gt;
+    &lt;x-ui.button variant=&quot;primary&quot; kgn-get=&quot;/signup?plan=pro&quot;&gt;Start 14-Day Trial&lt;/x-ui.button&gt;
+  &lt;/x-ui.card&gt;
+  &lt;x-ui.card title=&quot;Enterprise&quot; badge=&quot;Custom&quot;&gt;
+    &lt;p&gt;&lt;strong&gt;Custom&lt;/strong&gt; — Dedicated FrankenPHP clusters, SSO/SAML, and SLA support.&lt;/p&gt;
+    &lt;x-ui.button variant=&quot;outline&quot; kgn-get=&quot;/contact&quot;&gt;Contact Sales&lt;/x-ui.button&gt;
+  &lt;/x-ui.card&gt;
+&lt;/section&gt;</pre></div>
+        <div class="pg-code-wrap" data-pg-code-wrap><pre class="z-code" k-show="view === 'cli'" hidden>php vendor/bin/zokeibi block add pricing-grid</pre></div>
+      </div>
+      <div class="pg-demo-foot"><span>views/blocks/pricing-grid.kgn.html</span><span>Uses: card · badge · button</span></div>
+    </section>
+    <section id="block-empty-onboarding" class="pg-demo-card" data-pg-block="empty-onboarding" k-state="{&quot;view&quot;:&quot;preview&quot;}">
+      <div class="pg-demo-head">
+        <div>
+          <h3 class="pg-demo-title">Onboarding Stepper &amp; Empty State <span class="z-badge z-badge-primary">Saas</span></h3>
+          <p class="pg-demo-desc">Multi-step onboarding wizard paired with a calm empty-state call to action.</p>
+        </div>
+        <div class="pg-seg">
+          <button type="button" class="pg-seg-btn is-active" k-class:is-active="view === 'preview'" k-on:click="set(view, 'preview')">Live Preview</button>
+          <button type="button" class="pg-seg-btn" k-class:is-active="view === 'code'" k-on:click="set(view, 'code')">Markup</button>
+          <button type="button" class="pg-seg-btn" k-class:is-active="view === 'cli'" k-on:click="set(view, 'cli')">CLI</button>
+        </div>
+      </div>
+      <div class="pg-demo-body">
+        <div class="pg-stage" k-show="view === 'preview'">
+          <section class="z-stack">
+  <nav aria-label="Progress steps">
+  <ol class="z-stepper" role="list">
+                <li class="z-step is-done">
+        <span class="z-step-num" aria-hidden="true">✓</span>
+        <span>Create Account<span class="z-sr-only"> (completed)</span></span>
+      </li>
+                <li class="z-step is-active" aria-current="step">
+        <span class="z-step-num" aria-hidden="true">2</span>
+        <span>Connect Database</span>
+      </li>
+                <li class="z-step">
+        <span class="z-step-num" aria-hidden="true">3</span>
+        <span>Run kongo prove</span>
+      </li>
+                <li class="z-step">
+        <span class="z-step-num" aria-hidden="true">4</span>
+        <span>Deploy</span>
+      </li>
+      </ol>
+</nav>
+  <div class="z-empty">
+  <div class="z-empty-icon" aria-hidden="true">造</div>
+  <h3 class="z-empty-title">No projects yet</h3>
+  <p class="z-empty-desc">Create your first project to unlock live telemetry, proofs, and zero-downtime deploys.</p>
+  <div class="z-empty-actions"><button
+  type="button"
+  class="z-btn z-btn-primary"
+  
+>Create Project</button></div>
+</div>
+</section>
+        </div>
+        <div class="pg-code-wrap" data-pg-code-wrap><pre class="z-code" k-show="view === 'code'" hidden>&lt;section class=&quot;z-stack&quot;&gt;
+  &lt;x-ui.stepper steps=&quot;Create Account|Connect Database|Run kongo prove|Deploy&quot; :current=&quot;$step ?? 2&quot; /&gt;
+  &lt;x-ui.empty-state icon=&quot;造&quot; title=&quot;No projects yet&quot; description=&quot;Create your first project to unlock live telemetry, proofs, and zero-downtime deploys.&quot;&gt;
+    &lt;x-ui.button variant=&quot;primary&quot; kgn-get=&quot;/projects/new&quot;&gt;Create Project&lt;/x-ui.button&gt;
+  &lt;/x-ui.empty-state&gt;
+&lt;/section&gt;</pre></div>
+        <div class="pg-code-wrap" data-pg-code-wrap><pre class="z-code" k-show="view === 'cli'" hidden>php vendor/bin/zokeibi block add empty-onboarding</pre></div>
+      </div>
+      <div class="pg-demo-foot"><span>views/blocks/empty-onboarding.kgn.html</span><span>Uses: stepper · empty-state · button</span></div>
+    </section>
+    <section id="block-error-page" class="pg-demo-card" data-pg-block="error-page" k-state="{&quot;view&quot;:&quot;preview&quot;}">
+      <div class="pg-demo-head">
+        <div>
+          <h3 class="pg-demo-title">Zero-Leak Error Page (KGN Ref) <span class="z-badge z-badge-primary">System</span></h3>
+          <p class="pg-demo-desc">Calm, accessible 404/500 error card displaying only the safe KGN-* Reference ID without leaking internals.</p>
+        </div>
+        <div class="pg-seg">
+          <button type="button" class="pg-seg-btn is-active" k-class:is-active="view === 'preview'" k-on:click="set(view, 'preview')">Live Preview</button>
+          <button type="button" class="pg-seg-btn" k-class:is-active="view === 'code'" k-on:click="set(view, 'code')">Markup</button>
+          <button type="button" class="pg-seg-btn" k-class:is-active="view === 'cli'" k-on:click="set(view, 'cli')">CLI</button>
+        </div>
+      </div>
+      <div class="pg-demo-body">
+        <div class="pg-stage" k-show="view === 'preview'">
+          <main class="z-stack">
+  <article class="z-card">
+  <header class="z-card-head">
+    <div>
+      <h3 class="z-card-title">404 — Page Not Found</h3>
+    </div>
+    <span class="z-badge z-badge-primary">404</span>
+  </header>
+  <div class="z-card-body">    <div class="z-alert z-alert-warning" role="status">
+  <div>
+    <div class="z-alert-title">Reference ID</div>
+    <div>KGN-9F4A-2026</div>
+  </div>
+</div>
+    <p>The requested workspace route does not exist. Share the reference ID above if you need support.</p>
+    <div class="z-row">
+      <a class="z-btn z-btn-primary" href="/">Return Home</a>
+    </div>
+  </div>
+</article>
+</main>
+        </div>
+        <div class="pg-code-wrap" data-pg-code-wrap><pre class="z-code" k-show="view === 'code'" hidden>&lt;main class=&quot;z-stack&quot;&gt;
+  &lt;x-ui.card :title=&quot;$title ?? &apos;Something went wrong&apos;&quot; :badge=&quot;$statusCode ?? &apos;500&apos;&quot;&gt;
+    &lt;x-ui.alert variant=&quot;warning&quot; title=&quot;Reference ID&quot;&gt;{{ $reference ?? &apos;KGN-UNKNOWN&apos; }}&lt;/x-ui.alert&gt;
+    &lt;p&gt;{{ $message ?? &apos;The request could not be completed. Share the reference ID above with support.&apos; }}&lt;/p&gt;
+    &lt;div class=&quot;z-row&quot;&gt;
+      &lt;a class=&quot;z-btn z-btn-primary&quot; href=&quot;/&quot;&gt;Return Home&lt;/a&gt;
+    &lt;/div&gt;
+  &lt;/x-ui.card&gt;
+&lt;/main&gt;</pre></div>
+        <div class="pg-code-wrap" data-pg-code-wrap><pre class="z-code" k-show="view === 'cli'" hidden>php vendor/bin/zokeibi block add error-page</pre></div>
+      </div>
+      <div class="pg-demo-foot"><span>views/blocks/error-page.kgn.html</span><span>Uses: card · badge · button · alert</span></div>
+    </section>
+    <section id="block-analytics-dashboard" class="pg-demo-card" data-pg-block="analytics-dashboard" k-state="{&quot;view&quot;:&quot;preview&quot;}">
+      <div class="pg-demo-head">
+        <div>
+          <h3 class="pg-demo-title">Executive Analytics Dashboard (0 B JS Charts) <span class="z-badge z-badge-primary">Saas</span></h3>
+          <p class="pg-demo-desc">Full analytics screen with breadcrumb trail, date-range picker, KPI strip, pure-SVG Bar/Sparkline/Donut charts, and sortable/searchable DataTable.</p>
+        </div>
+        <div class="pg-seg">
+          <button type="button" class="pg-seg-btn is-active" k-class:is-active="view === 'preview'" k-on:click="set(view, 'preview')">Live Preview</button>
+          <button type="button" class="pg-seg-btn" k-class:is-active="view === 'code'" k-on:click="set(view, 'code')">Markup</button>
+          <button type="button" class="pg-seg-btn" k-class:is-active="view === 'cli'" k-on:click="set(view, 'cli')">CLI</button>
+        </div>
+      </div>
+      <div class="pg-demo-body">
+        <div class="pg-stage" k-show="view === 'preview'">
+          <section class="z-stack">
+  <nav class="z-breadcrumb" aria-label="Breadcrumb">
+  <ol>
+    <li>
+      <a href="/">Workspace</a>
+    </li>
+    <li>
+      <span aria-current="page">Analytics</span>
+    </li>
+  </ol>
+</nav>
+  <div class="z-grid-3">
+    <div class="z-kpi z-kpi-emerald">
+  <div class="z-kpi-top">
+    <span class="z-kpi-label">Monthly Revenue</span>
+    <span class="z-kpi-delta is-up">+24.2%</span>
+  </div>
+  <div class="z-kpi-value">$48,920</div>
+</div>
+    <div class="z-kpi z-kpi-accent">
+  <div class="z-kpi-top">
+    <span class="z-kpi-label">Active Workspaces</span>
+    <span class="z-kpi-delta is-up">+9.1%</span>
+  </div>
+  <div class="z-kpi-value">1,284</div>
+</div>
+    <div class="z-kpi">
+  <div class="z-kpi-top">
+    <span class="z-kpi-label">P95 Latency</span>
+    <span class="z-kpi-delta is-up">-31%</span>
+  </div>
+  <div class="z-kpi-value">11.4 ms</div>
+</div>
+  </div>
+  <div class="z-grid-2">
+    <figure class="z-chart" data-z-chart="true">
+  <figcaption class="z-chart-head">
+    <span class="z-chart-title">Daily API Requests (k)</span>
+    <span class="z-chart-meta" data-z-chart-readout data-default-meta="Last 5 days" aria-live="polite">Last 5 days</span>
+  </figcaption>
+
+  <svg class="z-chart-svg" viewBox="0 0 360 152" role="img" aria-label="Daily API Requests (k) bar chart">
+    <line class="z-chart-grid" x1="16" y1="74" x2="344" y2="74" />
+    <line class="z-chart-grid" x1="16" y1="128" x2="344" y2="128" />
+    <rect class="z-chart-bar" x="29.8" y="77.2" width="38.0" height="50.8" tabindex="0" data-chart-tip="Mon: 32">
+      <title>Mon: 32</title>
+    </rect>
+    <text class="z-chart-val" x="48.8" y="72.2" text-anchor="middle">32</text>
+    <text class="z-chart-label" x="48.8" y="144" text-anchor="middle">Mon</text>
+    <rect class="z-chart-bar" x="95.4" y="50.2" width="38.0" height="77.8" tabindex="0" data-chart-tip="Tue: 49">
+      <title>Tue: 49</title>
+    </rect>
+    <text class="z-chart-val" x="114.4" y="45.2" text-anchor="middle">49</text>
+    <text class="z-chart-label" x="114.4" y="144" text-anchor="middle">Tue</text>
+    <rect class="z-chart-bar" x="161.0" y="58.1" width="38.0" height="69.9" tabindex="0" data-chart-tip="Wed: 44">
+      <title>Wed: 44</title>
+    </rect>
+    <text class="z-chart-val" x="180.0" y="53.1" text-anchor="middle">44</text>
+    <text class="z-chart-label" x="180.0" y="144" text-anchor="middle">Wed</text>
+    <rect class="z-chart-bar" x="226.6" y="20.0" width="38.0" height="108.0" tabindex="0" data-chart-tip="Thu: 68">
+      <title>Thu: 68</title>
+    </rect>
+    <text class="z-chart-val" x="245.6" y="15.0" text-anchor="middle">68</text>
+    <text class="z-chart-label" x="245.6" y="144" text-anchor="middle">Thu</text>
+    <rect class="z-chart-bar" x="292.2" y="31.1" width="38.0" height="96.9" tabindex="0" data-chart-tip="Fri: 61">
+      <title>Fri: 61</title>
+    </rect>
+    <text class="z-chart-val" x="311.2" y="26.1" text-anchor="middle">61</text>
+    <text class="z-chart-label" x="311.2" y="144" text-anchor="middle">Fri</text>
+  </svg>
+</figure>
+    <figure class="z-chart" data-z-chart="true">
+  <figcaption class="z-chart-head">
+    <span class="z-chart-title">Plan Distribution</span>
+    <span class="z-chart-meta" data-z-chart-readout data-default-meta="Active seats" aria-live="polite">Active seats</span>
+  </figcaption>
+
+  <div class="z-chart-donut-wrap">
+    <svg class="z-chart-donut" viewBox="0 0 120 120" role="img" aria-label="Plan Distribution donut chart">
+      <circle class="z-chart-track" cx="60" cy="60" r="46" />
+      <circle class="z-chart-seg z-chart-tone-0" cx="60" cy="60" r="46" stroke-dasharray="121.39 289.03" stroke-dashoffset="0.00" transform="rotate(-90 60 60)" tabindex="0" data-chart-tip="Starter: 42 (42%)">
+        <title>Starter: 42 (42%)</title>
+      </circle>
+      <circle class="z-chart-seg z-chart-tone-1" cx="60" cy="60" r="46" stroke-dasharray="109.83 289.03" stroke-dashoffset="-121.39" transform="rotate(-90 60 60)" tabindex="0" data-chart-tip="Pro: 38 (38%)">
+        <title>Pro: 38 (38%)</title>
+      </circle>
+      <circle class="z-chart-seg z-chart-tone-2" cx="60" cy="60" r="46" stroke-dasharray="57.81 289.03" stroke-dashoffset="-231.22" transform="rotate(-90 60 60)" tabindex="0" data-chart-tip="Enterprise: 20 (20%)">
+        <title>Enterprise: 20 (20%)</title>
+      </circle>
+      <text class="z-chart-center" x="60" y="65" text-anchor="middle">100</text>
+    </svg>
+    <ul class="z-chart-legend">
+      <li>
+        <span><span class="z-chart-swatch z-chart-tone-0" aria-hidden="true"></span>Starter</span>
+        <span class="z-mono">42%</span>
+      </li>
+      <li>
+        <span><span class="z-chart-swatch z-chart-tone-1" aria-hidden="true"></span>Pro</span>
+        <span class="z-mono">38%</span>
+      </li>
+      <li>
+        <span><span class="z-chart-swatch z-chart-tone-2" aria-hidden="true"></span>Enterprise</span>
+        <span class="z-mono">20%</span>
+      </li>
+    </ul>
+  </div>
+</figure>
+  </div>
+  <div class="z-grid-2">
+    <div class="z-dr" data-z-daterange="true" data-dr-year="2026" data-dr-month="11">
+  <span class="z-label">Reporting Window</span>
+  <input type="hidden" name="analytics_window_start" value="2026-11-01" data-z-dr-start>
+  <input type="hidden" name="analytics_window_end" value="2026-11-24" data-z-dr-end>
+  <div class="z-dr-bar">
+    <span class="z-dr-summary" data-z-dr-summary aria-live="polite">2026-11-01 → 2026-11-24</span>
+    <div class="z-dr-presets" role="group" aria-label="Quick date ranges">
+      <button type="button" class="z-dr-preset" data-z-dr-preset="7">Last 7d</button>
+      <button type="button" class="z-dr-preset" data-z-dr-preset="30">Last 30d</button>
+      <button type="button" class="z-dr-preset" data-z-dr-preset="month">This Month</button>
+      <button type="button" class="z-dr-preset" data-z-dr-preset="90">Quarter</button>
+    </div>
+  </div>
+  <div class="z-dr-cal" role="group" aria-label="Date range calendar">
+    <div class="z-dr-head">
+      <button type="button" class="z-dr-nav" data-z-dr-nav="-1" aria-label="Previous month">‹</button>
+      <span class="z-dr-month" data-z-dr-month>November 2026</span>
+      <button type="button" class="z-dr-nav" data-z-dr-nav="1" aria-label="Next month">›</button>
+    </div>
+    <div class="z-dr-dow" aria-hidden="true">
+      <span>Su</span><span>Mo</span><span>Tu</span><span>We</span><span>Th</span><span>Fr</span><span>Sa</span>
+    </div>
+    <div class="z-dr-grid" data-z-dr-grid>
+      <button type="button" class="z-dr-day is-edge" data-z-dr-day="2026-11-01" aria-label="2026-11-01" aria-pressed="true" >1</button>
+      <button type="button" class="z-dr-day is-in-range" data-z-dr-day="2026-11-02" aria-label="2026-11-02" aria-pressed="true" >2</button>
+      <button type="button" class="z-dr-day is-in-range" data-z-dr-day="2026-11-03" aria-label="2026-11-03" aria-pressed="true" >3</button>
+      <button type="button" class="z-dr-day is-in-range" data-z-dr-day="2026-11-04" aria-label="2026-11-04" aria-pressed="true" >4</button>
+      <button type="button" class="z-dr-day is-in-range" data-z-dr-day="2026-11-05" aria-label="2026-11-05" aria-pressed="true" >5</button>
+      <button type="button" class="z-dr-day is-in-range" data-z-dr-day="2026-11-06" aria-label="2026-11-06" aria-pressed="true" >6</button>
+      <button type="button" class="z-dr-day is-in-range" data-z-dr-day="2026-11-07" aria-label="2026-11-07" aria-pressed="true" >7</button>
+      <button type="button" class="z-dr-day is-in-range" data-z-dr-day="2026-11-08" aria-label="2026-11-08" aria-pressed="true" >8</button>
+      <button type="button" class="z-dr-day is-in-range" data-z-dr-day="2026-11-09" aria-label="2026-11-09" aria-pressed="true" >9</button>
+      <button type="button" class="z-dr-day is-in-range" data-z-dr-day="2026-11-10" aria-label="2026-11-10" aria-pressed="true" >10</button>
+      <button type="button" class="z-dr-day is-in-range" data-z-dr-day="2026-11-11" aria-label="2026-11-11" aria-pressed="true" >11</button>
+      <button type="button" class="z-dr-day is-in-range" data-z-dr-day="2026-11-12" aria-label="2026-11-12" aria-pressed="true" >12</button>
+      <button type="button" class="z-dr-day is-in-range" data-z-dr-day="2026-11-13" aria-label="2026-11-13" aria-pressed="true" >13</button>
+      <button type="button" class="z-dr-day is-in-range" data-z-dr-day="2026-11-14" aria-label="2026-11-14" aria-pressed="true" >14</button>
+      <button type="button" class="z-dr-day is-in-range" data-z-dr-day="2026-11-15" aria-label="2026-11-15" aria-pressed="true" >15</button>
+      <button type="button" class="z-dr-day is-in-range" data-z-dr-day="2026-11-16" aria-label="2026-11-16" aria-pressed="true" >16</button>
+      <button type="button" class="z-dr-day is-in-range" data-z-dr-day="2026-11-17" aria-label="2026-11-17" aria-pressed="true" >17</button>
+      <button type="button" class="z-dr-day is-in-range" data-z-dr-day="2026-11-18" aria-label="2026-11-18" aria-pressed="true" >18</button>
+      <button type="button" class="z-dr-day is-in-range" data-z-dr-day="2026-11-19" aria-label="2026-11-19" aria-pressed="true" >19</button>
+      <button type="button" class="z-dr-day is-in-range" data-z-dr-day="2026-11-20" aria-label="2026-11-20" aria-pressed="true" >20</button>
+      <button type="button" class="z-dr-day is-in-range" data-z-dr-day="2026-11-21" aria-label="2026-11-21" aria-pressed="true" >21</button>
+      <button type="button" class="z-dr-day is-in-range" data-z-dr-day="2026-11-22" aria-label="2026-11-22" aria-pressed="true" >22</button>
+      <button type="button" class="z-dr-day is-in-range" data-z-dr-day="2026-11-23" aria-label="2026-11-23" aria-pressed="true" >23</button>
+      <button type="button" class="z-dr-day is-edge" data-z-dr-day="2026-11-24" aria-label="2026-11-24" aria-pressed="true" >24</button>
+      <button type="button" class="z-dr-day" data-z-dr-day="2026-11-25" aria-label="2026-11-25" aria-pressed="false" >25</button>
+      <button type="button" class="z-dr-day" data-z-dr-day="2026-11-26" aria-label="2026-11-26" aria-pressed="false" >26</button>
+      <button type="button" class="z-dr-day is-today" data-z-dr-day="2026-11-27" aria-label="2026-11-27" aria-pressed="false"  aria-current="date" >27</button>
+      <button type="button" class="z-dr-day" data-z-dr-day="2026-11-28" aria-label="2026-11-28" aria-pressed="false" >28</button>
+      <button type="button" class="z-dr-day" data-z-dr-day="2026-11-29" aria-label="2026-11-29" aria-pressed="false" >29</button>
+      <button type="button" class="z-dr-day" data-z-dr-day="2026-11-30" aria-label="2026-11-30" aria-pressed="false" >30</button>
+    </div>
+  </div>
+</div>
+    <figure class="z-chart" data-z-chart="true">
+  <figcaption class="z-chart-head">
+    <span class="z-chart-title">Conversion Velocity</span>
+    <span class="z-chart-meta" data-z-chart-readout data-default-meta="7d trend" aria-live="polite">7d trend</span>
+  </figcaption>
+
+  <svg class="z-chart-svg" viewBox="0 0 340 96" role="img" aria-label="Conversion Velocity sparkline chart">
+    <line class="z-chart-grid" x1="10" y1="84" x2="330" y2="84" />
+    <polygon class="z-chart-area" points="10.0,84.0 10.0,61.3 63.3,48.0 116.7,51.8 170.0,34.7 223.3,25.3 276.7,29.1 330.0,12.0 330.0,84.0" />
+    <polyline class="z-chart-line" points="10.0,61.3 63.3,48.0 116.7,51.8 170.0,34.7 223.3,25.3 276.7,29.1 330.0,12.0" />
+    <circle class="z-chart-dot" cx="10.0" cy="61.3" r="3.5" tabindex="0" data-chart-tip="D1: 12">
+      <title>D1: 12</title>
+    </circle>
+    <circle class="z-chart-dot" cx="63.3" cy="48.0" r="3.5" tabindex="0" data-chart-tip="D2: 19">
+      <title>D2: 19</title>
+    </circle>
+    <circle class="z-chart-dot" cx="116.7" cy="51.8" r="3.5" tabindex="0" data-chart-tip="D3: 17">
+      <title>D3: 17</title>
+    </circle>
+    <circle class="z-chart-dot" cx="170.0" cy="34.7" r="3.5" tabindex="0" data-chart-tip="D4: 26">
+      <title>D4: 26</title>
+    </circle>
+    <circle class="z-chart-dot" cx="223.3" cy="25.3" r="3.5" tabindex="0" data-chart-tip="D5: 31">
+      <title>D5: 31</title>
+    </circle>
+    <circle class="z-chart-dot" cx="276.7" cy="29.1" r="3.5" tabindex="0" data-chart-tip="D6: 29">
+      <title>D6: 29</title>
+    </circle>
+    <circle class="z-chart-dot" cx="330.0" cy="12.0" r="3.5" tabindex="0" data-chart-tip="D7: 38">
+      <title>D7: 38</title>
+    </circle>
+  </svg>
+</figure>
+  </div>
+  <article class="z-card">
+  <header class="z-card-head">
+    <div>
+      <h3 class="z-card-title">Top Endpoints</h3>
+    </div>
+    <span class="z-badge z-badge-emerald">Live Sort &amp; Filter</span>
+  </header>
+  <div class="z-card-body">    <div
+  class="z-table-wrap"
+  data-z-table="true"
+  data-z-table-sortable="true"
+>
+  <div class="z-table-toolbar">
+    <input type="search" class="z-table-search" data-z-table-search placeholder="Filter endpoints..." aria-label="Filter endpoints...">
+    <div class="z-table-tools">
+      <span class="z-table-count" data-z-table-count aria-live="polite"></span>
+    </div>
+  </div>
+  <table class="z-table">
+    <caption class="z-sr-only">Endpoint performance breakdown</caption>
+          <thead>
+        <tr>
+          <th scope="col">Route</th>
+          <th scope="col">Requests</th>
+          <th scope="col">P95</th>
+          <th scope="col">Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>/api/orders</td><td>42,190</td><td>8.4 ms</td><td><span class="z-badge z-badge-emerald">Healthy</span>
+</td></tr>
+        <tr><td>/api/search</td><td>18,412</td><td>14.2 ms</td><td><span class="z-badge z-badge-emerald">Healthy</span>
+</td></tr>
+        <tr><td>/api/exports</td><td>3,920</td><td>41.0 ms</td><td><span class="z-badge z-badge-amber">Warm</span>
+</td></tr>
+      </tbody>
+      </table>
+</div>
+  </div>
+</article>
+</section>
+        </div>
+        <div class="pg-code-wrap" data-pg-code-wrap><pre class="z-code" k-show="view === 'code'" hidden>&lt;section class=&quot;z-stack&quot;&gt;
+  &lt;x-ui.breadcrumb items=&quot;Workspace:/|Analytics&quot; /&gt;
+  &lt;div class=&quot;z-grid-3&quot;&gt;
+    &lt;x-ui.kpi label=&quot;Monthly Revenue&quot; :value=&quot;$mrr ?? &apos;$48,920&apos;&quot; delta=&quot;+24.2%&quot; trend=&quot;up&quot; variant=&quot;emerald&quot; /&gt;
+    &lt;x-ui.kpi label=&quot;Active Workspaces&quot; :value=&quot;$tenants ?? &apos;1,284&apos;&quot; delta=&quot;+9.1%&quot; trend=&quot;up&quot; variant=&quot;accent&quot; /&gt;
+    &lt;x-ui.kpi label=&quot;P95 Latency&quot; :value=&quot;$p95 ?? &apos;11.4 ms&apos;&quot; delta=&quot;-31%&quot; trend=&quot;up&quot; /&gt;
+  &lt;/div&gt;
+  &lt;div class=&quot;z-grid-2&quot;&gt;
+    &lt;x-ui.chart type=&quot;bar&quot; title=&quot;Daily API Requests (k)&quot; meta=&quot;Last 5 days&quot; data=&quot;Mon:32|Tue:49|Wed:44|Thu:68|Fri:61&quot; /&gt;
+    &lt;x-ui.chart type=&quot;donut&quot; title=&quot;Plan Distribution&quot; meta=&quot;Active seats&quot; data=&quot;Starter:42|Pro:38|Enterprise:20&quot; /&gt;
+  &lt;/div&gt;
+  &lt;div class=&quot;z-grid-2&quot;&gt;
+    &lt;x-ui.date-range name=&quot;analytics_window&quot; label=&quot;Reporting Window&quot; start=&quot;2026-11-01&quot; end=&quot;2026-11-24&quot; presets=&quot;true&quot; /&gt;
+    &lt;x-ui.chart type=&quot;sparkline&quot; title=&quot;Conversion Velocity&quot; meta=&quot;7d trend&quot; data=&quot;D1:12|D2:19|D3:17|D4:26|D5:31|D6:29|D7:38&quot; /&gt;
+  &lt;/div&gt;
+  &lt;x-ui.card title=&quot;Top Endpoints&quot; badge=&quot;Live Sort &amp; Filter&quot; badge-variant=&quot;emerald&quot;&gt;
+    &lt;x-ui.table caption=&quot;Endpoint performance breakdown&quot; searchable=&quot;true&quot; sortable=&quot;true&quot; search-placeholder=&quot;Filter endpoints...&quot;&gt;
+      &lt;thead&gt;
+        &lt;tr&gt;
+          &lt;th scope=&quot;col&quot;&gt;Route&lt;/th&gt;
+          &lt;th scope=&quot;col&quot;&gt;Requests&lt;/th&gt;
+          &lt;th scope=&quot;col&quot;&gt;P95&lt;/th&gt;
+          &lt;th scope=&quot;col&quot;&gt;Status&lt;/th&gt;
+        &lt;/tr&gt;
+      &lt;/thead&gt;
+      &lt;tbody&gt;
+        &lt;tr&gt;&lt;td&gt;/api/orders&lt;/td&gt;&lt;td&gt;42,190&lt;/td&gt;&lt;td&gt;8.4 ms&lt;/td&gt;&lt;td&gt;&lt;x-ui.badge variant=&quot;emerald&quot;&gt;Healthy&lt;/x-ui.badge&gt;&lt;/td&gt;&lt;/tr&gt;
+        &lt;tr&gt;&lt;td&gt;/api/search&lt;/td&gt;&lt;td&gt;18,412&lt;/td&gt;&lt;td&gt;14.2 ms&lt;/td&gt;&lt;td&gt;&lt;x-ui.badge variant=&quot;emerald&quot;&gt;Healthy&lt;/x-ui.badge&gt;&lt;/td&gt;&lt;/tr&gt;
+        &lt;tr&gt;&lt;td&gt;/api/exports&lt;/td&gt;&lt;td&gt;3,920&lt;/td&gt;&lt;td&gt;41.0 ms&lt;/td&gt;&lt;td&gt;&lt;x-ui.badge variant=&quot;amber&quot;&gt;Warm&lt;/x-ui.badge&gt;&lt;/td&gt;&lt;/tr&gt;
+      &lt;/tbody&gt;
+    &lt;/x-ui.table&gt;
+  &lt;/x-ui.card&gt;
+&lt;/section&gt;</pre></div>
+        <div class="pg-code-wrap" data-pg-code-wrap><pre class="z-code" k-show="view === 'cli'" hidden>php vendor/bin/zokeibi block add analytics-dashboard</pre></div>
+      </div>
+      <div class="pg-demo-foot"><span>views/blocks/analytics-dashboard.kgn.html</span><span>Uses: breadcrumb · date-range · kpi · chart · table · badge · card</span></div>
+    </section>
+    <section id="block-api-keys-audit" class="pg-demo-card" data-pg-block="api-keys-audit" k-state="{&quot;view&quot;:&quot;preview&quot;}">
+      <div class="pg-demo-head">
+        <div>
+          <h3 class="pg-demo-title">API Keys, 2FA Verification &amp; Audit Trail <span class="z-badge z-badge-primary">Security</span></h3>
+          <p class="pg-demo-desc">Developer credentials view pairing masked copy-to-clipboard PAT tokens, 6-digit OTP verification, and a zero-JS security timeline.</p>
+        </div>
+        <div class="pg-seg">
+          <button type="button" class="pg-seg-btn is-active" k-class:is-active="view === 'preview'" k-on:click="set(view, 'preview')">Live Preview</button>
+          <button type="button" class="pg-seg-btn" k-class:is-active="view === 'code'" k-on:click="set(view, 'code')">Markup</button>
+          <button type="button" class="pg-seg-btn" k-class:is-active="view === 'cli'" k-on:click="set(view, 'cli')">CLI</button>
+        </div>
+      </div>
+      <div class="pg-demo-body">
+        <div class="pg-stage" k-show="view === 'preview'">
+          <section class="z-stack">
+  <nav class="z-breadcrumb" aria-label="Breadcrumb">
+  <ol>
+    <li>
+      <a href="/">Workspace</a>
+    </li>
+    <li>
+      <a href="/security">Security</a>
+    </li>
+    <li>
+      <span aria-current="page">API Keys</span>
+    </li>
+  </ol>
+</nav>
+  <div class="z-grid-2">
+    <article class="z-card">
+  <header class="z-card-head">
+    <div>
+      <h3 class="z-card-title">Personal Access Token</h3>
+    </div>
+    <span class="z-badge z-badge-emerald">SHA-256 Hashed</span>
+  </header>
+  <div class="z-card-body">      <div class="z-stack">
+        <div class="z-copy" data-z-copy="true" data-copy-value="kgn_pat_live_9f4a8c2e1b7d" data-copy-masked="true">
+  <span class="z-label">Active Production Token</span>
+  <div class="z-copy-row">
+    <code class="z-copy-val" data-z-copy-display>••••••••••••••••••••••••</code>
+    <button type="button" class="z-btn z-btn-ghost z-btn-sm" data-z-copy-reveal aria-pressed="false">Show</button>
+    <button type="button" class="z-btn z-btn-outline z-btn-sm" data-z-copy-btn>Copy</button>
+  </div>
+  <span class="z-copy-status" data-z-copy-status aria-live="polite"></span>
+</div>
+        <form method="POST" action="#" class="z-stack">
+          <input type="hidden" name="_csrf" value="demo-csrf-token">
+          <div class="z-otp" data-z-otp="true" data-otp-length="6">
+  <span class="z-label">Confirm Rotation with 2FA Code</span>
+  <input type="hidden" name="totp_code" value="" data-z-otp-value>
+  <div class="z-otp-group" role="group" aria-label="Confirm Rotation with 2FA Code"  aria-describedby="z-otp-totp_code-b4d308-hint" >
+    <input
+      type="text"
+      inputmode="numeric"
+      pattern="[0-9]*"
+            class="z-otp-digit"
+      value=""
+      autocomplete="one-time-code"
+      aria-label="Digit 1 of 6"
+      data-z-otp-digit="0"
+    >
+    <input
+      type="text"
+      inputmode="numeric"
+      pattern="[0-9]*"
+       maxlength="1"       class="z-otp-digit"
+      value=""
+      autocomplete="off"
+      aria-label="Digit 2 of 6"
+      data-z-otp-digit="1"
+    >
+    <input
+      type="text"
+      inputmode="numeric"
+      pattern="[0-9]*"
+       maxlength="1"       class="z-otp-digit"
+      value=""
+      autocomplete="off"
+      aria-label="Digit 3 of 6"
+      data-z-otp-digit="2"
+    >
+    <input
+      type="text"
+      inputmode="numeric"
+      pattern="[0-9]*"
+       maxlength="1"       class="z-otp-digit"
+      value=""
+      autocomplete="off"
+      aria-label="Digit 4 of 6"
+      data-z-otp-digit="3"
+    >
+    <input
+      type="text"
+      inputmode="numeric"
+      pattern="[0-9]*"
+       maxlength="1"       class="z-otp-digit"
+      value=""
+      autocomplete="off"
+      aria-label="Digit 5 of 6"
+      data-z-otp-digit="4"
+    >
+    <input
+      type="text"
+      inputmode="numeric"
+      pattern="[0-9]*"
+       maxlength="1"       class="z-otp-digit"
+      value=""
+      autocomplete="off"
+      aria-label="Digit 6 of 6"
+      data-z-otp-digit="5"
+    >
+  </div>
+  <span id="z-otp-totp_code-b4d308-hint" class="z-hint">Enter your 6-digit authenticator code.</span>
+</div>
+          <div class="z-row">
+            <button
+  type="submit"
+  class="z-btn z-btn-primary"
+>Rotate API Key</button>
+          </div>
+        </form>
+      </div>
+    </div>
+</article>
+    <article class="z-card">
+  <header class="z-card-head">
+    <div>
+      <h3 class="z-card-title">Security Audit Timeline</h3>
+    </div>
+    <span class="z-badge z-badge-primary">Immutable</span>
+  </header>
+  <div class="z-card-body">      <ol class="z-timeline">
+  <li class="z-timeline-item">
+    <span class="z-timeline-dot is-emerald" aria-hidden="true"></span>
+    <div class="z-timeline-head">
+      <span class="z-timeline-title">API Key Verified</span>
+      <time class="z-timeline-time">Just now</time>
+    </div>
+    <p class="z-timeline-meta">Read-only scope checked via CapabilityMiddleware</p>
+  </li>
+  <li class="z-timeline-item">
+    <span class="z-timeline-dot is-blue" aria-hidden="true"></span>
+    <div class="z-timeline-head">
+      <span class="z-timeline-title">2FA Challenge Passed</span>
+      <time class="z-timeline-time">18m ago</time>
+    </div>
+    <p class="z-timeline-meta">WebAuthn passkey on macOS</p>
+  </li>
+  <li class="z-timeline-item">
+    <span class="z-timeline-dot is-amber" aria-hidden="true"></span>
+    <div class="z-timeline-head">
+      <span class="z-timeline-title">Old Key Revoked</span>
+      <time class="z-timeline-time">2d ago</time>
+    </div>
+    <p class="z-timeline-meta">kgn_pat_***81a invalidated</p>
+  </li>
+</ol>
+    </div>
+</article>
+  </div>
+</section>
+        </div>
+        <div class="pg-code-wrap" data-pg-code-wrap><pre class="z-code" k-show="view === 'code'" hidden>&lt;section class=&quot;z-stack&quot;&gt;
+  &lt;x-ui.breadcrumb items=&quot;Workspace:/|Security:/security|API Keys&quot; /&gt;
+  &lt;div class=&quot;z-grid-2&quot;&gt;
+    &lt;x-ui.card title=&quot;Personal Access Token&quot; badge=&quot;SHA-256 Hashed&quot; badge-variant=&quot;emerald&quot;&gt;
+      &lt;div class=&quot;z-stack&quot;&gt;
+        &lt;x-ui.copy-field label=&quot;Active Production Token&quot; :value=&quot;$maskedToken ?? &apos;kgn_pat_example_replace_me&apos;&quot; masked=&quot;true&quot; /&gt;
+        &lt;form method=&quot;POST&quot; action=&quot;/security/keys/rotate&quot; class=&quot;z-stack&quot;&gt;
+          &lt;input type=&quot;hidden&quot; name=&quot;_csrf&quot; value=&quot;{{ $csrf ?? &apos;&apos; }}&quot;&gt;
+          &lt;x-ui.otp-input name=&quot;totp_code&quot; label=&quot;Confirm Rotation with 2FA Code&quot; length=&quot;6&quot; hint=&quot;Enter your 6-digit authenticator code.&quot; /&gt;
+          &lt;div class=&quot;z-row&quot;&gt;
+            &lt;x-ui.button type=&quot;submit&quot; variant=&quot;primary&quot;&gt;Rotate API Key&lt;/x-ui.button&gt;
+          &lt;/div&gt;
+        &lt;/form&gt;
+      &lt;/div&gt;
+    &lt;/x-ui.card&gt;
+    &lt;x-ui.card title=&quot;Security Audit Timeline&quot; badge=&quot;Immutable&quot;&gt;
+      &lt;x-ui.timeline items=&quot;API Key Verified|Just now|Read-only scope checked via CapabilityMiddleware|emerald;;2FA Challenge Passed|18m ago|WebAuthn passkey on macOS|blue;;Old Key Revoked|2d ago|kgn_pat_***81a invalidated|amber&quot; /&gt;
+    &lt;/x-ui.card&gt;
+  &lt;/div&gt;
+&lt;/section&gt;</pre></div>
+        <div class="pg-code-wrap" data-pg-code-wrap><pre class="z-code" k-show="view === 'cli'" hidden>php vendor/bin/zokeibi block add api-keys-audit</pre></div>
+      </div>
+      <div class="pg-demo-foot"><span>views/blocks/api-keys-audit.kgn.html</span><span>Uses: breadcrumb · card · copy-field · otp-input · timeline · button · badge</span></div>
+    </section>
+  </div>
+</section>
   </main>
 
     <footer class="pg-footer z-shell">
     <div>
-      <strong>Zokeibi (造形美 — "Beauty of Form") v1.2.0</strong> · Pure PHP 8.5 CSS compiler &amp; 60 accessible <code>&lt;x-ui.*&gt;</code> components.
+      <strong>Zokeibi (造形美 — "Beauty of Form") v1.3.0</strong> · Pure PHP 8.5 CSS compiler, 62 accessible <code>&lt;x-ui.*&gt;</code> components &amp; 8 SaaS blocks.
     </div>
     <div class="z-row">
       <a class="pg-link" href="/">Overview</a>
+      <a class="pg-link" href="/playground/">Playground</a>
+      <a class="pg-link" href="/studio/">OKLCH Studio</a>
       <a class="pg-link" href="/api/registry.json">/api/registry.json</a>
       <a class="pg-link" href="/api/prove.json">/api/prove.json</a>
       <a class="pg-link" href="/llms.txt">llms.txt</a>
-      <a class="pg-link" href="https://github.com/kongono/zokeibi" target="_blank" rel="noopener">GitHub</a>
     </div>
   </footer>
 </body>

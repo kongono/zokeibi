@@ -1,0 +1,93 @@
+@layer zokeibi.components {
+  .z-filter-bar {
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+    padding: 0.62rem 0.78rem;
+    border-radius: var(--z-radius);
+    border: 1px solid var(--z-border);
+    background: var(--z-surface);
+  }
+
+  .z-filter-views {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    flex-wrap: wrap;
+    padding-bottom: 0.45rem;
+    border-bottom: 1px solid var(--z-border);
+  }
+
+  .z-filter-view {
+    appearance: none;
+    border: 1px solid transparent;
+    background: transparent;
+    color: var(--z-ink-muted);
+    font: inherit;
+    font-size: 0.74rem;
+    font-weight: 650;
+    padding: 0.24rem 0.6rem;
+    border-radius: var(--z-radius-sm);
+    text-decoration: none;
+    cursor: pointer;
+
+    &:hover { color: var(--z-ink); background: var(--z-surface-2); }
+    &.is-active { background: var(--z-accent-soft); border-color: var(--z-accent-border); color: var(--z-ink); }
+  }
+
+  .z-filter-row { display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; flex-wrap: wrap; }
+  .z-filter-pills { display: flex; align-items: center; gap: 0.38rem; flex-wrap: wrap; }
+  .z-filter-controls { display: flex; align-items: center; gap: 0.35rem; }
+
+  .z-filter-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.32rem;
+    padding: 0.2rem 0.5rem;
+    border-radius: 999px;
+    border: 1px solid var(--z-accent-border);
+    background: var(--z-accent-soft);
+    color: var(--z-ink);
+    font-size: 0.73rem;
+    font-weight: 620;
+  }
+
+  .z-filter-key { font-family: var(--z-mono); font-size: 0.68rem; color: var(--z-ink-soft); }
+
+  .z-filter-rm {
+    border: 0;
+    background: transparent;
+    color: var(--z-ink-muted);
+    cursor: pointer;
+    padding: 0 0.1rem;
+    line-height: 1;
+    &:hover { color: var(--z-danger); }
+  }
+
+  .z-filter-menu {
+    margin: auto;
+    padding: 0.35rem;
+    min-width: 220px;
+    border-radius: var(--z-radius-sm);
+    border: 1px solid var(--z-border-strong);
+    background: var(--z-surface);
+    box-shadow: var(--z-shadow);
+    &:popover-open { display: grid; gap: 0.15rem; }
+  }
+
+  .z-filter-opt {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    padding: 0.42rem 0.6rem;
+    border: 0;
+    border-radius: calc(var(--z-radius-sm) - 2px);
+    background: transparent;
+    color: var(--z-ink);
+    font: inherit;
+    font-size: 0.77rem;
+    cursor: pointer;
+    &:hover { background: var(--z-surface-hover); }
+  }
+}

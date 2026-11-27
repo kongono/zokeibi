@@ -3,19 +3,19 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Zokeibi (造形美) v1.2.0 — Zero-npm, Strict-CSP UI Framework &amp; Pure PHP 8.5 OKLCH Compiler</title>
-  <meta name="description" content="Zokeibi (造形美 — Architectural Beauty of Form): 60 accessible UI components, 8 turnkey SaaS blocks, Two-Gear density switching, integer-cents money inputs, hardened alert dialogs, undoable toasts, bulk/CSV DataTables, human-in-the-loop AI review &amp; approval cards, and pure PHP 8.5 OKLCH CSS tree-shaker (11.05 KB gzip).">
+  <title>Zokeibi (造形美) v1.3.0 — Zero-npm, Strict-CSP UI Framework &amp; Pure PHP 8.5 OKLCH Compiler</title>
+  <meta name="description" content="Zokeibi (造形美 — Architectural Beauty of Form): 62 accessible UI components, 8 live SaaS blocks, browser OKLCH Theme Studio, Two-Gear density switching, filter bars, compare sliders, dirty-form guards, mobile bottom sheets, integer-cents money inputs, bulk/CSV DataTables, human-in-the-loop AI review &amp; approval cards, and pure PHP 8.5 OKLCH CSS tree-shaker (11.75 KB gzip).">
   <meta property="og:type" content="website">
   <meta property="og:title" content="Zokeibi (造形美) — Zero-npm, Strict-CSP UI Framework for PHP 8.5+">
-  <meta property="og:description" content="60 accessible components + 8 SaaS blocks in 11.05 KB gzip. Zero npm, strict CSP (style-src 'self'), Two-Gear density, integer-cents inputs, bulk/CSV tables, AI review &amp; approval gates, and Grade A+ automated WCAG/CSP proofs.">
+  <meta property="og:description" content="62 accessible components + 8 live SaaS blocks in 11.75 KB gzip, plus a live browser OKLCH Theme Studio, filter bars, compare sliders, dirty-form guards, and Grade A+ automated WCAG/CSP proofs.">
   <meta property="og:url" content="https://zokeibi.com/">
   <link rel="canonical" href="https://zokeibi.com/">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Zokeibi (造形美) — Zero-npm, Strict-CSP UI Framework">
-  <meta name="twitter:description" content="60 accessible components + 8 SaaS blocks in 11.05 KB gzip. Pure PHP 8.5 OKLCH compiler, Two-Gear density, integer-cents inputs, AI review/approval gates, and zokeibi prove Grade A+ gate.">
+  <meta name="twitter:description" content="62 accessible components + 8 live SaaS blocks in 11.75 KB gzip. Pure PHP 8.5 OKLCH compiler, browser Theme Studio, filter bars, compare sliders, dirty-form guards, and zokeibi prove Grade A+ gate.">
   <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
-  <link rel="stylesheet" href="assets/zokeibi.min.css">
-  <link rel="stylesheet" href="assets/site.css">
+  <link rel="stylesheet" href="assets/zokeibi.min.css?v=c4d1c800">
+  <link rel="stylesheet" href="assets/site.css?v=680ba49a">
   <link rel="alternate" type="text/markdown" title="Zokeibi LLM Documentation Index" href="llms.txt">
 </head>
 <body>
@@ -25,12 +25,13 @@
         <img src="assets/favicon.svg" width="26" height="26" alt="Zokeibi mark">
         <span>Zokeibi</span>
         <span class="zs-brand-kanji">造形美</span>
-        <span class="z-badge">v1.2.0</span>
+        <span class="z-badge">v1.3.0</span>
       </a>
       <nav class="zs-nav" aria-label="Primary">
         <a href="/playground/"><strong>Playground</strong></a>
-        <a href="#live-demo">Highlights</a>
-        <a href="#catalog">60 Components</a>
+        <a href="/studio/"><strong>OKLCH Studio</strong></a>
+        <a href="/playground/#blocks">8 Blocks</a>
+        <a href="#catalog">62 Components</a>
         <a href="#quickstart">CLI &amp; Proof</a>
         <a href="#stacks">Any Stack</a>
         <a href="https://kongono.com" target="_blank" rel="noopener">Kongono &rarr;</a>
@@ -48,10 +49,10 @@
   <main id="top">
     <section class="zs-hero">
       <div class="zs-container">
-        <div class="zs-kicker">造形美 · Architectural Beauty of Form · PHP 8.5+ · 0 npm · 11.05 KB Gzip · MIT</div>
+        <div class="zs-kicker">造形美 · Architectural Beauty of Form · PHP 8.5+ · 0 npm · 11.75 KB Gzip · MIT</div>
         <h1>Zero-npm, Strict-CSP UI <span class="zs-hero-accent">Proven on Every Build</span></h1>
         <p class="zs-lead">
-          <strong>Zokeibi</strong> (<code>kongono/zokeibi</code>) is a standalone UI component framework and pure PHP 8.5 OKLCH CSS tree-shaker with <strong>zero runtime Composer dependencies</strong> and <strong>zero Node.js</strong>. Ship 60 accessible components, 8 turnkey SaaS blocks, Two-Gear density switching, integer-cents money inputs, bulk/CSV DataTables, human-in-the-loop AI review &amp; approval cards, pure-SVG charts, and automated Grade A+ WCAG &amp; CSP proofs — on <strong>Kongono</strong> or any HTML stack.
+          <strong>Zokeibi</strong> (<code>kongono/zokeibi</code>) is a standalone UI component framework and pure PHP 8.5 OKLCH CSS tree-shaker with <strong>zero runtime Composer dependencies</strong> and <strong>zero Node.js</strong>. Ship 62 accessible components, 8 live SaaS blocks, a live browser OKLCH Theme Studio, Two-Gear density switching, composable filter bars, before/after compare sliders, declarative dirty-form guards, mobile bottom sheets, integer-cents money inputs, bulk/CSV DataTables, human-in-the-loop AI review &amp; approval cards, interactive pure-SVG charts, and automated Grade A+ WCAG &amp; CSP proofs — on <strong>Kongono</strong> or any HTML stack.
         </p>
 
         <div class="zs-install">
@@ -61,16 +62,16 @@
         </div>
 
         <div class="zs-cta-row">
-          <a class="z-btn z-btn-primary" href="/playground/">Open 60-Component Playground &rarr;</a>
-          <a class="z-btn z-btn-outline" href="#live-demo">Quick Highlights</a>
-          <a class="z-btn z-btn-outline" href="#catalog">Browse Catalog</a>
+          <a class="z-btn z-btn-primary" href="/playground/">Open 62-Component Playground &rarr;</a>
+          <a class="z-btn z-btn-emerald" href="/studio/">Open Live OKLCH Studio &rarr;</a>
+          <a class="z-btn z-btn-outline" href="/playground/#blocks">8 Live SaaS Blocks</a>
           <a class="z-btn z-btn-ghost" href="https://kongono.com" target="_blank" rel="noopener">Built for Kongono &rarr;</a>
         </div>
 
         <div class="zs-stats">
           <div class="zs-stat"><div class="zs-stat-num">0</div><div class="zs-stat-lbl">npm or Runtime Composer Deps</div></div>
-          <div class="zs-stat"><div class="zs-stat-num">60 + 8</div><div class="zs-stat-lbl">Components &amp; SaaS Blocks (MIT)</div></div>
-          <div class="zs-stat"><div class="zs-stat-num">11.05 KB</div><div class="zs-stat-lbl">Full 60-Component Gzip Bundle</div></div>
+          <div class="zs-stat"><div class="zs-stat-num">62 + 8</div><div class="zs-stat-lbl">Components &amp; Live SaaS Blocks</div></div>
+          <div class="zs-stat"><div class="zs-stat-num">11.75 KB</div><div class="zs-stat-lbl">Full 62-Component Gzip Bundle</div></div>
           <div class="zs-stat"><div class="zs-stat-num">Grade A+</div><div class="zs-stat-lbl">zokeibi prove --strict (100/100)</div></div>
           <div class="zs-stat"><div class="zs-stat-num">Strict CSP</div><div class="zs-stat-lbl">script-src 'self' · style-src 'self'</div></div>
         </div>
@@ -120,7 +121,8 @@
                 <div id="demo-menu" class="z-dropdown-panel" popover="auto" role="menu">
                   <ul class="z-dropdown-list" role="none">
                     <li role="none"><a class="z-dropdown-item" role="menuitem" href="#quickstart"><span>Install via Composer</span><kbd class="z-kbd">I</kbd></a></li>
-                    <li role="none"><a class="z-dropdown-item" role="menuitem" href="#catalog"><span>Browse 60 Components</span><kbd class="z-kbd">C</kbd></a></li>
+                    <li role="none"><a class="z-dropdown-item" role="menuitem" href="#catalog"><span>Browse 62 Components</span><kbd class="z-kbd">C</kbd></a></li>
+                    <li role="none"><a class="z-dropdown-item" role="menuitem" href="/studio/"><span>Open OKLCH Studio</span><kbd class="z-kbd">S</kbd></a></li>
                     <li class="z-dropdown-sep" role="separator"></li>
                     <li role="none"><a class="z-dropdown-item" role="menuitem" href="https://kongono.com" target="_blank" rel="noopener"><span>Open Kongono</span><kbd class="z-kbd">↗</kbd></a></li>
                   </ul>
@@ -141,7 +143,7 @@
                 <span class="z-badge z-badge-primary">OKLCH Tokens</span>
                 <span class="z-badge z-badge-emerald">Grade A+</span>
                 <span class="z-badge z-badge-blue">Strict CSP</span>
-                <span class="z-badge z-badge-amber">11.05 KB Gzip</span>
+                <span class="z-badge z-badge-amber">11.75 KB Gzip</span>
               </div>
               <div class="z-alert z-alert-success" role="status">
                 <div class="z-alert-title">Zero Inline Styles or Eval</div>
@@ -201,61 +203,61 @@
             </div>
           </article>
 
-          <!-- 3. Pure-SVG Charts (0 B JS) -->
+          <!-- 3. Pure-SVG Charts (0 B JS + Progressive Hover Tooltips) -->
           <article class="z-card">
             <div class="z-card-head">
               <div>
                 <div class="z-card-kicker">0 B JS · Pure Server-Rendered SVG</div>
                 <h3 class="z-card-title">Pure-SVG Bar &amp; Donut Charts</h3>
               </div>
-              <span class="z-badge z-badge-emerald">0 B JS</span>
+              <span class="z-badge z-badge-emerald">Hover / Focus</span>
             </div>
             <div class="z-card-body z-stack">
-              <figure class="z-chart">
+              <figure class="z-chart" data-z-chart="true">
                 <figcaption class="z-chart-head">
                   <span class="z-chart-title">Tree-Shaken CSS Size by App (KB Gzip)</span>
-                  <span class="z-chart-meta">Pure PHP 8.5</span>
+                  <span class="z-chart-meta" data-z-chart-readout>Pure PHP 8.5</span>
                 </figcaption>
                 <svg class="z-chart-svg" viewBox="0 0 360 152" role="img" aria-label="Tree-shaken CSS size bar chart">
                   <line class="z-chart-grid" x1="16" y1="74" x2="344" y2="74" />
                   <line class="z-chart-grid" x1="16" y1="128" x2="344" y2="128" />
-                  <rect class="z-chart-bar" x="29.8" y="100.4" width="38.0" height="27.6"><title>Landing: 2.4 KB</title></rect>
+                  <rect class="z-chart-bar" x="29.8" y="100.4" width="38.0" height="27.6" tabindex="0" data-chart-tip="Landing: 2.4 KB"><title>Landing: 2.4 KB</title></rect>
                   <text class="z-chart-val" x="48.8" y="95.4" text-anchor="middle">2.4</text>
                   <text class="z-chart-label" x="48.8" y="144" text-anchor="middle">Landing</text>
-                  <rect class="z-chart-bar" x="95.4" y="84.3" width="38.0" height="43.7"><title>Auth: 3.8 KB</title></rect>
+                  <rect class="z-chart-bar" x="95.4" y="84.3" width="38.0" height="43.7" tabindex="0" data-chart-tip="Auth: 3.8 KB"><title>Auth: 3.8 KB</title></rect>
                   <text class="z-chart-val" x="114.4" y="79.3" text-anchor="middle">3.8</text>
                   <text class="z-chart-label" x="114.4" y="144" text-anchor="middle">Auth</text>
-                  <rect class="z-chart-bar" x="161.0" y="69.4" width="38.0" height="58.6"><title>CRUD: 5.1 KB</title></rect>
+                  <rect class="z-chart-bar" x="161.0" y="69.4" width="38.0" height="58.6" tabindex="0" data-chart-tip="CRUD: 5.1 KB"><title>CRUD: 5.1 KB</title></rect>
                   <text class="z-chart-val" x="180.0" y="64.4" text-anchor="middle">5.1</text>
                   <text class="z-chart-label" x="180.0" y="144" text-anchor="middle">CRUD</text>
-                  <rect class="z-chart-bar" x="226.6" y="45.2" width="38.0" height="82.8"><title>SaaS: 7.2 KB</title></rect>
+                  <rect class="z-chart-bar" x="226.6" y="45.2" width="38.0" height="82.8" tabindex="0" data-chart-tip="SaaS: 7.2 KB"><title>SaaS: 7.2 KB</title></rect>
                   <text class="z-chart-val" x="245.6" y="40.2" text-anchor="middle">7.2</text>
                   <text class="z-chart-label" x="245.6" y="144" text-anchor="middle">SaaS</text>
-                  <rect class="z-chart-bar" x="292.2" y="20.0" width="38.0" height="108.0"><title>All 60: 11.0 KB</title></rect>
-                  <text class="z-chart-val" x="311.2" y="15.0" text-anchor="middle">11.0</text>
-                  <text class="z-chart-label" x="311.2" y="144" text-anchor="middle">All 60</text>
+                  <rect class="z-chart-bar" x="292.2" y="20.0" width="38.0" height="108.0" tabindex="0" data-chart-tip="All 62: 11.75 KB"><title>All 62: 11.75 KB</title></rect>
+                  <text class="z-chart-val" x="311.2" y="15.0" text-anchor="middle">11.75</text>
+                  <text class="z-chart-label" x="311.2" y="144" text-anchor="middle">All 62</text>
                 </svg>
               </figure>
-              <figure class="z-chart">
+              <figure class="z-chart" data-z-chart="true">
                 <figcaption class="z-chart-head">
-                  <span class="z-chart-title">60 Components by Category</span>
-                  <span class="z-chart-meta">100% MIT</span>
+                  <span class="z-chart-title">62 Components by Category</span>
+                  <span class="z-chart-meta" data-z-chart-readout>100% MIT</span>
                 </figcaption>
                 <div class="z-chart-donut-wrap">
                   <svg class="z-chart-donut" viewBox="0 0 120 120" role="img" aria-label="Component breakdown donut chart">
                     <circle class="z-chart-track" cx="60" cy="60" r="46" />
-                    <circle class="z-chart-seg z-chart-tone-0" cx="60" cy="60" r="46" stroke-dasharray="101.16 289.03" stroke-dashoffset="0.00" transform="rotate(-90 60 60)"><title>Forms: 21 (35%)</title></circle>
-                    <circle class="z-chart-seg z-chart-tone-1" cx="60" cy="60" r="46" stroke-dasharray="57.81 289.03" stroke-dashoffset="-101.16" transform="rotate(-90 60 60)"><title>Primitives: 12 (20%)</title></circle>
-                    <circle class="z-chart-seg z-chart-tone-2" cx="60" cy="60" r="46" stroke-dasharray="52.99 289.03" stroke-dashoffset="-158.97" transform="rotate(-90 60 60)"><title>Data: 11 (18%)</title></circle>
-                    <circle class="z-chart-seg z-chart-tone-3" cx="60" cy="60" r="46" stroke-dasharray="38.54 289.03" stroke-dashoffset="-211.96" transform="rotate(-90 60 60)"><title>Navigation: 8 (13%)</title></circle>
-                    <circle class="z-chart-seg z-chart-tone-4" cx="60" cy="60" r="46" stroke-dasharray="38.54 289.03" stroke-dashoffset="-250.50" transform="rotate(-90 60 60)"><title>Overlays: 8 (13%)</title></circle>
-                    <text class="z-chart-center" x="60" y="65" text-anchor="middle">60</text>
+                    <circle class="z-chart-seg z-chart-tone-0" cx="60" cy="60" r="46" stroke-dasharray="97.90 289.03" stroke-dashoffset="0.00" transform="rotate(-90 60 60)" tabindex="0" data-chart-tip="Forms: 21 (34%)"><title>Forms: 21 (34%)</title></circle>
+                    <circle class="z-chart-seg z-chart-tone-1" cx="60" cy="60" r="46" stroke-dasharray="55.94 289.03" stroke-dashoffset="-97.90" transform="rotate(-90 60 60)" tabindex="0" data-chart-tip="Primitives: 12 (19%)"><title>Primitives: 12 (19%)</title></circle>
+                    <circle class="z-chart-seg z-chart-tone-2" cx="60" cy="60" r="46" stroke-dasharray="55.94 289.03" stroke-dashoffset="-153.84" transform="rotate(-90 60 60)" tabindex="0" data-chart-tip="Data: 12 (19%)"><title>Data: 12 (19%)</title></circle>
+                    <circle class="z-chart-seg z-chart-tone-3" cx="60" cy="60" r="46" stroke-dasharray="41.96 289.03" stroke-dashoffset="-209.78" transform="rotate(-90 60 60)" tabindex="0" data-chart-tip="Navigation: 9 (15%)"><title>Navigation: 9 (15%)</title></circle>
+                    <circle class="z-chart-seg z-chart-tone-4" cx="60" cy="60" r="46" stroke-dasharray="37.29 289.03" stroke-dashoffset="-251.74" transform="rotate(-90 60 60)" tabindex="0" data-chart-tip="Overlays: 8 (13%)"><title>Overlays: 8 (13%)</title></circle>
+                    <text class="z-chart-center" x="60" y="65" text-anchor="middle">62</text>
                   </svg>
                   <ul class="z-chart-legend">
                     <li><span><span class="z-chart-swatch z-chart-tone-0" aria-hidden="true"></span>Forms</span><span class="z-mono">21</span></li>
                     <li><span><span class="z-chart-swatch z-chart-tone-1" aria-hidden="true"></span>Primitives</span><span class="z-mono">12</span></li>
-                    <li><span><span class="z-chart-swatch z-chart-tone-2" aria-hidden="true"></span>Data</span><span class="z-mono">11</span></li>
-                    <li><span><span class="z-chart-swatch z-chart-tone-3" aria-hidden="true"></span>Navigation</span><span class="z-mono">8</span></li>
+                    <li><span><span class="z-chart-swatch z-chart-tone-2" aria-hidden="true"></span>Data</span><span class="z-mono">12</span></li>
+                    <li><span><span class="z-chart-swatch z-chart-tone-3" aria-hidden="true"></span>Navigation</span><span class="z-mono">9</span></li>
                     <li><span><span class="z-chart-swatch z-chart-tone-4" aria-hidden="true"></span>Overlays</span><span class="z-mono">8</span></li>
                   </ul>
                 </div>
@@ -351,10 +353,10 @@
                     </div>
                   </div>
                   <div class="z-editor-panes is-split" data-z-ed-panes>
-                    <textarea id="demo-editor" name="notes" rows="6" class="z-editor-input" aria-label="Markdown release notes" data-z-ed-input>### Zokeibi v1.2.0 (造形美)
-Ship **60 accessible components** in `11.05 KB` gzipped with *zero npm*.
+                    <textarea id="demo-editor" name="notes" rows="6" class="z-editor-input" aria-label="Markdown release notes" data-z-ed-input>### Zokeibi v1.3.0 (造形美)
+Ship **62 accessible components** &amp; **8 live SaaS blocks** in `11.75 KB` gzipped with *zero npm*.
 
-> Two-Gear density, integer-cents money inputs, bulk/CSV tables, undoable toasts, and AI review/approval gates.
+> Live browser OKLCH Studio (`/studio/`), composable filter bars, before/after compare sliders, dirty-form guards, mobile bottom sheets, and interactive SVG chart tooltips.
 
 - Run `php vendor/bin/zokeibi prove --strict` for Grade A+ contrast &amp; audit proofs.
 - Pair with [Kongono PHP 8.5](https://kongono.com) or drop `.z-*` classes into any stack.</textarea>
@@ -476,16 +478,16 @@ Ship **60 accessible components** in `11.05 KB` gzipped with *zero npm*.
     <section class="zs-section" id="catalog">
       <div class="zs-container">
         <div class="zs-section-head">
-          <h2>Complete Catalog: 60 Components + 8 Turnkey SaaS Blocks</h2>
-          <p>Install only what you use (<code>zokeibi add ...</code>) or everything at once (<code>zokeibi add --all</code>). Click any component below to test it live in the <a href="/playground/">60-Component Interactive Playground</a>.</p>
+          <h2>Complete Catalog: 62 Components + 8 Live Turnkey SaaS Blocks</h2>
+          <p>Install only what you use (<code>zokeibi add ...</code>) or everything at once (<code>zokeibi add --all</code>). Click any component below to test it live in the <a href="/playground/">62-Component &amp; 8-Block Interactive Playground</a>, or customize OKLCH tokens live in the <a href="/studio/">OKLCH Theme Studio</a>.</p>
         </div>
 
         <div class="zs-catalog-filters" role="group" aria-label="Filter component catalog by category">
-          <button type="button" class="zs-pill is-active" data-catalog-filter="all" aria-pressed="true">All (68)</button>
+          <button type="button" class="zs-pill is-active" data-catalog-filter="all" aria-pressed="true">All (70)</button>
           <button type="button" class="zs-pill" data-catalog-filter="primitives" aria-pressed="false">Primitives (12)</button>
           <button type="button" class="zs-pill" data-catalog-filter="forms" aria-pressed="false">Forms (21)</button>
-          <button type="button" class="zs-pill" data-catalog-filter="data" aria-pressed="false">Data (11)</button>
-          <button type="button" class="zs-pill" data-catalog-filter="navigation" aria-pressed="false">Navigation (8)</button>
+          <button type="button" class="zs-pill" data-catalog-filter="data" aria-pressed="false">Data (12)</button>
+          <button type="button" class="zs-pill" data-catalog-filter="navigation" aria-pressed="false">Navigation (9)</button>
           <button type="button" class="zs-pill" data-catalog-filter="overlays" aria-pressed="false">Overlays (8)</button>
           <button type="button" class="zs-pill" data-catalog-filter="blocks" aria-pressed="false">SaaS Blocks (8)</button>
         </div>
@@ -528,8 +530,8 @@ Ship **60 accessible components** in `11.05 KB` gzipped with *zero npm*.
           <div class="zs-comp-card" data-catalog-item="forms"><div class="zs-comp-top"><span class="zs-comp-tag">signature-pad</span><span class="z-badge z-badge-blue">Runtime</span></div><p class="zs-comp-desc">ESIGN/UETA pointer/touch canvas drawing + typed legal signature capture.</p></div>
           <div class="zs-comp-card" data-catalog-item="forms"><div class="zs-comp-top"><span class="zs-comp-tag">money-input</span><span class="z-badge z-badge-blue">Runtime</span></div><p class="zs-comp-desc">Formatted currency input submitting exact integer cents (zero float bugs).</p></div>
 
-          <!-- Data (11) -->
-          <div class="zs-comp-card" data-catalog-item="data"><div class="zs-comp-top"><span class="zs-comp-tag">chart</span><span class="z-badge z-badge-emerald">0 B JS</span></div><p class="zs-comp-desc">Pure server-rendered SVG Bar, Donut, and Sparkline charts.</p></div>
+          <!-- Data (12) -->
+          <div class="zs-comp-card" data-catalog-item="data"><div class="zs-comp-top"><span class="zs-comp-tag">chart</span><span class="z-badge z-badge-emerald">0 B JS</span></div><p class="zs-comp-desc">Pure server-rendered SVG Bar, Donut, and Sparkline charts with progressive hover/focus tooltips.</p></div>
           <div class="zs-comp-card" data-catalog-item="data"><div class="zs-comp-top"><span class="zs-comp-tag">table</span><span class="z-badge z-badge-blue">Runtime</span></div><p class="zs-comp-desc">Sort, filter, Shift+Click row selection, bulk action bar, Popover column toggle &amp; CSV export.</p></div>
           <div class="zs-comp-card" data-catalog-item="data"><div class="zs-comp-top"><span class="zs-comp-tag">kpi</span><span class="z-badge z-badge-emerald">0 B JS</span></div><p class="zs-comp-desc">Executive metric tiles with delta indicators and accent tones.</p></div>
           <div class="zs-comp-card" data-catalog-item="data"><div class="zs-comp-top"><span class="zs-comp-tag">progress</span><span class="z-badge z-badge-emerald">0 B JS</span></div><p class="zs-comp-desc">Native &lt;progress&gt; bar styled with semantic OKLCH tokens.</p></div>
@@ -540,8 +542,9 @@ Ship **60 accessible components** in `11.05 KB` gzipped with *zero npm*.
           <div class="zs-comp-card" data-catalog-item="data"><div class="zs-comp-top"><span class="zs-comp-tag">carousel</span><span class="z-badge z-badge-emerald">0 B JS</span></div><p class="zs-comp-desc">Smooth CSS scroll-snap horizontal showcase strip.</p></div>
           <div class="zs-comp-card" data-catalog-item="data"><div class="zs-comp-top"><span class="zs-comp-tag">ai-review</span><span class="z-badge z-badge-emerald">0 B JS</span></div><p class="zs-comp-desc">Human-in-the-loop AI extraction verification card with confidence badges.</p></div>
           <div class="zs-comp-card" data-catalog-item="data"><div class="zs-comp-top"><span class="zs-comp-tag">approval-card</span><span class="z-badge z-badge-emerald">0 B JS</span></div><p class="zs-comp-desc">Before/after diff approval gate card built for Kongono #[RequiresApproval].</p></div>
+          <div class="zs-comp-card" data-catalog-item="data"><div class="zs-comp-top"><span class="zs-comp-tag">compare-slider</span><span class="z-badge z-badge-blue">Runtime</span></div><p class="zs-comp-desc">Accessible before/after visual comparison slider using CSS clip-path and native range input.</p></div>
 
-          <!-- Navigation (8) -->
+          <!-- Navigation (9) -->
           <div class="zs-comp-card" data-catalog-item="navigation"><div class="zs-comp-top"><span class="zs-comp-tag">tabs</span><span class="z-badge z-badge-blue">Runtime</span></div><p class="zs-comp-desc">ARIA tablist + tabpanels with live selection state.</p></div>
           <div class="zs-comp-card" data-catalog-item="navigation"><div class="zs-comp-top"><span class="zs-comp-tag">accordion</span><span class="z-badge z-badge-emerald">0 B JS</span></div><p class="zs-comp-desc">Native HTML &lt;details name="..."&gt; exclusive accordions.</p></div>
           <div class="zs-comp-card" data-catalog-item="navigation"><div class="zs-comp-top"><span class="zs-comp-tag">stepper</span><span class="z-badge z-badge-emerald">0 B JS</span></div><p class="zs-comp-desc">Multi-step onboarding and checkout progress rail.</p></div>
@@ -550,13 +553,14 @@ Ship **60 accessible components** in `11.05 KB` gzipped with *zero npm*.
           <div class="zs-comp-card" data-catalog-item="navigation"><div class="zs-comp-top"><span class="zs-comp-tag">segmented</span><span class="z-badge z-badge-emerald">0 B JS</span></div><p class="zs-comp-desc">Compact segmented radio/link mode switcher.</p></div>
           <div class="zs-comp-card" data-catalog-item="navigation"><div class="zs-comp-top"><span class="zs-comp-tag">sidebar</span><span class="z-badge z-badge-emerald">0 B JS</span></div><p class="zs-comp-desc">Grouped workspace navigation rail with item counters.</p></div>
           <div class="zs-comp-card" data-catalog-item="navigation"><div class="zs-comp-top"><span class="zs-comp-tag">tree</span><span class="z-badge z-badge-emerald">0 B JS</span></div><p class="zs-comp-desc">Nested directory/file tree built on native &lt;details&gt; elements.</p></div>
+          <div class="zs-comp-card" data-catalog-item="navigation"><div class="zs-comp-top"><span class="zs-comp-tag">filter-bar</span><span class="z-badge z-badge-blue">Runtime</span></div><p class="zs-comp-desc">Composable filter pills, Saved Views, Top-Layer Popover picker &amp; URL query sync.</p></div>
 
-          <!-- Overlays (7) -->
+          <!-- Overlays (8) -->
           <div class="zs-comp-card" data-catalog-item="overlays"><div class="zs-comp-top"><span class="zs-comp-tag">dropdown</span><span class="z-badge z-badge-emerald">0 B JS</span></div><p class="zs-comp-desc">Native HTML Top-Layer [popover] action menu with shortcuts.</p></div>
           <div class="zs-comp-card" data-catalog-item="overlays"><div class="zs-comp-top"><span class="zs-comp-tag">popover</span><span class="z-badge z-badge-emerald">0 B JS</span></div><p class="zs-comp-desc">Native Top-Layer floating info card with @starting-style animation.</p></div>
           <div class="zs-comp-card" data-catalog-item="overlays"><div class="zs-comp-top"><span class="zs-comp-tag">tooltip</span><span class="z-badge z-badge-emerald">0 B JS</span></div><p class="zs-comp-desc">Pure CSS hover and focus-visible hint bubble.</p></div>
           <div class="zs-comp-card" data-catalog-item="overlays"><div class="zs-comp-top"><span class="zs-comp-tag">modal</span><span class="z-badge z-badge-blue">Runtime</span></div><p class="zs-comp-desc">Accessible modal dialog with Esc, backdrop click, and focus shift.</p></div>
-          <div class="zs-comp-card" data-catalog-item="overlays"><div class="zs-comp-top"><span class="zs-comp-tag">drawer</span><span class="z-badge z-badge-blue">Runtime</span></div><p class="zs-comp-desc">Slide-over panel for detail editors and inspectors.</p></div>
+          <div class="zs-comp-card" data-catalog-item="overlays"><div class="zs-comp-top"><span class="zs-comp-tag">drawer</span><span class="z-badge z-badge-blue">Runtime</span></div><p class="zs-comp-desc">Slide-over panel &amp; mobile bottom sheet (position="right|left|bottom").</p></div>
           <div class="zs-comp-card" data-catalog-item="overlays"><div class="zs-comp-top"><span class="zs-comp-tag">toast</span><span class="z-badge z-badge-blue">Runtime</span></div><p class="zs-comp-desc">Stacked programmatic toasts + declarative grace-window Undo countdown queue.</p></div>
           <div class="zs-comp-card" data-catalog-item="overlays"><div class="zs-comp-top"><span class="zs-comp-tag">command-palette</span><span class="z-badge z-badge-blue">Runtime</span></div><p class="zs-comp-desc">Global Cmd+K / Ctrl+K keyboard command launcher.</p></div>
           <div class="zs-comp-card" data-catalog-item="overlays"><div class="zs-comp-top"><span class="zs-comp-tag">alert-dialog</span><span class="z-badge z-badge-blue">Runtime</span></div><p class="zs-comp-desc">Hardened destructive confirmation dialog with static backdrop &amp; typed phrase gate.</p></div>
@@ -609,10 +613,10 @@ php vendor/bin/zokeibi studio --dir=. --port=8101</code></pre>
             <h3 class="z-card-title">2. Executable UI Proof Certificate</h3>
             <pre class="zs-pre"><code>$ php vendor/bin/zokeibi prove --dir=. --views=views --strict
 
-Zokeibi (造形美) UI Proof Certificate — Grade A+ (100/100 · PASS · 21.4 ms)
+Zokeibi (造形美) UI Proof Certificate — Grade A+ (100/100 · PASS · 27.3 ms)
   [1] WCAG 2.1 AA Contrast: PASS (100/100 · 2 theme(s) checked)
-  [2] UI Schema &amp; CSP Audit: PASS (100/100 · 63 file(s), 0 err, 0 warn)
-  [3] Gzip CSS Budget:      PASS (100/100 · 11.05 KB / 12.00 KB max · 60 components)</code></pre>
+  [2] UI Schema &amp; CSP Audit: PASS (100/100 · 65 file(s), 0 err, 0 warn)
+  [3] Gzip CSS Budget:      PASS (100/100 · 11.75 KB / 12.50 KB max · 62 components)</code></pre>
             <div class="z-card">
               <div class="z-card-body z-stack-sm">
                 <div class="z-card-kicker">AI-Native · Zero Hallucinations</div>
@@ -667,14 +671,20 @@ Zokeibi (造形美) UI Proof Certificate — Grade A+ (100/100 · PASS · 21.4 m
         <button type="button" class="z-btn z-btn-ghost z-btn-sm" data-z-close="#site-cmdk" aria-label="Close command palette">Esc</button>
       </div>
       <ul id="site-cmdk-list" class="z-cmdk-list" role="listbox" aria-label="Quick navigation commands" data-z-cmdk-list>
-        <li role="option" aria-selected="true" data-z-cmdk-item="playground 60 components interactive live workbench sandbox">
-          <a class="z-cmdk-item is-active" href="/playground/"><span>Open Live 60-Component Playground</span><kbd class="z-kbd">Playground</kbd></a>
+        <li role="option" aria-selected="true" data-z-cmdk-item="playground 62 components interactive live workbench sandbox">
+          <a class="z-cmdk-item is-active" href="/playground/"><span>Open Live 62-Component Playground</span><kbd class="z-kbd">Playground</kbd></a>
+        </li>
+        <li role="option" aria-selected="false" data-z-cmdk-item="studio oklch theme token wcag contrast tailwind w3c export">
+          <a class="z-cmdk-item" href="/studio/"><span>Open Live Browser OKLCH Theme Studio</span><kbd class="z-kbd">Studio</kbd></a>
+        </li>
+        <li role="option" aria-selected="false" data-z-cmdk-item="8 saas blocks live preview templates dashboard auth billing">
+          <a class="z-cmdk-item" href="/playground/#blocks"><span>Browse All 8 Live Turnkey SaaS Blocks</span><kbd class="z-kbd">Blocks</kbd></a>
         </li>
         <li role="option" aria-selected="false" data-z-cmdk-item="live demo interactive showcase components">
           <a class="z-cmdk-item" href="#live-demo" data-z-close="#site-cmdk"><span>Live Interactive Highlights</span><kbd class="z-kbd">Demo</kbd></a>
         </li>
-        <li role="option" aria-selected="false" data-z-cmdk-item="60 components catalog saas blocks">
-          <a class="z-cmdk-item" href="#catalog" data-z-close="#site-cmdk"><span>Browse All 60 Components &amp; 8 Blocks</span><kbd class="z-kbd">Catalog</kbd></a>
+        <li role="option" aria-selected="false" data-z-cmdk-item="62 components catalog saas blocks">
+          <a class="z-cmdk-item" href="#catalog" data-z-close="#site-cmdk"><span>Browse All 62 Components &amp; 8 Blocks</span><kbd class="z-kbd">Catalog</kbd></a>
         </li>
         <li role="option" aria-selected="false" data-z-cmdk-item="quickstart cli prove studio install">
           <a class="z-cmdk-item" href="#quickstart" data-z-close="#site-cmdk"><span>CLI Quick Start &amp; zokeibi prove</span><kbd class="z-kbd">CLI</kbd></a>
@@ -709,7 +719,7 @@ Zokeibi (造形美) UI Proof Certificate — Grade A+ (100/100 · PASS · 21.4 m
       </div>
       <div class="z-modal-body z-stack-sm">
         <p>Opened purely via <code>data-z-open="#demo-modal"</code> with zero inline JavaScript and zero inline styles. Press <kbd class="z-kbd">Esc</kbd> or click the backdrop to close.</p>
-        <p class="z-muted">All 60 Zokeibi components share this exact zero-bloat, strict-CSP architecture.</p>
+        <p class="z-muted">All 62 Zokeibi components share this exact zero-bloat, strict-CSP architecture.</p>
       </div>
       <div class="z-modal-foot">
         <button type="button" class="z-btn z-btn-outline z-btn-sm" data-z-close="#demo-modal">Close</button>
@@ -740,11 +750,12 @@ Zokeibi (造形美) UI Proof Certificate — Grade A+ (100/100 · PASS · 21.4 m
 
   <footer class="zs-footer">
     <div class="zs-container zs-footer-inner">
-      <div><strong>Zokeibi v1.2.0 (造形美)</strong> · MIT License · Part of the <a href="https://kongono.com" target="_blank" rel="noopener">Kongono</a> ecosystem</div>
+      <div><strong>Zokeibi v1.3.0 (造形美)</strong> · MIT License · Part of the <a href="https://kongono.com" target="_blank" rel="noopener">Kongono</a> ecosystem</div>
       <div class="zs-footer-links">
         <a href="/playground/">Playground</a>
-        <a href="#live-demo">Highlights</a>
-        <a href="#catalog">60 Components</a>
+        <a href="/studio/">OKLCH Studio</a>
+        <a href="/playground/#blocks">8 Blocks</a>
+        <a href="#catalog">62 Components</a>
         <a href="#quickstart">CLI &amp; Proof</a>
         <a href="llms.txt">llms.txt</a>
         <a href="https://github.com/kongono/zokeibi" target="_blank" rel="noopener">GitHub</a>
@@ -754,7 +765,7 @@ Zokeibi (造形美) UI Proof Certificate — Grade A+ (100/100 · PASS · 21.4 m
     </div>
   </footer>
 
-  <script src="assets/zokeibi-runtime.js" defer></script>
-  <script src="assets/site.js" defer></script>
+  <script src="assets/zokeibi-runtime.js?v=b534ba44" defer></script>
+  <script src="assets/site.js?v=4c9695f5" defer></script>
 </body>
 </html>

@@ -50,12 +50,10 @@ $count = count($points);
 $class = isset($class) && is_string($class) ? trim($class) : '';
 $wrapClass = $class !== '' ? 'z-chart ' . $class : 'z-chart';
 @endphp
-<figure class="{{ $wrapClass }}">
+<figure class="{{ $wrapClass }}" data-z-chart="true">
   <figcaption class="z-chart-head">
     <span class="z-chart-title">{{ $title }}</span>
-@if ($meta !== null)
-    <span class="z-chart-meta">{{ $meta }}</span>
-@endif
+    <span class="z-chart-meta" data-z-chart-readout data-default-meta="{{ $meta ?? '' }}" aria-live="polite">{{ $meta ?? '' }}</span>
   </figcaption>
 
 @if ($type === 'sparkline')
@@ -83,7 +81,7 @@ $areaPoints = sprintf('%.1f,%.1f %s %.1f,%.1f', $padX, $h - $padY, $linePoints, 
     <polygon class="z-chart-area" points="{{ $areaPoints }}" />
     <polyline class="z-chart-line" points="{{ $linePoints }}" />
 @foreach ($dots as $dot)
-    <circle class="z-chart-dot" cx="{{ $dot['x'] }}" cy="{{ $dot['y'] }}" r="3">
+    <circle class="z-chart-dot" cx="{{ $dot['x'] }}" cy="{{ $dot['y'] }}" r="3.5" tabindex="0" data-chart-tip="{{ $dot['label'] }}: {{ $dot['val'] }}">
       <title>{{ $dot['label'] }}: {{ $dot['val'] }}</title>
     </circle>
 @endforeach
@@ -121,7 +119,7 @@ foreach ($points as $i => $pt) {
     <line class="z-chart-grid" x1="16" y1="74" x2="344" y2="74" />
     <line class="z-chart-grid" x1="16" y1="128" x2="344" y2="128" />
 @foreach ($bars as $b)
-    <rect class="z-chart-bar" x="{{ $b['x'] }}" y="{{ $b['y'] }}" width="{{ $b['w'] }}" height="{{ $b['h'] }}">
+    <rect class="z-chart-bar" x="{{ $b['x'] }}" y="{{ $b['y'] }}" width="{{ $b['w'] }}" height="{{ $b['h'] }}" tabindex="0" data-chart-tip="{{ $b['label'] }}: {{ $b['val'] }}">
       <title>{{ $b['label'] }}: {{ $b['val'] }}</title>
     </rect>
     <text class="z-chart-val" x="{{ $b['cx'] }}" y="{{ $b['valY'] }}" text-anchor="middle">{{ $b['val'] }}</text>
@@ -154,7 +152,7 @@ $totalDisp = rtrim(rtrim(sprintf('%.1f', $sumVal), '0'), '.');
     <svg class="z-chart-donut" viewBox="0 0 120 120" role="img" aria-label="{{ $title }} donut chart">
       <circle class="z-chart-track" cx="60" cy="60" r="46" />
 @foreach ($segs as $seg)
-      <circle class="z-chart-seg {{ $seg['tone'] }}" cx="60" cy="60" r="46" stroke-dasharray="{{ $seg['dash'] }}" stroke-dashoffset="{{ $seg['offset'] }}" transform="rotate(-90 60 60)">
+      <circle class="z-chart-seg {{ $seg['tone'] }}" cx="60" cy="60" r="46" stroke-dasharray="{{ $seg['dash'] }}" stroke-dashoffset="{{ $seg['offset'] }}" transform="rotate(-90 60 60)" tabindex="0" data-chart-tip="{{ $seg['label'] }}: {{ $seg['val'] }} ({{ $seg['pct'] }}%)">
         <title>{{ $seg['label'] }}: {{ $seg['val'] }} ({{ $seg['pct'] }}%)</title>
       </circle>
 @endforeach

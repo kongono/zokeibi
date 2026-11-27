@@ -41,4 +41,28 @@
   .z-hint { font-size: 0.73rem; color: var(--z-ink-soft); }
   .z-field-err,
   .z-field-error { font-size: 0.74rem; color: var(--z-danger); font-weight: 600; }
+
+  /* Declarative Unsaved-Changes Form Guard (data-z-dirty-guard) */
+  .z-field.is-dirty,
+  .z-input-group.is-dirty {
+    padding-left: 0.55rem;
+    border-left: 2px solid var(--z-accent);
+  }
+
+  .z-dirty-bar {
+    position: sticky;
+    bottom: 0.75rem;
+    z-index: 42;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    padding: 0.55rem 0.85rem;
+    border-radius: var(--z-radius);
+    border: 1px solid var(--z-accent-border);
+    background: var(--z-surface);
+    box-shadow: var(--z-shadow);
+    font-size: 0.78rem;
+  }
 }

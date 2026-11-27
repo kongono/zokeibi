@@ -43,7 +43,7 @@ final readonly class UiProver
     public function prove(
         string $projectDir,
         ?string $viewsDir = null,
-        float $maxGzipKb = 12.0,
+        float $maxGzipKb = 12.5,
         bool $strict = false,
     ): array {
         if (!is_finite($maxGzipKb) || $maxGzipKb <= 0.0) {

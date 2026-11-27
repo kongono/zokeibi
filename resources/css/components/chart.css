@@ -25,6 +25,7 @@
     font-family: var(--z-mono);
     font-size: 0.7rem;
     color: var(--z-ink-soft);
+    &.is-active { color: var(--z-accent); font-weight: 700; }
   }
 
   .z-chart-svg {

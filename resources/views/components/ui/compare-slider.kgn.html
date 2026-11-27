@@ -1,0 +1,72 @@
+@php
+$safeUrl = static function (string $raw): string {
+    $clean = trim((string) preg_replace('/[\x00-\x1F\x7F]+/', '', $raw));
+    if ($clean === '') {
+        return '';
+    }
+    $lower = strtolower($clean);
+    if (str_starts_with($lower, '//') || str_starts_with($lower, '/\\')) {
+        return '';
+    }
+    if (
+        str_starts_with($lower, '/')
+        || str_starts_with($lower, './')
+        || str_starts_with($lower, '../')
+        || str_starts_with($lower, 'https://')
+        || str_starts_with($lower, 'http://')
+    ) {
+        return $clean;
+    }
+
+    return '';
+};
+$id = isset($id) && is_string($id) && $id !== '' ? $id : 'z-cmp-' . bin2hex(random_bytes(3));
+$label = isset($label) && is_string($label) && $label !== '' ? $label : 'Before and after comparison';
+$beforeLabel = isset($beforeLabel) && is_string($beforeLabel) && $beforeLabel !== '' ? $beforeLabel : 'Before';
+$afterLabel = isset($afterLabel) && is_string($afterLabel) && $afterLabel !== '' ? $afterLabel : 'After';
+$beforeSrc = isset($beforeSrc) && is_string($beforeSrc) ? $safeUrl($beforeSrc) : '';
+$afterSrc = isset($afterSrc) && is_string($afterSrc) ? $safeUrl($afterSrc) : '';
+$beforeText = isset($beforeText) && is_string($beforeText) ? $beforeText : '';
+$afterText = isset($afterText) && is_string($afterText) ? $afterText : '';
+$initial = isset($initial) && is_numeric($initial) ? max(5, min(95, (int) $initial)) : 50;
+$class = isset($class) && is_string($class) ? trim($class) : '';
+@endphp
+<figure class="z-compare{{ $class !== '' ? ' ' . $class : '' }}" data-z-compare="true" data-compare-initial="{{ $initial }}">
+  <div class="z-compare-stage">
+    <div class="z-compare-pane z-compare-after">
+      <span class="z-compare-tag is-after">{{ $afterLabel }}</span>
+@if ($afterSrc !== '')
+      <img class="z-compare-img" src="{{ $afterSrc }}" alt="{{ $afterLabel }}" loading="lazy">
+@else
+      <div class="z-compare-panel is-after">
+        <strong>{{ $afterLabel }}</strong>
+        <p>{{ $afterText }}</p>
+      </div>
+@endif
+    </div>
+    <div class="z-compare-pane z-compare-before" data-z-compare-before>
+      <span class="z-compare-tag is-before">{{ $beforeLabel }}</span>
+@if ($beforeSrc !== '')
+      <img class="z-compare-img" src="{{ $beforeSrc }}" alt="{{ $beforeLabel }}" loading="lazy">
+@else
+      <div class="z-compare-panel is-before">
+        <strong>{{ $beforeLabel }}</strong>
+        <p>{{ $beforeText }}</p>
+      </div>
+@endif
+    </div>
+    <div class="z-compare-divider" aria-hidden="true">
+      <span class="z-compare-knob">↔</span>
+    </div>
+    <input
+      id="{{ $id }}"
+      type="range"
+      class="z-compare-range"
+      min="0"
+      max="100"
+      value="{{ $initial }}"
+      aria-label="{{ $label }}"
+      data-z-compare-range
+    >
+  </div>
+</figure>

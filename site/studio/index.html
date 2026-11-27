@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="en" data-z-density="default">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Zokeibi (造形美) — Live OKLCH Theme &amp; Token Studio</title>
+    <meta name="description" content="Interactive browser OKLCH Design Token &amp; Theme Studio for Zokeibi (造形美) — drag 1-knob OKLCH hue, chroma, lightness, and radius sliders with real-time WCAG 2.1 AA contrast proofs and live CSS, zokeibi.json, W3C DTCG, and Tailwind v4 @theme exports.">
+  <link rel="canonical" href="https://zokeibi.com/studio/">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Zokeibi (造形美) — Live OKLCH Design Token &amp; Theme Studio">
+  <meta property="og:description" content="Build accessible OKLCH themes with live WCAG 2.1 AA contrast checks and instant CSS, Tailwind v4, W3C DTCG, and zokeibi.json exports.">
+  <meta property="og:url" content="https://zokeibi.com/studio/">
+  <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+  <link rel="stylesheet" href="/assets/zokeibi.min.css?v=c4d1c800">
+  <link rel="stylesheet" href="/assets/playground.css?v=3f110f4b">
+  <script src="/assets/live.js?v=32aed364" defer></script>
+  <script src="/assets/zokeibi-runtime.js?v=b534ba44" defer></script>
+  <script src="/assets/studio-static.js?v=ae156435" defer></script>
+</head>
+<body
+  data-zokeibi-theme="sumi"
+  data-zokeibi-radius="default"
+  k-state="{&quot;theme&quot;:&quot;sumi&quot;,&quot;radius&quot;:&quot;default&quot;,&quot;cat&quot;:&quot;all&quot;}"  k-persist="local"
+  k-persist-key="zokeibi-studio-v1"
+  k-attr:data-zokeibi-theme="theme"
+  k-attr:data-zokeibi-radius="radius"
+>
+    <header class="pg-nav">
+    <div class="pg-nav-inner">
+      <a class="pg-brand" href="/">
+        <span class="pg-mark" aria-hidden="true">造</span>
+        <span class="pg-brand-name">Zokeibi</span>
+        <span class="pg-brand-sub">zokeibi.com</span>
+      </a>
+      <nav class="pg-links" aria-label="Primary navigation">
+        <a class="pg-link" href="/">Overview</a>
+        <a class="pg-link" href="/playground/">62 Components</a>
+        <a class="pg-link" href="/playground/#blocks">8 SaaS Blocks</a>
+        <a class="pg-link is-active" href="/studio/" aria-current="page">Live OKLCH Studio</a>
+        <a class="pg-link" href="/api/prove.json">Proof JSON</a>
+        <a class="pg-link" href="/api/registry.json">Registry JSON</a>
+        <a class="pg-link" href="https://github.com/kongono/zokeibi" target="_blank" rel="noopener">GitHub</a>
+        <a class="pg-link" href="https://kongono.com" target="_blank" rel="noopener">Kongono →</a>
+      </nav>
+      <div class="z-row">
+        <span class="z-badge z-badge-emerald"><span class="z-badge-dot" aria-hidden="true"></span>Strict CSP · 0 npm</span>
+        <span class="z-badge z-badge-primary">v1.3.0</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="z-shell">
+      <section class="pg-hero">
+    <div>
+      <div class="pg-hero-kicker">造形美 Zokeibi Studio · Dev-Only Design Token Workbench · Git-Backed</div>
+      <h1 class="pg-hero-title">Central Color, Theme &amp; Typography Studio.</h1>
+      <p class="pg-hero-sub">
+        Dial in OKLCH brand hues, light/dark surfaces, corner radius, typography, and custom named colors with live WCAG 2.1 contrast checks. Saving writes clean JSON to <code>playground/zokeibi.json</code> and recompiles <code>zokeibi.min.css</code> purely in PHP 8.5.
+      </p>
+    </div>
+    <div class="pg-studio-box">
+      <div class="pg-studio-label">Local Dev Command (Works on Any Kongono App)</div>
+      <pre class="z-code">php vendor/bin/zokeibi studio --dir=. --port=8101</pre>
+      <div class="z-between">
+        <span class="z-badge z-badge-emerald"><span class="z-badge-dot" aria-hidden="true"></span>Source of Truth: zokeibi.json</span>
+        <div class="z-row">
+          <a
+  href="#studio-css-preview"
+  class="z-btn z-btn-outline z-btn-sm"
+>CSS</a>
+          <a
+  href="#studio-w3c-preview"
+  class="z-btn z-btn-outline z-btn-sm"
+>W3C JSON</a>
+          <a
+  href="#studio-tailwind-preview"
+  class="z-btn z-btn-outline z-btn-sm"
+>Tailwind v4</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <div class="st-layout" id="studio-workbench">
+    
+    <div class="z-stack">
+      <article class="z-card">
+  <header class="z-card-head">
+    <div>
+      <div class="z-card-kicker">1. Brand &amp; Surface Tokens</div>
+      <h3 class="z-card-title">Live OKLCH Knobs</h3>
+    </div>
+    <span class="z-badge z-badge-primary">Auto-Compile</span>
+  </header>
+  <div class="z-card-body">        <div class="z-stack-sm">
+          <div class="pg-studio-label">Load Starter Preset</div>
+          <div class="pg-swatches">
+            <button type="button" class="pg-swatch" data-studio-preset="sumi" data-hue="355" data-chroma="0.145" data-lightness="0.65" data-mode="dark" data-radius="12"><span class="pg-dot is-sumi" aria-hidden="true"></span>Sumi</button>
+            <button type="button" class="pg-swatch" data-studio-preset="washi" data-hue="355" data-chroma="0.145" data-lightness="0.51" data-mode="light" data-radius="12"><span class="pg-dot is-washi" aria-hidden="true"></span>Washi</button>
+            <button type="button" class="pg-swatch" data-studio-preset="indigo" data-hue="268" data-chroma="0.175" data-lightness="0.65" data-mode="dark" data-radius="12"><span class="pg-dot is-indigo" aria-hidden="true"></span>Indigo</button>
+            <button type="button" class="pg-swatch" data-studio-preset="matcha" data-hue="158" data-chroma="0.145" data-lightness="0.65" data-mode="dark" data-radius="12"><span class="pg-dot is-matcha" aria-hidden="true"></span>Matcha</button>
+            <button type="button" class="pg-swatch" data-studio-preset="kintsugi" data-hue="74" data-chroma="0.145" data-lightness="0.72" data-mode="dark" data-radius="10"><span class="pg-dot is-kintsugi" aria-hidden="true"></span>Kintsugi</button>
+          </div>
+
+          <form method="POST" action="#" class="z-stack-sm z-stack-gap-top" id="studio-save-form">
+
+            <div class="st-slider-row">
+              <div class="st-slider-head">
+                <label for="st-hue">Brand Hue (--z-hue)</label>
+                <span class="z-row">
+                  <span class="st-chip" id="st-accent-chip" aria-hidden="true"></span>
+                  <span id="st-accent-hex">#007e7b</span>
+                  <span id="st-hue-out">192°</span>
+                </span>
+              </div>
+              <input class="st-range st-range-hue" id="st-hue" name="hue" type="range" min="0" max="360" step="1" value="192">
+            </div>
+
+            <div class="st-slider-row">
+              <div class="st-slider-head">
+                <label for="st-chroma">Color Vividness (--z-chroma)</label>
+                <span id="st-chroma-out">0.145</span>
+              </div>
+              <input class="st-range" id="st-chroma" name="chroma" type="range" min="0.02" max="0.26" step="0.005" value="0.145">
+            </div>
+
+            <div class="st-slider-row">
+              <div class="st-slider-head">
+                <label for="st-lightness">Accent Lightness (L)</label>
+                <span id="st-lightness-out">0.51</span>
+              </div>
+              <input class="st-range" id="st-lightness" name="accent_lightness" type="range" min="0.42" max="0.78" step="0.01" value="0.51">
+            </div>
+
+            <div class="st-slider-row">
+              <div class="st-slider-head">
+                <label for="st-radius">Corner Radius (--z-radius)</label>
+                <span id="st-radius-out">16px</span>
+              </div>
+              <input class="st-range" id="st-radius" name="radius_px" type="range" min="0" max="24" step="1" value="16">
+            </div>
+
+            <div class="z-grid-2">
+              <div class="z-field">
+  <label class="z-label" for="st-mode">Surface Mode</label>
+  <select
+    class="z-select"
+    id="st-mode"
+    name="mode"
+  >                <option value="dark" selected>Dark Atelier</option>
+                <option value="light" >Light Paper</option>
+              </select>
+</div>
+
+              <div class="z-field">
+  <label class="z-label" for="st-font-scale">Text Density</label>
+  <select
+    class="z-select"
+    id="st-font-scale"
+    name="font_scale"
+  >                <option value="compact" >Compact (13px)</option>
+                <option value="default" selected>Default (14px)</option>
+                <option value="comfortable" >Comfortable (15px)</option>
+              </select>
+</div>
+            </div>
+
+            <div class="z-field">
+  <label class="z-label" for="st-font-stack">Typography Stack (Zero Webfont CDN)</label>
+  <select
+    class="z-select"
+    id="st-font-stack"
+    name="font_stack"
+  >              <option value="system" selected>System UI Sans (Fastest)</option>
+              <option value="geometric" >Geometric Humanist</option>
+              <option value="editorial" >Editorial Serif</option>
+              <option value="mono" >Technical Monospace</option>
+            </select>
+</div>
+
+            <div class="z-row z-stack-gap-top">
+              <button
+  type="submit"
+  class="z-btn z-btn-primary"
+  id="st-save-btn"
+>Save Snapshot in Browser</button>
+            </div>
+            <div class="z-between">
+              <label class="z-switch" for="st-live-sync">
+  <input
+    type="checkbox"
+    role="switch"
+    id="st-live-sync"
+    name="live_sync"
+    value="1"
+   checked>
+  <span class="z-switch-track" aria-hidden="true"><span class="z-switch-thumb"></span></span>
+  <span>
+    Browser Live Preview Active (60fps OKLCH)  </span>
+</label>
+              <span class="z-soft z-mono" id="st-live-sync-status">Instant export</span>
+            </div>
+          </form>
+
+          <form method="POST" action="#" class="st-inline-form">
+            <button
+  type="submit"
+  class="z-btn z-btn-ghost z-btn-sm"
+  id="st-reset-btn"
+>Reset to Default Sumi</button>
+          </form>
+        </div>
+      </div>
+</article>
+
+      
+      <article class="z-card">
+  <header class="z-card-head">
+    <div>
+      <div class="z-card-kicker">2. Multi-Brand Presets</div>
+      <h3 class="z-card-title">Saved Custom Themes</h3>
+    </div>
+    <span class="z-badge z-badge-emerald" id="st-static-themes-count">0 saved</span>
+  </header>
+  <div class="z-card-body">        <div class="z-stack-sm">
+          <form method="POST" action="#" class="z-stack-sm">
+            <input type="hidden" id="st-theme-hue" name="hue" value="192">
+            <input type="hidden" id="st-theme-chroma" name="chroma" value="0.145">
+            <input type="hidden" id="st-theme-lightness" name="accent_lightness" value="0.51">
+            <input type="hidden" id="st-theme-mode" name="mode" value="dark">
+            <input type="hidden" id="st-theme-radius" name="radius_px" value="16">
+            <div class="z-row">
+              <div class="z-field">
+  <label class="z-label" for="st-new-theme-name">Snapshot Current Knobs as Named Theme</label>
+  <input
+    class="z-input"
+    id="st-new-theme-name"
+    name="theme_name"
+    type="text"
+    value=""
+    placeholder="e.g. acme-ocean"
+  >
+</div>
+            </div>
+            <div>
+              <button
+  type="submit"
+  class="z-btn z-btn-emerald z-btn-sm"
+  id="st-add-theme-btn"
+>Save Named Theme</button>
+            </div>
+          </form>
+
+          <div class="z-stack-sm" id="st-static-themes"></div></div>
+      </div>
+</article>
+
+      
+      <article class="z-card">
+  <header class="z-card-head">
+    <div>
+      <div class="z-card-kicker">3. Custom CSS Variables</div>
+      <h3 class="z-card-title">Custom Brand Color Tokens</h3>
+    </div>
+    <span class="z-badge z-badge-blue" id="st-static-colors-count">0 tokens</span>
+  </header>
+  <div class="z-card-body">        <div class="z-stack-sm">
+          <form method="POST" action="#" class="z-stack-sm">
+            <div class="z-field">
+  <label class="z-label" for="st-color-name">Token Name (emits --z-color-name)</label>
+  <input
+    class="z-input"
+    id="st-color-name"
+    name="color_name"
+    type="text"
+    value=""
+    placeholder="e.g. brand-teal"
+  >
+</div>
+            <div class="z-field">
+              <label class="z-label" for="st-color-value">Color Value (#hex or oklch(...))</label>
+              <div class="st-picker-wrap">
+                <input class="st-color-input" id="st-color-picker" type="color" value="#14b8a6" aria-label="Pick hex color">
+                <input class="z-input" id="st-color-value" name="color_value" type="text" value="oklch(0.72 0.14 185)" placeholder="oklch(0.72 0.14 185) or #14b8a6">
+              </div>
+            </div>
+            <div>
+              <button
+  type="submit"
+  class="z-btn z-btn-outline z-btn-sm"
+  id="st-add-color-btn"
+>Add Color Token</button>
+            </div>
+          </form>
+
+          <div class="z-stack-sm" id="st-static-colors"></div></div>
+      </div>
+</article>
+    </div>
+
+    
+    <div class="z-stack">
+      
+      <article class="z-card">
+  <header class="z-card-head">
+    <div>
+      <div class="z-card-kicker">Automatic Accessibility &amp; Budget Guardrails</div>
+      <h3 class="z-card-title">Real-Time WCAG 2.1 Contrast + zokeibi prove</h3>
+    </div>
+    <span class="z-badge z-badge-emerald">Grade A+ · 100/100</span>
+  </header>
+  <div class="z-card-body">        <div class="z-stack-sm">
+          <div class="st-wcag-grid">
+            <div class="st-wcag-item">
+              <span>Primary Button (Ink on Accent)</span>
+              <span
+                id="wcag-accent_button"
+                class="z-badge z-badge-emerald"
+              >4.72:1 AA</span>
+            </div>
+            <div class="st-wcag-item">
+              <span>Body Copy (Ink on Background)</span>
+              <span
+                id="wcag-body_text"
+                class="z-badge z-badge-emerald"
+              >17.20:1 AAA</span>
+            </div>
+            <div class="st-wcag-item">
+              <span>Card Heading (Ink on Surface)</span>
+              <span
+                id="wcag-card_text"
+                class="z-badge z-badge-emerald"
+              >16.14:1 AAA</span>
+            </div>
+            <div class="st-wcag-item">
+              <span>Muted Caption (Muted on Surface)</span>
+              <span
+                id="wcag-muted_text"
+                class="z-badge z-badge-emerald"
+              >7.55:1 AAA</span>
+            </div>
+          </div>
+          <div class="z-between">
+            <span class="z-soft z-mono" id="st-proof-summary">
+              Themes: 2 · Audit: 100/100 · Gzip: 11.75 / 12.5 KB
+            </span>
+            <a
+  href="/api/prove.json"
+  class="z-btn z-btn-outline z-btn-sm"
+>Proof JSON</a>
+          </div>
+        </div>
+      </div>
+</article>
+
+      
+      <article class="z-card">
+  <header class="z-card-head">
+    <div>
+      <div class="z-card-kicker">Instant 60fps Preview (Zero Rebuild Needed)</div>
+      <h3 class="z-card-title">Live Component Sandbox</h3>
+    </div>
+    <span class="z-badge z-badge-primary">Live Primitives</span>
+  </header>
+  <div class="z-card-body">        <div class="st-preview-canvas" id="studio-preview">
+          <div class="z-between">
+            <div class="z-row">
+              <span class="z-avatar" role="img" aria-label="Zokeibi Studio">
+  <span>ZK</span>
+  <span class="z-avatar-dot is-online" aria-hidden="true"></span>
+</span>
+              <div>
+                <strong>Acme Billing Console</strong>
+                <div class="z-muted">Previewing your live OKLCH brand &amp; surface tokens</div>
+              </div>
+            </div>
+            <div class="z-row">
+              <span class="z-badge z-badge-primary"><span class="z-badge-dot" aria-hidden="true"></span>Active Brand</span>
+              <span class="z-badge z-badge-emerald"><span class="z-badge-dot" aria-hidden="true"></span>WCAG Safe</span>
+            </div>
+          </div>
+
+          <div class="z-grid-2">
+            <div class="z-kpi z-kpi-accent">
+  <div class="z-kpi-top">
+    <span class="z-kpi-label">Monthly Recurring</span>
+    <span class="z-kpi-delta is-up">+21.4%</span>
+  </div>
+  <div class="z-kpi-value">$48,290</div>
+  <div class="z-kpi-hint">Recalculates live on hue drag</div>
+</div>
+            <div class="z-kpi z-kpi-emerald">
+  <div class="z-kpi-top">
+    <span class="z-kpi-label">Strict CSP Score</span>
+    <span class="z-kpi-delta is-up">0 inline</span>
+  </div>
+  <div class="z-kpi-value">100/100</div>
+  <div class="z-kpi-hint">Pure PHP compiled CSS</div>
+</div>
+          </div>
+
+          <div class="z-row">
+            <button
+  type="button"
+  class="z-btn z-btn-primary"
+>Primary CTA</button>
+            <button
+  type="button"
+  class="z-btn z-btn-emerald"
+>Approve</button>
+            <button
+  type="button"
+  class="z-btn z-btn-outline"
+>Secondary</button>
+            <button
+  type="button"
+  class="z-btn z-btn-danger"
+>Revoke</button>
+            <div class="z-popover-wrap">
+  <button type="button" class="z-btn z-btn-outline z-btn-sm" popovertarget="studio-preview-pop">Test Popover</button>
+  <div id="studio-preview-pop" popover="auto" class="z-popover">
+    <div class="z-popover-head">
+      <h4 class="z-popover-title">Styled Top-Layer Popover</h4>
+      <button type="button" class="z-btn z-btn-ghost z-btn-sm" popovertarget="studio-preview-pop" popovertargetaction="hide" aria-label="Close popover">✕</button>
+    </div>
+    <div class="z-popover-body">              Inherits your exact border radius, surface, and OKLCH brand tokens automatically.
+            </div>
+  </div>
+</div>
+          </div>
+
+          <div class="z-grid-2">
+            <div class="z-field">
+  <label class="z-label" for="z-input-preview_email-170ed3">Focus to inspect accent ring</label>
+  <input
+    class="z-input"
+    id="z-input-preview_email-170ed3"
+    name="preview_email"
+    type="email"
+    value="founder@acme.dev"
+    aria-describedby="z-input-preview_email-170ed3-hint"
+  >
+  <span class="z-hint" id="z-input-preview_email-170ed3-hint">Derived via color-mix(in oklch).</span>
+</div>
+            <div class="z-stack-sm">
+              <div class="z-progress">
+  <div class="z-progress-head">
+    <span class="z-muted">Usage Quota</span>
+    <span class="z-mono">74%</span>
+  </div>
+  <progress class="z-progress-native" value="74" max="100" aria-label="Usage Quota">74%</progress>
+</div>
+              <label class="z-switch" for="preview-sw">
+  <input
+    type="checkbox"
+    role="switch"
+    id="preview-sw"
+    name="preview_sw"
+    value="1"
+    checked
+  >
+  <span class="z-switch-track" aria-hidden="true"><span class="z-switch-thumb"></span></span>
+  <span>
+    Auto-compile zokeibi.min.css  </span>
+</label>
+            </div>
+          </div>
+
+          <div class="z-alert z-alert-info" role="status">
+  <div>
+    <div class="z-alert-title">Semantic Status Harmony</div>
+    <div>            Brand accent shifts independently while semantic status colors stay readable in both Dark and Light surfaces.
+          </div>
+  </div>
+</div>
+        </div>
+      </div>
+</article>
+
+      
+      <article class="z-card">
+  <header class="z-card-head">
+    <div>
+      <div class="z-card-kicker">Git-Tracked Output · Zero Lock-In</div>
+      <h3 class="z-card-title">Inspect &amp; Export Design Tokens</h3>
+    </div>
+    <span class="z-badge z-badge-primary">CSS · W3C · Tailwind</span>
+  </header>
+  <div class="z-card-body">        <div class="z-stack-sm">
+          <div class="z-between">
+            <span class="z-muted">Export your OKLCH tokens for Kongono, React/Figma (W3C DTCG), or Tailwind CSS v4.</span>
+            <button
+  type="button"
+  class="z-btn z-btn-outline z-btn-sm"
+  id="st-copy-css"
+>Copy CSS</button>
+          </div>
+          <div class="z-tabs" data-z-tabs="true" k-state="{&quot;tab&quot;:&quot;css&quot;}">
+  <div class="z-tablist" role="tablist">
+    <button
+      type="button"
+      role="tab"
+      class="z-tab is-active"
+      aria-selected="true"
+      tabindex="0"
+      data-z-tab="css"
+      k-class:is-active="tab === 'css'"
+      k-attr:aria-selected="tab === 'css'"
+      k-on:click="set(tab, 'css')"
+    >Compiled @layer CSS</button>
+    <button
+      type="button"
+      role="tab"
+      class="z-tab"
+      aria-selected="false"
+      tabindex="-1"
+      data-z-tab="json"
+      k-class:is-active="tab === 'json'"
+      k-attr:aria-selected="tab === 'json'"
+      k-on:click="set(tab, 'json')"
+    >zokeibi.json (Git)</button>
+    <button
+      type="button"
+      role="tab"
+      class="z-tab"
+      aria-selected="false"
+      tabindex="-1"
+      data-z-tab="w3c"
+      k-class:is-active="tab === 'w3c'"
+      k-attr:aria-selected="tab === 'w3c'"
+      k-on:click="set(tab, 'w3c')"
+    >W3C Tokens JSON</button>
+    <button
+      type="button"
+      role="tab"
+      class="z-tab"
+      aria-selected="false"
+      tabindex="-1"
+      data-z-tab="tailwind"
+      k-class:is-active="tab === 'tailwind'"
+      k-attr:aria-selected="tab === 'tailwind'"
+      k-on:click="set(tab, 'tailwind')"
+    >Tailwind v4 @theme</button>
+  </div>
+              <div class="z-tabpanel" role="tabpanel" k-show="tab === 'css'">
+              <pre class="z-code" id="studio-css-preview">@layer zokeibi.themes {
+  :root {
+    --z-color-brand-cyan: #06b6d4;
+  }
+  [data-zokeibi-theme=&quot;studio&quot;] {
+    --z-hue: 192.0;
+    --z-chroma: 0.145;
+    --z-radius: 16px;
+    --z-radius-sm: 11px;
+    --z-accent: oklch(0.510 var(--z-chroma) var(--z-hue));
+    --z-accent-strong: oklch(0.400 var(--z-chroma) var(--z-hue));
+    --z-accent-ink: oklch(0.985 0.008 var(--z-hue));
+    color-scheme: dark;
+    --z-bg: oklch(0.152 0.014 192.0);
+    --z-surface: oklch(0.190 0.016 192.0);
+    --z-surface-2: oklch(0.228 0.018 192.0);
+    --z-surface-hover: oklch(0.262 0.020 192.0);
+    --z-border: oklch(0.296 0.020 192.0);
+    --z-border-strong: oklch(0.372 0.024 192.0);
+    --z-ink: oklch(0.955 0.006 264);
+    --z-ink-muted: oklch(0.725 0.014 264);
+    --z-ink-soft: oklch(0.645 0.014 264);
+    --z-emerald: oklch(0.72 0.155 162);
+    --z-emerald-ink: oklch(0.15 0.02 162);
+    --z-amber: oklch(0.80 0.15 78);
+    --z-danger: oklch(0.66 0.195 22);
+    --z-blue: oklch(0.71 0.15 254);
+    --z-shadow: 0 18px 46px oklch(0.05 0.01 264 / 0.45);
+  }
+  [data-zokeibi-theme=&quot;acme-ocean&quot;] {
+    --z-hue: 192.0;
+    --z-chroma: 0.145;
+    --z-radius: 16px;
+    --z-radius-sm: 11px;
+    --z-accent: oklch(0.510 var(--z-chroma) var(--z-hue));
+    --z-accent-strong: oklch(0.400 var(--z-chroma) var(--z-hue));
+    --z-accent-ink: oklch(0.985 0.008 var(--z-hue));
+    color-scheme: dark;
+    --z-bg: oklch(0.152 0.014 192.0);
+    --z-surface: oklch(0.190 0.016 192.0);
+    --z-surface-2: oklch(0.228 0.018 192.0);
+    --z-surface-hover: oklch(0.262 0.020 192.0);
+    --z-border: oklch(0.296 0.020 192.0);
+    --z-border-strong: oklch(0.372 0.024 192.0);
+    --z-ink: oklch(0.955 0.006 264);
+    --z-ink-muted: oklch(0.725 0.014 264);
+    --z-ink-soft: oklch(0.645 0.014 264);
+    --z-emerald: oklch(0.72 0.155 162);
+    --z-emerald-ink: oklch(0.15 0.02 162);
+    --z-amber: oklch(0.80 0.15 78);
+    --z-danger: oklch(0.66 0.195 22);
+    --z-blue: oklch(0.71 0.15 254);
+    --z-shadow: 0 18px 46px oklch(0.05 0.01 264 / 0.45);
+  }
+}
+</pre>
+            </div>
+            <div class="z-tabpanel" role="tabpanel" k-show="tab === 'json'" hidden>
+              <pre class="z-code" id="studio-json-preview">{
+    &quot;zokeibi&quot;: &quot;1.0.0&quot;,
+    &quot;theme&quot;: &quot;acme-ocean&quot;,
+    &quot;radius&quot;: &quot;rounded&quot;,
+    &quot;views_dir&quot;: &quot;views&quot;,
+    &quot;css_out&quot;: &quot;public/assets/zokeibi.min.css&quot;,
+    &quot;installed&quot;: [
+        &quot;accordion&quot;,
+        &quot;ai-review&quot;,
+        &quot;alert&quot;,
+        &quot;alert-dialog&quot;,
+        &quot;approval-card&quot;,
+        &quot;avatar&quot;,
+        &quot;avatar-group&quot;,
+        &quot;badge&quot;,
+        &quot;banner&quot;,
+        &quot;breadcrumb&quot;,
+        &quot;button&quot;,
+        &quot;card&quot;,
+        &quot;carousel&quot;,
+        &quot;chart&quot;,
+        &quot;checkbox&quot;,
+        &quot;code-block&quot;,
+        &quot;combobox&quot;,
+        &quot;command-palette&quot;,
+        &quot;compare-slider&quot;,
+        &quot;copy-field&quot;,
+        &quot;date-range&quot;,
+        &quot;datepicker&quot;,
+        &quot;description-list&quot;,
+        &quot;divider&quot;,
+        &quot;drawer&quot;,
+        &quot;dropdown&quot;,
+        &quot;dropzone&quot;,
+        &quot;editor&quot;,
+        &quot;empty-state&quot;,
+        &quot;filter-bar&quot;,
+        &quot;input&quot;,
+        &quot;input-group&quot;,
+        &quot;kbd&quot;,
+        &quot;kpi&quot;,
+        &quot;modal&quot;,
+        &quot;money-input&quot;,
+        &quot;multi-select&quot;,
+        &quot;number-input&quot;,
+        &quot;otp-input&quot;,
+        &quot;pagination&quot;,
+        &quot;password-input&quot;,
+        &quot;popover&quot;,
+        &quot;progress&quot;,
+        &quot;radio-group&quot;,
+        &quot;rating&quot;,
+        &quot;segmented&quot;,
+        &quot;select&quot;,
+        &quot;sidebar&quot;,
+        &quot;signature-pad&quot;,
+        &quot;skeleton&quot;,
+        &quot;slider&quot;,
+        &quot;spinner&quot;,
+        &quot;stepper&quot;,
+        &quot;switch&quot;,
+        &quot;table&quot;,
+        &quot;tabs&quot;,
+        &quot;tag-input&quot;,
+        &quot;textarea&quot;,
+        &quot;timeline&quot;,
+        &quot;toast&quot;,
+        &quot;tooltip&quot;,
+        &quot;tree&quot;
+    ],
+    &quot;studio&quot;: {
+        &quot;active_theme&quot;: &quot;acme-ocean&quot;,
+        &quot;radius_preset&quot;: &quot;rounded&quot;,
+        &quot;hue&quot;: 192,
+        &quot;chroma&quot;: 0.145,
+        &quot;accent_lightness&quot;: 0.51,
+        &quot;mode&quot;: &quot;dark&quot;,
+        &quot;radius_px&quot;: 16,
+        &quot;font_scale&quot;: &quot;default&quot;,
+        &quot;font_stack&quot;: &quot;system&quot;,
+        &quot;custom_colors&quot;: {
+            &quot;brand-cyan&quot;: &quot;#06b6d4&quot;
+        },
+        &quot;custom_themes&quot;: {
+            &quot;acme-ocean&quot;: {
+                &quot;hue&quot;: 192,
+                &quot;chroma&quot;: 0.145,
+                &quot;accent_lightness&quot;: 0.51,
+                &quot;mode&quot;: &quot;dark&quot;,
+                &quot;radius_px&quot;: 16
+            }
+        }
+    }
+}
+</pre>
+            </div>
+            <div class="z-tabpanel" role="tabpanel" k-show="tab === 'w3c'" hidden>
+              <pre class="z-code" id="studio-w3c-preview">{
+    &quot;$schema&quot;: &quot;https://tr.designtokens.org/format/&quot;,
+    &quot;zokeibi&quot;: {
+        &quot;brand&quot;: {
+            &quot;accent&quot;: {
+                &quot;$value&quot;: &quot;oklch(0.510 0.145 192.0)&quot;,
+                &quot;$type&quot;: &quot;color&quot;,
+                &quot;$description&quot;: &quot;Primary perceptual OKLCH brand accent&quot;
+            },
+            &quot;accentHex&quot;: {
+                &quot;$value&quot;: &quot;#007e7b&quot;,
+                &quot;$type&quot;: &quot;color&quot;,
+                &quot;$description&quot;: &quot;sRGB hex equivalent&quot;
+            },
+            &quot;accentInk&quot;: {
+                &quot;$value&quot;: &quot;#f4fcfb&quot;,
+                &quot;$type&quot;: &quot;color&quot;,
+                &quot;$description&quot;: &quot;Auto-contrasted button foreground ink&quot;
+            },
+            &quot;hue&quot;: {
+                &quot;$value&quot;: 192,
+                &quot;$type&quot;: &quot;number&quot;
+            },
+            &quot;chroma&quot;: {
+                &quot;$value&quot;: 0.145,
+                &quot;$type&quot;: &quot;number&quot;
+            }
+        },
+        &quot;geometry&quot;: {
+            &quot;radius&quot;: {
+                &quot;$value&quot;: &quot;16px&quot;,
+                &quot;$type&quot;: &quot;dimension&quot;
+            },
+            &quot;radiusSm&quot;: {
+                &quot;$value&quot;: &quot;11px&quot;,
+                &quot;$type&quot;: &quot;dimension&quot;
+            }
+        },
+        &quot;typography&quot;: {
+            &quot;fontFamily&quot;: {
+                &quot;$value&quot;: &quot;ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \&quot;Segoe UI\&quot;, Roboto, sans-serif&quot;,
+                &quot;$type&quot;: &quot;fontFamily&quot;
+            },
+            &quot;fontSize&quot;: {
+                &quot;$value&quot;: &quot;14px&quot;,
+                &quot;$type&quot;: &quot;dimension&quot;
+            }
+        },
+        &quot;customColors&quot;: {
+            &quot;brand-cyan&quot;: {
+                &quot;$value&quot;: &quot;#06b6d4&quot;,
+                &quot;$type&quot;: &quot;color&quot;,
+                &quot;$description&quot;: &quot;Zokeibi custom token --z-color-brand-cyan&quot;
+            }
+        },
+        &quot;customThemes&quot;: {
+            &quot;acme-ocean&quot;: {
+                &quot;accent&quot;: {
+                    &quot;$value&quot;: &quot;oklch(0.510 0.145 192.0)&quot;,
+                    &quot;$type&quot;: &quot;color&quot;
+                },
+                &quot;accentHex&quot;: {
+                    &quot;$value&quot;: &quot;#007e7b&quot;,
+                    &quot;$type&quot;: &quot;color&quot;
+                },
+                &quot;radius&quot;: {
+                    &quot;$value&quot;: &quot;16px&quot;,
+                    &quot;$type&quot;: &quot;dimension&quot;
+                },
+                &quot;mode&quot;: {
+                    &quot;$value&quot;: &quot;dark&quot;,
+                    &quot;$type&quot;: &quot;other&quot;
+                }
+            }
+        }
+    }
+}
+</pre>
+            </div>
+            <div class="z-tabpanel" role="tabpanel" k-show="tab === 'tailwind'" hidden>
+              <pre class="z-code" id="studio-tailwind-preview">/* Zokeibi (造形美) -&gt; Tailwind CSS v4 @theme bridge (generated from zokeibi.json) */
+@theme {
+  --color-brand: oklch(0.510 0.145 192.0);
+  --color-brand-strong: oklch(0.400 0.145 192.0);
+  --color-brand-ink: oklch(0.985 0.008 192.0);
+  --radius-zokeibi: 16px;
+  --radius-zokeibi-sm: 11px;
+  --font-zokeibi: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, Roboto, sans-serif;
+  --color-brand-cyan: #06b6d4;
+}
+</pre>
+            </div>
+          </div>
+        </div>
+      </div>
+</article>
+    </div>
+  </div>
+  </main>
+
+    <footer class="pg-footer z-shell">
+    <div>
+      <strong>Zokeibi (造形美 — "Beauty of Form") v1.3.0</strong> · Pure PHP 8.5 CSS compiler, 62 accessible <code>&lt;x-ui.*&gt;</code> components &amp; 8 SaaS blocks.
+    </div>
+    <div class="z-row">
+      <a class="pg-link" href="/">Overview</a>
+      <a class="pg-link" href="/playground/">Playground</a>
+      <a class="pg-link" href="/studio/">OKLCH Studio</a>
+      <a class="pg-link" href="/api/registry.json">/api/registry.json</a>
+      <a class="pg-link" href="/api/prove.json">/api/prove.json</a>
+      <a class="pg-link" href="/llms.txt">llms.txt</a>
+    </div>
+  </footer>
+</body>
+</html>

@@ -1,15 +1,17 @@
-# Zokeibi (造形美 — Architectural Beauty of Form) v1.2.0
+# Zokeibi (造形美 — Architectural Beauty of Form) v1.3.0
 
-> Standalone, zero-npm, strict-CSP, AI-native UI component framework, pure PHP 8.5 OKLCH CSS compiler, pure-SVG charting engine, DTO-to-UI generator, executable UI proof gate, and local Design Token & Theme Studio GUI for Kongono (and any HTML/HTMX/Twig/Blade/React/Vue/Svelte stack).
+> Standalone, zero-npm, strict-CSP, AI-native UI component framework, pure PHP 8.5 OKLCH CSS compiler, live browser OKLCH Theme Studio, pure-SVG charting engine with progressive hover tooltips, DTO-to-UI generator, and executable UI proof gate for Kongono (and any HTML/HTMX/Twig/Blade/React/Vue/Svelte stack).
 
 - Website: https://zokeibi.com/
-- Live 60-Component Playground: https://zokeibi.com/playground/
+- Live 62-Component & 8-Block Playground: https://zokeibi.com/playground/
+- Live 8 Turnkey SaaS Blocks Showcase: https://zokeibi.com/playground/#blocks
+- Live Browser OKLCH Theme & Token Studio: https://zokeibi.com/studio/
 - Live Registry JSON: https://zokeibi.com/api/registry.json
 - Live UI Proof JSON: https://zokeibi.com/api/prove.json
 - GitHub: https://github.com/kongono/zokeibi
 - Companion Framework: https://kongono.com/
 - Composer Package: `kongono/zokeibi` (zero runtime Composer dependencies; `php >= 8.5.13` only; MIT license)
-- Full-Catalog Bundle Size: `~11.0 KB` gzipped for all 60 components combined (`~2.5 KB` tree-shaken for a landing page)
+- Full-Catalog Bundle Size: `11.75 KB` gzipped for all 62 components combined (`~2.5 KB` tree-shaken for a landing page)
 - CSS/JS Prefixes: `.z-*` classes, `--z-*` OKLCH tokens, `data-z-*` runtime hooks, `data-zokeibi-theme` / `data-zokeibi-radius` / `data-z-density`
 
 ## Quick Start
@@ -17,7 +19,7 @@
 ```bash
 composer require kongono/zokeibi
 php vendor/bin/zokeibi init --theme=sumi
-php vendor/bin/zokeibi add button card money-input alert-dialog ai-review approval-card table chart
+php vendor/bin/zokeibi add button card filter-bar compare-slider money-input alert-dialog ai-review approval-card table chart drawer
 php vendor/bin/zokeibi block add saas-shell analytics-dashboard api-keys-audit
 php vendor/bin/zokeibi build --views=views --out=public/assets/zokeibi.min.css
 php vendor/bin/zokeibi runtime --out=public/assets/zokeibi-runtime.js
@@ -25,12 +27,12 @@ php vendor/bin/zokeibi prove --dir=. --views=views --strict
 php vendor/bin/zokeibi studio --dir=. --port=8101
 ```
 
-## Complete Catalog (60 Components + 8 SaaS Blocks)
+## Complete Catalog (62 Components + 8 Live SaaS Blocks)
 
 - **Primitives (12):** `button`, `badge`, `card`, `alert`, `kbd`, `avatar`, `copy-field`, `spinner`, `divider`, `code-block`, `banner`, `avatar-group`
 - **Forms (21):** `input`, `select`, `textarea`, `switch`, `checkbox`, `radio-group`, `combobox`, `multi-select`, `tag-input`, `dropzone`, `datepicker`, `date-range`, `slider`, `otp-input`, `editor`, `rating`, `input-group`, `number-input`, `password-input`, `signature-pad`, `money-input`
-- **Data (11):** `progress`, `skeleton`, `empty-state`, `kpi`, `table`, `chart`, `timeline`, `description-list`, `carousel`, `ai-review`, `approval-card`
-- **Navigation (8):** `tabs`, `accordion`, `stepper`, `pagination`, `breadcrumb`, `segmented`, `sidebar`, `tree`
+- **Data (12):** `progress`, `skeleton`, `empty-state`, `kpi`, `table`, `chart`, `timeline`, `description-list`, `carousel`, `ai-review`, `approval-card`, `compare-slider`
+- **Navigation (9):** `tabs`, `accordion`, `stepper`, `pagination`, `breadcrumb`, `segmented`, `sidebar`, `tree`, `filter-bar`
 - **Overlays (8):** `popover`, `tooltip`, `modal`, `drawer`, `toast`, `command-palette`, `dropdown`, `alert-dialog`
 - **Full-Page SaaS Blocks (8):** `saas-shell`, `auth-login`, `settings-billing`, `pricing-grid`, `empty-onboarding`, `error-page`, `analytics-dashboard`, `api-keys-audit`
 
@@ -40,13 +42,15 @@ php vendor/bin/zokeibi studio --dir=. --port=8101
 - Radius presets (`data-zokeibi-radius`): `sharp` (`4px`), `default` (`12px`), `rounded` (`18px`)
 - Two-Gear Density (`data-z-density` / `data-z-set-density` / `data-z-cycle-density`): `calm` (airy editorial), `default`, `compact` (high-density power tables)
 
-## Standout v1.2.0 Capabilities
+## Standout v1.3.0 Capabilities
 
-- **Integer-Cents `<x-ui.money-input>`:** Formats `1,850.00` with `tabular-nums` while submitting exact integer minor units (`185000`) via string-safe math.
-- **Hardened `<x-ui.alert-dialog>`:** Static backdrop (`data-z-static-backdrop="true"`), focuses Cancel on open, and supports typed confirmation gates (`confirm-text="DELETE"`).
-- **Stacked & Undoable Toasts:** Programmatic `Zokeibi.toast(...)` queue plus declarative `data-z-undo="Lease archived"` grace-window countdown with Undo cancellation.
-- **DataTable Power Suite:** `selectable="true"` (Shift+Click range select + bulk action bar), `column-toggle="true"` (native Top-Layer Popover), and `exportable="true"` (RFC 4180 formula-safe CSV export).
-- **Composite Skeletons + Human-in-the-Loop AI Cards:** `<x-ui.skeleton variant="card|table|kpi" live-only="true" />`, `<x-ui.ai-review>` (OCR/extraction verification with confidence pills), and `<x-ui.approval-card>` (before/after diff gate for Kongono `#[RequiresApproval]`).
+- **Live Browser OKLCH Theme Studio (`https://zokeibi.com/studio/`):** Interactive 60fps OKLCH sliders, real-time WCAG 2.1 AA contrast proofs, `localStorage`-persisted custom themes & color tokens, and 4 live copyable exports (`@layer CSS`, `zokeibi.json`, `W3C DTCG JSON`, `Tailwind v4 @theme`).
+- **Composable `<x-ui.filter-bar>`:** Active removable filter pills, Saved Views switcher, native Top-Layer Popover `+ Filter` picker, optional URL query-string sync (`sync-url="true"`), and `zokeibi:filter-change` CustomEvent.
+- **Accessible `<x-ui.compare-slider>`:** Strict-CSP before/after visual comparison slider using CSS `clip-path`, semantic `<input type="range">`, and zero inline HTML styles.
+- **Declarative Dirty-Form Guard (`data-z-dirty-guard="true"`):** Snapshots initial form fields, highlights edited fields with `.is-dirty`, reveals a sticky `.z-dirty-bar` (*"N unsaved changes — Discard / Save Changes"*), and protects against accidental navigation via `beforeunload`.
+- **Mobile Bottom Sheet (`<x-ui.drawer position="right|left|bottom">`):** Thumb-reachable rounded bottom sheet with drag handle indicator.
+- **Interactive SVG Chart Hover/Focus Tooltips (`<x-ui.chart>`):** Progressive header readout pill on bar/donut/sparkline hover or keyboard focus while staying 0 B JS by default.
+- **v1.2.0 SaaS & AI Primitives:** Integer-cents `<x-ui.money-input>`, hardened `<x-ui.alert-dialog>`, stacked & grace-window undoable toasts, DataTable bulk selection / Popover column toggle / RFC 4180 CSV export, composite `<x-ui.skeleton>`, `<x-ui.ai-review>`, and `<x-ui.approval-card>`.
 
 ## Kongono MCP & Proof Gate
 

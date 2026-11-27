@@ -3,7 +3,7 @@
   "kanji": "造形美",
   "meaning": "Beauty of Form",
   "package": "kongono/zokeibi",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "themes": ["sumi", "washi", "indigo", "matcha", "kintsugi"],
   "radius_presets": ["sharp", "default", "rounded"],
   "density_presets": ["calm", "default", "compact"],
@@ -435,21 +435,22 @@
     "drawer": {
       "id": "drawer",
       "tag": "x-ui.drawer",
-      "name": "Slide-Over Drawer",
+      "name": "Slide-Over Drawer & Bottom Sheet",
       "category": "overlays",
-      "js_mode": "Live 2.5",
-      "description": "Right-edge detail inspector drawer wired to Kongono Live 2.5 reactive signals.",
-      "standards": ["ARIA role=dialog", "Kongono Live 2.5"],
+      "js_mode": "Live 2.5 / Runtime",
+      "description": "Edge detail inspector drawer or thumb-reachable mobile bottom sheet (position=right|left|bottom) wired to Live 2.5 or data-z-open.",
+      "standards": ["ARIA role=dialog", "Mobile Bottom Sheet", "Kongono Live 2.5"],
       "css": "drawer.css",
       "css_deps": ["button"],
       "template": "drawer.kgn.html",
       "props": {
         "id": { "type": "string", "default": "z-drawer", "description": "Drawer DOM ID" },
         "title": { "type": "string", "description": "Drawer title" },
+        "position": { "type": "enum", "enum": ["right", "left", "bottom"], "default": "right", "description": "Edge attachment (use bottom for mobile sheet)" },
         "show": { "type": "string", "default": "drawerOpen", "description": "Live 2.5 boolean expression" },
         "close-expr": { "type": "string", "description": "Live 2.5 close action" }
       },
-      "example": "<x-ui.drawer id=\"inspector-drawer\" title=\"Deployment Inspector\" show=\"drawerOpen\">Inspect headers and CSP policy.</x-ui.drawer>"
+      "example": "<x-ui.drawer id=\"mobile-sheet\" title=\"Quick Payment\" position=\"bottom\" show=\"sheetOpen\">Thumb-reachable mobile sheet.</x-ui.drawer>"
     },
     "toast": {
       "id": "toast",
@@ -642,11 +643,11 @@
     "chart": {
       "id": "chart",
       "tag": "x-ui.chart",
-      "name": "Pure SVG Chart & Sparkline",
+      "name": "Pure SVG Chart & Interactive Readout",
       "category": "data",
-      "js_mode": "0 B JS",
-      "description": "Zero-JavaScript server-rendered accessible SVG Sparkline, Bar, and Donut charts themed automatically via OKLCH tokens.",
-      "standards": ["Pure SVG", "0 B JS", "Zero inline style"],
+      "js_mode": "0 B JS / Runtime",
+      "description": "Server-rendered accessible SVG Sparkline, Bar, and Donut charts themed automatically via OKLCH tokens with progressive hover/focus readout tooltips.",
+      "standards": ["Pure SVG", "0 B JS Core", "Hover/Focus Readout"],
       "css": "chart.css",
       "css_deps": [],
       "template": "chart.kgn.html",
@@ -1235,6 +1236,51 @@
         "reject-label": { "type": "string", "default": "Reject", "description": "Reject button text" }
       },
       "example": "<x-ui.approval-card title=\"Apply Monthly Rent Increase\" agent=\"Lease Workflow\" risk=\"high\" summary=\"Updates active lease ledger for Unit 4B starting Jan 1.\" changes=\"Monthly Rent|$1,800.00|$1,850.00;;Auto-Pay|Pending|Enabled\" note-field=\"true\" />"
+    },
+    "filter-bar": {
+      "id": "filter-bar",
+      "tag": "x-ui.filter-bar",
+      "name": "Filter Pill Bar & Saved Views",
+      "category": "navigation",
+      "js_mode": "Runtime",
+      "description": "Composable dashboard filter pill bar with Saved Views tabs, native Top-Layer Popover +Filter picker, optional URL query-param sync, and zokeibi:filter-change events.",
+      "standards": ["HTML Popover API", "URL Query Sync", "Strict CSP"],
+      "css": "filter-bar.css",
+      "css_deps": ["button"],
+      "template": "filter-bar.kgn.html",
+      "props": {
+        "label": { "type": "string", "default": "Active filters", "description": "Accessible region label" },
+        "views": { "type": "string", "description": "Pipe-separated id:Label or id:Label:href saved view tabs" },
+        "active-view": { "type": "string", "description": "ID of active saved view" },
+        "filters": { "type": "string", "description": "Pipe-separated key:Label:Value initially active pills" },
+        "options": { "type": "string", "description": "Pipe-separated key:Label:Value options for the +Filter Popover menu" },
+        "sync-url": { "type": "boolean", "default": false, "description": "Syncs active filters into browser URL query parameters via history.replaceState" },
+        "reset-label": { "type": "string", "default": "Clear all", "description": "Reset button label" }
+      },
+      "example": "<x-ui.filter-bar views=\"all:All Units|overdue:Overdue|vacant:Vacant\" active-view=\"overdue\" filters=\"status:Status:Overdue|building:Property:Oak St\" options=\"status:Status:Paid|status:Status:Overdue|tier:Lease:Annual\" />"
+    },
+    "compare-slider": {
+      "id": "compare-slider",
+      "tag": "x-ui.compare-slider",
+      "name": "Before / After Compare Slider",
+      "category": "data",
+      "js_mode": "Runtime",
+      "description": "Accessible pointer & keyboard split comparison slider supporting before/after photos or structured comparison panels with zero inline HTML styles.",
+      "standards": ["CSS clip-path", "Semantic input[type=range]", "Strict CSP"],
+      "css": "compare-slider.css",
+      "css_deps": [],
+      "template": "compare-slider.kgn.html",
+      "props": {
+        "label": { "type": "string", "default": "Before and after comparison", "description": "Accessible range slider label" },
+        "before-label": { "type": "string", "default": "Before", "description": "Left/before badge label" },
+        "after-label": { "type": "string", "default": "After", "description": "Right/after badge label" },
+        "before-src": { "type": "string", "description": "Optional sanitized before image URL" },
+        "after-src": { "type": "string", "description": "Optional sanitized after image URL" },
+        "before-text": { "type": "string", "description": "Panel text when comparing without images" },
+        "after-text": { "type": "string", "description": "Panel text when comparing without images" },
+        "initial": { "type": "integer", "default": 50, "description": "Initial split percentage (5-95)" }
+      },
+      "example": "<x-ui.compare-slider before-label=\"Move-In (2025)\" after-label=\"Move-Out (2026)\" before-text=\"Fresh paint, spotless hardwood.\" after-text=\"Minor scuffing on hallway trim.\" initial=\"52\" />"
     }
   }
 }

@@ -1,0 +1,150 @@
+@php
+$safeUrl = static function (string $raw, string $fallback = '#'): string {
+    $clean = trim((string) preg_replace('/[\x00-\x1F\x7F]+/', '', $raw));
+    if ($clean === '') {
+        return $fallback;
+    }
+    $lower = strtolower($clean);
+    if (str_starts_with($lower, '//') || str_starts_with($lower, '/\\')) {
+        return $fallback;
+    }
+    if (
+        str_starts_with($lower, '/')
+        || str_starts_with($lower, './')
+        || str_starts_with($lower, '../')
+        || str_starts_with($lower, '#')
+        || str_starts_with($lower, '?')
+        || str_starts_with($lower, 'https://')
+        || str_starts_with($lower, 'http://')
+    ) {
+        return $clean;
+    }
+
+    return $fallback;
+};
+$id = isset($id) && is_string($id) && $id !== '' ? $id : 'z-fbar-' . bin2hex(random_bytes(3));
+$label = isset($label) && is_string($label) && $label !== '' ? $label : 'Active filters';
+$activeView = isset($activeView) && is_string($activeView) ? trim($activeView) : '';
+$syncUrl = isset($syncUrl) && ($syncUrl === true || $syncUrl === 'true' || $syncUrl === '1');
+$resetLabel = isset($resetLabel) && is_string($resetLabel) && $resetLabel !== '' ? $resetLabel : 'Clear all';
+$class = isset($class) && is_string($class) ? trim($class) : '';
+
+$parsedViews = [];
+if (isset($views) && is_array($views)) {
+    foreach ($views as $v) {
+        if (is_array($v) && isset($v['id'], $v['label'])) {
+            $parsedViews[] = [
+                'id' => trim((string) $v['id']),
+                'label' => trim((string) $v['label']),
+                'href' => isset($v['href']) && is_string($v['href']) ? $safeUrl($v['href']) : null,
+            ];
+        }
+    }
+} elseif (isset($views) && is_string($views) && trim($views) !== '') {
+    foreach (explode('|', $views) as $seg) {
+        $parts = array_map('trim', explode(':', $seg, 3));
+        $vid = $parts[0] ?? '';
+        $vlbl = $parts[1] ?? $vid;
+        $vhref = isset($parts[2]) && $parts[2] !== '' ? $safeUrl($parts[2]) : null;
+        if ($vid !== '') {
+            $parsedViews[] = ['id' => $vid, 'label' => $vlbl, 'href' => $vhref];
+        }
+    }
+}
+
+$parsedFilters = [];
+if (isset($filters) && is_array($filters)) {
+    foreach ($filters as $f) {
+        if (is_array($f) && isset($f['key'], $f['value'])) {
+            $parsedFilters[] = [
+                'key' => trim((string) $f['key']),
+                'label' => trim((string) ($f['label'] ?? $f['key'])),
+                'value' => trim((string) $f['value']),
+            ];
+        }
+    }
+} elseif (isset($filters) && is_string($filters) && trim($filters) !== '') {
+    foreach (explode('|', $filters) as $seg) {
+        $parts = array_map('trim', explode(':', $seg, 3));
+        $fk = $parts[0] ?? '';
+        $fl = $parts[1] ?? $fk;
+        $fv = $parts[2] ?? '';
+        if ($fk !== '' && $fv !== '') {
+            $parsedFilters[] = ['key' => $fk, 'label' => $fl, 'value' => $fv];
+        }
+    }
+}
+
+$parsedOptions = [];
+if (isset($options) && is_string($options) && trim($options) !== '') {
+    foreach (explode('|', $options) as $seg) {
+        $parts = array_map('trim', explode(':', $seg, 3));
+        $ok = $parts[0] ?? '';
+        $ol = $parts[1] ?? $ok;
+        $ov = $parts[2] ?? '';
+        if ($ok !== '' && $ov !== '') {
+            $parsedOptions[] = ['key' => $ok, 'label' => $ol, 'value' => $ov];
+        }
+    }
+}
+$popId = $id . '-add';
+@endphp
+<div
+  class="z-filter-bar{{ $class !== '' ? ' ' . $class : '' }}"
+  role="region"
+  aria-label="{{ $label }}"
+  data-z-filter-bar="true"
+@if ($syncUrl)
+  data-z-filter-sync-url="true"
+@endif
+>
+@if (count($parsedViews) > 0)
+  <div class="z-filter-views" role="tablist" aria-label="Saved filter views">
+@foreach ($parsedViews as $v)
+@php $isAct = $v['id'] === $activeView; @endphp
+@if ($v['href'] !== null)
+    <a class="z-filter-view{{ $isAct ? ' is-active' : '' }}" href="{{ $v['href'] }}" @if ($isAct) aria-current="page" @endif>{{ $v['label'] }}</a>
+@else
+    <button type="button" role="tab" class="z-filter-view{{ $isAct ? ' is-active' : '' }}" aria-selected="{{ $isAct ? 'true' : 'false' }}" data-z-filter-view="{{ $v['id'] }}">{{ $v['label'] }}</button>
+@endif
+@endforeach
+  </div>
+@endif
+  <div class="z-filter-row">
+    <div class="z-filter-pills" data-z-filter-pills>
+@foreach ($parsedFilters as $f)
+      <span class="z-filter-pill" data-z-filter-pill data-filter-key="{{ $f['key'] }}" data-filter-label="{{ $f['label'] }}" data-filter-value="{{ $f['value'] }}">
+        <span class="z-filter-key">{{ $f['label'] }}:</span>
+        <span>{{ $f['value'] }}</span>
+        <button type="button" class="z-filter-rm" data-z-filter-remove aria-label="Remove {{ $f['label'] }} filter">×</button>
+      </span>
+@endforeach
+    </div>
+    <div class="z-filter-controls">
+@if (count($parsedOptions) > 0)
+      <div class="z-filter-add-wrap">
+        <button type="button" class="z-btn z-btn-outline z-btn-sm" popovertarget="{{ $popId }}" aria-haspopup="menu">+ Filter</button>
+        <div id="{{ $popId }}" class="z-filter-menu" popover="auto" role="menu" aria-label="Add filter">
+@foreach ($parsedOptions as $opt)
+          <button
+            type="button"
+            role="menuitem"
+            class="z-filter-opt"
+            data-z-filter-add
+            data-filter-key="{{ $opt['key'] }}"
+            data-filter-label="{{ $opt['label'] }}"
+            data-filter-value="{{ $opt['value'] }}"
+            popovertarget="{{ $popId }}"
+            popovertargetaction="hide"
+          >
+            <span class="z-filter-key">{{ $opt['label'] }}</span>
+            <span>{{ $opt['value'] }}</span>
+          </button>
+@endforeach
+        </div>
+      </div>
+@endif
+      <button type="button" class="z-btn z-btn-ghost z-btn-sm" data-z-filter-clear @if (count($parsedFilters) === 0) hidden @endif>{{ $resetLabel }}</button>
+    </div>
+  </div>
+</div>
