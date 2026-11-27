@@ -64,17 +64,16 @@
     }
   });
 
-  // Wire every component catalog card to open its live demo directly in /playground/#comp-<id>
+  // Wire every catalog card (62 components + 8 SaaS blocks) to open its live preview in /playground/
   document.querySelectorAll(".zs-comp-card[data-catalog-item]").forEach((card) => {
     const cat = card.getAttribute("data-catalog-item") || "";
-    if (cat === "blocks") return;
     const tagEl = card.querySelector(".zs-comp-tag");
     const slug = tagEl ? (tagEl.textContent || "").trim() : "";
     if (!slug || !/^[a-z0-9-]+$/.test(slug)) return;
     const link = document.createElement("a");
     link.className = "zs-comp-try";
-    link.href = `/playground/#comp-${slug}`;
-    link.textContent = "Try live →";
+    link.href = cat === "blocks" ? `/playground/#block-${slug}` : `/playground/#comp-${slug}`;
+    link.textContent = cat === "blocks" ? "Preview block →" : "Try live →";
     card.appendChild(link);
   });
 
@@ -109,9 +108,14 @@
       return;
     }
 
-    const copyBtn = target.closest("[data-copy-cmd]");
+    const copyBtn = target.closest("[data-copy-cmd], [data-copy-target]");
     if (copyBtn) {
-      const cmd = copyBtn.getAttribute("data-copy-cmd") || "";
+      let cmd = copyBtn.getAttribute("data-copy-cmd") || "";
+      const copySel = copyBtn.getAttribute("data-copy-target") || "";
+      if (copySel) {
+        const srcEl = document.querySelector(copySel);
+        cmd = srcEl ? (srcEl.textContent || "").trim() : "";
+      }
       if (!copyBtn.dataset.origLabel) copyBtn.dataset.origLabel = copyBtn.textContent || "Copy";
       const finish = (label) => {
         const prev = copyTimers.get(copyBtn);

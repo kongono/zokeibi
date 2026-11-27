@@ -6,6 +6,11 @@
 - Live 62-Component & 8-Block Playground: https://zokeibi.com/playground/
 - Live 8 Turnkey SaaS Blocks Showcase: https://zokeibi.com/playground/#blocks
 - Live Browser OKLCH Theme & Token Studio: https://zokeibi.com/studio/
+- Zero-Install Single-File CDN (`v1.3`, CORS + SHA-384 SRI):
+  - CSS: https://zokeibi.com/dist/v1.3/zokeibi.min.css
+  - Runtime JS: https://zokeibi.com/dist/v1.3/zokeibi-runtime.js
+  - Single-File Starter HTML: https://zokeibi.com/dist/v1.3/starter.html
+  - SRI Manifest JSON: https://zokeibi.com/dist/manifest.json
 - Live Registry JSON: https://zokeibi.com/api/registry.json
 - Live UI Proof JSON: https://zokeibi.com/api/prove.json
 - GitHub: https://github.com/kongono/zokeibi

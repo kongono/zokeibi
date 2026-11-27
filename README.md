@@ -9,6 +9,7 @@ Modern, zero-npm, strict-CSP, AI-native UI component framework and pure PHP 8.5 
 
 - **Live 62-Component & 8-Block Playground:** https://zokeibi.com/playground/
 - **Live Browser OKLCH Theme Studio:** https://zokeibi.com/studio/
+- **Zero-Install Single-File CDN & Starter HTML:** https://zokeibi.com/dist/v1.3/starter.html ([SRI Manifest](https://zokeibi.com/dist/manifest.json))
 
 ## Why Zokeibi?
 
@@ -54,7 +55,13 @@ php vendor/bin/zokeibi studio --dir=. --port=8101
 
 Zokeibi has **zero runtime Composer dependencies** (`php >= 8.5.13` only) and works cleanly outside Kongono too:
 
-- **React / Vue / Svelte / Twig / Blade / Plain HTML Tree-Shaking:** `zokeibi build` scans both `<x-ui.*>` tags AND `.z-*` CSS classes (`z-btn`, `z-card`, `z-modal`, etc.) across `.kgn.html`, `.html`, `.php`, `.twig`, `.blade.php`, `.jsx`, `.tsx`, `.vue`, and `.svelte` (automatically skipping `vendor/` and `node_modules/`). Add `"safelist": ["modal", "toast"]` in `zokeibi.json` for dynamic class names.
+- **Zero-Install CDN (HTMX / Plain HTML / CodePen):**
+  ```html
+  <link rel="stylesheet" href="https://zokeibi.com/dist/v1.3/zokeibi.min.css">
+  <script src="https://zokeibi.com/dist/v1.3/zokeibi-runtime.js" defer></script>
+  ```
+  Verified SHA-384 SRI hashes are published at `https://zokeibi.com/dist/manifest.json`, and a ready-to-save single-file starter lives at `https://zokeibi.com/dist/v1.3/starter.html`.
+- **Laravel (Blade) / Symfony (Twig) / React / Vue / Svelte Tree-Shaking:** `zokeibi build` scans both `<x-ui.*>` tags AND `.z-*` CSS classes (`z-btn`, `z-card`, `z-modal`, etc.) across `.kgn.html`, `.html`, `.php`, `.twig`, `.blade.php`, `.jsx`, `.tsx`, `.vue`, and `.svelte` (automatically skipping `vendor/` and `node_modules/`). Add `"safelist": ["modal", "toast"]` in `zokeibi.json` for dynamic class names.
 - **Plain HTML / HTMX / Non-Live Interactivity:** Install the optional `~1.5 KB` zero-dependency strict-CSP runtime (`data-z-open`, `data-z-close`, `data-z-toggle`, `data-z-tabs`):
   ```bash
   php vendor/bin/zokeibi runtime --out=public/assets/zokeibi-runtime.js

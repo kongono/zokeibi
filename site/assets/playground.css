@@ -79,6 +79,32 @@
     }
   }
 
+  @media (max-width: 1220px) {
+    .pg-nav-inner {
+      gap: 0.6rem;
+      padding: 0.65rem 1rem;
+    }
+
+    .pg-brand-sub {
+      display: none;
+    }
+
+    .pg-link {
+      font-size: 0.75rem;
+      padding: 0.32rem 0.48rem;
+    }
+  }
+
+  @media (max-width: 960px) {
+    .pg-nav-inner {
+      flex-wrap: wrap;
+    }
+
+    .pg-links {
+      flex-wrap: wrap;
+    }
+  }
+
   .pg-hero {
     padding: 1.5rem 1.45rem;
     border-radius: var(--z-radius);

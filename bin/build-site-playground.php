@@ -409,23 +409,254 @@ $studioHtml = preg_replace(
 
 file_put_contents($root . '/site/studio/index.html', $studioHtml);
 
-// 7. Stamp automatic content-hashed `?v=<hash>` cache-busters onto site/index.html too
+// 7. Publish versioned single-file CDN bundles (/dist/v1.3, /dist/v1.3.0, /dist/latest), SRI manifest & zero-install starter.html
+$version = $zokeibi->version();
+$verParts = explode('.', $version);
+$minorTag = 'v' . ($verParts[0] ?? '1') . '.' . ($verParts[1] ?? '0');
+$patchTag = 'v' . $version;
+$cssBytes = (string) file_get_contents($root . '/site/assets/zokeibi.min.css');
+$rtBytes = (string) file_get_contents($root . '/site/assets/zokeibi-runtime.js');
+$cssSri = 'sha384-' . base64_encode(hash('sha384', $cssBytes, true));
+$rtSri = 'sha384-' . base64_encode(hash('sha384', $rtBytes, true));
+$cssGzBytes = strlen((string) gzencode($cssBytes, 9));
+$rtGzBytes = strlen((string) gzencode($rtBytes, 9));
+
+$starterHtml = <<<HTML
+<!doctype html>
+<html lang="en" data-zokeibi-theme="sumi" data-zokeibi-radius="default" data-z-density="default">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Zokeibi ({$patchTag}) — Zero-Install Single-File HTML Starter</title>
+  <link rel="stylesheet" href="https://zokeibi.com/dist/{$minorTag}/zokeibi.min.css" integrity="{$cssSri}" crossorigin="anonymous">
+</head>
+<body>
+  <main class="z-shell z-stack">
+    <header class="z-between">
+      <div>
+        <span class="z-badge z-badge-emerald">Zero npm · Strict CSP · {$patchTag}</span>
+        <h1>Zokeibi Single-File Starter</h1>
+        <p class="z-muted">Save this HTML file locally or paste into CodePen — no build step, no Node.js, no Composer required.</p>
+      </div>
+      <div class="z-row">
+        <button type="button" class="z-btn z-btn-outline z-btn-sm" data-z-cycle-theme="sumi,washi,indigo,matcha,kintsugi">Cycle Theme</button>
+        <button type="button" class="z-btn z-btn-outline z-btn-sm" data-z-cycle-density="calm,default,compact">Cycle Density</button>
+        <a class="z-btn z-btn-primary z-btn-sm" href="https://zokeibi.com/playground/">62-Component Playground →</a>
+      </div>
+    </header>
+
+    <section class="z-grid-3" aria-label="Key metrics">
+      <article class="z-kpi z-kpi-emerald">
+        <span class="z-kpi-label">Monthly Recurring</span>
+        <strong class="z-kpi-value">\$48,920</strong>
+        <span class="z-kpi-delta is-up">+14.2% MoM</span>
+      </article>
+      <article class="z-kpi z-kpi-blue">
+        <span class="z-kpi-label">Active Units</span>
+        <strong class="z-kpi-value">1,284</strong>
+        <span class="z-kpi-delta is-up">98.4% occupied</span>
+      </article>
+      <article class="z-kpi">
+        <span class="z-kpi-label">Bundle Weight</span>
+        <strong class="z-kpi-value">11.75 KB</strong>
+        <span class="z-kpi-delta">All 62 components gzip</span>
+      </article>
+    </section>
+
+    <section class="z-grid-2">
+      <article class="z-card">
+        <header class="z-card-head">
+          <div>
+            <div class="z-card-kicker">Integer Cents + Declarative Dirty-Form Guard</div>
+            <h2 class="z-card-title">Edit Lease Settings (Try Changing a Value)</h2>
+          </div>
+          <span class="z-badge z-badge-primary">Zero Custom JS</span>
+        </header>
+        <div class="z-card-body">
+          <form class="z-stack" action="#" method="get" data-z-dirty-guard="true">
+            <div class="z-field">
+              <label class="z-label" for="starter-name">Workspace Name</label>
+              <input id="starter-name" name="workspace" type="text" class="z-input" value="Acme Properties LLC">
+            </div>
+            <div class="z-input-group z-money" data-z-money="true" data-money-decimals="2" data-money-negative="false">
+              <label class="z-label" for="starter-rent">Monthly Rent (Submits Integer Cents)</label>
+              <input type="hidden" name="rent_cents" value="185000" data-z-money-cents>
+              <div class="z-input-group-row">
+                <span class="z-input-addon is-prefix" aria-hidden="true">\$</span>
+                <input id="starter-rent" type="text" inputmode="decimal" autocomplete="off" class="z-input-group-field z-money-field" value="1,850.00" data-z-money-display>
+                <span class="z-input-addon is-suffix">USD</span>
+              </div>
+              <span class="z-hint">Hidden input submits exact integer <code>185000</code> — zero floating-point drift.</span>
+            </div>
+            <div class="z-dirty-bar" data-z-dirty-bar hidden role="status" aria-live="polite">
+              <span class="z-dirty-count" data-z-dirty-count>0 unsaved changes</span>
+              <div class="z-row">
+                <button type="button" class="z-btn z-btn-outline z-btn-sm" data-z-dirty-discard>Discard</button>
+                <button type="submit" class="z-btn z-btn-primary z-btn-sm" data-z-toast="Settings saved" data-z-toast-variant="emerald">Save Changes</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </article>
+
+      <article class="z-card">
+        <header class="z-card-head">
+          <div>
+            <div class="z-card-kicker">Hardened Destructive Flows &amp; Undo Toasts</div>
+            <h2 class="z-card-title">Overlays Without Inline Scripts</h2>
+          </div>
+          <span class="z-badge z-badge-emerald">Strict CSP</span>
+        </header>
+        <div class="z-card-body z-stack">
+          <p class="z-muted">Trigger static-backdrop alert dialogs with typed confirmation gates or 5-second undoable toasts purely with <code>data-z-*</code> attributes.</p>
+          <div class="z-row">
+            <button type="button" class="z-btn z-btn-danger z-btn-sm" data-z-open="#starter-alert">Delete Workspace...</button>
+            <button type="button" class="z-btn z-btn-emerald z-btn-sm" data-z-undo="Invoice #402 archived" data-z-undo-delay="5000">Archive with 5s Undo</button>
+            <a class="z-btn z-btn-outline z-btn-sm" href="https://zokeibi.com/studio/">Customize in OKLCH Studio</a>
+          </div>
+          <div class="z-alert z-alert-info" role="status">
+            <div class="z-alert-title">Ready for HTMX, Laravel Blade, Symfony Twig, or Kongono</div>
+            <div>Use <code>https://zokeibi.com/dist/{$minorTag}/</code> directly or run <code>composer require kongono/zokeibi</code> to tree-shake to ~2.5 KB gzip.</div>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <article class="z-card">
+      <header class="z-card-head">
+        <div>
+          <div class="z-card-kicker">Sort · Search · Shift+Click Select · CSV Export</div>
+          <h2 class="z-card-title">Power Data Table</h2>
+        </div>
+        <span class="z-badge z-badge-blue">Built-in Runtime</span>
+      </header>
+      <div class="z-card-body">
+        <div class="z-table-wrap" data-z-table="true" data-z-table-sortable="true" data-z-table-selectable="true" data-z-table-export-file="leases.csv">
+          <div class="z-table-toolbar">
+            <input type="search" class="z-table-search" data-z-table-search placeholder="Search leases..." aria-label="Search leases">
+            <div class="z-table-tools">
+              <span class="z-table-count" data-z-table-count aria-live="polite"></span>
+              <button type="button" class="z-table-tool-btn" data-z-table-export>Export CSV</button>
+            </div>
+          </div>
+          <div class="z-table-bulk" data-z-table-bulk hidden role="region" aria-label="Selected rows">
+            <span class="z-table-bulk-count" data-z-table-selected-count aria-live="polite">0 selected</span>
+            <div class="z-table-bulk-actions">
+              <button type="button" class="z-table-tool-btn z-table-bulk-emerald" data-z-table-bulk-action="approve">Approve</button>
+              <button type="button" class="z-table-tool-btn" data-z-table-clear-selection>Clear</button>
+            </div>
+          </div>
+          <table class="z-table">
+            <caption class="z-sr-only">Active property leases</caption>
+            <thead>
+              <tr>
+                <th scope="col" data-z-sort="string" tabindex="0" aria-sort="none">Unit</th>
+                <th scope="col" data-z-sort="string" tabindex="0" aria-sort="none">Tenant</th>
+                <th scope="col" data-z-sort="string" tabindex="0" aria-sort="none">Status</th>
+                <th scope="col" data-z-sort="auto" tabindex="0" aria-sort="none">Monthly Rent</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr data-row-id="unit-4b"><td>Unit 4B</td><td>Elena Vance</td><td><span class="z-badge z-badge-emerald">Paid</span></td><td>1850</td></tr>
+              <tr data-row-id="unit-2a"><td>Unit 2A</td><td>Marcus Chen</td><td><span class="z-badge z-badge-amber">Pending</span></td><td>2100</td></tr>
+              <tr data-row-id="unit-7c"><td>Unit 7C</td><td>Priya Nair</td><td><span class="z-badge z-badge-emerald">Paid</span></td><td>1650</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </article>
+  </main>
+
+  <div class="z-modal-backdrop z-alertdialog-backdrop" id="starter-alert" data-z-static-backdrop="true" data-z-alertdialog="true" hidden>
+    <div class="z-modal z-alertdialog z-modal-danger" role="alertdialog" aria-modal="true" aria-labelledby="starter-ad-title" aria-describedby="starter-ad-desc">
+      <div class="z-modal-head"><h3 class="z-modal-title" id="starter-ad-title">Delete Workspace?</h3></div>
+      <div class="z-modal-body z-stack-sm" id="starter-ad-desc">
+        <p class="z-alertdialog-desc">Type <code class="z-alertdialog-code">DELETE</code> below to unlock confirmation.</p>
+        <div class="z-field z-alertdialog-confirm">
+          <label class="z-label" for="starter-ad-input">Confirmation phrase</label>
+          <input id="starter-ad-input" type="text" class="z-input" autocomplete="off" placeholder="DELETE" data-z-confirm-input data-z-confirm-match="DELETE">
+        </div>
+      </div>
+      <div class="z-modal-foot">
+        <button type="button" class="z-btn z-btn-outline" data-z-close="#starter-alert" data-z-initial-focus="true">Cancel</button>
+        <button type="button" class="z-btn z-btn-danger" data-z-confirm-btn data-z-close="#starter-alert" data-z-toast="Workspace deleted" data-z-toast-variant="danger" disabled>Confirm Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://zokeibi.com/dist/{$minorTag}/zokeibi-runtime.js" integrity="{$rtSri}" crossorigin="anonymous" defer></script>
+</body>
+</html>
+HTML;
+
+foreach ([$minorTag, $patchTag, 'latest'] as $distChannel) {
+    $distDir = $root . '/site/dist/' . $distChannel;
+    if (!is_dir($distDir) && !mkdir($distDir, 0o775, true) && !is_dir($distDir)) {
+        fwrite(STDERR, "Unable to create dist directory: {$distDir}\n");
+        exit(1);
+    }
+    file_put_contents($distDir . '/zokeibi.min.css', $cssBytes);
+    file_put_contents($distDir . '/zokeibi-runtime.js', $rtBytes);
+    if ('latest' === $distChannel || $minorTag === $distChannel) {
+        file_put_contents($distDir . '/starter.html', $starterHtml);
+    }
+}
+
+$distManifest = [
+    'version' => $version,
+    'minor_channel' => $minorTag,
+    'components_count' => $zokeibi->registry->count(),
+    'blocks_count' => count($zokeibi->blocks->ids()),
+    'files' => [
+        'css' => [
+            'url' => "https://zokeibi.com/dist/{$minorTag}/zokeibi.min.css",
+            'pinned_url' => "https://zokeibi.com/dist/{$patchTag}/zokeibi.min.css",
+            'latest_url' => 'https://zokeibi.com/dist/latest/zokeibi.min.css',
+            'integrity' => $cssSri,
+            'bytes' => strlen($cssBytes),
+            'gzip_bytes' => $cssGzBytes,
+        ],
+        'runtime' => [
+            'url' => "https://zokeibi.com/dist/{$minorTag}/zokeibi-runtime.js",
+            'pinned_url' => "https://zokeibi.com/dist/{$patchTag}/zokeibi-runtime.js",
+            'latest_url' => 'https://zokeibi.com/dist/latest/zokeibi-runtime.js',
+            'integrity' => $rtSri,
+            'bytes' => strlen($rtBytes),
+            'gzip_bytes' => $rtGzBytes,
+        ],
+        'starter_html' => [
+            'url' => "https://zokeibi.com/dist/{$minorTag}/starter.html",
+            'latest_url' => 'https://zokeibi.com/dist/latest/starter.html',
+            'bytes' => strlen($starterHtml),
+        ],
+    ],
+];
+file_put_contents($root . '/site/dist/manifest.json', (string) json_encode($distManifest, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES) . "\n");
+
+// 8. Stamp automatic content-hashed `?v=<hash>` cache-busters & exact SRI hashes onto site/index.html
 $siteIndexPath = $root . '/site/index.html';
 $siteIndex = (string) file_get_contents($siteIndexPath);
 $siteIndex = preg_replace('/href="assets\/zokeibi\.min\.css(?:\?v=[a-f0-9]+)?"/', 'href="assets/zokeibi.min.css?v=' . $hCss . '"', $siteIndex) ?? $siteIndex;
 $siteIndex = preg_replace('/href="assets\/site\.css(?:\?v=[a-f0-9]+)?"/', 'href="assets/site.css?v=' . $hSiteCss . '"', $siteIndex) ?? $siteIndex;
 $siteIndex = preg_replace('/src="assets\/zokeibi-runtime\.js(?:\?v=[a-f0-9]+)?"/', 'src="assets/zokeibi-runtime.js?v=' . $hRt . '"', $siteIndex) ?? $siteIndex;
 $siteIndex = preg_replace('/src="assets\/site\.js(?:\?v=[a-f0-9]+)?"/', 'src="assets/site.js?v=' . $hSiteJs . '"', $siteIndex) ?? $siteIndex;
+$siteIndex = str_replace(['__ZOKEIBI_CSS_SRI__', '__ZOKEIBI_RT_SRI__'], [$cssSri, $rtSri], $siteIndex);
+$siteIndex = preg_replace('/(zokeibi\.min\.css&quot; integrity=&quot;)sha384-[A-Za-z0-9+\/=]+(&quot;)/', '$1' . $cssSri . '$2', $siteIndex) ?? $siteIndex;
+$siteIndex = preg_replace('/(zokeibi-runtime\.js&quot; integrity=&quot;)sha384-[A-Za-z0-9+\/=]+(&quot;)/', '$1' . $rtSri . '$2', $siteIndex) ?? $siteIndex;
 file_put_contents($siteIndexPath, $siteIndex);
 
 $cardCount = substr_count($pgHtml, 'data-pg-card="');
 $blockCount = substr_count($pgHtml, 'data-pg-block="');
 echo sprintf(
-    "Built Zokeibi static web suite:\n  - site/playground/index.html (%d live components + %d live SaaS blocks, %s KB)\n  - site/studio/index.html (%s KB, live OKLCH + WCAG AA + 4 exports)\n  - Cache-busted assets: css=%s rt=%s studio=%s\n",
+    "Built Zokeibi static web suite:\n  - site/playground/index.html (%d live components + %d live SaaS blocks, %s KB)\n  - site/studio/index.html (%s KB, live OKLCH + WCAG AA + 4 exports)\n  - site/dist/{%s,%s,latest}/ (CSS %.2f KB gz, RT %.2f KB gz, SRI manifest + starter.html)\n  - Cache-busted assets: css=%s rt=%s studio=%s\n",
     $cardCount,
     $blockCount,
     number_format(strlen($pgHtml) / 1024, 1),
     number_format(strlen($studioHtml) / 1024, 1),
+    $minorTag,
+    $patchTag,
+    $cssGzBytes / 1024,
+    $rtGzBytes / 1024,
     $hCss,
     $hRt,
     $hStudioJs,

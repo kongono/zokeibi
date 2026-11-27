@@ -1,0 +1,29 @@
+{
+    "version": "1.3.0",
+    "minor_channel": "v1.3",
+    "components_count": 62,
+    "blocks_count": 8,
+    "files": {
+        "css": {
+            "url": "https://zokeibi.com/dist/v1.3/zokeibi.min.css",
+            "pinned_url": "https://zokeibi.com/dist/v1.3.0/zokeibi.min.css",
+            "latest_url": "https://zokeibi.com/dist/latest/zokeibi.min.css",
+            "integrity": "sha384-ZT2LXXuctwHJM2ps+vDR89gbu0Ffa2aG9T6iib4pCo8fLvAprRaghKb1BcHeHqiL",
+            "bytes": 72254,
+            "gzip_bytes": 12034
+        },
+        "runtime": {
+            "url": "https://zokeibi.com/dist/v1.3/zokeibi-runtime.js",
+            "pinned_url": "https://zokeibi.com/dist/v1.3.0/zokeibi-runtime.js",
+            "latest_url": "https://zokeibi.com/dist/latest/zokeibi-runtime.js",
+            "integrity": "sha384-8n/CfEPzkoDD9w1QWIn9pIYQvqsGGPEWIsbd8lRxrnGV6Tx7VHfTVeZOSCMI3HBL",
+            "bytes": 97640,
+            "gzip_bytes": 20569
+        },
+        "starter_html": {
+            "url": "https://zokeibi.com/dist/v1.3/starter.html",
+            "latest_url": "https://zokeibi.com/dist/latest/starter.html",
+            "bytes": 9787
+        }
+    }
+}

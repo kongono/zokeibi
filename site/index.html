@@ -15,7 +15,7 @@
   <meta name="twitter:description" content="62 accessible components + 8 live SaaS blocks in 11.75 KB gzip. Pure PHP 8.5 OKLCH compiler, browser Theme Studio, filter bars, compare sliders, dirty-form guards, and zokeibi prove Grade A+ gate.">
   <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
   <link rel="stylesheet" href="assets/zokeibi.min.css?v=c4d1c800">
-  <link rel="stylesheet" href="assets/site.css?v=680ba49a">
+  <link rel="stylesheet" href="assets/site.css?v=3a90f757">
   <link rel="alternate" type="text/markdown" title="Zokeibi LLM Documentation Index" href="llms.txt">
 </head>
 <body>
@@ -632,8 +632,139 @@ Zokeibi (造形美) UI Proof Certificate — Grade A+ (100/100 · PASS · 27.3 m
     <section class="zs-section" id="stacks">
       <div class="zs-container">
         <div class="zs-section-head">
-          <h2>Built for Kongono — Zero Lock-In on Any Stack</h2>
-          <p><code>kongono/zokeibi</code> requires only PHP <code>&gt;= 8.5.13</code> with zero runtime Composer dependencies. Use it directly with Kongono Live 2.5 or export tokens and tree-shake <code>.z-*</code> classes across HTML, HTMX, Twig, Blade, React, Vue, and Svelte.</p>
+          <h2>60-Second &ldquo;Any Stack&rdquo; Recipes &amp; Zero-Install CDN</h2>
+          <p><code>kongono/zokeibi</code> has <strong>zero runtime Composer dependencies</strong> and requires <strong>zero npm</strong>. Drop two versioned CDN lines into plain HTML or HTMX right now, or tree-shake <code>.z-*</code> classes inside Kongono, Laravel Blade, Symfony Twig, React, Vue, or Svelte.</p>
+        </div>
+
+        <article class="z-card zs-cdn-card" id="cdn">
+          <div class="z-card-head">
+            <div>
+              <div class="z-card-kicker">Zero Install · CORS + SRI Enabled · Immutable Cache</div>
+              <h3 class="z-card-title">Single-File CDN Bundle (<code>https://zokeibi.com/dist/v1.3/</code>)</h3>
+            </div>
+            <div class="zs-cdn-actions">
+              <button type="button" class="z-btn z-btn-outline z-btn-sm" data-copy-target="#cdn-snippet">Copy CDN Tags</button>
+              <a class="z-btn z-btn-primary z-btn-sm" href="/dist/v1.3/starter.html">Open Live Starter HTML &rarr;</a>
+              <a class="z-btn z-btn-ghost z-btn-sm" href="/dist/manifest.json">SRI Manifest JSON</a>
+            </div>
+          </div>
+          <div class="z-card-body">
+            <pre class="zs-pre" id="cdn-snippet"><code>&lt;!-- Zokeibi v1.3.0 — All 62 components (11.75 KB gzip CSS) + strict-CSP runtime --&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;https://zokeibi.com/dist/v1.3/zokeibi.min.css&quot; integrity=&quot;sha384-ZT2LXXuctwHJM2ps+vDR89gbu0Ffa2aG9T6iib4pCo8fLvAprRaghKb1BcHeHqiL&quot; crossorigin=&quot;anonymous&quot;&gt;
+&lt;script src=&quot;https://zokeibi.com/dist/v1.3/zokeibi-runtime.js&quot; integrity=&quot;sha384-8n/CfEPzkoDD9w1QWIn9pIYQvqsGGPEWIsbd8lRxrnGV6Tx7VHfTVeZOSCMI3HBL&quot; crossorigin=&quot;anonymous&quot; defer&gt;&lt;/script&gt;</code></pre>
+          </div>
+        </article>
+
+        <div class="z-tabs zs-recipes" data-z-tabs="true">
+          <div class="z-tablist" role="tablist" aria-label="60-second stack integration recipes">
+            <button type="button" role="tab" class="z-tab is-active" aria-selected="true" tabindex="0" data-z-tab="kongono">Kongono (Golden Path)</button>
+            <button type="button" role="tab" class="z-tab" aria-selected="false" tabindex="-1" data-z-tab="laravel">Laravel (Blade)</button>
+            <button type="button" role="tab" class="z-tab" aria-selected="false" tabindex="-1" data-z-tab="symfony">Symfony (Twig)</button>
+            <button type="button" role="tab" class="z-tab" aria-selected="false" tabindex="-1" data-z-tab="htmx">HTMX / Plain HTML</button>
+            <button type="button" role="tab" class="z-tab" aria-selected="false" tabindex="-1" data-z-tab="spa">React / Vue / Tailwind v4</button>
+          </div>
+
+          <div class="z-tabpanel" role="tabpanel" data-z-panel="kongono">
+            <div class="zs-recipe-bar">
+              <div class="zs-recipe-title"><span>Kongono PHP 8.5 + Live 2.5 Signals</span><span class="z-badge z-badge-primary">Owned &lt;x-ui.*&gt; + MCP</span></div>
+              <button type="button" class="z-btn z-btn-outline z-btn-sm" data-copy-target="#recipe-kongono">Copy Recipe</button>
+            </div>
+            <pre class="zs-pre" id="recipe-kongono"><code>composer require kongono/zokeibi
+php vendor/bin/zokeibi init --theme=sumi
+php vendor/bin/zokeibi add button card money-input filter-bar table drawer alert-dialog
+php vendor/bin/zokeibi block add saas-shell analytics-dashboard
+php vendor/bin/zokeibi build --views=views --out=public/assets/zokeibi.min.css
+php vendor/bin/zokeibi prove --dir=. --views=views --strict</code></pre>
+          </div>
+
+          <div class="z-tabpanel" role="tabpanel" data-z-panel="laravel" hidden>
+            <div class="zs-recipe-bar">
+              <div class="zs-recipe-title"><span>Laravel (Blade) — Zero Vite / Zero npm Required</span><span class="z-badge z-badge-emerald">Scans *.blade.php</span></div>
+              <button type="button" class="z-btn z-btn-outline z-btn-sm" data-copy-target="#recipe-laravel">Copy Recipe</button>
+            </div>
+            <pre class="zs-pre" id="recipe-laravel"><code># 1. Install (0 runtime Composer deps) &amp; tree-shake directly from resources/views/
+composer require kongono/zokeibi
+php vendor/bin/zokeibi runtime --out=public/assets/zokeibi-runtime.js
+php vendor/bin/zokeibi build --views=resources/views --out=public/assets/zokeibi.min.css
+
+# 2. Drop into resources/views/layouts/app.blade.php:
+&lt;html lang=&quot;en&quot; data-zokeibi-theme=&quot;sumi&quot; data-z-density=&quot;default&quot;&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;{{ asset('assets/zokeibi.min.css') }}&quot;&gt;
+&lt;script src=&quot;{{ asset('assets/zokeibi-runtime.js') }}&quot; defer&gt;&lt;/script&gt;
+
+# 3. Use any .z-* component in Blade (integer cents + dirty-form guard):
+&lt;form method=&quot;POST&quot; action=&quot;{{ route('leases.store') }}&quot; data-z-dirty-guard=&quot;true&quot;&gt;
+  @csrf
+  &lt;div class=&quot;z-input-group z-money&quot; data-z-money=&quot;true&quot; data-money-decimals=&quot;2&quot;&gt;
+    &lt;input type=&quot;hidden&quot; name=&quot;rent_cents&quot; value=&quot;185000&quot; data-z-money-cents&gt;
+    &lt;div class=&quot;z-input-group-row&quot;&gt;
+      &lt;span class=&quot;z-input-addon is-prefix&quot;&gt;$&lt;/span&gt;
+      &lt;input type=&quot;text&quot; inputmode=&quot;decimal&quot; class=&quot;z-input-group-field z-money-field&quot; value=&quot;1,850.00&quot; data-z-money-display&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/form&gt;</code></pre>
+          </div>
+
+          <div class="z-tabpanel" role="tabpanel" data-z-panel="symfony" hidden>
+            <div class="zs-recipe-bar">
+              <div class="zs-recipe-title"><span>Symfony (Twig) — Strict CSP Without Webpack Encore</span><span class="z-badge z-badge-blue">Scans *.twig</span></div>
+              <button type="button" class="z-btn z-btn-outline z-btn-sm" data-copy-target="#recipe-symfony">Copy Recipe</button>
+            </div>
+            <pre class="zs-pre" id="recipe-symfony"><code># 1. Install &amp; compile tree-shaken CSS directly from templates/
+composer require kongono/zokeibi
+php vendor/bin/zokeibi runtime --out=public/assets/zokeibi-runtime.js
+php vendor/bin/zokeibi build --views=templates --out=public/assets/zokeibi.min.css
+
+# 2. Include in templates/base.html.twig (works under style-src 'self' CSP):
+&lt;link rel=&quot;stylesheet&quot; href=&quot;{{ asset('assets/zokeibi.min.css') }}&quot;&gt;
+&lt;script src=&quot;{{ asset('assets/zokeibi-runtime.js') }}&quot; defer&gt;&lt;/script&gt;
+
+# 3. Render sortable/filterable/CSV-exportable DataTables in pure Twig:
+&lt;div class=&quot;z-table-wrap&quot; data-z-table=&quot;true&quot; data-z-table-sortable=&quot;true&quot; data-z-table-export-file=&quot;orders.csv&quot;&gt;
+  &lt;div class=&quot;z-table-toolbar&quot;&gt;
+    &lt;input type=&quot;search&quot; class=&quot;z-table-search&quot; data-z-table-search placeholder=&quot;Search...&quot;&gt;
+    &lt;button type=&quot;button&quot; class=&quot;z-table-tool-btn&quot; data-z-table-export&gt;Export CSV&lt;/button&gt;
+  &lt;/div&gt;
+  &lt;table class=&quot;z-table&quot;&gt;...&lt;/table&gt;
+&lt;/div&gt;</code></pre>
+          </div>
+
+          <div class="z-tabpanel" role="tabpanel" data-z-panel="htmx" hidden>
+            <div class="zs-recipe-bar">
+              <div class="zs-recipe-title"><span>HTMX / Plain HTML — Zero Composer, Zero Node, 2 CDN Lines</span><span class="z-badge z-badge-emerald">Works in CodePen</span></div>
+              <button type="button" class="z-btn z-btn-outline z-btn-sm" data-copy-target="#recipe-htmx">Copy Recipe</button>
+            </div>
+            <pre class="zs-pre" id="recipe-htmx"><code>&lt;!doctype html&gt;
+&lt;html lang=&quot;en&quot; data-zokeibi-theme=&quot;sumi&quot; data-z-density=&quot;default&quot;&gt;
+&lt;head&gt;
+  &lt;link rel=&quot;stylesheet&quot; href=&quot;https://zokeibi.com/dist/v1.3/zokeibi.min.css&quot;&gt;
+  &lt;script src=&quot;https://zokeibi.com/dist/v1.3/zokeibi-runtime.js&quot; defer&gt;&lt;/script&gt;
+&lt;/head&gt;
+&lt;body class=&quot;z-shell z-stack&quot;&gt;
+  &lt;div class=&quot;z-row&quot;&gt;
+    &lt;button class=&quot;z-btn z-btn-outline z-btn-sm&quot; data-z-cycle-theme=&quot;sumi,washi,indigo,matcha&quot;&gt;Theme&lt;/button&gt;
+    &lt;button class=&quot;z-btn z-btn-emerald z-btn-sm&quot; hx-delete=&quot;/leases/402&quot; data-z-undo=&quot;Lease #402 archived&quot;&gt;Archive (5s Undo)&lt;/button&gt;
+    &lt;button class=&quot;z-btn z-btn-danger z-btn-sm&quot; data-z-open=&quot;#confirm-del&quot;&gt;Delete...&lt;/button&gt;
+  &lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+&lt;!-- Or open the complete ready-to-save starter: https://zokeibi.com/dist/v1.3/starter.html --&gt;</code></pre>
+          </div>
+
+          <div class="z-tabpanel" role="tabpanel" data-z-panel="spa" hidden>
+            <div class="zs-recipe-bar">
+              <div class="zs-recipe-title"><span>React / Vue / Svelte / Tailwind v4 — Shared OKLCH Tokens</span><span class="z-badge z-badge-primary">W3C DTCG + @theme</span></div>
+              <button type="button" class="z-btn z-btn-outline z-btn-sm" data-copy-target="#recipe-spa">Copy Recipe</button>
+            </div>
+            <pre class="zs-pre" id="recipe-spa"><code># Tree-shake .z-* classes directly from .jsx / .tsx / .vue / .svelte files
+php vendor/bin/zokeibi build --views=src --out=public/zokeibi.min.css
+
+# Or export your OKLCH tokens into Tailwind v4 @theme or Figma W3C DTCG JSON
+php vendor/bin/zokeibi export --format=tailwind --out=src/styles/zokeibi-theme.css
+php vendor/bin/zokeibi export --format=w3c-tokens --out=tokens.json
+
+# Or design visually &amp; copy exports right in the browser: https://zokeibi.com/studio/</code></pre>
+          </div>
         </div>
 
         <div class="z-grid-3">
@@ -655,7 +786,7 @@ Zokeibi (造形美) UI Proof Certificate — Grade A+ (100/100 · PASS · 27.3 m
             <div class="z-card-body z-stack-sm">
               <span class="z-badge z-badge-blue">Standalone Runtime</span>
               <h3 class="z-card-title">Zero-Dependency JS</h3>
-              <p class="z-muted">Drop <code>zokeibi-runtime.js</code> into plain HTML or HTMX apps for modals, drawers, Cmd+K, comboboxes, date ranges, sortable tables, and safe Markdown preview.</p>
+              <p class="z-muted">Drop <code>zokeibi-runtime.js</code> into plain HTML or HTMX apps for modals, bottom sheets, Cmd+K, filter bars, compare sliders, dirty guards, sortable/CSV tables, and safe Markdown preview.</p>
             </div>
           </div>
         </div>
@@ -689,8 +820,11 @@ Zokeibi (造形美) UI Proof Certificate — Grade A+ (100/100 · PASS · 27.3 m
         <li role="option" aria-selected="false" data-z-cmdk-item="quickstart cli prove studio install">
           <a class="z-cmdk-item" href="#quickstart" data-z-close="#site-cmdk"><span>CLI Quick Start &amp; zokeibi prove</span><kbd class="z-kbd">CLI</kbd></a>
         </li>
-        <li role="option" aria-selected="false" data-z-cmdk-item="bring your own stack react vue svelte twig blade tailwind w3c tokens">
-          <a class="z-cmdk-item" href="#stacks" data-z-close="#site-cmdk"><span>Any Stack &amp; W3C / Tailwind Exports</span><kbd class="z-kbd">Export</kbd></a>
+        <li role="option" aria-selected="false" data-z-cmdk-item="bring your own stack laravel blade symfony twig htmx react vue svelte tailwind cdn starter">
+          <a class="z-cmdk-item" href="#stacks" data-z-close="#site-cmdk"><span>60-Second Stack Recipes &amp; Zero-Install CDN</span><kbd class="z-kbd">CDN</kbd></a>
+        </li>
+        <li role="option" aria-selected="false" data-z-cmdk-item="single file html starter template codepen zero install dist">
+          <a class="z-cmdk-item" href="/dist/v1.3/starter.html"><span>Open Zero-Install Single-File Starter HTML</span><kbd class="z-kbd">Starter</kbd></a>
         </li>
         <li role="option" aria-selected="false" data-z-cmdk-item="kongono php framework home">
           <a class="z-cmdk-item" href="https://kongono.com" target="_blank" rel="noopener"><span>Kongono PHP 8.5 Framework</span><kbd class="z-kbd">kongono.com</kbd></a>
@@ -755,6 +889,8 @@ Zokeibi (造形美) UI Proof Certificate — Grade A+ (100/100 · PASS · 27.3 m
         <a href="/playground/">Playground</a>
         <a href="/studio/">OKLCH Studio</a>
         <a href="/playground/#blocks">8 Blocks</a>
+        <a href="#cdn">CDN</a>
+        <a href="/dist/v1.3/starter.html">Starter HTML</a>
         <a href="#catalog">62 Components</a>
         <a href="#quickstart">CLI &amp; Proof</a>
         <a href="llms.txt">llms.txt</a>
@@ -766,6 +902,6 @@ Zokeibi (造形美) UI Proof Certificate — Grade A+ (100/100 · PASS · 27.3 m
   </footer>
 
   <script src="assets/zokeibi-runtime.js?v=b534ba44" defer></script>
-  <script src="assets/site.js?v=4c9695f5" defer></script>
+  <script src="assets/site.js?v=a4a6dc53" defer></script>
 </body>
 </html>
