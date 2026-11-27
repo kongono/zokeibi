@@ -1081,6 +1081,7 @@ HTML;
     server-sort="true"
     cursor-url="/api/auctions"
     next-cursor="cur_2"
+    filter-source="#auction-filters"
   >
     <thead><tr><th scope="col" data-z-sort="string" data-sort-key="domain">Domain</th><th scope="col" data-z-sort="number" data-sort-key="bid">Bid</th></tr></thead>
     <tbody><tr data-row-id="acme"><td>acme.com</td><td id="bid-acme">$2,450</td></tr></tbody>
@@ -1102,6 +1103,7 @@ HTML;
             self::assertStringContainsString('data-z-table-kbd="true"', $html);
             self::assertStringContainsString('data-z-table-server="true"', $html);
             self::assertStringContainsString('data-z-table-cursor-url="/api/auctions"', $html);
+            self::assertStringContainsString('data-z-table-filter-source="#auction-filters"', $html);
             self::assertStringContainsString('data-z-table-sentinel', $html);
             self::assertStringContainsString('data-next-cursor="cur_2"', $html);
 
@@ -1120,9 +1122,13 @@ HTML;
 
             $runtime = (string) file_get_contents($this->packageDir . '/resources/js/zokeibi-runtime.js');
             self::assertStringContainsString('initCountdowns', $runtime);
+            self::assertStringContainsString('resolveCountdownMeta', $runtime);
+            self::assertStringContainsString('kongono:sse-patch', $runtime);
             self::assertStringContainsString('data-z-server-now', $runtime);
             self::assertStringContainsString('zokeibi:countdown-ended', $runtime);
             self::assertStringContainsString('data-z-table-kbd', $runtime);
+            self::assertStringContainsString('data-active-sort', $runtime);
+            self::assertStringContainsString('data-z-table-filter-source', $runtime);
             self::assertStringContainsString('zokeibi:table-sort', $runtime);
             self::assertStringContainsString('zokeibi:table-row-open', $runtime);
             self::assertStringContainsString('zokeibi:table-load-more', $runtime);

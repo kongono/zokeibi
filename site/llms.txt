@@ -1,4 +1,4 @@
-# Zokeibi (造形美 — Architectural Beauty of Form) v1.4.0
+# Zokeibi (造形美 — Architectural Beauty of Form) v1.4.1
 
 > Standalone, zero-npm, strict-CSP, AI-native UI component framework, pure PHP 8.5 OKLCH CSS compiler, live browser OKLCH Theme Studio, pure-SVG charting engine with progressive hover tooltips, DTO-to-UI generator, and executable UI proof gate for Kongono (and any HTML/HTMX/Twig/Blade/React/Vue/Svelte stack).
 

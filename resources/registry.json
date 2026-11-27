@@ -3,7 +3,7 @@
   "kanji": "造形美",
   "meaning": "Beauty of Form",
   "package": "kongono/zokeibi",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "themes": ["sumi", "washi", "indigo", "matcha", "kintsugi"],
   "radius_presets": ["sharp", "default", "rounded"],
   "density_presets": ["calm", "default", "compact"],
@@ -341,7 +341,8 @@
         "keyboard": { "type": "boolean", "default": false, "description": "Enables power-user j/k/ArrowDown/ArrowUp row navigation, Space select, and Enter detail open" },
         "server-sort": { "type": "boolean", "default": false, "description": "Delegates sort clicks to zokeibi:table-sort event instead of client DOM sorting (for cursor-paginated datasets)" },
         "cursor-url": { "type": "string", "description": "Same-origin endpoint for IntersectionObserver cursor infinite scroll appending <tr> rows" },
-        "next-cursor": { "type": "string", "description": "Initial cursor token rendered on the infinite-scroll sentinel" }
+        "next-cursor": { "type": "string", "description": "Initial cursor token rendered on the infinite-scroll sentinel" },
+        "filter-source": { "type": "string", "description": "Optional CSS selector of a linked <x-ui.filter-bar> whose active view and pills are merged into cursor pagination requests" }
       },
       "example": "<x-ui.table caption=\"Live Auctions\" searchable=\"true\" sortable=\"true\" selectable=\"true\" frozen-first=\"true\" keyboard=\"true\" column-toggle=\"true\" exportable=\"true\" bulk-actions=\"watch:Bulk Watch:emerald|archive:Archive:outline\"><thead><tr><th>Domain</th><th>Bid</th><th>Closes</th></tr></thead><tbody><tr data-row-id=\"acme\"><td>acme.com</td><td>$2,450</td><td><x-ui.countdown seconds=\"85\" /></td></tr></tbody></x-ui.table>"
     },

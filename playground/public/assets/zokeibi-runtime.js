@@ -846,6 +846,8 @@
     const wrap = table.closest("[data-z-table]");
     if (wrap && wrap.getAttribute("data-z-table-server") === "true") {
       const colKey = (th.getAttribute("data-sort-key") || th.textContent || "").trim();
+      wrap.setAttribute("data-active-sort", colKey);
+      wrap.setAttribute("data-active-dir", dir);
       const searchInput = wrap.querySelector("[data-z-table-search]");
       const query = searchInput instanceof HTMLInputElement ? searchInput.value.trim() : "";
       wrap.dispatchEvent(new CustomEvent("zokeibi:table-sort", {
@@ -2471,8 +2473,55 @@
     return `${pad(m)}:${pad(s)}`;
   }
 
+  function resolveCountdownMeta(el) {
+    const rawUntil = el.getAttribute("data-z-countdown") || "";
+    const rawSeconds = el.getAttribute("data-z-countdown-seconds") || "";
+    const rawServerNow = el.getAttribute("data-z-server-now") || "";
+    const urgentSec = Math.max(0, parseInt(el.getAttribute("data-z-urgent-seconds") || "60", 10) || 0);
+    const endedLabel = el.getAttribute("data-z-ended-label") || "Ended";
+    const prefix = el.getAttribute("data-z-countdown-prefix") || "";
+
+    const existing = countdownMeta.get(el);
+    if (
+      existing
+      && existing.rawUntil === rawUntil
+      && existing.rawSeconds === rawSeconds
+      && existing.rawServerNow === rawServerNow
+      && existing.urgentSec === urgentSec
+      && existing.endedLabel === endedLabel
+      && existing.prefix === prefix
+    ) {
+      return existing;
+    }
+
+    const now = Date.now();
+    const serverNowMs = rawServerNow ? Date.parse(rawServerNow) : NaN;
+    const skewMs = Number.isFinite(serverNowMs) ? serverNowMs - now : 0;
+    let targetMs = NaN;
+    if (rawSeconds !== "" && Number.isFinite(Number(rawSeconds))) {
+      targetMs = now + skewMs + Math.max(0, Number(rawSeconds)) * 1000;
+    } else if (rawUntil) {
+      targetMs = Date.parse(rawUntil);
+    }
+    if (!Number.isFinite(targetMs)) return null;
+
+    const fresh = {
+      rawUntil,
+      rawSeconds,
+      rawServerNow,
+      targetMs,
+      skewMs,
+      urgentSec,
+      endedLabel,
+      prefix,
+      ended: false,
+    };
+    countdownMeta.set(el, fresh);
+    return fresh;
+  }
+
   function updateOneCountdown(el) {
-    const meta = countdownMeta.get(el);
+    const meta = resolveCountdownMeta(el);
     if (!meta) return false;
     const remainingSec = Math.ceil((meta.targetMs - (Date.now() + meta.skewMs)) / 1000);
     const prefix = meta.prefix ? `${meta.prefix} ` : "";
@@ -2484,11 +2533,12 @@
         meta.ended = true;
         el.dispatchEvent(new CustomEvent("zokeibi:countdown-ended", {
           bubbles: true,
-          detail: { until: el.getAttribute("data-z-countdown") || "" },
+          detail: { until: meta.rawUntil },
         }));
       }
       return false;
     }
+    meta.ended = false;
     el.textContent = `${prefix}${formatCountdown(remainingSec)}`;
     el.classList.remove("is-ended");
     el.classList.toggle("is-urgent", remainingSec <= meta.urgentSec);
@@ -2499,7 +2549,7 @@
     const nodes = document.querySelectorAll("[data-z-countdown], [data-z-countdown-seconds]");
     let activeCount = 0;
     nodes.forEach((el) => {
-      if (countdownMeta.has(el) && updateOneCountdown(el)) activeCount++;
+      if (updateOneCountdown(el)) activeCount++;
     });
     if (activeCount === 0 && countdownInterval !== null) {
       window.clearInterval(countdownInterval);
@@ -2509,26 +2559,13 @@
 
   function initCountdowns(scope) {
     let anyActive = false;
-    (scope || document).querySelectorAll("[data-z-countdown], [data-z-countdown-seconds]").forEach((el) => {
-      if (!countdownMeta.has(el)) {
-        const now = Date.now();
-        const serverNowRaw = el.getAttribute("data-z-server-now");
-        const serverNowMs = serverNowRaw ? Date.parse(serverNowRaw) : NaN;
-        const skewMs = Number.isFinite(serverNowMs) ? serverNowMs - now : 0;
-        const secAttr = el.getAttribute("data-z-countdown-seconds");
-        const untilAttr = el.getAttribute("data-z-countdown");
-        let targetMs = NaN;
-        if (secAttr !== null && secAttr !== "" && Number.isFinite(Number(secAttr))) {
-          targetMs = now + skewMs + Math.max(0, Number(secAttr)) * 1000;
-        } else if (untilAttr) {
-          targetMs = Date.parse(untilAttr);
-        }
-        if (!Number.isFinite(targetMs)) return;
-        const urgentSec = Math.max(0, parseInt(el.getAttribute("data-z-urgent-seconds") || "60", 10) || 0);
-        const endedLabel = el.getAttribute("data-z-ended-label") || "Ended";
-        const prefix = el.getAttribute("data-z-countdown-prefix") || "";
-        countdownMeta.set(el, { targetMs, skewMs, urgentSec, endedLabel, prefix, ended: false });
-      }
+    const root = scope || document;
+    const targets = [];
+    if (root instanceof Element && (root.hasAttribute("data-z-countdown") || root.hasAttribute("data-z-countdown-seconds"))) {
+      targets.push(root);
+    }
+    root.querySelectorAll("[data-z-countdown], [data-z-countdown-seconds]").forEach((el) => targets.push(el));
+    targets.forEach((el) => {
       if (updateOneCountdown(el)) anyActive = true;
     });
     if (anyActive && countdownInterval === null) {
@@ -2561,6 +2598,46 @@
     }
     if (parsedUrl.origin !== window.location.origin) return;
     parsedUrl.searchParams.set("cursor", nextCursor);
+
+    // Carry forward active server-sort, search query, and linked FilterBar params so page 2+ stays consistent
+    const activeSort = wrap.getAttribute("data-active-sort") || "";
+    const activeDir = wrap.getAttribute("data-active-dir") || "";
+    if (activeSort && !parsedUrl.searchParams.has("sort")) {
+      parsedUrl.searchParams.set("sort", activeSort);
+      if (activeDir) parsedUrl.searchParams.set("dir", activeDir);
+    } else if (!parsedUrl.searchParams.has("sort")) {
+      const sortedTh = wrap.querySelector('th[data-z-sort][aria-sort="ascending"], th[data-z-sort][aria-sort="descending"]');
+      if (sortedTh) {
+        const key = (sortedTh.getAttribute("data-sort-key") || sortedTh.textContent || "").trim();
+        if (key) {
+          parsedUrl.searchParams.set("sort", key);
+          parsedUrl.searchParams.set("dir", sortedTh.getAttribute("aria-sort") || "ascending");
+        }
+      }
+    }
+    if (wrap.getAttribute("data-z-table-server") === "true" && !parsedUrl.searchParams.has("q")) {
+      const searchEl = wrap.querySelector("[data-z-table-search]");
+      if (searchEl instanceof HTMLInputElement && searchEl.value.trim() !== "") {
+        parsedUrl.searchParams.set("q", searchEl.value.trim());
+      }
+    }
+    const filterSrcSel = (wrap.getAttribute("data-z-table-filter-source") || "").trim();
+    if (filterSrcSel) {
+      let filterBar = null;
+      try { filterBar = document.querySelector(filterSrcSel); } catch (_selErr) { filterBar = null; }
+      if (filterBar) {
+        const activeView = filterBar.querySelector('[data-z-filter-view][aria-current="true"], [data-z-filter-view].is-active');
+        const viewId = activeView ? (activeView.getAttribute("data-z-filter-view") || "").trim() : "";
+        if (viewId && !parsedUrl.searchParams.has("view")) parsedUrl.searchParams.set("view", viewId);
+        filterBar.querySelectorAll("[data-z-filter-pill]").forEach((pill) => {
+          const k = (pill.getAttribute("data-filter-key") || "").trim();
+          const v = (pill.getAttribute("data-filter-value") || "").trim();
+          if (k && v && !parsedUrl.searchParams.getAll(k).includes(v)) {
+            parsedUrl.searchParams.append(k, v);
+          }
+        });
+      }
+    }
 
     cursorInflight.add(sentinel);
     const btn = sentinel.querySelector("[data-z-table-load-more]");
@@ -2738,6 +2815,11 @@
   document.addEventListener("kongono:morphed", (event) => {
     const target = event.target instanceof Element ? event.target : document;
     initScope(target);
+  });
+
+  document.addEventListener("kongono:sse-patch", (event) => {
+    const target = event.target instanceof Element ? event.target : document;
+    initCountdowns(target);
   });
 
   if (document.readyState === "loading") {

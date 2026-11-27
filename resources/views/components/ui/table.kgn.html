@@ -11,6 +11,7 @@ $keyboard = isset($keyboard) && ($keyboard === true || $keyboard === 'true' || $
 $serverSort = isset($serverSort) && ($serverSort === true || $serverSort === 'true' || $serverSort === '1');
 $cursorUrl = isset($cursorUrl) && is_string($cursorUrl) ? trim($cursorUrl) : '';
 $nextCursor = isset($nextCursor) && is_string($nextCursor) ? trim($nextCursor) : '';
+$filterSource = isset($filterSource) && is_string($filterSource) ? trim($filterSource) : '';
 $exportFilename = isset($exportFilename) && is_string($exportFilename) && trim($exportFilename) !== '' ? trim($exportFilename) : 'table-export.csv';
 $searchPlaceholder = isset($searchPlaceholder) && is_string($searchPlaceholder) && $searchPlaceholder !== '' ? $searchPlaceholder : 'Filter rows...';
 
@@ -65,6 +66,9 @@ $slot = isset($slot) && is_string($slot) ? $slot : '';
 @endif
 @if ($cursorUrl !== '')
   data-z-table-cursor-url="{{ $cursorUrl }}"
+@endif
+@if ($filterSource !== '')
+  data-z-table-filter-source="{{ $filterSource }}"
 @endif
 >
 @if ($showToolbar)
