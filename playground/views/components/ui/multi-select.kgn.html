@@ -78,9 +78,10 @@ $wrapClass = $class !== '' ? 'z-ms ' . $class : 'z-ms';
     >
   </div>
   <ul id="{{ $id }}-list" class="z-ms-list" role="listbox" aria-multiselectable="true" aria-label="{{ $label ?? $placeholder }}" data-z-ms-list hidden>
+@php $optIdx = 0; @endphp
 @foreach ($items as $optVal => $optLabel)
-@php $optKey = (string) $optVal; $isSel = in_array($optKey, $selectedList, true); @endphp
-    <li class="z-ms-option" role="option" data-z-ms-option data-value="{{ $optKey }}" data-label="{{ $optLabel }}" aria-selected="{{ $isSel ? 'true' : 'false' }}">
+@php $optKey = (string) $optVal; $isSel = in_array($optKey, $selectedList, true); $optDomId = $id . '-opt-' . $optIdx; $optIdx++; @endphp
+    <li id="{{ $optDomId }}" class="z-ms-option" role="option" data-z-ms-option data-value="{{ $optKey }}" data-label="{{ $optLabel }}" aria-selected="{{ $isSel ? 'true' : 'false' }}">
       <span>{{ $optLabel }}</span>
       <span class="z-ms-check" aria-hidden="true">{{ $isSel ? '✓' : '' }}</span>
     </li>

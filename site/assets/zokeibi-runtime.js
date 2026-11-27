@@ -631,6 +631,13 @@
     const chk = opt.querySelector(".z-ms-check");
     if (chk) chk.textContent = next ? "✓" : "";
     syncMultiSelect(root);
+    const inp = root.querySelector("[data-z-ms-input]");
+    if (inp instanceof HTMLInputElement && inp.value !== "") {
+      inp.value = "";
+      root.querySelectorAll("[data-z-ms-option]").forEach((o) => {
+        o.hidden = false;
+      });
+    }
   }
 
   /* ---- Sortable & Filterable Data Tables ---- */
@@ -1063,9 +1070,18 @@
     copyTimers.set(btn, timer);
   }
 
-  /* ---- Pointerdown Tracking for Backdrop Drag Safety ---- */
+  /* ---- Pointerdown Tracking & Combobox/Multi-Select Blur Prevention ---- */
   document.addEventListener("pointerdown", (event) => {
     pointerDownTarget = event.target instanceof Element ? event.target : null;
+  });
+
+  document.addEventListener("mousedown", (event) => {
+    const target = event.target;
+    if (!(target instanceof Element)) return;
+    // Prevent input focusout from closing the listbox before click fires on non-focusable <li role="option">
+    if (target.closest("[data-z-ms-option], [data-z-ms-list], [data-z-combobox-option], [data-z-combobox-list]")) {
+      event.preventDefault();
+    }
   });
 
   /* ---- Global Click Delegation ---- */
@@ -1347,10 +1363,25 @@
       return;
     }
 
+    const comboInpClick = target.closest("[data-z-combobox-input]");
+    if (comboInpClick instanceof HTMLInputElement) {
+      const root = comboInpClick.closest("[data-z-combobox]");
+      const list = root && root.querySelector("[data-z-combobox-list]");
+      if (list && list.hidden) {
+        list.hidden = false;
+        comboInpClick.setAttribute("aria-expanded", "true");
+      }
+      return;
+    }
+
     const msOpt = target.closest("[data-z-ms-option]");
     if (msOpt) {
       const root = msOpt.closest("[data-z-multiselect]");
-      if (root) toggleMultiOption(root, msOpt);
+      if (root) {
+        toggleMultiOption(root, msOpt);
+        const inp = root.querySelector("[data-z-ms-input]");
+        if (inp instanceof HTMLElement) inp.focus();
+      }
       return;
     }
 
@@ -1359,10 +1390,28 @@
       const root = msRm.closest("[data-z-multiselect]");
       const val = msRm.getAttribute("data-z-ms-remove");
       if (root && val) {
+        const list = root.querySelector("[data-z-ms-list]");
+        const wasOpen = Boolean(list && !list.hidden);
         const match = root.querySelector(`[data-z-ms-option][data-value="${CSS.escape(val)}"]`);
         if (match) toggleMultiOption(root, match);
         const inp = root.querySelector("[data-z-ms-input]");
         if (inp instanceof HTMLElement) inp.focus();
+        if (list && !wasOpen) {
+          closeMultiSelect(root);
+        }
+      }
+      return;
+    }
+
+    const msBox = target.closest("[data-z-ms-box]");
+    if (msBox) {
+      const root = msBox.closest("[data-z-multiselect]");
+      const inp = root && root.querySelector("[data-z-ms-input]");
+      const list = root && root.querySelector("[data-z-ms-list]");
+      if (inp instanceof HTMLElement) inp.focus();
+      if (list && list.hidden) {
+        list.hidden = false;
+        if (inp) inp.setAttribute("aria-expanded", "true");
       }
       return;
     }

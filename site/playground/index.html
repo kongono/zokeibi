@@ -129,7 +129,7 @@
     <span class="z-kpi-label">Playground CSS (Gzip)</span>
     <span class="z-kpi-delta is-up">66.1 KB min</span>
   </div>
-  <div class="z-kpi-value">11.0 KB</div>
+  <div class="z-kpi-value">11.1 KB</div>
   <div class="z-kpi-hint">Compiled by PHP CssTreeShaker</div>
 </div>
     <div class="z-kpi z-kpi-emerald">
@@ -205,7 +205,7 @@
               <td><strong>Full 60-Component Playground</strong></td>
               <td class="z-mono">60/60</td>
               <td class="z-mono">66.1 KB</td>
-              <td class="z-mono"><strong>11.0 KB</strong></td>
+              <td class="z-mono"><strong>11.1 KB</strong></td>
               <td><span class="z-badge">Full Set</span>
 </td>
             </tr>
@@ -554,31 +554,31 @@ php vendor/bin/zokeibi prove --views=views --strict</pre></div>
           <div class="pg-demo-body">
             <div class="pg-stage z-stack-sm" k-show="view === 'preview'">
               <div class="z-field">
-  <label class="z-label" for="z-input-demo_email-47295e">Work Email (focus to watch :has() label highlight)</label>
+  <label class="z-label" for="z-input-demo_email-75890d">Work Email (focus to watch :has() label highlight)</label>
   <input
     class="z-input"
-    id="z-input-demo_email-47295e"
+    id="z-input-demo_email-75890d"
     name="demo_email"
     type="email"
     value=""
     placeholder="you@company.dev"
     k-model="email"
-    aria-describedby="z-input-demo_email-47295e-hint"
+    aria-describedby="z-input-demo_email-75890d-hint"
   >
-  <span class="z-hint" id="z-input-demo_email-47295e-hint">Live signal mirror below.</span>
+  <span class="z-hint" id="z-input-demo_email-75890d-hint">Live signal mirror below.</span>
 </div>
               <div class="z-field">
-  <label class="z-label" for="z-input-demo_slug-e93e03">Invalid State (:has([aria-invalid=&#039;true&#039;]))</label>
+  <label class="z-label" for="z-input-demo_slug-c22b92">Invalid State (:has([aria-invalid=&#039;true&#039;]))</label>
   <input
     class="z-input"
-    id="z-input-demo_slug-e93e03"
+    id="z-input-demo_slug-c22b92"
     name="demo_slug"
     type="text"
     value="bad slug!"
     aria-invalid="true"
-    aria-describedby="z-input-demo_slug-e93e03-err"
+    aria-describedby="z-input-demo_slug-c22b92-err"
   >
-  <span class="z-field-err" id="z-input-demo_slug-e93e03-err" role="alert">Only lowercase letters and hyphens are allowed.</span>
+  <span class="z-field-err" id="z-input-demo_slug-c22b92-err" role="alert">Only lowercase letters and hyphens are allowed.</span>
 </div>
               <div class="z-mono z-soft">Bound signal: <strong k-text="email">founder@kongono.dev</strong></div>
             </div>
@@ -607,18 +607,18 @@ php vendor/bin/zokeibi prove --views=views --strict</pre></div>
           <div class="pg-demo-body">
             <div class="pg-stage z-stack-sm" k-show="view === 'preview'">
               <div class="z-field">
-  <label class="z-label" for="z-select-demo_region-0dcaee">Primary Edge Region</label>
+  <label class="z-label" for="z-select-demo_region-e16217">Primary Edge Region</label>
   <select
     class="z-select"
-    id="z-select-demo_region-0dcaee"
+    id="z-select-demo_region-e16217"
     name="demo_region"
     k-model="region"
-    aria-describedby="z-select-demo_region-0dcaee-hint"
+    aria-describedby="z-select-demo_region-e16217-hint"
   >                <option value="us-east">US East (Virginia)</option>
                 <option value="eu-west">EU West (Frankfurt)</option>
                 <option value="ap-northeast">AP Northeast (Tokyo)</option>
               </select>
-  <span id="z-select-demo_region-0dcaee-hint" class="z-hint">Bound to Live 2.5 k-model.</span>
+  <span id="z-select-demo_region-e16217-hint" class="z-hint">Bound to Live 2.5 k-model.</span>
 </div>
               <div class="z-mono z-soft">Selected: <strong k-text="region">us-east</strong></div>
             </div>
@@ -647,16 +647,16 @@ php vendor/bin/zokeibi prove --views=views --strict</pre></div>
           <div class="pg-demo-body">
             <div class="pg-stage" k-show="view === 'preview'">
               <div class="z-field">
-  <label class="z-label" for="z-textarea-demo_notes-5aa736">Release Changelog</label>
+  <label class="z-label" for="z-textarea-demo_notes-90ed86">Release Changelog</label>
   <textarea
     class="z-textarea"
-    id="z-textarea-demo_notes-5aa736"
+    id="z-textarea-demo_notes-90ed86"
     name="demo_notes"
     rows="3"
     placeholder="Describe what shipped in this Zokeibi release..."
-    aria-describedby="z-textarea-demo_notes-5aa736-hint"
+    aria-describedby="z-textarea-demo_notes-90ed86-hint"
   ></textarea>
-  <span id="z-textarea-demo_notes-5aa736-hint" class="z-hint">Supports vertical resize and strict accessible labels.</span>
+  <span id="z-textarea-demo_notes-90ed86-hint" class="z-hint">Supports vertical resize and strict accessible labels.</span>
 </div>
             </div>
             <div class="pg-code-wrap" data-pg-code-wrap><pre class="z-code" k-show="view === 'code'" hidden>&lt;x-ui.textarea name=&quot;notes&quot; label=&quot;Release Notes&quot; placeholder=&quot;Summarize changes...&quot; rows=&quot;3&quot; /&gt;</pre></div>
@@ -934,8 +934,8 @@ php vendor/bin/zokeibi prove --views=views --strict</pre></div>
     <div class="z-table-tools">
       <span class="z-table-count" data-z-table-count aria-live="polite"></span>
       <div class="z-table-col-wrap">
-        <button type="button" class="z-table-tool-btn" popovertarget="z-tbl-cols-484b1d" aria-haspopup="menu">Columns ▾</button>
-        <div id="z-tbl-cols-484b1d" class="z-table-col-menu" popover="auto" role="group" aria-label="Toggle table columns" data-z-table-col-list></div>
+        <button type="button" class="z-table-tool-btn" popovertarget="z-tbl-cols-e4d659" aria-haspopup="menu">Columns ▾</button>
+        <div id="z-tbl-cols-e4d659" class="z-table-col-menu" popover="auto" role="group" aria-label="Toggle table columns" data-z-table-col-list></div>
       </div>
       <button type="button" class="z-table-tool-btn" data-z-table-export>Export CSV</button>
     </div>
@@ -961,7 +961,7 @@ php vendor/bin/zokeibi prove --views=views --strict</pre></div>
                 <tbody>
                   <tr data-row-id="zokeibi">
                     <td><strong>Zokeibi (造形美)</strong></td>
-                    <td>11.0 KB</td>
+                    <td>11.1 KB</td>
                     <td><span class="z-badge z-badge-emerald">100%</span>
 </td>
                     <td><span class="z-badge z-badge-primary">Built-In</span>
@@ -1157,19 +1157,19 @@ php vendor/bin/zokeibi prove --views=views --strict</pre></div>
           </div>
           <div class="pg-demo-body">
             <div class="pg-stage z-row" k-show="view === 'preview'">
-              <span class="z-tooltip" aria-describedby="z-tip-9c4bfa">
+              <span class="z-tooltip" aria-describedby="z-tip-5899ad">
                   <button
   type="button"
   class="z-btn z-btn-outline z-btn-sm"
 >Hover / Focus Top</button>
-                <span id="z-tip-9c4bfa" class="z-tooltip-bubble" role="tooltip">Zero-JS CSS tooltip (top)</span>
+                <span id="z-tip-5899ad" class="z-tooltip-bubble" role="tooltip">Zero-JS CSS tooltip (top)</span>
 </span>
-              <span class="z-tooltip" aria-describedby="z-tip-762df1">
+              <span class="z-tooltip" aria-describedby="z-tip-744cab">
                   <button
   type="button"
   class="z-btn z-btn-outline z-btn-sm"
 >Hover / Focus Bottom</button>
-                <span id="z-tip-762df1" class="z-tooltip-bubble is-bottom" role="tooltip">Works on keyboard focus too!</span>
+                <span id="z-tip-744cab" class="z-tooltip-bubble is-bottom" role="tooltip">Works on keyboard focus too!</span>
 </span>
             </div>
             <div class="pg-code-wrap" data-pg-code-wrap><pre class="z-code" k-show="view === 'code'" hidden>&lt;x-ui.tooltip text=&quot;Zero-JS CSS tooltip&quot; position=&quot;top&quot;&gt;&lt;x-ui.button size=&quot;sm&quot; variant=&quot;outline&quot;&gt;Hover or Focus&lt;/x-ui.button&gt;&lt;/x-ui.tooltip&gt;</pre></div>
@@ -1296,7 +1296,7 @@ php vendor/bin/zokeibi prove --views=views --strict</pre></div>
     <span class="z-kpi-label">Gzipped CSS</span>
     <span class="z-kpi-delta is-up">All 60</span>
   </div>
-  <div class="z-kpi-value">11.0 KB</div>
+  <div class="z-kpi-value">11.1 KB</div>
 </div>
               <button
   type="button"
@@ -1472,26 +1472,26 @@ php vendor/bin/zokeibi prove --views=views --strict</pre></div>
           <div class="pg-demo-body">
             <div class="pg-stage" k-show="view === 'preview'">
               <div class="z-combobox" data-z-combobox="true">
-      <label class="z-label" for="z-combo-demo_cluster-185e9f-input">Search Deploy Region (ARIA 1.2 Combobox)</label>
+      <label class="z-label" for="z-combo-demo_cluster-690057-input">Search Deploy Region (ARIA 1.2 Combobox)</label>
     <input type="hidden" name="demo_cluster" value="ap-northeast" data-z-combobox-value>
   <div class="z-combobox-control">
     <input
-      id="z-combo-demo_cluster-185e9f-input"
+      id="z-combo-demo_cluster-690057-input"
       type="text"
       class="z-combobox-input"
       role="combobox"
       aria-autocomplete="list"
       aria-expanded="false"
-      aria-controls="z-combo-demo_cluster-185e9f-list"
+      aria-controls="z-combo-demo_cluster-690057-list"
       placeholder="Type to filter regions..."
       value="AP Northeast (Tokyo)"
       data-z-combobox-input
       autocomplete="off"
                       >
     <button type="button" class="z-combobox-toggle" data-z-combobox-toggle aria-label="Toggle options">▾</button>
-    <ul id="z-combo-demo_cluster-185e9f-list" class="z-combobox-list" role="listbox" aria-label="Search Deploy Region (ARIA 1.2 Combobox)" data-z-combobox-list hidden>
+    <ul id="z-combo-demo_cluster-690057-list" class="z-combobox-list" role="listbox" aria-label="Search Deploy Region (ARIA 1.2 Combobox)" data-z-combobox-list hidden>
               <li
-          id="z-combo-demo_cluster-185e9f-opt-0"
+          id="z-combo-demo_cluster-690057-opt-0"
           class="z-combobox-option"
           role="option"
           data-z-combobox-option
@@ -1500,7 +1500,7 @@ php vendor/bin/zokeibi prove --views=views --strict</pre></div>
           aria-selected="false"
         >US East (Virginia)</li>
               <li
-          id="z-combo-demo_cluster-185e9f-opt-1"
+          id="z-combo-demo_cluster-690057-opt-1"
           class="z-combobox-option"
           role="option"
           data-z-combobox-option
@@ -1509,7 +1509,7 @@ php vendor/bin/zokeibi prove --views=views --strict</pre></div>
           aria-selected="false"
         >US West (Oregon)</li>
               <li
-          id="z-combo-demo_cluster-185e9f-opt-2"
+          id="z-combo-demo_cluster-690057-opt-2"
           class="z-combobox-option"
           role="option"
           data-z-combobox-option
@@ -1518,7 +1518,7 @@ php vendor/bin/zokeibi prove --views=views --strict</pre></div>
           aria-selected="false"
         >EU Central (Frankfurt)</li>
               <li
-          id="z-combo-demo_cluster-185e9f-opt-3"
+          id="z-combo-demo_cluster-690057-opt-3"
           class="z-combobox-option"
           role="option"
           data-z-combobox-option
@@ -1527,7 +1527,7 @@ php vendor/bin/zokeibi prove --views=views --strict</pre></div>
           aria-selected="true"
         >AP Northeast (Tokyo)</li>
               <li
-          id="z-combo-demo_cluster-185e9f-opt-4"
+          id="z-combo-demo_cluster-690057-opt-4"
           class="z-combobox-option"
           role="option"
           data-z-combobox-option
@@ -1564,17 +1564,17 @@ php vendor/bin/zokeibi prove --views=views --strict</pre></div>
           <div class="pg-demo-body">
             <div class="pg-stage" k-show="view === 'preview'">
               <div class="z-dropzone" data-z-dropzone="true">
-      <label class="z-label" for="z-drop-demo_attachment-a83a93">Upload Invoice or Spec Sheet</label>
+      <label class="z-label" for="z-drop-demo_attachment-df4667">Upload Invoice or Spec Sheet</label>
     <div class="z-dropzone-area" data-z-dropzone-area>
     <input
-      id="z-drop-demo_attachment-a83a93"
+      id="z-drop-demo_attachment-df4667"
       type="file"
       name="demo_attachment[]"
       class="z-dropzone-input"
       data-z-dropzone-input
-       accept="image/png,application/pdf,.csv"        multiple                    aria-describedby="z-drop-demo_attachment-a83a93-hint"     >
+       accept="image/png,application/pdf,.csv"        multiple                    aria-describedby="z-drop-demo_attachment-df4667-hint"     >
     <div class="z-dropzone-title">Drop files here or click to browse</div>
-    <div id="z-drop-demo_attachment-a83a93-hint" class="z-dropzone-hint">PNG, PDF, or CSV up to 10 MB — pairs with Kongono UploadedFileStore.</div>
+    <div id="z-drop-demo_attachment-df4667-hint" class="z-dropzone-hint">PNG, PDF, or CSV up to 10 MB — pairs with Kongono UploadedFileStore.</div>
   </div>
   <ul class="z-dropzone-files" data-z-dropzone-files aria-live="polite"></ul>
   </div>
@@ -1604,9 +1604,9 @@ php vendor/bin/zokeibi prove --views=views --strict</pre></div>
           <div class="pg-demo-body">
             <div class="pg-stage" k-show="view === 'preview'">
               <div class="z-datepicker" data-z-datepicker="true">
-      <label class="z-label" for="z-date-demo_launch_date-5c1d0b">Target Release Date</label>
+      <label class="z-label" for="z-date-demo_launch_date-c59267">Target Release Date</label>
     <input
-    id="z-date-demo_launch_date-5c1d0b"
+    id="z-date-demo_launch_date-c59267"
     type="date"
     name="demo_launch_date"
     value="2026-12-01"
@@ -1845,7 +1845,7 @@ php vendor/bin/zokeibi prove --views=views --strict</pre></div>
           <div class="pg-demo-body">
             <div class="pg-stage" k-show="view === 'preview'">
               <div class="z-ms" data-z-multiselect="true" data-ms-name="demo_scopes">
-  <label class="z-label" for="z-ms-demo_scopes-954146-input">API Token Scopes (Submits demo_scopes[])</label>
+  <label class="z-label" for="z-ms-demo_scopes-9fe8a4-input">API Token Scopes (Submits demo_scopes[])</label>
   <div data-z-ms-hidden>
     <input type="hidden" name="demo_scopes[]" value="read">
     <input type="hidden" name="demo_scopes[]" value="deploy">
@@ -1862,7 +1862,7 @@ php vendor/bin/zokeibi prove --views=views --strict</pre></div>
       </span>
     </div>
     <input
-      id="z-ms-demo_scopes-954146-input"
+      id="z-ms-demo_scopes-9fe8a4-input"
       type="text"
       class="z-ms-input"
       placeholder="Filter &amp; select tags..."
@@ -1870,28 +1870,28 @@ php vendor/bin/zokeibi prove --views=views --strict</pre></div>
       role="combobox"
       aria-expanded="false"
       aria-autocomplete="list"
-      aria-controls="z-ms-demo_scopes-954146-list"
+      aria-controls="z-ms-demo_scopes-9fe8a4-list"
       data-z-ms-input
     >
   </div>
-  <ul id="z-ms-demo_scopes-954146-list" class="z-ms-list" role="listbox" aria-multiselectable="true" aria-label="API Token Scopes (Submits demo_scopes[])" data-z-ms-list hidden>
-    <li class="z-ms-option" role="option" data-z-ms-option data-value="read" data-label="Read Data" aria-selected="true">
+  <ul id="z-ms-demo_scopes-9fe8a4-list" class="z-ms-list" role="listbox" aria-multiselectable="true" aria-label="API Token Scopes (Submits demo_scopes[])" data-z-ms-list hidden>
+    <li id="z-ms-demo_scopes-9fe8a4-opt-0" class="z-ms-option" role="option" data-z-ms-option data-value="read" data-label="Read Data" aria-selected="true">
       <span>Read Data</span>
       <span class="z-ms-check" aria-hidden="true">✓</span>
     </li>
-    <li class="z-ms-option" role="option" data-z-ms-option data-value="write" data-label="Write Records" aria-selected="false">
+    <li id="z-ms-demo_scopes-9fe8a4-opt-1" class="z-ms-option" role="option" data-z-ms-option data-value="write" data-label="Write Records" aria-selected="false">
       <span>Write Records</span>
       <span class="z-ms-check" aria-hidden="true"></span>
     </li>
-    <li class="z-ms-option" role="option" data-z-ms-option data-value="deploy" data-label="Zero-Downtime Deploy" aria-selected="true">
+    <li id="z-ms-demo_scopes-9fe8a4-opt-2" class="z-ms-option" role="option" data-z-ms-option data-value="deploy" data-label="Zero-Downtime Deploy" aria-selected="true">
       <span>Zero-Downtime Deploy</span>
       <span class="z-ms-check" aria-hidden="true">✓</span>
     </li>
-    <li class="z-ms-option" role="option" data-z-ms-option data-value="billing" data-label="Manage Billing" aria-selected="false">
+    <li id="z-ms-demo_scopes-9fe8a4-opt-3" class="z-ms-option" role="option" data-z-ms-option data-value="billing" data-label="Manage Billing" aria-selected="false">
       <span>Manage Billing</span>
       <span class="z-ms-check" aria-hidden="true"></span>
     </li>
-    <li class="z-ms-option" role="option" data-z-ms-option data-value="audit" data-label="Read Audit Logs" aria-selected="false">
+    <li id="z-ms-demo_scopes-9fe8a4-opt-4" class="z-ms-option" role="option" data-z-ms-option data-value="audit" data-label="Read Audit Logs" aria-selected="false">
       <span>Read Audit Logs</span>
       <span class="z-ms-check" aria-hidden="true"></span>
     </li>
@@ -2053,7 +2053,7 @@ php vendor/bin/zokeibi prove --views=views --strict</pre></div>
           <div class="pg-demo-body">
             <div class="pg-stage" k-show="view === 'preview'">
               <div class="z-editor" data-z-editor="true">
-  <label class="z-label" for="z-ed-demo_markdown-4a433e">Release Notes Editor (Try Split or Preview Mode)</label>
+  <label class="z-label" for="z-ed-demo_markdown-29770a">Release Notes Editor (Try Split or Preview Mode)</label>
   <div class="z-editor-shell">
     <div class="z-editor-bar">
       <div class="z-editor-tools" role="toolbar" aria-label="Markdown formatting">
@@ -2072,7 +2072,7 @@ php vendor/bin/zokeibi prove --views=views --strict</pre></div>
       </div>
     </div>
     <div class="z-editor-panes" data-z-ed-panes>
-      <textarea id="z-ed-demo_markdown-4a433e" name="demo_markdown" rows="6" class="z-editor-input" placeholder="Write Markdown with **bold**, `code`, &gt; quotes, or - lists..."  data-z-ed-input>### Zokeibi v1.2 Shipped
+      <textarea id="z-ed-demo_markdown-29770a" name="demo_markdown" rows="6" class="z-editor-input" placeholder="Write Markdown with **bold**, `code`, &gt; quotes, or - lists..."  data-z-ed-input>### Zokeibi v1.2 Shipped
 Build **strict-CSP** SaaS apps with `0 npm` packages.
 - Pure SVG charts (0 B JS)
 - Safe DOM preview (zero innerHTML)</textarea>
@@ -2112,7 +2112,7 @@ Build **strict-CSP** SaaS apps with `0 npm` packages.
               <div class="z-otp" data-z-otp="true" data-otp-length="6">
   <span class="z-label">Two-Factor Verification Code</span>
   <input type="hidden" name="demo_totp" value="" data-z-otp-value>
-  <div class="z-otp-group" role="group" aria-label="Two-Factor Verification Code"  aria-describedby="z-otp-demo_totp-8bfb82-hint" >
+  <div class="z-otp-group" role="group" aria-label="Two-Factor Verification Code"  aria-describedby="z-otp-demo_totp-8c8989-hint" >
     <input
       type="text"
       inputmode="numeric"
@@ -2174,7 +2174,7 @@ Build **strict-CSP** SaaS apps with `0 npm` packages.
       data-z-otp-digit="5"
     >
   </div>
-  <span id="z-otp-demo_totp-8bfb82-hint" class="z-hint">Type digits or paste a 6-digit code like 482915 — auto-advances cleanly.</span>
+  <span id="z-otp-demo_totp-8c8989-hint" class="z-hint">Type digits or paste a 6-digit code like 482915 — auto-advances cleanly.</span>
 </div>
             </div>
             <div class="pg-code-wrap" data-pg-code-wrap><pre class="z-code" k-show="view === 'code'" hidden>&lt;x-ui.otp-input name=&quot;totp_code&quot; label=&quot;Authenticator Code&quot; length=&quot;6&quot; hint=&quot;Paste or enter the 6-digit code.&quot; /&gt;</pre></div>
@@ -2332,9 +2332,9 @@ Build **strict-CSP** SaaS apps with `0 npm` packages.
           </div>
           <div class="pg-demo-body">
             <div class="pg-stage z-stack-sm" k-show="view === 'preview'">
-              <label class="z-checkbox" for="z-cb-demo_cb_terms-5a9ac3">
+              <label class="z-checkbox" for="z-cb-demo_cb_terms-23911f">
   <input
-    id="z-cb-demo_cb_terms-5a9ac3"
+    id="z-cb-demo_cb_terms-23911f"
     type="checkbox"
     name="demo_cb_terms"
     value="1"
@@ -2344,9 +2344,9 @@ Build **strict-CSP** SaaS apps with `0 npm` packages.
     <span class="z-checkbox-desc">Blocks inline scripts and inline styles across every route.</span>
   </span>
 </label>
-              <label class="z-checkbox" for="z-cb-demo_cb_email-c20ed6">
+              <label class="z-checkbox" for="z-cb-demo_cb_email-8ed13d">
   <input
-    id="z-cb-demo_cb_email-c20ed6"
+    id="z-cb-demo_cb_email-8ed13d"
     type="checkbox"
     name="demo_cb_email"
     value="1"
@@ -2582,11 +2582,11 @@ Build **strict-CSP** SaaS apps with `0 npm` packages.
             <div class="pg-stage z-stack-sm" k-show="view === 'preview'">
               <div class="z-slider" data-z-slider="true" data-slider-unit=" seats">
   <div class="z-slider-head">
-    <label class="z-label" for="z-sl-demo_seats-231da4">Team Seat Quota</label>
-    <output class="z-slider-val" for="z-sl-demo_seats-231da4" data-z-slider-out>25 seats</output>
+    <label class="z-label" for="z-sl-demo_seats-c70333">Team Seat Quota</label>
+    <output class="z-slider-val" for="z-sl-demo_seats-c70333" data-z-slider-out>25 seats</output>
   </div>
   <input
-    id="z-sl-demo_seats-231da4"
+    id="z-sl-demo_seats-c70333"
     name="demo_seats"
     type="range"
     class="z-slider-input"
@@ -2599,11 +2599,11 @@ Build **strict-CSP** SaaS apps with `0 npm` packages.
 </div>
               <div class="z-slider" data-z-slider="true" data-slider-unit=" KB">
   <div class="z-slider-head">
-    <label class="z-label" for="z-sl-demo_budget-a1721c">CSS Gzip Ceiling</label>
-    <output class="z-slider-val" for="z-sl-demo_budget-a1721c" data-z-slider-out>10 KB</output>
+    <label class="z-label" for="z-sl-demo_budget-3d4517">CSS Gzip Ceiling</label>
+    <output class="z-slider-val" for="z-sl-demo_budget-3d4517" data-z-slider-out>10 KB</output>
   </div>
   <input
-    id="z-sl-demo_budget-a1721c"
+    id="z-sl-demo_budget-3d4517"
     name="demo_budget"
     type="range"
     class="z-slider-input"
@@ -2769,7 +2769,7 @@ public function health(): Response { return Response::json([&#039;ok&#039; =&gt;
           <div class="pg-demo-body">
             <div class="pg-stage" k-show="view === 'preview'">
               <div class="z-taginput" data-z-taginput="true" data-ti-name="demo_topics">
-  <label class="z-label" for="z-ti-demo_topics-105256">Webhook Topics (Type + Enter or Comma)</label>
+  <label class="z-label" for="z-ti-demo_topics-bc3ed4">Webhook Topics (Type + Enter or Comma)</label>
   <div data-z-ti-hidden>
     <input type="hidden" name="demo_topics[]" value="order.paid">
     <input type="hidden" name="demo_topics[]" value="invoice.sent">
@@ -2790,7 +2790,7 @@ public function health(): Response { return Response::json([&#039;ok&#039; =&gt;
         <button type="button" class="z-taginput-rm" data-z-ti-remove="key.rotated" aria-label="Remove key.rotated">×</button>
       </span>
     </div>
-    <input id="z-ti-demo_topics-105256" type="text" class="z-taginput-field" placeholder="Type a tag and press Enter..."  autocomplete="off" data-z-ti-field>
+    <input id="z-ti-demo_topics-bc3ed4" type="text" class="z-taginput-field" placeholder="Type a tag and press Enter..."  autocomplete="off" data-z-ti-field>
   </div>
 </div>
             </div>
@@ -2970,11 +2970,11 @@ public function health(): Response { return Response::json([&#039;ok&#039; =&gt;
           <div class="pg-demo-body">
             <div class="pg-stage z-stack-sm" k-show="view === 'preview'">
               <div class="z-input-group">
-  <label class="z-label" for="z-ig-demo_domain-9bc956">Workspace Subdomain</label>
+  <label class="z-label" for="z-ig-demo_domain-868afd">Workspace Subdomain</label>
   <div class="z-input-group-row">
     <span class="z-input-addon is-prefix">https://</span>
     <input
-      id="z-ig-demo_domain-9bc956"
+      id="z-ig-demo_domain-868afd"
       name="demo_domain"
       type="text"
       class="z-input-group-field"
@@ -2985,11 +2985,11 @@ public function health(): Response { return Response::json([&#039;ok&#039; =&gt;
   </div>
 </div>
               <div class="z-input-group">
-  <label class="z-label" for="z-ig-demo_price-7f6739">Monthly Cap</label>
+  <label class="z-label" for="z-ig-demo_price-1f7738">Monthly Cap</label>
   <div class="z-input-group-row">
     <span class="z-input-addon is-prefix">$</span>
     <input
-      id="z-ig-demo_price-7f6739"
+      id="z-ig-demo_price-1f7738"
       name="demo_price"
       type="number"
       class="z-input-group-field"
@@ -3025,11 +3025,11 @@ public function health(): Response { return Response::json([&#039;ok&#039; =&gt;
           <div class="pg-demo-body">
             <div class="pg-stage z-row" k-show="view === 'preview'">
               <div class="z-num" data-z-number="true">
-  <label class="z-label" for="z-num-demo_workers-40bd23">FrankenPHP Workers</label>
+  <label class="z-label" for="z-num-demo_workers-135f34">FrankenPHP Workers</label>
   <div class="z-num-row">
     <button type="button" class="z-num-btn" data-z-num-dec aria-label="Decrease value">−</button>
     <input
-      id="z-num-demo_workers-40bd23"
+      id="z-num-demo_workers-135f34"
       name="demo_workers"
       type="number"
       class="z-num-input"
@@ -3043,11 +3043,11 @@ public function health(): Response { return Response::json([&#039;ok&#039; =&gt;
   </div>
 </div>
               <div class="z-num" data-z-number="true">
-  <label class="z-label" for="z-num-demo_replicas-535710">Read Replicas</label>
+  <label class="z-label" for="z-num-demo_replicas-aa2422">Read Replicas</label>
   <div class="z-num-row">
     <button type="button" class="z-num-btn" data-z-num-dec aria-label="Decrease value">−</button>
     <input
-      id="z-num-demo_replicas-535710"
+      id="z-num-demo_replicas-aa2422"
       name="demo_replicas"
       type="number"
       class="z-num-input"
@@ -3233,10 +3233,10 @@ public function health(): Response { return Response::json([&#039;ok&#039; =&gt;
           <div class="pg-demo-body">
             <div class="pg-stage" k-show="view === 'preview'">
               <div class="z-pw" data-z-password="true" data-strength="0">
-  <label class="z-label" for="z-pw-demo_signup_pw-09decc">Create Account Password (Live 4-Segment Strength)</label>
+  <label class="z-label" for="z-pw-demo_signup_pw-7ee44d">Create Account Password (Live 4-Segment Strength)</label>
   <div class="z-pw-row">
     <input
-      id="z-pw-demo_signup_pw-09decc"
+      id="z-pw-demo_signup_pw-7ee44d"
       name="demo_signup_pw"
       type="password"
       class="z-pw-input"
@@ -3284,7 +3284,7 @@ public function health(): Response { return Response::json([&#039;ok&#039; =&gt;
             <div class="pg-stage" k-show="view === 'preview'">
               <div class="z-sig" data-z-signature="true" data-sig-mode="drawn">
   <div class="z-sig-head">
-    <label class="z-label" for="z-sig-demo_lease_sig-715b18-text">Lease Agreement Signature (Draw or Type)</label>
+    <label class="z-label" for="z-sig-demo_lease_sig-1c9d74-text">Lease Agreement Signature (Draw or Type)</label>
           <div class="z-sig-modes" role="tablist" aria-label="Signature input mode">
         <button type="button" class="z-sig-mode is-active" role="tab" aria-selected="true" data-z-sig-mode="drawn">Draw</button>
         <button type="button" class="z-sig-mode" role="tab" aria-selected="false" data-z-sig-mode="typed">Type</button>
@@ -3293,10 +3293,10 @@ public function health(): Response { return Response::json([&#039;ok&#039; =&gt;
   <input type="hidden" name="demo_lease_sig" value="" data-z-sig-value >
   <input type="hidden" name="demo_lease_sig_type" value="drawn" data-z-sig-type>
       <div class="z-sig-pad" data-z-sig-panel="drawn" >
-      <canvas id="z-sig-demo_lease_sig-715b18-canvas" class="z-sig-canvas" width="520" height="150" role="img" aria-label="Lease Agreement Signature (Draw or Type) drawing canvas" data-z-sig-canvas></canvas>
+      <canvas id="z-sig-demo_lease_sig-1c9d74-canvas" class="z-sig-canvas" width="520" height="150" role="img" aria-label="Lease Agreement Signature (Draw or Type) drawing canvas" data-z-sig-canvas></canvas>
     </div>
         <div class="z-stack-sm" data-z-sig-panel="typed"  hidden >
-      <input id="z-sig-demo_lease_sig-715b18-text" type="text" class="z-input" value="" placeholder="Type full legal name..." autocomplete="name" data-z-sig-text>
+      <input id="z-sig-demo_lease_sig-1c9d74-text" type="text" class="z-input" value="" placeholder="Type full legal name..." autocomplete="name" data-z-sig-text>
       <div class="z-sig-preview" data-z-sig-preview aria-live="polite">Your signature preview</div>
     </div>
     <div class="z-sig-foot">
@@ -3335,7 +3335,7 @@ public function health(): Response { return Response::json([&#039;ok&#039; =&gt;
   data-money-decimals="2"
   data-money-negative="false"
 >
-  <label class="z-label" for="z-money-demo_rent_cents-626cd4">Monthly Rent (USD)</label>
+  <label class="z-label" for="z-money-demo_rent_cents-0af336">Monthly Rent (USD)</label>
   <input
     type="hidden"
     name="demo_rent_cents"
@@ -3345,7 +3345,7 @@ public function health(): Response { return Response::json([&#039;ok&#039; =&gt;
   <div class="z-input-group-row">
     <span class="z-input-addon is-prefix" aria-hidden="true">$</span>
     <input
-      id="z-money-demo_rent_cents-626cd4"
+      id="z-money-demo_rent_cents-0af336"
       type="text"
       inputmode="decimal"
       autocomplete="off"
@@ -3353,11 +3353,11 @@ public function health(): Response { return Response::json([&#039;ok&#039; =&gt;
       value="1,850.00"
       placeholder="0.00"
       data-z-money-display
-      aria-describedby="z-money-demo_rent_cents-626cd4-hint"
+      aria-describedby="z-money-demo_rent_cents-0af336-hint"
     >
     <span class="z-input-addon is-suffix">USD</span>
   </div>
-  <span id="z-money-demo_rent_cents-626cd4-hint" class="z-hint">Hidden input submits exact integer 185000.</span>
+  <span id="z-money-demo_rent_cents-0af336-hint" class="z-hint">Hidden input submits exact integer 185000.</span>
 </div>
               <div
   class="z-input-group z-money"
@@ -3365,7 +3365,7 @@ public function health(): Response { return Response::json([&#039;ok&#039; =&gt;
   data-money-decimals="2"
   data-money-negative="true"
 >
-  <label class="z-label" for="z-money-demo_credit_cents-64c3a4">Ledger Adjustment</label>
+  <label class="z-label" for="z-money-demo_credit_cents-a778c6">Ledger Adjustment</label>
   <input
     type="hidden"
     name="demo_credit_cents"
@@ -3375,7 +3375,7 @@ public function health(): Response { return Response::json([&#039;ok&#039; =&gt;
   <div class="z-input-group-row">
     <span class="z-input-addon is-prefix" aria-hidden="true">$</span>
     <input
-      id="z-money-demo_credit_cents-64c3a4"
+      id="z-money-demo_credit_cents-a778c6"
       type="text"
       inputmode="decimal"
       autocomplete="off"
@@ -3383,11 +3383,11 @@ public function health(): Response { return Response::json([&#039;ok&#039; =&gt;
       value="-125.50"
       placeholder="0.00"
       data-z-money-display
-      aria-describedby="z-money-demo_credit_cents-64c3a4-hint"
+      aria-describedby="z-money-demo_credit_cents-a778c6-hint"
     >
     <span class="z-input-addon is-suffix">USD</span>
   </div>
-  <span id="z-money-demo_credit_cents-64c3a4-hint" class="z-hint">Supports negative integer credits.</span>
+  <span id="z-money-demo_credit_cents-a778c6-hint" class="z-hint">Supports negative integer credits.</span>
 </div>
             </div>
             <div class="pg-code-wrap" data-pg-code-wrap><pre class="z-code" k-show="view === 'code'" hidden>&lt;x-ui.money-input name=&quot;monthly_rent_cents&quot; label=&quot;Monthly Rent&quot; value=&quot;185000&quot; currency=&quot;USD&quot; symbol=&quot;$&quot; hint=&quot;Submits exact integer 185000.&quot; /&gt;</pre></div>
@@ -3513,24 +3513,24 @@ public function health(): Response { return Response::json([&#039;ok&#039; =&gt;
       <div class="z-stack-sm">
         <div class="z-field z-ai-field">
           <div class="z-between">
-            <label class="z-label" for="z-airev-cf2433-f-0">Vendor</label>
+            <label class="z-label" for="z-airev-8406b2-f-0">Vendor</label>
             <span class="z-badge z-badge-emerald">98% · High</span>
           </div>
-          <input id="z-airev-cf2433-f-0" name="vendor" type="text" class="z-input" value="Home Depot #4012">
+          <input id="z-airev-8406b2-f-0" name="vendor" type="text" class="z-input" value="Home Depot #4012">
         </div>
         <div class="z-field z-ai-field">
           <div class="z-between">
-            <label class="z-label" for="z-airev-cf2433-f-1">Total Amount</label>
+            <label class="z-label" for="z-airev-8406b2-f-1">Total Amount</label>
             <span class="z-badge z-badge-emerald">96% · High</span>
           </div>
-          <input id="z-airev-cf2433-f-1" name="amount" type="text" class="z-input" value="$184.50">
+          <input id="z-airev-8406b2-f-1" name="amount" type="text" class="z-input" value="$184.50">
         </div>
         <div class="z-field z-ai-field is-low">
           <div class="z-between">
-            <label class="z-label" for="z-airev-cf2433-f-2">Expense Category</label>
+            <label class="z-label" for="z-airev-8406b2-f-2">Expense Category</label>
             <span class="z-badge z-badge-crimson">64% · Low</span>
           </div>
-          <input id="z-airev-cf2433-f-2" name="category" type="text" class="z-input" value="Plumbing Repair">
+          <input id="z-airev-8406b2-f-2" name="category" type="text" class="z-input" value="Plumbing Repair">
         </div>
       </div>
     </div>
@@ -3566,11 +3566,11 @@ TOTAL: $184.50&quot; fields=&quot;vendor|Vendor|Home Depot #4012|98%;;amount|Amo
           </div>
           <div class="pg-demo-body">
             <div class="pg-stage" k-show="view === 'preview'">
-              <article class="z-card z-approval z-approval-high" role="region" aria-labelledby="z-appr-a1fa06-title">
+              <article class="z-card z-approval z-approval-high" role="region" aria-labelledby="z-appr-52f4d8-title">
   <div class="z-card-head">
     <div>
       <div class="z-card-kicker">Chie AI · #[RequiresApproval] · Approval Gate</div>
-      <h3 class="z-card-title" id="z-appr-a1fa06-title">Apply Annual Rent Renewal</h3>
+      <h3 class="z-card-title" id="z-appr-52f4d8-title">Apply Annual Rent Renewal</h3>
     </div>
     <span class="z-badge z-badge-crimson">High Risk</span>
   </div>
@@ -3607,8 +3607,8 @@ TOTAL: $184.50&quot; fields=&quot;vendor|Vendor|Home Depot #4012|98%;;amount|Amo
         </div>
       </dl>
       <div class="z-field">
-        <label class="z-label" for="z-appr-a1fa06-note">Reviewer Note (optional)</label>
-        <input id="z-appr-a1fa06-note" name="reviewer_note" type="text" class="z-input" placeholder="Add audit rationale...">
+        <label class="z-label" for="z-appr-52f4d8-note">Reviewer Note (optional)</label>
+        <input id="z-appr-52f4d8-note" name="reviewer_note" type="text" class="z-input" placeholder="Add audit rationale...">
       </div>
     </div>
     <div class="z-card-foot z-between">

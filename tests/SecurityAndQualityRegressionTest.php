@@ -332,6 +332,11 @@ HTML;
             // OTP truncates initial hidden value to length=6 and omits maxlength=1 on digit 0
             self::assertStringContainsString('name="otp" value="123456"', $html);
             self::assertStringNotContainsString('123456789', $html);
+
+            // Runtime prevents mousedown focusout race on combobox & multi-select options
+            $runtime = (string) file_get_contents($this->packageDir . '/resources/js/zokeibi-runtime.js');
+            self::assertStringContainsString('[data-z-ms-option], [data-z-ms-list], [data-z-combobox-option], [data-z-combobox-list]', $runtime);
+            self::assertStringContainsString('data-z-ms-box', $runtime);
         } finally {
             $this->removeDir($tmpDir);
         }
