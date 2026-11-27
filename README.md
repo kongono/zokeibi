@@ -7,16 +7,16 @@
 
 Modern, zero-npm, strict-CSP, AI-native UI component framework and pure PHP 8.5 OKLCH CSS compiler for **Kongono** (or any HTML stack).
 
-- **Live 62-Component & 8-Block Playground:** https://zokeibi.com/playground/
+- **Live 63-Component & 8-Block Playground:** https://zokeibi.com/playground/
 - **Live Browser OKLCH Theme Studio:** https://zokeibi.com/studio/
-- **Zero-Install Single-File CDN & Starter HTML:** https://zokeibi.com/dist/v1.3/starter.html ([SRI Manifest](https://zokeibi.com/dist/manifest.json))
+- **Zero-Install Single-File CDN & Starter HTML:** https://zokeibi.com/dist/v1.4/starter.html ([SRI Manifest](https://zokeibi.com/dist/manifest.json))
 
 ## Why Zokeibi?
 
 - **Pure 2026 Web Standards First**: Native CSS `@layer`, perceptual OKLCH 1-knob theming (`--z-hue`, `--z-chroma`, `--z-radius`), `color-mix(in oklch, ...)`, CSS Nesting, `@container` queries, `:has()` form & switch states, native HTML `<details name="...">` exclusive accordions, and Top-Layer `[popover]` + `@starting-style` transitions.
-- **Zero Node, Zero npm, Zero Vite Required**: A pure PHP 8.5 CSS Tree-Shaker (`Zokeibi\Compiler\CssTreeShaker`) scans your `views/**/*.kgn.html` files for `<x-ui.*>` tags, resolves transitive CSS dependencies, and writes a tiny minified `zokeibi.min.css` (`11.75 KB` gzip for all 62 components).
+- **Zero Node, Zero npm, Zero Vite Required**: A pure PHP 8.5 CSS Tree-Shaker (`Zokeibi\Compiler\CssTreeShaker`) scans your `views/**/*.kgn.html` files for `<x-ui.*>` tags, resolves transitive CSS dependencies, and writes a tiny minified `zokeibi.min.css` (`12.08 KB` gzip for all 63 components).
 - **Shadcn Ownership Model**: `zokeibi add button card modal` copies clean `<x-ui.*>` templates straight into your app's `views/components/ui/` directory — you own every line of markup.
-- **Strict CSP (`script-src 'self'` & `style-src 'self'`)**: Zero inline `<script>`, zero `on*=` attributes, zero inline `style="..."` attributes across all **62** primitives (composable `<x-ui.filter-bar>` with Saved Views & URL query sync, accessible `<x-ui.compare-slider>`, declarative `data-z-dirty-guard="true"` unsaved-changes form bar, mobile bottom sheets `<x-ui.drawer position="bottom">`, interactive hover/focus pure-SVG `<x-ui.chart>` tooltips, two-gear `data-z-density="calm|default|compact"` switching, integer-cents `<x-ui.money-input>`, hardened `<x-ui.alert-dialog>` with typed confirmation gates, stacked programmatic & grace-window undoable toasts, DataTable row selection + bulk action bar + Popover column toggle + RFC 4180 CSV export, composite `<x-ui.skeleton>` presets, human-in-the-loop `<x-ui.ai-review>` & `<x-ui.approval-card>` gates, ESIGN/UETA `signature-pad`, date-range calendars, multi-select comboboxes, XSS-safe Markdown editor, 6-digit OTP inputs, Cmd+K palette, zero-code `data-z-cycle-theme` OKLCH theme switching, `@media print` defaults, and more) and **8** full-page SaaS blocks.
+- **Strict CSP (`script-src 'self'` & `style-src 'self'`)**: Zero inline `<script>`, zero `on*=` attributes, zero inline `style="..."` attributes across all **63** primitives (declarative `<x-ui.countdown>` with server clock-skew sync, power DataTable with `frozen-first` sticky column + `j/k/Space/Enter` keyboard triage + `server-sort` + cursor infinite scroll + Shift+Click bulk bar + Popover column toggle + RFC 4180 CSV export, composable `<x-ui.filter-bar>`, `<x-ui.compare-slider>`, declarative `data-z-dirty-guard="true"` unsaved-changes form bar, mobile bottom sheets, interactive pure-SVG charts, two-gear density switching, integer-cents `<x-ui.money-input>`, hardened `<x-ui.alert-dialog>`, undoable toasts, composite `<x-ui.skeleton>`, `<x-ui.ai-review>` & `<x-ui.approval-card>`, and more) and **8** full-page SaaS blocks.
 - **DTO-to-UI Reflection Generator**: `zokeibi form` and `zokeibi table` reflect PHP 8.5 readonly DTOs (`#[Required]`, `#[Email]`, `#[Url]`, `#[Date]`, `#[In]`, `BackedEnum`, `array`) with zero runtime Composer deps and emit accessible `.kgn.html` views (sortable & searchable tables out of the box).
 - **Executable UI Proof Gate (`zokeibi prove`)**: Proves WCAG 2.1 AA contrast across active + every saved custom theme, static ARIA/schema/CSP audit (`100/100`), and gzipped CSS KB budget (`--max-gzip-kb=12.5`) in one deterministic Readiness Certificate.
 - **Live Studio (Web + Local Hot-Swap) & AI-Native Registry**: Try the zero-backend browser OKLCH Studio at [zokeibi.com/studio](https://zokeibi.com/studio/), or launch local `zokeibi studio` / `zokeibi watch` hot-swap sync, machine-readable `resources/registry.json` (`zokeibi schema`), and Kongono MCP tool `kongono_zokeibi_registry`.
@@ -57,10 +57,10 @@ Zokeibi has **zero runtime Composer dependencies** (`php >= 8.5.13` only) and wo
 
 - **Zero-Install CDN (HTMX / Plain HTML / CodePen):**
   ```html
-  <link rel="stylesheet" href="https://zokeibi.com/dist/v1.3/zokeibi.min.css">
-  <script src="https://zokeibi.com/dist/v1.3/zokeibi-runtime.js" defer></script>
+  <link rel="stylesheet" href="https://zokeibi.com/dist/v1.4/zokeibi.min.css">
+  <script src="https://zokeibi.com/dist/v1.4/zokeibi-runtime.js" defer></script>
   ```
-  Verified SHA-384 SRI hashes are published at `https://zokeibi.com/dist/manifest.json`, and a ready-to-save single-file starter lives at `https://zokeibi.com/dist/v1.3/starter.html`.
+  Verified SHA-384 SRI hashes are published at `https://zokeibi.com/dist/manifest.json`, and a ready-to-save single-file starter lives at `https://zokeibi.com/dist/v1.4/starter.html`.
 - **Laravel (Blade) / Symfony (Twig) / React / Vue / Svelte Tree-Shaking:** `zokeibi build` scans both `<x-ui.*>` tags AND `.z-*` CSS classes (`z-btn`, `z-card`, `z-modal`, etc.) across `.kgn.html`, `.html`, `.php`, `.twig`, `.blade.php`, `.jsx`, `.tsx`, `.vue`, and `.svelte` (automatically skipping `vendor/` and `node_modules/`). Add `"safelist": ["modal", "toast"]` in `zokeibi.json` for dynamic class names.
 - **Plain HTML / HTMX / Non-Live Interactivity:** Install the optional `~1.5 KB` zero-dependency strict-CSP runtime (`data-z-open`, `data-z-close`, `data-z-toggle`, `data-z-tabs`):
   ```bash

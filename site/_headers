@@ -28,6 +28,12 @@
 /dist/v1.3.0/*
   Cache-Control: public, max-age=31536000, immutable
 
+/dist/v1.4/*
+  Cache-Control: public, max-age=86400, stale-while-revalidate=604800
+
+/dist/v1.4.0/*
+  Cache-Control: public, max-age=31536000, immutable
+
 /dist/latest/*
   Cache-Control: public, max-age=3600, stale-while-revalidate=86400
 

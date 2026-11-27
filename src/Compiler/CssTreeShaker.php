@@ -120,6 +120,7 @@ final readonly class CssTreeShaker
         'z-approval' => 'approval-card',
         'z-filter' => 'filter-bar',
         'z-compare' => 'compare-slider',
+        'z-countdown' => 'countdown',
     ];
 
     public function __construct(

@@ -1,14 +1,30 @@
 @php
 $caption = isset($caption) && is_string($caption) && $caption !== '' ? $caption : null;
 $class = isset($class) && is_string($class) ? trim($class) : '';
-$wrapClass = $class !== '' ? 'z-table-wrap ' . $class : 'z-table-wrap';
 $searchable = isset($searchable) && ($searchable === true || $searchable === 'true' || $searchable === '1');
 $sortable = isset($sortable) && ($sortable === true || $sortable === 'true' || $sortable === '1');
 $selectable = isset($selectable) && ($selectable === true || $selectable === 'true' || $selectable === '1');
 $columnToggle = isset($columnToggle) && ($columnToggle === true || $columnToggle === 'true' || $columnToggle === '1');
 $exportable = isset($exportable) && ($exportable === true || $exportable === 'true' || $exportable === '1');
+$frozenFirst = isset($frozenFirst) && ($frozenFirst === true || $frozenFirst === 'true' || $frozenFirst === '1');
+$keyboard = isset($keyboard) && ($keyboard === true || $keyboard === 'true' || $keyboard === '1');
+$serverSort = isset($serverSort) && ($serverSort === true || $serverSort === 'true' || $serverSort === '1');
+$cursorUrl = isset($cursorUrl) && is_string($cursorUrl) ? trim($cursorUrl) : '';
+$nextCursor = isset($nextCursor) && is_string($nextCursor) ? trim($nextCursor) : '';
 $exportFilename = isset($exportFilename) && is_string($exportFilename) && trim($exportFilename) !== '' ? trim($exportFilename) : 'table-export.csv';
 $searchPlaceholder = isset($searchPlaceholder) && is_string($searchPlaceholder) && $searchPlaceholder !== '' ? $searchPlaceholder : 'Filter rows...';
+
+$wrapClasses = ['z-table-wrap'];
+if ($frozenFirst) {
+    $wrapClasses[] = 'z-table-frozen';
+}
+if ($selectable) {
+    $wrapClasses[] = 'z-table-has-select';
+}
+if ($class !== '') {
+    $wrapClasses[] = $class;
+}
+$wrapClass = implode(' ', $wrapClasses);
 $bulkItems = [];
 if (isset($bulkActions) && is_string($bulkActions) && trim($bulkActions) !== '') {
     foreach (explode('|', $bulkActions) as $rawItem) {
@@ -39,6 +55,16 @@ $slot = isset($slot) && is_string($slot) ? $slot : '';
 @endif
 @if ($exportable)
   data-z-table-export-file="{{ $exportFilename }}"
+@endif
+@if ($keyboard)
+  data-z-table-kbd="true"
+  tabindex="0"
+@endif
+@if ($serverSort)
+  data-z-table-server="true"
+@endif
+@if ($cursorUrl !== '')
+  data-z-table-cursor-url="{{ $cursorUrl }}"
 @endif
 >
 @if ($showToolbar)
@@ -77,4 +103,9 @@ $slot = isset($slot) && is_string($slot) ? $slot : '';
 @endif
     {!! $slot !!}
   </table>
+@if ($cursorUrl !== '' && $nextCursor !== '')
+  <div class="z-table-cursor-foot" data-z-table-sentinel data-next-cursor="{{ $nextCursor }}">
+    <button type="button" class="z-table-tool-btn" data-z-table-load-more>Load more rows</button>
+  </div>
+@endif
 </div>

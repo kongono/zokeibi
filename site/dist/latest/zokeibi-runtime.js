@@ -843,6 +843,18 @@
       }
     });
 
+    const wrap = table.closest("[data-z-table]");
+    if (wrap && wrap.getAttribute("data-z-table-server") === "true") {
+      const colKey = (th.getAttribute("data-sort-key") || th.textContent || "").trim();
+      const searchInput = wrap.querySelector("[data-z-table-search]");
+      const query = searchInput instanceof HTMLInputElement ? searchInput.value.trim() : "";
+      wrap.dispatchEvent(new CustomEvent("zokeibi:table-sort", {
+        bubbles: true,
+        detail: { column: colKey, dir, query },
+      }));
+      return;
+    }
+
     const mode = th.getAttribute("data-z-sort") || "auto";
     const rows = Array.from(tbody.rows);
     const parseVal = (tr) => {
@@ -2094,6 +2106,55 @@
       return;
     }
 
+    // Power-user DataTable keyboard navigation (j/k/ArrowDown/ArrowUp/Space/Enter)
+    if (
+      target instanceof Element
+      && !event.ctrlKey
+      && !event.metaKey
+      && !event.altKey
+      && !target.closest("input, textarea, select, [contenteditable='true']")
+      && !document.querySelector(".z-modal-backdrop:not([hidden]), .z-drawer-backdrop:not([hidden]), .z-cmdk-backdrop:not([hidden])")
+    ) {
+      const kbdWrap = target.closest('[data-z-table-kbd="true"]');
+      if (kbdWrap && ["j", "k", "ArrowDown", "ArrowUp", " ", "Enter"].includes(event.key)) {
+        const table = kbdWrap.querySelector("table");
+        const visibleRows = table ? directTableRows(table).filter((r) => !r.hidden) : [];
+        if (visibleRows.length > 0) {
+          const curIdx = visibleRows.findIndex((r) => r.classList.contains("is-kbd-active"));
+          if (event.key === "j" || event.key === "ArrowDown" || event.key === "k" || event.key === "ArrowUp") {
+            event.preventDefault();
+            const delta = (event.key === "j" || event.key === "ArrowDown") ? 1 : -1;
+            const nextIdx = curIdx < 0
+              ? (delta > 0 ? 0 : visibleRows.length - 1)
+              : Math.max(0, Math.min(visibleRows.length - 1, curIdx + delta));
+            visibleRows.forEach((r, idx) => r.classList.toggle("is-kbd-active", idx === nextIdx));
+            visibleRows[nextIdx].scrollIntoView({ block: "nearest" });
+            return;
+          }
+          if (event.key === " " && curIdx >= 0 && !(target instanceof HTMLButtonElement)) {
+            const chk = visibleRows[curIdx].querySelector("[data-z-table-select-row]");
+            if (chk instanceof HTMLInputElement) {
+              event.preventDefault();
+              chk.checked = !chk.checked;
+              syncTableSelection(kbdWrap);
+              return;
+            }
+          }
+          if (event.key === "Enter" && curIdx >= 0 && !(target instanceof HTMLButtonElement) && !(target instanceof HTMLAnchorElement)) {
+            const activeRow = visibleRows[curIdx];
+            event.preventDefault();
+            const actionEl = activeRow.querySelector("[data-z-row-action]");
+            if (actionEl instanceof HTMLElement) actionEl.click();
+            kbdWrap.dispatchEvent(new CustomEvent("zokeibi:table-row-open", {
+              bubbles: true,
+              detail: { rowId: activeRow.getAttribute("data-row-id") || String(curIdx + 1), row: activeRow },
+            }));
+            return;
+          }
+        }
+      }
+    }
+
     // Combobox keyboard navigation (WAI-ARIA Combobox APG)
     if (target instanceof HTMLInputElement && target.hasAttribute("data-z-combobox-input")) {
       const root = target.closest("[data-z-combobox]");
@@ -2394,9 +2455,219 @@
     });
   }
 
+  /* ---- Declarative Client-Side Countdowns (Single Shared Ticker + Server Clock-Skew Offset) ---- */
+  const countdownMeta = new WeakMap();
+  let countdownInterval = null;
+
+  function formatCountdown(totalSec) {
+    const clamped = Math.max(0, totalSec);
+    const d = Math.floor(clamped / 86400);
+    const h = Math.floor((clamped % 86400) / 3600);
+    const m = Math.floor((clamped % 3600) / 60);
+    const s = clamped % 60;
+    const pad = (n) => String(n).padStart(2, "0");
+    if (d > 0) return `${d}d ${pad(h)}:${pad(m)}:${pad(s)}`;
+    if (h > 0) return `${pad(h)}:${pad(m)}:${pad(s)}`;
+    return `${pad(m)}:${pad(s)}`;
+  }
+
+  function updateOneCountdown(el) {
+    const meta = countdownMeta.get(el);
+    if (!meta) return false;
+    const remainingSec = Math.ceil((meta.targetMs - (Date.now() + meta.skewMs)) / 1000);
+    const prefix = meta.prefix ? `${meta.prefix} ` : "";
+    if (remainingSec <= 0) {
+      el.textContent = `${prefix}${meta.endedLabel}`;
+      el.classList.remove("is-urgent");
+      el.classList.add("is-ended");
+      if (!meta.ended) {
+        meta.ended = true;
+        el.dispatchEvent(new CustomEvent("zokeibi:countdown-ended", {
+          bubbles: true,
+          detail: { until: el.getAttribute("data-z-countdown") || "" },
+        }));
+      }
+      return false;
+    }
+    el.textContent = `${prefix}${formatCountdown(remainingSec)}`;
+    el.classList.remove("is-ended");
+    el.classList.toggle("is-urgent", remainingSec <= meta.urgentSec);
+    return true;
+  }
+
+  function tickCountdowns() {
+    const nodes = document.querySelectorAll("[data-z-countdown], [data-z-countdown-seconds]");
+    let activeCount = 0;
+    nodes.forEach((el) => {
+      if (countdownMeta.has(el) && updateOneCountdown(el)) activeCount++;
+    });
+    if (activeCount === 0 && countdownInterval !== null) {
+      window.clearInterval(countdownInterval);
+      countdownInterval = null;
+    }
+  }
+
+  function initCountdowns(scope) {
+    let anyActive = false;
+    (scope || document).querySelectorAll("[data-z-countdown], [data-z-countdown-seconds]").forEach((el) => {
+      if (!countdownMeta.has(el)) {
+        const now = Date.now();
+        const serverNowRaw = el.getAttribute("data-z-server-now");
+        const serverNowMs = serverNowRaw ? Date.parse(serverNowRaw) : NaN;
+        const skewMs = Number.isFinite(serverNowMs) ? serverNowMs - now : 0;
+        const secAttr = el.getAttribute("data-z-countdown-seconds");
+        const untilAttr = el.getAttribute("data-z-countdown");
+        let targetMs = NaN;
+        if (secAttr !== null && secAttr !== "" && Number.isFinite(Number(secAttr))) {
+          targetMs = now + skewMs + Math.max(0, Number(secAttr)) * 1000;
+        } else if (untilAttr) {
+          targetMs = Date.parse(untilAttr);
+        }
+        if (!Number.isFinite(targetMs)) return;
+        const urgentSec = Math.max(0, parseInt(el.getAttribute("data-z-urgent-seconds") || "60", 10) || 0);
+        const endedLabel = el.getAttribute("data-z-ended-label") || "Ended";
+        const prefix = el.getAttribute("data-z-countdown-prefix") || "";
+        countdownMeta.set(el, { targetMs, skewMs, urgentSec, endedLabel, prefix, ended: false });
+      }
+      if (updateOneCountdown(el)) anyActive = true;
+    });
+    if (anyActive && countdownInterval === null) {
+      countdownInterval = window.setInterval(tickCountdowns, 1000);
+    }
+  }
+
+  /* ---- Server-Backed Cursor Infinite Scroll Loader (Zero innerHTML, Strict Same-Origin) ---- */
+  const cursorObservers = new WeakSet();
+  const cursorInflight = new WeakSet();
+
+  function loadTableNextCursor(wrap, sentinel) {
+    if (cursorInflight.has(sentinel)) return;
+    const nextCursor = (sentinel.getAttribute("data-next-cursor") || "").trim();
+    const rawUrl = (wrap.getAttribute("data-z-table-cursor-url") || "").trim();
+    if (!nextCursor) return;
+
+    const loadEvt = new CustomEvent("zokeibi:table-load-more", {
+      bubbles: true,
+      cancelable: true,
+      detail: { cursor: nextCursor, url: rawUrl },
+    });
+    if (!wrap.dispatchEvent(loadEvt) || !rawUrl) return;
+
+    let parsedUrl = null;
+    try {
+      parsedUrl = new URL(rawUrl, window.location.origin);
+    } catch (_e) {
+      return;
+    }
+    if (parsedUrl.origin !== window.location.origin) return;
+    parsedUrl.searchParams.set("cursor", nextCursor);
+
+    cursorInflight.add(sentinel);
+    const btn = sentinel.querySelector("[data-z-table-load-more]");
+    if (btn instanceof HTMLButtonElement) {
+      btn.disabled = true;
+      btn.textContent = "Loading...";
+    }
+
+    fetch(parsedUrl.href, {
+      method: "GET",
+      headers: { "X-Kongono-Live": "true", "Accept": "text/html" },
+      credentials: "same-origin",
+    }).then(async (res) => {
+      if (!res.ok) return;
+      const html = await res.text();
+      const doc = new DOMParser().parseFromString(`<table><tbody>${html}</tbody></table>`, "text/html");
+      const newRows = Array.from(doc.querySelectorAll("tbody > tr"));
+      const table = wrap.querySelector("table");
+      const tbody = table && table.tBodies && table.tBodies[0];
+      if (tbody && newRows.length > 0) {
+        const selectable = wrap.getAttribute("data-z-table-selectable") === "true";
+        const baseCount = tbody.rows.length;
+        newRows.forEach((rawTr, i) => {
+          rawTr.querySelectorAll("script, iframe, object, embed").forEach((bad) => bad.remove());
+          rawTr.querySelectorAll("*").forEach((node) => {
+            Array.from(node.attributes).forEach((attr) => {
+              const name = attr.name.toLowerCase();
+              if (name.startsWith("on") || name === "style") node.removeAttribute(attr.name);
+            });
+          });
+          const imported = document.importNode(rawTr, true);
+          if (selectable && !imported.querySelector("[data-z-table-select-row]")) {
+            const td = document.createElement("td");
+            td.className = "z-table-check-col";
+            td.setAttribute("data-z-no-export", "true");
+            const chk = document.createElement("input");
+            chk.type = "checkbox";
+            chk.value = imported.getAttribute("data-row-id") || String(baseCount + i + 1);
+            chk.setAttribute("data-z-table-select-row", "true");
+            chk.setAttribute("aria-label", `Select row ${baseCount + i + 1}`);
+            td.appendChild(chk);
+            imported.insertBefore(td, imported.firstChild);
+          }
+          tbody.appendChild(imported);
+        });
+        updateTableCount(wrap);
+        if (selectable) syncTableSelection(wrap);
+        initCountdowns(tbody);
+      }
+      const nextHeader = (res.headers.get("X-Next-Cursor") || "").trim();
+      if (nextHeader) {
+        sentinel.setAttribute("data-next-cursor", nextHeader);
+        if (btn instanceof HTMLButtonElement) {
+          btn.disabled = false;
+          btn.textContent = "Load more rows";
+        }
+      } else {
+        sentinel.remove();
+      }
+    }).catch(() => {
+      if (btn instanceof HTMLButtonElement) {
+        btn.disabled = false;
+        btn.textContent = "Load more rows";
+      }
+    }).finally(() => {
+      cursorInflight.delete(sentinel);
+    });
+  }
+
+  function initTableCursorLoaders(scope) {
+    (scope || document).querySelectorAll("[data-z-table] [data-z-table-sentinel]").forEach((sentinel) => {
+      if (cursorObservers.has(sentinel)) return;
+      cursorObservers.add(sentinel);
+      const wrap = sentinel.closest("[data-z-table]");
+      if (!wrap) return;
+      const btn = sentinel.querySelector("[data-z-table-load-more]");
+      if (btn) {
+        btn.addEventListener("click", () => loadTableNextCursor(wrap, sentinel));
+      }
+      if (typeof IntersectionObserver !== "undefined") {
+        const io = new IntersectionObserver((entries) => {
+          if (entries.some((e) => e.isIntersecting)) {
+            loadTableNextCursor(wrap, sentinel);
+          }
+        }, { rootMargin: "120px" });
+        io.observe(sentinel);
+      }
+    });
+  }
+
+  document.addEventListener("click", (event) => {
+    const target = event.target instanceof Element ? event.target : null;
+    const row = target && target.closest('[data-z-table-kbd="true"] tbody tr');
+    if (row) {
+      const wrap = row.closest('[data-z-table-kbd="true"]');
+      const table = wrap && wrap.querySelector("table");
+      if (table) {
+        directTableRows(table).forEach((r) => r.classList.toggle("is-kbd-active", r === row));
+      }
+    }
+  });
+
   function initScope(scope) {
     const root = scope || document;
     initSortableTables(root);
+    initTableCursorLoaders(root);
+    initCountdowns(root);
     initSignaturePads(root);
     initCompareSliders(root);
     initDirtyGuards(root);
@@ -2405,7 +2676,7 @@
     syncDensityButtons((document.documentElement.getAttribute("data-z-density") || "default").trim().toLowerCase());
   }
 
-  window.Zokeibi = { init: initScope, setTheme, setDensity, toast: showToast };
+  window.Zokeibi = { init: initScope, setTheme, setDensity, toast: showToast, tickCountdowns };
 
   document.addEventListener("zokeibi:toast", (event) => {
     if (event instanceof CustomEvent && event.detail) showToast(event.detail);

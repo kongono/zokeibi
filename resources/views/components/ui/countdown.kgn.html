@@ -1,0 +1,69 @@
+@php
+$until = isset($until) && is_string($until) ? trim($until) : '';
+$seconds = isset($seconds) && is_numeric($seconds) ? max(0, (int) $seconds) : null;
+$serverNow = isset($serverNow) && is_string($serverNow) ? trim($serverNow) : '';
+$urgentSeconds = isset($urgentSeconds) && is_numeric($urgentSeconds) ? max(0, (int) $urgentSeconds) : 60;
+$endedLabel = isset($endedLabel) && is_string($endedLabel) && trim($endedLabel) !== '' ? trim($endedLabel) : 'Ended';
+$prefix = isset($prefix) && is_string($prefix) ? trim($prefix) : '';
+$variant = isset($variant) && is_string($variant) && in_array($variant, ['pill', 'inline', 'default'], true) ? $variant : 'pill';
+$label = isset($label) && is_string($label) && trim($label) !== '' ? trim($label) : null;
+$class = isset($class) && is_string($class) ? trim($class) : '';
+
+$classes = ['z-countdown'];
+if ($variant !== 'default') {
+    $classes[] = 'z-countdown-' . $variant;
+}
+if ($class !== '') {
+    $classes[] = $class;
+}
+
+$initialText = '--:--';
+if ($seconds !== null) {
+    $h = intdiv($seconds, 3600);
+    $m = intdiv($seconds % 3600, 60);
+    $s = $seconds % 60;
+    $initialText = $h > 0 ? sprintf('%02d:%02d:%02d', $h, $m, $s) : sprintf('%02d:%02d', $m, $s);
+} elseif ($until !== '') {
+    $targetTs = strtotime($until);
+    $nowTs = $serverNow !== '' ? strtotime($serverNow) : time();
+    if ($targetTs !== false && $nowTs !== false) {
+        $diff = $targetTs - $nowTs;
+        if ($diff <= 0) {
+            $initialText = $endedLabel;
+            $classes[] = 'is-ended';
+        } else {
+            if ($diff <= $urgentSeconds) {
+                $classes[] = 'is-urgent';
+            }
+            $d = intdiv($diff, 86400);
+            $h = intdiv($diff % 86400, 3600);
+            $m = intdiv($diff % 3600, 60);
+            $s = $diff % 60;
+            $initialText = $d > 0
+                ? sprintf('%dd %02d:%02d:%02d', $d, $h, $m, $s)
+                : ($h > 0 ? sprintf('%02d:%02d:%02d', $h, $m, $s) : sprintf('%02d:%02d', $m, $s));
+        }
+    }
+}
+@endphp
+<time
+  class="{{ implode(' ', $classes) }}"
+@if ($until !== '')
+  datetime="{{ $until }}"
+  data-z-countdown="{{ $until }}"
+@endif
+@if ($seconds !== null)
+  data-z-countdown-seconds="{{ $seconds }}"
+@endif
+@if ($serverNow !== '')
+  data-z-server-now="{{ $serverNow }}"
+@endif
+  data-z-urgent-seconds="{{ $urgentSeconds }}"
+  data-z-ended-label="{{ $endedLabel }}"
+@if ($prefix !== '')
+  data-z-countdown-prefix="{{ $prefix }}"
+@endif
+@if ($label !== null)
+  aria-label="{{ $label }}"
+@endif
+>{{ $prefix !== '' ? $prefix . ' ' : '' }}{{ $initialText }}</time>

@@ -9,11 +9,11 @@
       <div class="pg-hero-kicker">造形美 Zokeibi · Beauty of Form · Pure PHP 8.5 CSS Compiler</div>
       <h1 class="pg-hero-title">Superior UI for Kongono.<br>Zero Node. Zero npm. Pure Web Standards.</h1>
       <p class="pg-hero-sub">
-        62 accessible <code>&lt;x-ui.*&gt;</code> components + 8 turnkey SaaS page blocks built on native 2026 CSS (<code>@layer</code>, OKLCH, <code>@container</code>, <code>:has()</code>, Top-Layer Popover API, <code>@starting-style</code>), Two-Gear density switching, integer-cents money inputs, hardened alert dialogs, bulk/CSV DataTables, filter bars, compare sliders, dirty-form guards, human-in-the-loop AI review &amp; approval cards, interactive pure-SVG charts, DTO-to-UI reflection, and <code>zokeibi prove</code> under strict CSP (<code>script-src 'self'</code> &amp; <code>style-src 'self'</code>).
+        63 accessible <code>&lt;x-ui.*&gt;</code> components + 8 turnkey SaaS page blocks built on native 2026 CSS (<code>@layer</code>, OKLCH, <code>@container</code>, <code>:has()</code>, Top-Layer Popover API, <code>@starting-style</code>), Two-Gear density switching, integer-cents money inputs, hardened alert dialogs, power DataTables (frozen col, j/k keyboard triage, bulk/CSV, cursor scroll), live client-side countdowns, filter bars, compare sliders, dirty-form guards, human-in-the-loop AI review &amp; approval cards, interactive pure-SVG charts, DTO-to-UI reflection, and <code>zokeibi prove</code> under strict CSP (<code>script-src 'self'</code> &amp; <code>style-src 'self'</code>).
       </p>
       <div class="z-row z-stack-gap-top">
         <x-ui.button variant="primary" href="/studio">Open Token Studio GUI</x-ui.button>
-        <x-ui.button variant="outline" href="#components">Explore 62 Components</x-ui.button>
+        <x-ui.button variant="outline" href="#components">Explore 63 Components</x-ui.button>
         <x-ui.button variant="ghost" href="/studio/prove">UI Proof JSON</x-ui.button>
         <x-ui.button variant="ghost" href="/api/registry.json">Registry JSON</x-ui.button>
       </div>
@@ -102,7 +102,7 @@
               <td><x-ui.badge variant="primary">-{{ $telemetry['dash_savings'] }}</x-ui.badge></td>
             </tr>
             <tr>
-              <td><strong>Full 62-Component Playground</strong></td>
+              <td><strong>Full 63-Component Playground</strong></td>
               <td class="z-mono">{{ $telemetry['full_used'] }}/{{ $componentCount }}</td>
               <td class="z-mono">{{ $telemetry['full_min_kb'] }}</td>
               <td class="z-mono"><strong>{{ $telemetry['full_gz_kb'] }}</strong></td>
@@ -128,18 +128,18 @@ php vendor/bin/zokeibi prove --views=views --strict</pre>
     </div>
   </section>
 
-  {{-- Interactive 62-Component Gallery --}}
+  {{-- Interactive 63-Component Gallery --}}
   <section id="components">
     <div class="pg-section-head">
       <div>
-        <h2 class="pg-section-title">All 62 Live Zokeibi Components</h2>
+        <h2 class="pg-section-title">All 63 Live Zokeibi Components</h2>
         <p class="pg-section-sub">Every preview below renders the real installed <code>&lt;x-ui.*&gt;</code> component template. Switch themes or density above, or toggle <strong>Preview / Markup / CLI</strong> on any card.</p>
       </div>
       <div class="pg-seg" role="tablist" aria-label="Filter components by category">
-        <button id="cat-all" type="button" role="tab" aria-selected="true" class="pg-seg-btn" k-class:is-active="cat === 'all'" k-attr:aria-selected="cat === 'all'" k-on:click="set(cat, 'all')">All (62)</button>
+        <button id="cat-all" type="button" role="tab" aria-selected="true" class="pg-seg-btn" k-class:is-active="cat === 'all'" k-attr:aria-selected="cat === 'all'" k-on:click="set(cat, 'all')">All (63)</button>
         <button id="cat-primitives" type="button" role="tab" aria-selected="false" class="pg-seg-btn" k-class:is-active="cat === 'primitives'" k-attr:aria-selected="cat === 'primitives'" k-on:click="set(cat, 'primitives')">Primitives (12)</button>
         <button id="cat-forms" type="button" role="tab" aria-selected="false" class="pg-seg-btn" k-class:is-active="cat === 'forms'" k-attr:aria-selected="cat === 'forms'" k-on:click="set(cat, 'forms')">Forms (21)</button>
-        <button id="cat-data" type="button" role="tab" aria-selected="false" class="pg-seg-btn" k-class:is-active="cat === 'data'" k-attr:aria-selected="cat === 'data'" k-on:click="set(cat, 'data')">Data (12)</button>
+        <button id="cat-data" type="button" role="tab" aria-selected="false" class="pg-seg-btn" k-class:is-active="cat === 'data'" k-attr:aria-selected="cat === 'data'" k-on:click="set(cat, 'data')">Data (13)</button>
         <button id="cat-navigation" type="button" role="tab" aria-selected="false" class="pg-seg-btn" k-class:is-active="cat === 'navigation'" k-attr:aria-selected="cat === 'navigation'" k-on:click="set(cat, 'navigation')">Navigation (9)</button>
         <button id="cat-overlays" type="button" role="tab" aria-selected="false" class="pg-seg-btn" k-class:is-active="cat === 'overlays'" k-attr:aria-selected="cat === 'overlays'" k-on:click="set(cat, 'overlays')">Overlays (8)</button>
       </div>
@@ -567,8 +567,8 @@ php vendor/bin/zokeibi prove --views=views --strict</pre>
             </div>
           </div>
           <div class="pg-demo-body">
-            <div class="pg-stage" k-show="view === 'preview'">
-              <x-ui.table caption="UI framework comparison" searchable="true" sortable="true" selectable="true" column-toggle="true" exportable="true" export-filename="zokeibi-benchmarks.csv" bulk-actions="archive:Archive:outline|delete:Delete:danger" search-placeholder="Filter frameworks...">
+            <div class="pg-stage z-stack-sm" k-show="view === 'preview'">
+              <x-ui.table caption="UI framework comparison" searchable="true" sortable="true" selectable="true" frozen-first="true" keyboard="true" column-toggle="true" exportable="true" export-filename="zokeibi-benchmarks.csv" bulk-actions="archive:Archive:outline|delete:Delete:danger" search-placeholder="Filter frameworks...">
                 <thead>
                   <tr>
                     <th scope="col" data-z-sort="string">Framework</th>
@@ -598,6 +598,7 @@ php vendor/bin/zokeibi prove --views=views --strict</pre>
                   </tr>
                 </tbody>
               </x-ui.table>
+              <span class="z-soft">Tip: Click a row and press <kbd class="z-kbd">j</kbd>/<kbd class="z-kbd">k</kbd> to navigate, <kbd class="z-kbd">Space</kbd> to select, or scroll horizontally with column 1 pinned.</span>
             </div>
             <pre class="z-code" k-show="view === 'code'" hidden>{{ $schemas['table']['example'] }}</pre>
             <pre class="z-code" k-show="view === 'cli'" hidden>{{ $schemas['table']['cli'] }}</pre>
@@ -1920,6 +1921,36 @@ public function index(): Response
             <pre class="z-code" k-show="view === 'cli'" hidden>{{ $schemas['compare-slider']['cli'] }}</pre>
           </div>
           <div class="pg-demo-foot"><span>&lt;{{ $schemas['compare-slider']['tag'] }}&gt;</span><span>{{ $schemas['compare-slider']['standards'] }}</span></div>
+        </section>
+      </div>
+
+      {{-- 63. Live Client-Side Countdown Timer --}}
+      <div k-show="cat === 'all' || cat === 'data'">
+        <section class="pg-demo-card" @state(['view' => 'preview'])>
+          <div class="pg-demo-head">
+            <div>
+              <h3 class="pg-demo-title">{{ $schemas['countdown']['name'] }} <x-ui.badge variant="blue">{{ $schemas['countdown']['js_mode'] }}</x-ui.badge></h3>
+              <p class="pg-demo-desc">{{ $schemas['countdown']['description'] }}</p>
+            </div>
+            <div class="pg-seg">
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'preview'" k-on:click="set(view, 'preview')">Preview</button>
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'code'" k-on:click="set(view, 'code')">Markup</button>
+              <button type="button" class="pg-seg-btn" k-class:is-active="view === 'cli'" k-on:click="set(view, 'cli')">CLI</button>
+            </div>
+          </div>
+          <div class="pg-demo-body">
+            <div class="pg-stage z-stack-sm" k-show="view === 'preview'">
+              <div class="z-row">
+                <x-ui.countdown seconds="420" urgent-seconds="60" prefix="Auction:" />
+                <x-ui.countdown seconds="45" urgent-seconds="60" prefix="Closing:" />
+                <x-ui.countdown until="2025-01-01T00:00:00Z" ended-label="Closed" />
+              </div>
+              <span class="z-soft">Single shared ticker across all timers · supports <code>server-now</code> clock-skew sync · 0 server morphs/sec.</span>
+            </div>
+            <pre class="z-code" k-show="view === 'code'" hidden>{{ $schemas['countdown']['example'] }}</pre>
+            <pre class="z-code" k-show="view === 'cli'" hidden>{{ $schemas['countdown']['cli'] }}</pre>
+          </div>
+          <div class="pg-demo-foot"><span>&lt;{{ $schemas['countdown']['tag'] }}&gt;</span><span>{{ $schemas['countdown']['standards'] }}</span></div>
         </section>
       </div>
 

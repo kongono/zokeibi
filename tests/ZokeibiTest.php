@@ -26,11 +26,11 @@ final class ZokeibiTest extends TestCase
         $this->packageDir = dirname(__DIR__);
     }
 
-    public function testRegistryLoadsAll62ComponentsAndAssetsExist(): void
+    public function testRegistryLoadsAll63ComponentsAndAssetsExist(): void
     {
         $zokeibi = new Zokeibi();
 
-        self::assertSame(62, $zokeibi->registry->count());
+        self::assertSame(63, $zokeibi->registry->count());
         self::assertSame(['sumi', 'washi', 'indigo', 'matcha', 'kintsugi'], $zokeibi->registry->themes());
         self::assertSame(['sharp', 'default', 'rounded'], $zokeibi->registry->radiusPresets());
 
@@ -46,7 +46,7 @@ final class ZokeibiTest extends TestCase
         self::assertIsArray($decoded);
         self::assertSame('zokeibi', $decoded['name']);
         self::assertSame('造形美', $decoded['kanji']);
-        self::assertSame(62, $decoded['component_count']);
+        self::assertSame(63, $decoded['component_count']);
     }
 
     public function testCssTreeShakerReducesBundleAndResolvesDependencies(): void
@@ -67,7 +67,7 @@ final class ZokeibiTest extends TestCase
 
             // popover declares css_deps: ["button"], so button MUST be pulled in automatically
             self::assertSame(['button', 'badge', 'popover'], $report->usedComponents);
-            self::assertCount(59, $report->skippedComponents);
+            self::assertCount(60, $report->skippedComponents);
             self::assertSame(1, $report->scannedFiles);
             self::assertFileExists($outCss);
             self::assertGreaterThan(35.0, $report->treeShakeSavingsPercent);
@@ -160,7 +160,7 @@ HTML;
         }
     }
 
-    public function testAll62ComponentsCompileAndRenderCleanlyWithXssEscaping(): void
+    public function testAll63ComponentsCompileAndRenderCleanlyWithXssEscaping(): void
     {
         $zokeibi = new Zokeibi();
         $tmpDir = $this->makeTempDir('zokeibi-render-');
@@ -237,12 +237,13 @@ HTML;
   <x-ui.approval-card title="Rent Increase" agent="Chie AI" risk="high" summary="Update ledger" changes="Rent|$1,800|$1,850" note-field="true" />
   <x-ui.filter-bar views="all:All|overdue:Overdue" active-view="overdue" filters="status:Status:Overdue" options="status:Status:Paid" />
   <x-ui.compare-slider before-label="Before" after-label="After" before-text="Old" after-text="New" initial="45" />
+  <x-ui.countdown seconds="95" urgent-seconds="60" prefix="Closes in" />
 </section>
 HTML;
-            file_put_contents($viewsDir . DIRECTORY_SEPARATOR . 'all62.kgn.html', $page);
+            file_put_contents($viewsDir . DIRECTORY_SEPARATOR . 'all63.kgn.html', $page);
 
             $engine = new ViewEngine($viewsDir, $cacheDir);
-            $html = $engine->render('all62', ['xssTitle' => '<script>alert(1)</script>']);
+            $html = $engine->render('all63', ['xssTitle' => '<script>alert(1)</script>']);
 
             // Zero uncompiled <x-ui.*> tags
             self::assertStringNotContainsString('<x-ui.', $html);
@@ -333,7 +334,7 @@ HTML;
         self::assertSame(200, $reg->getStatusCode());
         $regJson = json_decode((string) $reg->getBody(), true, 512, JSON_THROW_ON_ERROR);
         self::assertIsArray($regJson);
-        self::assertSame(62, $regJson['component_count']);
+        self::assertSame(63, $regJson['component_count']);
         self::assertIsArray($regJson['blocks']);
         self::assertCount(8, $regJson['blocks']);
 
@@ -358,7 +359,7 @@ HTML;
         self::assertSame(0, $listCode);
         $listDecoded = json_decode(implode("\n", $listOut), true, 512, JSON_THROW_ON_ERROR);
         self::assertIsArray($listDecoded);
-        self::assertCount(62, $listDecoded);
+        self::assertCount(63, $listDecoded);
 
         $schemaOut = [];
         $schemaCode = 0;
@@ -758,7 +759,7 @@ HTML;
         self::assertTrue($playgroundProof['passed']);
         self::assertSame('A+', $playgroundProof['grade']);
         self::assertSame(100, $playgroundProof['score']);
-        self::assertSame(62, $playgroundProof['pillars']['budget']['components_used']);
+        self::assertSame(63, $playgroundProof['pillars']['budget']['components_used']);
 
         // Failing contrast custom theme (WCAG mid-luminance dead zone L=0.56, C=0.0) & tight budget must FAIL
         $tmpDir = $this->makeTempDir('zokeibi-prove-fail-');
@@ -1049,6 +1050,82 @@ HTML;
             self::assertStringContainsString('--z-cmp-pos', $runtime);
             self::assertStringContainsString('data-z-dirty-guard', $runtime);
             self::assertStringContainsString('data-chart-tip', $runtime);
+            self::assertStringNotContainsString('.innerHTML', $runtime);
+        } finally {
+            $this->removeDir($tmpDir);
+        }
+    }
+
+    public function testV140CountdownAndDataTableKeyboardFrozenServerCursor(): void
+    {
+        $zokeibi = new Zokeibi();
+        $tmpDir = $this->makeTempDir('zokeibi-v140-');
+
+        try {
+            $zokeibi->installer->add($tmpDir, ['countdown', 'table'], true);
+            $viewsDir = $tmpDir . DIRECTORY_SEPARATOR . 'views';
+            $cacheDir = $tmpDir . DIRECTORY_SEPARATOR . 'cache';
+            mkdir($cacheDir, 0o775, true);
+
+            $tpl = <<<'HTML'
+<main>
+  <x-ui.countdown until="2026-12-01T18:00:00Z" server-now="2026-12-01T17:59:15Z" urgent-seconds="60" prefix="Closes in" />
+  <x-ui.countdown seconds="120" variant="inline" />
+  <x-ui.table
+    caption="Auctions"
+    searchable="true"
+    sortable="true"
+    selectable="true"
+    frozen-first="true"
+    keyboard="true"
+    server-sort="true"
+    cursor-url="/api/auctions"
+    next-cursor="cur_2"
+  >
+    <thead><tr><th scope="col" data-z-sort="string" data-sort-key="domain">Domain</th><th scope="col" data-z-sort="number" data-sort-key="bid">Bid</th></tr></thead>
+    <tbody><tr data-row-id="acme"><td>acme.com</td><td id="bid-acme">$2,450</td></tr></tbody>
+  </x-ui.table>
+</main>
+HTML;
+            file_put_contents($viewsDir . DIRECTORY_SEPARATOR . 'v140.kgn.html', $tpl);
+
+            $engine = new ViewEngine($viewsDir, $cacheDir);
+            $html = $engine->render('v140', []);
+
+            self::assertStringNotContainsString('style="', $html);
+            self::assertStringContainsString('data-z-countdown="2026-12-01T18:00:00Z"', $html);
+            self::assertStringContainsString('data-z-server-now="2026-12-01T17:59:15Z"', $html);
+            self::assertStringContainsString('is-urgent', $html);
+            self::assertStringContainsString('data-z-countdown-seconds="120"', $html);
+            self::assertStringContainsString('z-table-frozen', $html);
+            self::assertStringContainsString('z-table-has-select', $html);
+            self::assertStringContainsString('data-z-table-kbd="true"', $html);
+            self::assertStringContainsString('data-z-table-server="true"', $html);
+            self::assertStringContainsString('data-z-table-cursor-url="/api/auctions"', $html);
+            self::assertStringContainsString('data-z-table-sentinel', $html);
+            self::assertStringContainsString('data-next-cursor="cur_2"', $html);
+
+            $detected = $zokeibi->compiler->detectComponentsInSource('<time class="z-countdown" data-z-countdown="2026-12-01T18:00:00Z">00:45</time>');
+            self::assertContains('countdown', $detected);
+
+            $build = $zokeibi->compiler->buildFromDirectory($viewsDir);
+            self::assertStringContainsString('.z-countdown-pill', $build->css);
+            self::assertStringContainsString('.kgn-patch-flash', $build->css);
+            self::assertStringContainsString('.z-table-frozen', $build->css);
+            self::assertStringContainsString('.is-kbd-active', $build->css);
+
+            $audit = $zokeibi->auditor->auditSource($tpl, 'v140.kgn.html');
+            self::assertTrue($audit->passed, 'Expected v1.4.0 audit pass: ' . json_encode($audit->findings));
+            self::assertSame(100, $audit->score);
+
+            $runtime = (string) file_get_contents($this->packageDir . '/resources/js/zokeibi-runtime.js');
+            self::assertStringContainsString('initCountdowns', $runtime);
+            self::assertStringContainsString('data-z-server-now', $runtime);
+            self::assertStringContainsString('zokeibi:countdown-ended', $runtime);
+            self::assertStringContainsString('data-z-table-kbd', $runtime);
+            self::assertStringContainsString('zokeibi:table-sort', $runtime);
+            self::assertStringContainsString('zokeibi:table-row-open', $runtime);
+            self::assertStringContainsString('zokeibi:table-load-more', $runtime);
             self::assertStringNotContainsString('.innerHTML', $runtime);
         } finally {
             $this->removeDir($tmpDir);

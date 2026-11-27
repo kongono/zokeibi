@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en" data-zokeibi-theme="sumi" data-zokeibi-radius="default" data-z-density="default">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Zokeibi (v1.4.0) — Zero-Install Single-File HTML Starter</title>
+  <link rel="stylesheet" href="https://zokeibi.com/dist/v1.4/zokeibi.min.css" integrity="sha384-Xvcr+SvIT9hwyTsK9p4IW1p/suYaRB7lt7JSj8TeNOZ+JOlAwRvdoNuj6u51FXno" crossorigin="anonymous">
+</head>
+<body>
+  <main class="z-shell z-stack">
+    <header class="z-between">
+      <div>
+        <span class="z-badge z-badge-emerald">Zero npm · Strict CSP · v1.4.0</span>
+        <h1>Zokeibi Single-File Starter</h1>
+        <p class="z-muted">Save this HTML file locally or paste into CodePen — no build step, no Node.js, no Composer required.</p>
+      </div>
+      <div class="z-row">
+        <button type="button" class="z-btn z-btn-outline z-btn-sm" data-z-cycle-theme="sumi,washi,indigo,matcha,kintsugi">Cycle Theme</button>
+        <button type="button" class="z-btn z-btn-outline z-btn-sm" data-z-cycle-density="calm,default,compact">Cycle Density</button>
+        <a class="z-btn z-btn-primary z-btn-sm" href="https://zokeibi.com/playground/">62-Component Playground →</a>
+      </div>
+    </header>
+
+    <section class="z-grid-3" aria-label="Key metrics">
+      <article class="z-kpi z-kpi-emerald">
+        <span class="z-kpi-label">Monthly Recurring</span>
+        <strong class="z-kpi-value">$48,920</strong>
+        <span class="z-kpi-delta is-up">+14.2% MoM</span>
+      </article>
+      <article class="z-kpi z-kpi-blue">
+        <span class="z-kpi-label">Active Units</span>
+        <strong class="z-kpi-value">1,284</strong>
+        <span class="z-kpi-delta is-up">98.4% occupied</span>
+      </article>
+      <article class="z-kpi">
+        <span class="z-kpi-label">Bundle Weight</span>
+        <strong class="z-kpi-value">11.75 KB</strong>
+        <span class="z-kpi-delta">All 62 components gzip</span>
+      </article>
+    </section>
+
+    <section class="z-grid-2">
+      <article class="z-card">
+        <header class="z-card-head">
+          <div>
+            <div class="z-card-kicker">Integer Cents + Declarative Dirty-Form Guard</div>
+            <h2 class="z-card-title">Edit Lease Settings (Try Changing a Value)</h2>
+          </div>
+          <span class="z-badge z-badge-primary">Zero Custom JS</span>
+        </header>
+        <div class="z-card-body">
+          <form class="z-stack" action="#" method="get" data-z-dirty-guard="true">
+            <div class="z-field">
+              <label class="z-label" for="starter-name">Workspace Name</label>
+              <input id="starter-name" name="workspace" type="text" class="z-input" value="Acme Properties LLC">
+            </div>
+            <div class="z-input-group z-money" data-z-money="true" data-money-decimals="2" data-money-negative="false">
+              <label class="z-label" for="starter-rent">Monthly Rent (Submits Integer Cents)</label>
+              <input type="hidden" name="rent_cents" value="185000" data-z-money-cents>
+              <div class="z-input-group-row">
+                <span class="z-input-addon is-prefix" aria-hidden="true">$</span>
+                <input id="starter-rent" type="text" inputmode="decimal" autocomplete="off" class="z-input-group-field z-money-field" value="1,850.00" data-z-money-display>
+                <span class="z-input-addon is-suffix">USD</span>
+              </div>
+              <span class="z-hint">Hidden input submits exact integer <code>185000</code> — zero floating-point drift.</span>
+            </div>
+            <div class="z-dirty-bar" data-z-dirty-bar hidden role="status" aria-live="polite">
+              <span class="z-dirty-count" data-z-dirty-count>0 unsaved changes</span>
+              <div class="z-row">
+                <button type="button" class="z-btn z-btn-outline z-btn-sm" data-z-dirty-discard>Discard</button>
+                <button type="submit" class="z-btn z-btn-primary z-btn-sm" data-z-toast="Settings saved" data-z-toast-variant="emerald">Save Changes</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </article>
+
+      <article class="z-card">
+        <header class="z-card-head">
+          <div>
+            <div class="z-card-kicker">Hardened Destructive Flows &amp; Undo Toasts</div>
+            <h2 class="z-card-title">Overlays Without Inline Scripts</h2>
+          </div>
+          <span class="z-badge z-badge-emerald">Strict CSP</span>
+        </header>
+        <div class="z-card-body z-stack">
+          <p class="z-muted">Trigger static-backdrop alert dialogs with typed confirmation gates or 5-second undoable toasts purely with <code>data-z-*</code> attributes.</p>
+          <div class="z-row">
+            <button type="button" class="z-btn z-btn-danger z-btn-sm" data-z-open="#starter-alert">Delete Workspace...</button>
+            <button type="button" class="z-btn z-btn-emerald z-btn-sm" data-z-undo="Invoice #402 archived" data-z-undo-delay="5000">Archive with 5s Undo</button>
+            <a class="z-btn z-btn-outline z-btn-sm" href="https://zokeibi.com/studio/">Customize in OKLCH Studio</a>
+          </div>
+          <div class="z-alert z-alert-info" role="status">
+            <div class="z-alert-title">Ready for HTMX, Laravel Blade, Symfony Twig, or Kongono</div>
+            <div>Use <code>https://zokeibi.com/dist/v1.4/</code> directly or run <code>composer require kongono/zokeibi</code> to tree-shake to ~2.5 KB gzip.</div>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <article class="z-card">
+      <header class="z-card-head">
+        <div>
+          <div class="z-card-kicker">Sort · Search · Shift+Click Select · CSV Export</div>
+          <h2 class="z-card-title">Power Data Table</h2>
+        </div>
+        <span class="z-badge z-badge-blue">Built-in Runtime</span>
+      </header>
+      <div class="z-card-body">
+        <div class="z-table-wrap" data-z-table="true" data-z-table-sortable="true" data-z-table-selectable="true" data-z-table-export-file="leases.csv">
+          <div class="z-table-toolbar">
+            <input type="search" class="z-table-search" data-z-table-search placeholder="Search leases..." aria-label="Search leases">
+            <div class="z-table-tools">
+              <span class="z-table-count" data-z-table-count aria-live="polite"></span>
+              <button type="button" class="z-table-tool-btn" data-z-table-export>Export CSV</button>
+            </div>
+          </div>
+          <div class="z-table-bulk" data-z-table-bulk hidden role="region" aria-label="Selected rows">
+            <span class="z-table-bulk-count" data-z-table-selected-count aria-live="polite">0 selected</span>
+            <div class="z-table-bulk-actions">
+              <button type="button" class="z-table-tool-btn z-table-bulk-emerald" data-z-table-bulk-action="approve">Approve</button>
+              <button type="button" class="z-table-tool-btn" data-z-table-clear-selection>Clear</button>
+            </div>
+          </div>
+          <table class="z-table">
+            <caption class="z-sr-only">Active property leases</caption>
+            <thead>
+              <tr>
+                <th scope="col" data-z-sort="string" tabindex="0" aria-sort="none">Unit</th>
+                <th scope="col" data-z-sort="string" tabindex="0" aria-sort="none">Tenant</th>
+                <th scope="col" data-z-sort="string" tabindex="0" aria-sort="none">Status</th>
+                <th scope="col" data-z-sort="auto" tabindex="0" aria-sort="none">Monthly Rent</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr data-row-id="unit-4b"><td>Unit 4B</td><td>Elena Vance</td><td><span class="z-badge z-badge-emerald">Paid</span></td><td>1850</td></tr>
+              <tr data-row-id="unit-2a"><td>Unit 2A</td><td>Marcus Chen</td><td><span class="z-badge z-badge-amber">Pending</span></td><td>2100</td></tr>
+              <tr data-row-id="unit-7c"><td>Unit 7C</td><td>Priya Nair</td><td><span class="z-badge z-badge-emerald">Paid</span></td><td>1650</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </article>
+  </main>
+
+  <div class="z-modal-backdrop z-alertdialog-backdrop" id="starter-alert" data-z-static-backdrop="true" data-z-alertdialog="true" hidden>
+    <div class="z-modal z-alertdialog z-modal-danger" role="alertdialog" aria-modal="true" aria-labelledby="starter-ad-title" aria-describedby="starter-ad-desc">
+      <div class="z-modal-head"><h3 class="z-modal-title" id="starter-ad-title">Delete Workspace?</h3></div>
+      <div class="z-modal-body z-stack-sm" id="starter-ad-desc">
+        <p class="z-alertdialog-desc">Type <code class="z-alertdialog-code">DELETE</code> below to unlock confirmation.</p>
+        <div class="z-field z-alertdialog-confirm">
+          <label class="z-label" for="starter-ad-input">Confirmation phrase</label>
+          <input id="starter-ad-input" type="text" class="z-input" autocomplete="off" placeholder="DELETE" data-z-confirm-input data-z-confirm-match="DELETE">
+        </div>
+      </div>
+      <div class="z-modal-foot">
+        <button type="button" class="z-btn z-btn-outline" data-z-close="#starter-alert" data-z-initial-focus="true">Cancel</button>
+        <button type="button" class="z-btn z-btn-danger" data-z-confirm-btn data-z-close="#starter-alert" data-z-toast="Workspace deleted" data-z-toast-variant="danger" disabled>Confirm Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://zokeibi.com/dist/v1.4/zokeibi-runtime.js" integrity="sha384-KHA7rgZ4RzKvtQCq9r0kRHVgxtmcBo17SMq+TejfrNYAkRz9SSesnBns/H+71z8n" crossorigin="anonymous" defer></script>
+</body>
+</html>

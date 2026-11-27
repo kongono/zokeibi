@@ -19,6 +19,12 @@
     <priority>0.95</priority>
   </url>
   <url>
+    <loc>https://zokeibi.com/dist/v1.4/starter.html</loc>
+    <lastmod>2026-11-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
     <loc>https://zokeibi.com/dist/v1.3/starter.html</loc>
     <lastmod>2026-11-27</lastmod>
     <changefreq>monthly</changefreq>

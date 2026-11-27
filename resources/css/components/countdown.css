@@ -1,0 +1,56 @@
+@layer zokeibi.components {
+  .z-countdown {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-family: var(--z-mono);
+    font-size: 0.78rem;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.01em;
+    color: var(--z-ink);
+    white-space: nowrap;
+  }
+
+  .z-countdown-pill {
+    padding: 0.22rem 0.56rem;
+    border-radius: 999px;
+    border: 1px solid var(--z-border-strong);
+    background: var(--z-surface-2);
+  }
+
+  .z-countdown-inline {
+    padding: 0;
+    border: none;
+    background: transparent;
+  }
+
+  .z-countdown.is-urgent {
+    color: var(--z-danger);
+    border-color: var(--z-danger-border);
+    background: var(--z-danger-soft);
+  }
+
+  .z-countdown-inline.is-urgent {
+    background: transparent;
+    border-color: transparent;
+  }
+
+  .z-countdown.is-ended {
+    color: var(--z-ink-soft);
+    opacity: 0.72;
+  }
+
+  @keyframes z-patch-flash {
+    0% { background-color: var(--z-accent-soft); }
+    100% { background-color: transparent; }
+  }
+
+  .kgn-patch-flash {
+    animation: z-patch-flash 650ms ease-out;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .kgn-patch-flash { animation: none; }
+  }
+}

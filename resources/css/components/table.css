@@ -187,11 +187,71 @@
     }
 
     & tbody tr:last-child td { border-bottom: none; }
-    & tbody tr.is-selected td { background: var(--z-accent-soft); }
+    & tbody tr.is-selected td { background: color-mix(in oklch, var(--z-accent) 12%, var(--z-surface)); }
+    & tbody tr.is-kbd-active td { background: color-mix(in oklch, var(--z-accent) 9%, var(--z-surface)); }
+    & tbody tr.is-kbd-active td:first-child { box-shadow: inset 3px 0 0 var(--z-accent); }
 
     & tbody tr:hover td {
-      background: color-mix(in oklch, var(--z-surface-2) 60%, transparent);
+      background: color-mix(in oklch, var(--z-surface-2) 60%, var(--z-surface));
     }
+  }
+
+  .z-table-wrap.z-table-frozen {
+    & .z-table th:first-child,
+    & .z-table td:first-child {
+      position: sticky;
+      left: 0;
+      z-index: 2;
+      background: var(--z-surface);
+      box-shadow: 1px 0 0 var(--z-border);
+    }
+
+    & .z-table th:first-child {
+      background: var(--z-surface-2);
+      z-index: 3;
+    }
+
+    &.z-table-has-select .z-table th:first-child,
+    &.z-table-has-select .z-table td:first-child {
+      box-shadow: none;
+    }
+
+    &.z-table-has-select .z-table th:nth-child(2),
+    &.z-table-has-select .z-table td:nth-child(2) {
+      position: sticky;
+      left: 2.3rem;
+      z-index: 2;
+      background: var(--z-surface);
+      box-shadow: 1px 0 0 var(--z-border);
+    }
+
+    &.z-table-has-select .z-table th:nth-child(2) {
+      background: var(--z-surface-2);
+      z-index: 3;
+    }
+
+    & .z-table tbody tr.is-selected td:first-child,
+    &.z-table-has-select .z-table tbody tr.is-selected td:nth-child(2) {
+      background: color-mix(in oklch, var(--z-accent) 14%, var(--z-surface));
+    }
+
+    & .z-table tbody tr.is-kbd-active td:first-child,
+    &.z-table-has-select .z-table tbody tr.is-kbd-active td:nth-child(2) {
+      background: color-mix(in oklch, var(--z-accent) 11%, var(--z-surface));
+    }
+
+    & .z-table tbody tr:hover td:first-child,
+    &.z-table-has-select .z-table tbody tr:hover td:nth-child(2) {
+      background: var(--z-surface-2);
+    }
+  }
+
+  .z-table-cursor-foot {
+    display: flex;
+    justify-content: center;
+    padding: 0.65rem;
+    border-top: 1px solid var(--z-border);
+    background: var(--z-surface-2);
   }
 
   @container (max-width: 520px) {

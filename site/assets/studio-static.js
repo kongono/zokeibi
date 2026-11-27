@@ -378,7 +378,7 @@
     if (jsonCodeOut) {
       jsonCodeOut.textContent = JSON.stringify(
         {
-          zokeibi: "1.3.0",
+          zokeibi: "1.4.0",
           theme: "studio",
           radius: "default",
           views_dir: "views",
