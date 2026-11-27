@@ -64,6 +64,20 @@
     }
   });
 
+  // Wire every component catalog card to open its live demo directly in /playground/#comp-<id>
+  document.querySelectorAll(".zs-comp-card[data-catalog-item]").forEach((card) => {
+    const cat = card.getAttribute("data-catalog-item") || "";
+    if (cat === "blocks") return;
+    const tagEl = card.querySelector(".zs-comp-tag");
+    const slug = tagEl ? (tagEl.textContent || "").trim() : "";
+    if (!slug || !/^[a-z0-9-]+$/.test(slug)) return;
+    const link = document.createElement("a");
+    link.className = "zs-comp-try";
+    link.href = `/playground/#comp-${slug}`;
+    link.textContent = "Try live →";
+    card.appendChild(link);
+  });
+
   document.addEventListener("click", (event) => {
     const target = event.target;
     if (!(target instanceof Element)) return;

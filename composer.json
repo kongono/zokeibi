@@ -60,6 +60,7 @@
   "scripts": {
     "playground": "@php vendor/bin/kongo serve --app=playground --port=8101",
     "build-playground-css": "@php bin/zokeibi build --views=playground/views --out=playground/public/assets/zokeibi.min.css",
+    "build-site-playground": "@php bin/build-site-playground.php",
     "audit-playground": "@php bin/zokeibi audit --views=playground/views",
     "test": "@php -d memory_limit=512M vendor/bin/phpunit --configuration phpunit.xml.dist --fail-on-deprecation --fail-on-warning --fail-on-notice",
     "analyse": "@php -d memory_limit=512M vendor/bin/phpstan analyse --configuration=phpstan.neon.dist --no-progress",

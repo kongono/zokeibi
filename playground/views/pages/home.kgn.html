@@ -788,7 +788,7 @@ php vendor/bin/zokeibi prove --views=views --strict</pre>
           <x-ui.drawer id="demo-inspector-drawer" title="Zokeibi Build Inspector" show="drawerOpen">
             <div class="z-stack-sm">
               <x-ui.alert variant="success" title="Zero Node Build">Compiled directly inside PHP 8.5 with zero external runtimes.</x-ui.alert>
-              <x-ui.kpi label="Gzipped CSS" :value="$telemetry['full_gz_kb']" delta="All 55" trend="up" variant="emerald" />
+              <x-ui.kpi label="Gzipped CSS" :value="$telemetry['full_gz_kb']" delta="All 60" trend="up" variant="emerald" />
               <x-ui.button id="close-demo-drawer" variant="outline" size="sm" k-click="set(drawerOpen, false)">Close Drawer</x-ui.button>
             </div>
           </x-ui.drawer>

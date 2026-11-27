@@ -294,6 +294,20 @@
   margin: 0;
 }
 
+.zs-comp-try {
+  margin-top: auto;
+  padding-top: 0.35rem;
+  font-family: var(--z-mono);
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--z-accent);
+  text-decoration: none;
+}
+
+.zs-comp-try:hover {
+  text-decoration: underline;
+}
+
 .zs-pre {
   margin: 0;
   padding: 1rem 1.15rem;

@@ -310,6 +310,44 @@
     margin-top: 1.05rem;
   }
 
+  .pg-search-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    margin-bottom: 0.95rem;
+  }
+
+  .pg-search-input {
+    max-width: 480px;
+    flex: 1 1 260px;
+  }
+
+  .pg-search-count {
+    font-size: 0.74rem;
+  }
+
+  .pg-search-hidden {
+    display: none !important;
+  }
+
+  .pg-code-wrap {
+    position: relative;
+  }
+
+  .pg-copy-btn {
+    position: absolute;
+    top: 0.45rem;
+    right: 0.45rem;
+    z-index: 2;
+  }
+
+  .pg-card-focus .pg-demo-card {
+    border-color: var(--z-accent);
+    box-shadow: 0 0 0 2px var(--z-accent-soft), var(--z-shadow);
+  }
+
   /* Zokeibi Design Token Studio Workbench */
   .st-layout {
     display: grid;
