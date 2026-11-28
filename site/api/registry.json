@@ -2,7 +2,7 @@
     "name": "zokeibi",
     "kanji": "造形美",
     "package": "kongono/zokeibi",
-    "version": "1.4.1",
+    "version": "1.4.2",
     "component_count": 63,
     "themes": [
         "sumi",

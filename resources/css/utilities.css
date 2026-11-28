@@ -45,6 +45,17 @@
     .z-grid-4 { grid-template-columns: 1fr; }
   }
 
+  /* Kibanno adaptive visibility & safe-area utilities */
+  .z-native-only { display: none !important; }
+  html[data-kibanno-chrome="native"] .z-web-only { display: none !important; }
+  html[data-kibanno-chrome="native"] .z-native-only { display: revert !important; }
+  .z-safe-pad {
+    padding-top: var(--z-safe-top);
+    padding-right: var(--z-safe-right);
+    padding-bottom: var(--z-safe-bottom);
+    padding-left: var(--z-safe-left);
+  }
+
   @media print {
     .z-no-print { display: none !important; }
     body { background: #fff !important; color: #111 !important; }

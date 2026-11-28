@@ -3,7 +3,7 @@
   "kanji": "造形美",
   "meaning": "Beauty of Form",
   "package": "kongono/zokeibi",
-  "version": "1.4.1",
+  "version": "1.4.2",
   "themes": ["sumi", "washi", "indigo", "matcha", "kintsugi"],
   "radius_presets": ["sharp", "default", "rounded"],
   "density_presets": ["calm", "default", "compact"],

@@ -1138,6 +1138,17 @@ HTML;
         }
     }
 
+    public function testKibannoAdaptiveNativeChromeAndSafeAreaHooksCompiledIntoCss(): void
+    {
+        $zokeibi = new Zokeibi();
+        $report = $zokeibi->compiler->buildForComponents(['button']);
+        self::assertStringContainsString('--z-safe-top', $report->css);
+        self::assertStringContainsString('data-kibanno-chrome', $report->css);
+        self::assertStringContainsString('.z-web-only', $report->css);
+        self::assertStringContainsString('.z-native-only', $report->css);
+        self::assertStringContainsString('.z-safe-pad', $report->css);
+    }
+
     private function makeTempDir(string $prefix): string
     {
         $path = sys_get_temp_dir() . DIRECTORY_SEPARATOR . $prefix . bin2hex(random_bytes(5));

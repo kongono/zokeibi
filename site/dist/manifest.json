@@ -1,20 +1,20 @@
 {
-    "version": "1.4.1",
+    "version": "1.4.2",
     "minor_channel": "v1.4",
     "components_count": 63,
     "blocks_count": 8,
     "files": {
         "css": {
             "url": "https://zokeibi.com/dist/v1.4/zokeibi.min.css",
-            "pinned_url": "https://zokeibi.com/dist/v1.4.1/zokeibi.min.css",
+            "pinned_url": "https://zokeibi.com/dist/v1.4.2/zokeibi.min.css",
             "latest_url": "https://zokeibi.com/dist/latest/zokeibi.min.css",
-            "integrity": "sha384-togZKjc5dMxPdjUyvYGCq3s/JuOrrq6DBJMXqr82oQvCC5b4INYVPPtddSmlj9vA",
-            "bytes": 74635,
-            "gzip_bytes": 12375
+            "integrity": "sha384-o4AosAknb0aQbVlvRyls7ywF0eiFxtGoZ6DpO9Bb+BX63EWDfFZi1CWHPsX90atK",
+            "bytes": 75429,
+            "gzip_bytes": 12605
         },
         "runtime": {
             "url": "https://zokeibi.com/dist/v1.4/zokeibi-runtime.js",
-            "pinned_url": "https://zokeibi.com/dist/v1.4.1/zokeibi-runtime.js",
+            "pinned_url": "https://zokeibi.com/dist/v1.4.2/zokeibi-runtime.js",
             "latest_url": "https://zokeibi.com/dist/latest/zokeibi-runtime.js",
             "integrity": "sha384-IPtQdBYZjhgKxHbi7CCcq4+CSGVEZcHVzsP2FiBm0obycp+FwS5IZRxj5p3PzOs1",
             "bytes": 112399,
